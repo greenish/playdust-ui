@@ -1,11 +1,11 @@
 import { selectorFamily } from 'recoil'
 import type {
   MetaplexCollectionIdentifier,
-  ParsedMetadata
+  ParsedOnchain
 } from '../solana/types'
 import * as solana from '../solana'
 
-const fetchCollectionOnchain = selectorFamily<ParsedMetadata[], MetaplexCollectionIdentifier>({
+const fetchCollectionOnchain = selectorFamily<ParsedOnchain[], MetaplexCollectionIdentifier>({
   key: 'fetchCollectionOnchain',
   get: (identifier: MetaplexCollectionIdentifier) =>
     async () => {

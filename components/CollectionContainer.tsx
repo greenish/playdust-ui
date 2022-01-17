@@ -1,17 +1,33 @@
 import { MetaplexCollectionIdentifier } from '../solana/types'
 import TokenContainer from './TokenContainer'
-import { fetchCollectionOnchain } from '../store'
-import { useRecoilValue } from 'recoil'
+import {
+  collectionCursor,
+  fetchNextCollectionPage,
+} from '../store'
+import {
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil'
 
 interface CollectionContainerProps {
   identifier: MetaplexCollectionIdentifier
 }
 
 const CollectionContainer = ({ identifier }: CollectionContainerProps) => {
-  const collectionData = useRecoilValue(fetchCollectionOnchain(identifier))
+  const setCursor = useSetRecoilState(collectionCursor)
+  const {
+    initialized,
+    tokens,
+    count,
+  } = useRecoilValue(fetchNextCollectionPage(identifier))
 
   return (
-    <TokenContainer tokens={collectionData} />
+    <TokenContainer
+      initialized={initialized}
+      tokens={tokens}
+      hasMore={count > tokens.length}
+      next={() => setCursor(cursor => cursor + 1)}
+    />
   )
 }
 

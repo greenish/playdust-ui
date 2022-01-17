@@ -1,8 +1,4 @@
 import {
-  useMemo,
-  useState,
-} from 'react'
-import {
   CircularProgress,
   Container,
 } from '@mui/material'
@@ -42,40 +38,39 @@ const Loader = () => (
   </LoaderContainer>
 )
 
-const initialMax = 10
-const incrementBy = 10
-
 const scrollId = "token-container-scrollable-box"
 
 interface TokenContainerProps {
+  initialized: boolean,
   tokens: ParsedMetadata[]
+  hasMore: boolean
+  next?: () => any,
 }
 
 const TokenContainer = ({
+  initialized,
   tokens,
+  hasMore,
+  next = () => null,
 }: TokenContainerProps) => {
-  const [numTokens, setNumTokens] = useState(initialMax)
-
-  const enhancedTokens = useMemo(() => {
-    return tokens.slice(0, numTokens)
-  }, [tokens, numTokens])
+  if (!initialized) {
+    return <Loader />
+  }
 
   return (
     <InfiniteScrollContainer id={scrollId}>
       <InfiniteScroll
         scrollableTarget={scrollId}
         scrollThreshold={.9}
-        dataLength={enhancedTokens.length}
-        next={() => {
-          setNumTokens(numTokens + incrementBy)
-        }}
-        hasMore={enhancedTokens.length < tokens.length}
+        dataLength={tokens.length}
+        next={next}
+        hasMore={hasMore}
         loader={<Loader />}
       >
         <Container>
           <TokensContainer>
             {
-              enhancedTokens.map(token => (
+              tokens.map(token => (
                 <TokenCard
                   key={token.mint}
                   metadata={token}

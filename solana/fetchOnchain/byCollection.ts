@@ -10,11 +10,11 @@ import {
 } from './filters'
 import {
   MetaplexCollectionIdentifier,
-  ParsedMetadata,
+  ParsedOnchain,
 } from '../types'
 import { METADATA_PROGRAM_ID } from '../programIds'
 
-const byCollection = async (collection: MetaplexCollectionIdentifier): Promise<ParsedMetadata[]> => {
+const byCollection = async (collection: MetaplexCollectionIdentifier): Promise<ParsedOnchain[]> => {
   const url = getUrl()
   const memFilters = byCombination(collection)
 

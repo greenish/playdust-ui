@@ -6,7 +6,6 @@ import {
 import { useRouter } from 'next/router'
 import {
   Container,
-  LinearProgress,
   Typography,
 } from '@mui/material'
 import styled from '@emotion/styled'
@@ -34,15 +33,10 @@ const CollectionNameContainer = styled.div`
   display: flex;
 `
 
-const LoadingContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
 const isValid = (input: any) =>
   typeof input === 'string' && !!input.length
 
-const serializeSearchParam = (searchParam: any): MetaplexCollectionIdentifier => {
+export const serializeSearchParam = (searchParam: any): MetaplexCollectionIdentifier => {
   const {
     symbol,
     name,
@@ -92,16 +86,7 @@ const Collection: NextPage = () => {
         <CollectionNameContainer>
           <Typography variant="h3">{identifier.name}</Typography>
         </CollectionNameContainer>
-        <Suspense
-          fallback={
-            <LoadingContainer>
-              <Typography variant="h3">
-                Loading onchain data...
-              </Typography>
-              <LinearProgress />
-            </LoadingContainer>
-          }
-        >
+        <Suspense fallback={<div />}>
           <CollectionContainer identifier={identifier} />
         </Suspense>
       </ParentContainer>

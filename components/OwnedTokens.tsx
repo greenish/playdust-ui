@@ -24,7 +24,11 @@ const OwnedTokens = ({ publicKey }: OwnedTokensProp) => {
     <div>
       {
         ownedTokens.length ? (
-          <TokenContainer tokens={ownedTokens} />
+          <TokenContainer
+            initialized
+            tokens={ownedTokens}
+            hasMore={false}
+          />
         ) : (
           <HelperMessageContainer>
             <Typography>No tokens found for address {publicKey?.toBase58()}</Typography>

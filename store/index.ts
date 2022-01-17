@@ -1,3 +1,6 @@
+export { default as collectionCursor } from './collectionCursor'
+export { default as fetchCollection } from './fetchCollection'
 export { default as fetchCollectionOnchain } from './fetchCollectionOnchain'
+export { default as fetchNextCollectionPage } from './fetchNextCollectionPage'
 export { default as fetchOffchain } from './fetchOffchain'
 export { default as fetchOwnedOnchain } from './fetchOwnedOnchain'

@@ -1,4 +1,3 @@
-import { CircularProgress } from '@mui/material'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { Suspense } from 'react'
@@ -21,7 +20,7 @@ const Me = () => {
       <WalletMultiButton />
       {
         wallet.connected && wallet.publicKey && (
-          <Suspense fallback={<CircularProgress />}>
+          <Suspense fallback={<div />}>
             <OwnedTokens publicKey={wallet.publicKey} />
           </Suspense>
         )

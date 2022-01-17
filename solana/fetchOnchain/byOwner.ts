@@ -7,9 +7,9 @@ import {
 } from '@solana/web3.js'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import getUrl from '../getUrl'
-import { ParsedMetadata } from '../types'
+import { ParsedOnchain } from '../types'
 
-const getTokensByOwner = async (owner: PublicKey): Promise<ParsedMetadata[]> => {
+const getTokensByOwner = async (owner: PublicKey): Promise<ParsedOnchain[]> => {
   // const url = getUrl()
   const url = 'https://api.devnet.solana.com'
 

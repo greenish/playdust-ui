@@ -6,8 +6,6 @@ import {
 } from '@mui/material'
 import { ParsedMetadata } from '../solana/types'
 import { useState } from 'react'
-import { useRecoilValueLoadable } from 'recoil'
-import { fetchOffchain } from '../store'
 
 const imageSize = 300
 
@@ -18,19 +16,20 @@ interface TokenCardProps {
 const TokenCard = ({ metadata }: TokenCardProps) => {
   const [isLoaded, setIsLoaded] = useState(false)
   const {
+    offchain,
+    onchain,
+  } = metadata
+  const {
     name,
-    uri,
-  } = metadata.onchain.data
-
-  const { contents } = useRecoilValueLoadable(fetchOffchain(uri))
+  } = onchain.data
 
   return (
     <Card sx={{ m: 2 }}>
       {
-        contents?.image && (
+        offchain?.image && (
           <img
             alt={name}
-            src={contents.image}
+            src={offchain.image}
             height={imageSize}
             style={isLoaded ? {} : {display: 'none'}}
             onLoad={() => setIsLoaded(true)}
@@ -38,7 +37,7 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
         )
       }
       {
-        (!contents || !isLoaded) && (
+        !isLoaded && (
           <Skeleton
             sx={{
               height: imageSize,

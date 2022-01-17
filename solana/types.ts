@@ -8,8 +8,12 @@ export type MetaplexCollectionIdentifier = {
   image?: string
 }
 
-export interface ParsedMetadata {
+export interface ParsedOnchain {
   mint: string
   pda: string
   onchain: MetadataData
+}
+
+export interface ParsedMetadata extends ParsedOnchain {
+  offchain: any
 }

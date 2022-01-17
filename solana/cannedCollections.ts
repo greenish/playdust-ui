@@ -32,20 +32,11 @@ export const aurory = {
   image: 'https://lz4y2kjsj23bm5j5zkjlffqlhu4mkhdckee67ji2w2u4zuzukvka.arweave.net/XnmNKTJOthZ1PcqSspYLPTjFHGJRCe-lGrapzNM0VVQ',
 }
 
-export const cryptoPunks = {
-  name: 'SolPunk_',
-  symbol: 'SolPunks',
-  creator: 'F5FKqzjucNDYymjHLxMR2uBT43QmaqBAMJwjwkvRRw4A',
-  updateAuthority: 'F5FKqzjucNDYymjHLxMR2uBT43QmaqBAMJwjwkvRRw4A',
-  image: 'https://i.imgur.com/17eC2nf.jpg',
-}
-
 const all: MetaplexCollectionIdentifier[] = [
   degenApes,
   shadowySuperCoders,
   rogueShark,
   aurory,
-  cryptoPunks,
 ]
 
 export default all
