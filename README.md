@@ -41,3 +41,14 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
   * we are using `emotion` as our CSS implementation
     * the preferred method is to use the `emotion/styled` API to add styles to components
   * [VSCode Syntax Highlighting for styled components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components)
+
+## API connection
+
+Enviroment variables are needed to connect to our API, follow these steps for correct configuration
+
+  * Clone API project [here](https://github.com/Coral-Reef-Art/auction-house-api)
+  * Run API project with another port (PORT=8000 npm run dev)
+  * Create a .env.local file in the root folder
+  * Add API_HOST key with API server URL as value
+
+All those steps are for connection in local to our API.
