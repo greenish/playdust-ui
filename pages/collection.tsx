@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import {
   Suspense,
-  useMemo,
+  useEffect,
 } from 'react'
 import { useRouter } from 'next/router'
 import {
@@ -11,6 +11,8 @@ import {
 import styled from '@emotion/styled'
 import { MetaplexCollectionIdentifier } from '../solana/types'
 import CollectionContainer from '../components/CollectionContainer'
+import { collectionIdentifier } from '../store'
+import { useRecoilState } from 'recoil'
 
 const AbsoluteContainer = styled.div`
   position: absolute;
@@ -26,7 +28,6 @@ const ParentContainer = styled.div`
   align-items: center;
   height: 100%;
   width: 100%;
-  overflow: hidden;
 `
 
 const CollectionNameContainer = styled.div`
@@ -56,21 +57,21 @@ export const serializeSearchParam = (searchParam: any): MetaplexCollectionIdenti
 
 const Collection: NextPage = () => {
   const { isReady, query } = useRouter()
+  const [identifier, setCollectionIdentifier] = useRecoilState(collectionIdentifier)
 
-  const identifier = useMemo(() => {
+  useEffect(() => {
     if (isReady) {
-      return serializeSearchParam(query)
+      const serialized = serializeSearchParam(query)
+
+      setCollectionIdentifier(serialized)
     }
-
-    return { symbol: '' }
   }, [isReady, query])
-
 
   if (!isReady) {
     return <div />
   }
 
-  if (identifier.symbol === '') {
+  if (identifier?.symbol === '') {
     return (
       <Container>
         <Typography variant="h3">
@@ -80,14 +81,14 @@ const Collection: NextPage = () => {
     )
   }
 
-  return (
+  return identifier && (
     <AbsoluteContainer>
       <ParentContainer>
         <CollectionNameContainer>
           <Typography variant="h3">{identifier.name}</Typography>
         </CollectionNameContainer>
         <Suspense fallback={<div />}>
-          <CollectionContainer identifier={identifier} />
+          <CollectionContainer />
         </Suspense>
       </ParentContainer>
     </AbsoluteContainer>

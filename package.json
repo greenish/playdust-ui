@@ -6,13 +6,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gen:meta": "ts-node ./scripts/generateMetadata.ts"
+    "gen:meta": "ts-node ./scripts/generateMetadata.ts",
+    "gen:agg": "ts-node ./scripts/generateAggregation.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@metaplex-foundation/mpl-token-metadata": "^0.0.2",
     "@metaplex/js": "4.1.0",
+    "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.8",
     "@solana/wallet-adapter-base": "^0.9.1",
     "@solana/wallet-adapter-react": "^0.15.1",

@@ -1,33 +1,62 @@
-import { MetaplexCollectionIdentifier } from '../solana/types'
+import CollectionFilters from './CollectionFilters'
 import TokenContainer from './TokenContainer'
 import {
   collectionCursor,
-  fetchNextCollectionPage,
+  fetchCollectionPages,
 } from '../store'
 import {
   useRecoilValue,
   useSetRecoilState,
 } from 'recoil'
+import styled from '@emotion/styled'
 
-interface CollectionContainerProps {
-  identifier: MetaplexCollectionIdentifier
-}
+const RootContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`
 
-const CollectionContainer = ({ identifier }: CollectionContainerProps) => {
+const FilterContainer = styled.div`
+  display: flex;
+  width: 300px;
+  padding: 16px;
+`
+
+const TokenFlexContainer = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+`
+
+const CollectionContainer = () => {
   const setCursor = useSetRecoilState(collectionCursor)
   const {
     initialized,
     tokens,
-    count,
-  } = useRecoilValue(fetchNextCollectionPage(identifier))
+    total,
+  } = useRecoilValue(fetchCollectionPages)
 
   return (
-    <TokenContainer
-      initialized={initialized}
-      tokens={tokens}
-      hasMore={count > tokens.length}
-      next={() => setCursor(cursor => cursor + 1)}
-    />
+    <RootContainer>
+      <FilterContainer>
+        <CollectionFilters />
+      </FilterContainer>
+      <TokenFlexContainer>
+        <TokenContainer
+          initialized={initialized}
+          tokens={tokens}
+          hasMore={total > tokens.length}
+          next={() => {
+            setCursor(cursor => cursor + 1)
+          }}
+        />
+      </TokenFlexContainer>
+    </RootContainer>
   )
 }
 

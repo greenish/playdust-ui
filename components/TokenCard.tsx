@@ -6,6 +6,14 @@ import {
 } from '@mui/material'
 import { ParsedMetadata } from '../solana/types'
 import { useState } from 'react'
+import QuickFilter from './QuickFilter'
+import styled from '@emotion/styled'
+
+const CardContentContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
 
 const imageSize = 300
 
@@ -49,7 +57,10 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
         )
       }
       <CardContent>
-        <Typography>{name}</Typography>
+        <CardContentContainer>
+          <Typography>{name}</Typography>
+          <QuickFilter metadata={metadata} />
+        </CardContentContainer>
       </CardContent>
     </Card>
   )

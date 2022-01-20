@@ -15,5 +15,11 @@ export interface ParsedOnchain {
 }
 
 export interface ParsedMetadata extends ParsedOnchain {
-  offchain: any
+  offchain: {
+    image: string
+    attributes: {
+      trait_type: string
+      value: string
+    }[]
+  }
 }
