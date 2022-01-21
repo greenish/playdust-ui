@@ -1,8 +1,9 @@
+import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
 import TradingModule from '../../components/TradingModule'
 
-const Nft = () => {
+const Nft: NextPage = () => {
   const router = useRouter()
 
   return (

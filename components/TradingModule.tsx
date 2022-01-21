@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { TextField, InputAdornment, Button, Divider } from '@mui/material'
 import { TransactionSignature, Transaction } from '@solana/web3.js'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
@@ -15,7 +15,7 @@ interface TradingModuleProps {
   id: string
 }
 
-const TradingModule = ({ id }: TradingModuleProps) => {
+const TradingModule: FC<TradingModuleProps> = ({ id }: TradingModuleProps) => {
   const [offer, setOffer] = useState(0)
   const [listPrice, setListPrice] = useState(0)
   const [salePrice, setSalePrice] = useState(0)
