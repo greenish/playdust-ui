@@ -8,8 +8,8 @@ import {
   Popover,
 } from '@mui/material'
 import { FilterAlt } from '@mui/icons-material'
-import { ParsedMetadata } from '../solana/types'
-import * as store from '../store'
+import { ParsedMetadata } from '../../solana/types'
+import * as store from '../../store'
 import { useRecoilValue } from 'recoil'
 
 interface QuickFilterProps {
@@ -25,7 +25,7 @@ const QuickFilter = ({ metadata }: QuickFilterProps) => {
 
   return (
     <>
-      <IconButton onClick={evt => setAnchorEl(evt.currentTarget)}>
+      <IconButton onClick={(evt) => setAnchorEl(evt.currentTarget)}>
         <FilterAlt />
       </IconButton>
       <Popover
@@ -35,28 +35,31 @@ const QuickFilter = ({ metadata }: QuickFilterProps) => {
       >
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormGroup>
-            {
-              attributes.map(attribute => (
-                <FormControlLabel
-                  key={attribute.trait_type}
-                  control={
-                    <Checkbox
-                      checked={
-                        !!filters.find(entry =>
+            {attributes.map((attribute) => (
+              <FormControlLabel
+                key={attribute.trait_type}
+                control={
+                  <Checkbox
+                    checked={
+                      !!filters.find(
+                        (entry) =>
                           entry.trait === attribute.trait_type &&
                           entry.options.includes(attribute.value)
-                        )
-                      }
-                      onChange={(_evt, nextValue) => {
-                        setFilter(attribute.trait_type, attribute.value, nextValue)
-                        setAnchorEl(null)
-                      }}
-                    />
-                  }
-                  label={`${attribute.trait_type}: ${attribute.value}`}
-                />
-              ))
-            }
+                      )
+                    }
+                    onChange={(_evt, nextValue) => {
+                      setFilter(
+                        attribute.trait_type,
+                        attribute.value,
+                        nextValue
+                      )
+                      setAnchorEl(null)
+                    }}
+                  />
+                }
+                label={`${attribute.trait_type}: ${attribute.value}`}
+              />
+            ))}
           </FormGroup>
         </FormControl>
       </Popover>

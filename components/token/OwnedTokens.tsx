@@ -3,7 +3,7 @@ import { PublicKey } from '@solana/web3.js'
 import TokenContainer from './TokenContainer'
 import styled from '@emotion/styled'
 import { useRecoilValue } from 'recoil'
-import { fetchOwnedOnchain } from '../store'
+import { fetchOwnedOnchain } from '../../store'
 
 const HelperMessageContainer = styled.div`
   display: flex;
@@ -22,19 +22,15 @@ const OwnedTokens = ({ publicKey }: OwnedTokensProp) => {
 
   return (
     <div>
-      {
-        ownedTokens.length ? (
-          <TokenContainer
-            initialized
-            tokens={ownedTokens}
-            hasMore={false}
-          />
-        ) : (
-          <HelperMessageContainer>
-            <Typography>No tokens found for address {publicKey?.toBase58()}</Typography>
-          </HelperMessageContainer>
-        )
-      }
+      {ownedTokens.length ? (
+        <TokenContainer initialized tokens={ownedTokens} hasMore={false} />
+      ) : (
+        <HelperMessageContainer>
+          <Typography>
+            No tokens found for address {publicKey?.toBase58()}
+          </Typography>
+        </HelperMessageContainer>
+      )}
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import CollectionFilters from './CollectionFilters'
-import TokenContainer from './TokenContainer'
-import { collectionCursor, fetchCollectionPages } from '../store'
+import TokenContainer from '../token/TokenContainer'
+import { collectionCursor, fetchCollectionPages } from '../../store'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import styled from '@emotion/styled'
 import SortFields from './SortFields'

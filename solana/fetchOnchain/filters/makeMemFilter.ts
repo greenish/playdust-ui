@@ -1,8 +1,5 @@
 import bs58 from 'bs58'
-import {
-  GetProgramAccountsFilter,
-  PublicKey,
-} from '@solana/web3.js'
+import { GetProgramAccountsFilter, PublicKey } from '@solana/web3.js'
 
 interface MakeMemFilter {
   offset: number

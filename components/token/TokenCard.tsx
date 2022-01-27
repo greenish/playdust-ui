@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography, Skeleton } from '@mui/material'
-import { ParsedMetadata } from '../solana/types'
+import { ParsedMetadata } from '../../solana/types'
 import { useState } from 'react'
-import QuickFilter from './QuickFilter'
+import QuickFilter from '../collection/QuickFilter'
 import styled from '@emotion/styled'
 import Link from 'next/link'
 

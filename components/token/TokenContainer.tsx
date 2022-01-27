@@ -1,10 +1,7 @@
-import {
-  CircularProgress,
-  Container,
-} from '@mui/material'
+import { CircularProgress, Container } from '@mui/material'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import TokenCard from '../components/TokenCard'
-import { ParsedMetadata } from '../solana/types'
+import TokenCard from './TokenCard'
+import { ParsedMetadata } from '../../solana/types'
 import styled from '@emotion/styled'
 
 const InfiniteScrollContainer = styled.div`
@@ -38,13 +35,13 @@ const Loader = () => (
   </LoaderContainer>
 )
 
-const scrollId = "token-container-scrollable-box"
+const scrollId = 'token-container-scrollable-box'
 
 interface TokenContainerProps {
-  initialized: boolean,
+  initialized: boolean
   tokens: ParsedMetadata[]
   hasMore: boolean
-  next?: () => any,
+  next?: () => any
 }
 
 const TokenContainer = ({
@@ -61,7 +58,7 @@ const TokenContainer = ({
     <InfiniteScrollContainer id={scrollId}>
       <InfiniteScroll
         scrollableTarget={scrollId}
-        scrollThreshold={.9}
+        scrollThreshold={0.9}
         dataLength={tokens.length}
         next={next}
         hasMore={hasMore}
@@ -69,14 +66,9 @@ const TokenContainer = ({
       >
         <Container>
           <TokensContainer>
-            {
-              tokens.map(token => (
-                <TokenCard
-                  key={token.mint}
-                  metadata={token}
-                />
-              ))
-            }
+            {tokens.map((token) => (
+              <TokenCard key={token.mint} metadata={token} />
+            ))}
           </TokensContainer>
         </Container>
       </InfiniteScroll>
