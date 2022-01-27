@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
-import { css, jsx } from '@emotion/react'
-import collectionSort, { CollectionSortType } from '../store/collectionSort'
+import collectionSort, { CollectionSortType } from '../../store/collectionSort'
 import { useRecoilState } from 'recoil'
 import {
   InputLabel,

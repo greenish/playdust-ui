@@ -5,6 +5,7 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  Typography,
 } from '@mui/material'
 import * as store from '../../store'
 import { useRecoilValue } from 'recoil'
@@ -36,6 +37,7 @@ const CollectionFilters = () => {
 
   return (
     <RootContainer>
+      <Typography sx={{ marginLeft: 1 }}>Filters</Typography>
       {attributes.map((attribute) => (
         <ItemContainer key={attribute.trait}>
           <FormControl fullWidth>
