@@ -1,10 +1,11 @@
-  import {
+import {
   Chip,
   FormControl,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
+  Typography,
 } from '@mui/material'
 import * as store from '../store'
 import { useRecoilValue } from 'recoil'
@@ -30,51 +31,46 @@ const ChipItem = styled.div`
 `
 
 const CollectionFilters = () => {
-  const {
-    attributes,
-  } = useRecoilValue(store.fetchCollectionAggregation)
+  const { attributes } = useRecoilValue(store.fetchCollectionAggregation)
   const filters = useRecoilValue(store.collectionFilters)
   const updateFilters = store.useUpdateCollectionFilters()
 
   return (
     <RootContainer>
-      {
-        attributes.map(attribute => (
-          <ItemContainer key={attribute.trait}>
-            <FormControl fullWidth>
-              <InputLabel>{attribute.trait}</InputLabel>
-              <Select
-                multiple
-                value={filters.find(entry => entry.trait === attribute.trait)?.options ||[]}
-                onChange={evt => {
-                  updateFilters(attribute.trait, evt.target.value as string[])
-                }}
-                input={<OutlinedInput label={attribute.trait} />}
-                renderValue={(selected) => (
-                  <ChipContainer>
-                    {
-                      selected.map(value => (
-                        <ChipItem key={value}>
-                          <Chip label={value} />
-                        </ChipItem>
-                      ))
-                    }
-                  </ChipContainer>
-                )}
-              >
-                {attribute.options.map(option => (
-                  <MenuItem
-                    key={option}
-                    value={option}
-                  >
-                    {option}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </ItemContainer>
-        ))
-      }
+      <Typography sx={{ marginLeft: 1 }}>Filters</Typography>
+      {attributes.map((attribute) => (
+        <ItemContainer key={attribute.trait}>
+          <FormControl fullWidth>
+            <InputLabel>{attribute.trait}</InputLabel>
+            <Select
+              multiple
+              value={
+                filters.find((entry) => entry.trait === attribute.trait)
+                  ?.options || []
+              }
+              onChange={(evt) => {
+                updateFilters(attribute.trait, evt.target.value as string[])
+              }}
+              input={<OutlinedInput label={attribute.trait} />}
+              renderValue={(selected) => (
+                <ChipContainer>
+                  {selected.map((value) => (
+                    <ChipItem key={value}>
+                      <Chip label={value} />
+                    </ChipItem>
+                  ))}
+                </ChipContainer>
+              )}
+            >
+              {attribute.options.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </ItemContainer>
+      ))}
     </RootContainer>
   )
 }

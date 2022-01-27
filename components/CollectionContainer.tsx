@@ -1,14 +1,9 @@
 import CollectionFilters from './CollectionFilters'
 import TokenContainer from './TokenContainer'
-import {
-  collectionCursor,
-  fetchCollectionPages,
-} from '../store'
-import {
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil'
+import { collectionCursor, fetchCollectionPages } from '../store'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import styled from '@emotion/styled'
+import SortFields from './SortFields'
 
 const RootContainer = styled.div`
   display: flex;
@@ -20,6 +15,7 @@ const RootContainer = styled.div`
 
 const FilterContainer = styled.div`
   display: flex;
+  flex-direction: column;
   width: 300px;
   padding: 16px;
 `
@@ -35,15 +31,12 @@ const TokenFlexContainer = styled.div`
 
 const CollectionContainer = () => {
   const setCursor = useSetRecoilState(collectionCursor)
-  const {
-    initialized,
-    tokens,
-    total,
-  } = useRecoilValue(fetchCollectionPages)
+  const { initialized, tokens, total } = useRecoilValue(fetchCollectionPages)
 
   return (
     <RootContainer>
       <FilterContainer>
+        <SortFields />
         <CollectionFilters />
       </FilterContainer>
       <TokenFlexContainer>
@@ -52,7 +45,7 @@ const CollectionContainer = () => {
           tokens={tokens}
           hasMore={total > tokens.length}
           next={() => {
-            setCursor(cursor => cursor + 1)
+            setCursor((cursor) => cursor + 1)
           }}
         />
       </TokenFlexContainer>

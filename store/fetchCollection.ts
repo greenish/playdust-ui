@@ -1,10 +1,11 @@
 import { selectorFamily } from 'recoil'
 import type {
   MetaplexCollectionIdentifier,
-  ParsedMetadata
+  ParsedMetadata,
 } from '../solana/types'
 import axios from 'axios'
 import collectionFilters, { CollectionFilterType } from './collectionFilters'
+import collectionSort, { CollectionSortType } from './collectionSort'
 
 const cache: any = {}
 
@@ -19,15 +20,18 @@ type FetchCollectionOutput = {
   total: number
 }
 
-const filterEntries = (data: ParsedMetadata[], filters: CollectionFilterType[]) => {
+const filterEntries = (
+  data: ParsedMetadata[],
+  filters: CollectionFilterType[]
+) => {
   if (!filters.length) {
     return data
   }
 
-  return data.filter(entry =>
-    filters.every(filter => {
-      const found = entry.offchain?.attributes?.find((attribute: any) =>
-        attribute.trait_type === filter.trait
+  return data.filter((entry) =>
+    filters.every((filter) => {
+      const found = entry.offchain?.attributes?.find(
+        (attribute: any) => attribute.trait_type === filter.trait
       )
 
       if (found) {
@@ -39,6 +43,11 @@ const filterEntries = (data: ParsedMetadata[], filters: CollectionFilterType[]) 
   )
 }
 
+const sortEntries = (data: ParsedMetadata[], sort: CollectionSortType[]) => {
+  sort.forEach((s) => data.sort(s.sortFunction(s.selectedValue)))
+  return data
+}
+
 const getData = async (symbol: string): Promise<ParsedMetadata[]> => {
   const cacheForSymbol = cache[symbol]
 
@@ -48,7 +57,6 @@ const getData = async (symbol: string): Promise<ParsedMetadata[]> => {
 
   const { data } = await axios.get<ParsedMetadata[]>(`/data/${symbol}.json`)
 
-
   return data
 }
 
@@ -57,14 +65,16 @@ const fetchCollection = selectorFamily<
   FetchCollectionInput
 >({
   key: 'fetchCollection',
-  get: ({ identifier, start, stop }) =>
+  get:
+    ({ identifier, start, stop }) =>
     async ({ get }) => {
       const data = await getData(identifier.symbol)
       const filters = get(collectionFilters)
+      const sort = get(collectionSort)
 
       cache[identifier.symbol] = data
 
-      const filtered = filterEntries(data, filters)
+      const filtered = sortEntries(filterEntries(data, filters), sort)
 
       return {
         data: filtered.slice(start, stop),
