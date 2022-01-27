@@ -63,7 +63,7 @@ const TradingModule: FC<TradingModuleProps> = ({ id }: TradingModuleProps) => {
   }
 
   return (
-    <>
+    <div>
       <ItemContainer>
         <TextField
           label="Offer price"
@@ -129,7 +129,7 @@ const TradingModule: FC<TradingModuleProps> = ({ id }: TradingModuleProps) => {
           Sale
         </Button>
       </ItemContainer>
-    </>
+    </div>
   )
 }
 

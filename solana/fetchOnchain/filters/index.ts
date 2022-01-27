@@ -14,7 +14,12 @@ export const byCreator = (creator: string) =>
 export const byUpdateAuthority = (updateAuthority: string) =>
   makeMemFilter({ offset: 1, publicKey: updateAuthority })
 
-export const byCombination = (filters: MetaplexCollectionIdentifier): GetProgramAccountsFilter[] => {
+export const byMintAddress = (mint: string) =>
+  makeMemFilter({ offset: 33, publicKey: mint })
+
+export const byCombination = (
+  filters: MetaplexCollectionIdentifier
+): GetProgramAccountsFilter[] => {
   const memFilters = []
 
   memFilters.push(bySymbol(filters.symbol))
@@ -32,12 +37,13 @@ export const byCombination = (filters: MetaplexCollectionIdentifier): GetProgram
   return memFilters
 }
 
-const filters =  {
+const filters = {
   byName,
   bySymbol,
   byCreator,
   byUpdateAuthority,
   byCombination,
+  byMintAddress,
 }
 
 export default filters
