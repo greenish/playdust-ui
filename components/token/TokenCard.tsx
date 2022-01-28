@@ -1,9 +1,9 @@
-import { Card, CardContent, Typography, Skeleton } from '@mui/material'
-import { ParsedMetadata } from '../../solana/types'
-import { useState } from 'react'
-import TokenCardFilter from './TokenCardFilter'
 import styled from '@emotion/styled'
+import { Card, CardContent, Skeleton, Typography } from '@mui/material'
 import Link from 'next/link'
+import { useState } from 'react'
+import { ParsedMetadata } from '../../solana/types'
+import TokenCardFilter from './TokenCardFilter'
 
 const imageSize = 300
 export const dimensions = {

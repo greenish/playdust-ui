@@ -1,6 +1,6 @@
-import TokenContainer from '../token/TokenContainer'
-import { collectionCursor, fetchCollectionPages } from '../../store'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { collectionCursor, fetchCollectionPages } from '../../store'
+import TokenContainer from '../token/TokenContainer'
 
 const CollectionContainer = () => {
   const setCursor = useSetRecoilState(collectionCursor)

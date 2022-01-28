@@ -1,7 +1,5 @@
-import { CircularProgress } from '@mui/material'
-import TokenCard, { dimensions, TokenCardContainer } from './TokenCard'
-import { ParsedMetadata } from '../../solana/types'
 import styled from '@emotion/styled'
+import { CircularProgress } from '@mui/material'
 import {
   AutoSizer,
   InfiniteLoader,
@@ -10,6 +8,8 @@ import {
   Size,
 } from 'react-virtualized'
 import 'react-virtualized/styles.css'
+import { ParsedMetadata } from '../../solana/types'
+import TokenCard, { dimensions, TokenCardContainer } from './TokenCard'
 
 const RootContainer = styled.div`
   height: 100%;

@@ -8,9 +8,7 @@ interface ProviderProps {
 
 const Provider = ({ children }: ProviderProps) => (
   <RecoilRoot>
-    <WalletProvider>
-      {children}
-    </WalletProvider>
+    <WalletProvider>{children}</WalletProvider>
   </RecoilRoot>
 )
 

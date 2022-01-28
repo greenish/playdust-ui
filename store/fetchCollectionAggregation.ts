@@ -1,5 +1,5 @@
-import { selector } from 'recoil'
 import axios from 'axios'
+import { selector } from 'recoil'
 import collectionIdentifier from './collectionIdentifier'
 
 type FetchCollectionAggregationOutput = {
@@ -16,12 +16,12 @@ const fetchCollectionAggregation = selector<FetchCollectionAggregationOutput>({
 
     if (!identifier) {
       return {
-        attributes: []
+        attributes: [],
       }
     }
 
     const { data } = await axios.get<FetchCollectionAggregationOutput>(
-      `/data/${identifier.symbol}-AGGREGATION.json`,
+      `/data/${identifier.symbol}-AGGREGATION.json`
     )
 
     return data

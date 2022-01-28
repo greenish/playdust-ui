@@ -1,10 +1,9 @@
-import { Typography } from '@mui/material'
-import { PublicKey } from '@solana/web3.js'
-import TokenContainer from './TokenContainer'
 import styled from '@emotion/styled'
+import { Container, Typography } from '@mui/material'
+import { PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
 import { fetchOwnedOnchain } from '../../store'
-import { Container } from '@mui/material'
+import TokenContainer from './TokenContainer'
 
 const HelperMessageContainer = styled.div`
   display: flex;

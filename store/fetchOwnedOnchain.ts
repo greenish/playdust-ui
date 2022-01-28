@@ -1,22 +1,19 @@
-import {
-  selectorFamily,
-  waitForNone,
-} from 'recoil'
-import type {
-  ParsedMetadata
-} from '../solana/types'
+import { selectorFamily, waitForNone } from 'recoil'
 import * as solana from '../solana'
+import type { ParsedMetadata } from '../solana/types'
 import fetchOffchain from './fetchOffchain'
 
 const fetchOwnedOnchain = selectorFamily<ParsedMetadata[], any>({
   key: 'fetchCollectionOnchain',
-  get: publicKey =>
-    async ({ get }) => {
+  get: (publicKey) => {
+    return async ({ get }) => {
       const result = await solana.fetchOnchain.byOwner(publicKey)
 
-      const offchainData = get(waitForNone(
-        result.map(entry => fetchOffchain(entry.onchain.data.uri))
-      ))
+      const offchainData = get(
+        waitForNone(
+          result.map((entry) => fetchOffchain(entry.onchain.data.uri))
+        )
+      )
 
       return result.map((entry, idx) => {
         if (offchainData[idx].state === 'hasValue') {
@@ -31,7 +28,8 @@ const fetchOwnedOnchain = selectorFamily<ParsedMetadata[], any>({
           offchain: {},
         }
       })
-    },
+    }
+  },
 })
 
 export default fetchOwnedOnchain

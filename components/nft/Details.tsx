@@ -1,18 +1,17 @@
-import { useState } from 'react'
-import { useRecoilValueLoadable } from 'recoil'
-import { fetchNftDetailsOnchain } from '../../store'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
-  Avatar,
   Accordion,
-  AccordionSummary,
   AccordionDetails,
-  Typography,
+  AccordionSummary,
+  Avatar,
+  Box,
   List,
   ListItem,
   ListItemText,
-  Box,
+  Typography,
 } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { useRecoilValueLoadable } from 'recoil'
+import { fetchNftDetailsOnchain } from '../../store'
 
 interface DetailsProps {
   mint: string

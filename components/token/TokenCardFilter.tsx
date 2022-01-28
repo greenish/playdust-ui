@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { FilterAlt } from '@mui/icons-material'
 import {
   Checkbox,
   FormControl,
@@ -7,10 +7,10 @@ import {
   IconButton,
   Popover,
 } from '@mui/material'
-import { FilterAlt } from '@mui/icons-material'
+import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import { ParsedMetadata } from '../../solana/types'
 import * as store from '../../store'
-import { useRecoilValue } from 'recoil'
 
 interface TokenCardFilter {
   metadata: ParsedMetadata

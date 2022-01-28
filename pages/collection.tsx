@@ -1,13 +1,13 @@
-import type { NextPage } from 'next'
-import { Suspense, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { Container, Typography } from '@mui/material'
 import styled from '@emotion/styled'
-import { MetaplexCollectionIdentifier } from '../solana/types'
+import { Container, Typography } from '@mui/material'
+import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import { Suspense, useEffect } from 'react'
+import { useRecoilState } from 'recoil'
 import CollectionContainer from '../components/collection/CollectionContainer'
 import CollectionFilters from '../components/collection/CollectionFilters'
+import { MetaplexCollectionIdentifier } from '../solana/types'
 import { collectionIdentifier } from '../store'
-import { useRecoilState } from 'recoil'
 
 const ParentContainer = styled.div`
   display: flex;

@@ -3,12 +3,11 @@ import * as solana from '../solana'
 
 const fetchOffchain = selectorFamily<any, string>({
   key: 'fetchOffchain',
-  get: (uri: string) =>
-    async () => {
-      const result = solana.fetchOffchain(uri)
+  get: (uri: string) => async () => {
+    const result = solana.fetchOffchain(uri)
 
-      return result
-    },
-  })
+    return result
+  },
+})
 
 export default fetchOffchain

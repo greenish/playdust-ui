@@ -1,9 +1,9 @@
+import axios from 'axios'
 import { selectorFamily } from 'recoil'
 import type {
   MetaplexCollectionIdentifier,
-  ParsedMetadata
+  ParsedMetadata,
 } from '../solana/types'
-import axios from 'axios'
 import collectionFilters, { CollectionFilterType } from './collectionFilters'
 
 const cache: any = {}
@@ -19,15 +19,18 @@ type FetchCollectionOutput = {
   total: number
 }
 
-const filterEntries = (data: ParsedMetadata[], filters: CollectionFilterType[]) => {
+const filterEntries = (
+  data: ParsedMetadata[],
+  filters: CollectionFilterType[]
+) => {
   if (!filters.length) {
     return data
   }
 
-  return data.filter(entry =>
-    filters.every(filter => {
-      const found = entry.offchain?.attributes?.find((attribute: any) =>
-        attribute.trait_type === filter.trait
+  return data.filter((entry) =>
+    filters.every((filter) => {
+      const found = entry.offchain?.attributes?.find(
+        (attribute: any) => attribute.trait_type === filter.trait
       )
 
       if (found) {
@@ -46,8 +49,9 @@ const getData = async (symbol: string): Promise<ParsedMetadata[]> => {
     return cacheForSymbol
   }
 
-  const { data } = await axios.get<ParsedMetadata[]>(`/data/${symbol}.json`)
-
+  const { data } = await axios.get<ParsedMetadata[]>(
+    `/data/${symbol}-RANKED.json`
+  )
 
   return data
 }
@@ -57,7 +61,8 @@ const fetchCollection = selectorFamily<
   FetchCollectionInput
 >({
   key: 'fetchCollection',
-  get: ({ identifier, start, stop }) =>
+  get:
+    ({ identifier, start, stop }) =>
     async ({ get }) => {
       const data = await getData(identifier.symbol)
       const filters = get(collectionFilters)

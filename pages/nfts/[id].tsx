@@ -1,11 +1,8 @@
 import styled from '@emotion/styled'
-
-import { Suspense } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-
-import TradingModule from '../../components/nft/TradingModule'
 import Details from '../../components/nft/Details'
+import TradingModule from '../../components/nft/TradingModule'
 import TransactionHistory from '../../components/nft/TransactionHistory'
 
 const PageContainer = styled.div`

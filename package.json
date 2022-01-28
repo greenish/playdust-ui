@@ -3,11 +3,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next lint && yarn prettier:check && next build",
     "start": "next start",
     "lint": "next lint",
+    "prettier:check": "yarn prettier --check '**/*.(ts|tsx|js)'",
+    "prettier:write": "yarn prettier --write '**/*.(ts|tsx|js)'",
     "gen:meta": "ts-node ./scripts/generateMetadata.ts",
-    "gen:agg": "ts-node ./scripts/generateAggregation.ts"
+    "gen:agg": "ts-node ./scripts/generateAggregation.ts",
+    "gen:rarity": "ts-node ./scripts/generateRarity.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -24,6 +27,7 @@
     "axios": "^0.25.0",
     "bs58": "^4.0.1",
     "elastic-builder": "^2.16.0",
+    "intercept-stdout": "^0.1.2",
     "next": "12.0.8",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -43,6 +47,7 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.3.1",
     "prettier": "^2.5.1",
+    "prettier-plugin-organize-imports": "^2.3.4",
     "ts-node": "^10.4.0",
     "typescript": "4.5.4"
   },
