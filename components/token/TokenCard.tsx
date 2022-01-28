@@ -1,17 +1,29 @@
-import { Card, CardContent, Typography, Skeleton } from '@mui/material'
-import { ParsedMetadata } from '../../solana/types'
-import { useState } from 'react'
-import QuickFilter from '../collection/QuickFilter'
 import styled from '@emotion/styled'
+import { Card, CardContent, Skeleton, Typography } from '@mui/material'
 import Link from 'next/link'
+import { useState } from 'react'
+import { ParsedMetadata } from '../../solana/types'
+import TokenCardFilter from './TokenCardFilter'
+
+const imageSize = 300
+export const dimensions = {
+  height: 450,
+  width: 350,
+}
+
+export const TokenCardContainer = styled.div`
+  height: ${dimensions.height}px;
+  width: ${dimensions.width}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 const CardContentContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `
-
-const imageSize = 300
 
 interface TokenCardProps {
   metadata: ParsedMetadata
@@ -23,37 +35,39 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
   const { name } = onchain.data
 
   return (
-    <Link href={`nfts/${onchain.mint}`}>
-      <a>
-        <Card sx={{ m: 2 }}>
-          {offchain?.image && (
-            <img
-              alt={name}
-              src={offchain.image}
-              height={imageSize}
-              style={isLoaded ? {} : { display: 'none' }}
-              onLoad={() => setIsLoaded(true)}
-            />
-          )}
-          {!isLoaded && (
-            <Skeleton
-              sx={{
-                height: imageSize,
-                width: imageSize,
-              }}
-              animation="wave"
-              variant="rectangular"
-            />
-          )}
-          <CardContent>
-            <CardContentContainer>
-              <Typography>{name}</Typography>
-              <QuickFilter metadata={metadata} />
-            </CardContentContainer>
-          </CardContent>
-        </Card>
-      </a>
-    </Link>
+    <TokenCardContainer>
+      <Card sx={{ width: imageSize }}>
+        <Link href={`nfts/${onchain.mint}`}>
+          <a>
+            {offchain?.image && (
+              <img
+                alt={name}
+                src={offchain.image}
+                height={imageSize}
+                style={isLoaded ? {} : { display: 'none' }}
+                onLoad={() => setIsLoaded(true)}
+              />
+            )}
+            {!isLoaded && (
+              <Skeleton
+                sx={{
+                  height: imageSize,
+                  width: imageSize,
+                }}
+                animation="wave"
+                variant="rectangular"
+              />
+            )}
+          </a>
+        </Link>
+        <CardContent>
+          <CardContentContainer>
+            <Typography>{name}</Typography>
+            {offchain.attributes && <TokenCardFilter metadata={metadata} />}
+          </CardContentContainer>
+        </CardContent>
+      </Card>
+    </TokenCardContainer>
   )
 }
 

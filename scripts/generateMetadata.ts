@@ -1,12 +1,8 @@
-import {
-  cannedCollections,
-  fetchOnchain,
-  fetchOffchain,
-} from '../solana'
+import retry from 'async-retry'
 import fastq from 'fastq'
 import fs from 'fs'
 import path from 'path'
-import retry from 'async-retry'
+import { cannedCollections, fetchOffchain, fetchOnchain } from '../solana'
 
 const OUTPUT_DIR = path.join(__dirname, '..', 'public/data')
 const ARWEAVE_CONCURRENCY_LIMIT = 500
@@ -24,33 +20,33 @@ const getOutputPath = (symbol: string) =>
 
 const run = async () => {
   const collectionPromises = cannedCollections
-    .filter(collection => !fs.existsSync(getOutputPath(collection.symbol)))
-    .map(
-      async collection => {
-        let count = 0
-        console.log('fetching onchain data for', collection.symbol)
-        const onchain = await fetchOnchain.byCollection(collection)
-        console.log('finished fetching onchain data for', collection.symbol)
+    .filter((collection) => !fs.existsSync(getOutputPath(collection.symbol)))
+    .map(async (collection) => {
+      let count = 0
+      console.log('fetching onchain data for', collection.symbol)
+      const onchain = await fetchOnchain.byCollection(collection)
+      console.log('finished fetching onchain data for', collection.symbol)
 
-        const offchainPromises = onchain.map(async meta => {
-          const { uri } = meta.onchain.data
-          const offchain = await queue.push(uri)
-          console.log(`${collection.symbol}: fetched offchain ${++count}/${onchain.length}`)
-
-          return {
-            ...meta,
-            offchain,
-          }
-        })
-
-        const payload = await Promise.all(offchainPromises)
-
-        fs.writeFileSync(
-          getOutputPath(collection.symbol),
-          JSON.stringify(payload),
+      const offchainPromises = onchain.map(async (meta) => {
+        const { uri } = meta.onchain.data
+        const offchain = await queue.push(uri)
+        console.log(
+          `${collection.symbol}: fetched offchain ${++count}/${onchain.length}`
         )
-      }
-    )
+
+        return {
+          ...meta,
+          offchain,
+        }
+      })
+
+      const payload = await Promise.all(offchainPromises)
+
+      fs.writeFileSync(
+        getOutputPath(collection.symbol),
+        JSON.stringify(payload)
+      )
+    })
 
   await Promise.all(collectionPromises)
 

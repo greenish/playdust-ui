@@ -1,9 +1,9 @@
+import axios from 'axios'
 import { selectorFamily } from 'recoil'
 import type {
   MetaplexCollectionIdentifier,
   ParsedMetadata,
 } from '../solana/types'
-import axios from 'axios'
 import collectionFilters, { CollectionFilterType } from './collectionFilters'
 import collectionSort, { CollectionSortType } from './collectionSort'
 
@@ -55,7 +55,9 @@ const getData = async (symbol: string): Promise<ParsedMetadata[]> => {
     return cacheForSymbol
   }
 
-  const { data } = await axios.get<ParsedMetadata[]>(`/data/${symbol}.json`)
+  const { data } = await axios.get<ParsedMetadata[]>(
+    `/data/${symbol}-RANKED.json`
+  )
 
   return data
 }

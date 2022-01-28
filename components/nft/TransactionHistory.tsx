@@ -1,21 +1,21 @@
-import { useState } from 'react'
 import {
+  Box,
+  Paper,
   Tab,
-  Tabs,
-  TableContainer,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  Paper,
-  TableBody,
-  Box,
+  Tabs,
 } from '@mui/material'
 import {
+  LAMPORTS_PER_SOL,
   PublicKey,
   TransactionResponse,
-  LAMPORTS_PER_SOL,
 } from '@solana/web3.js'
+import { useState } from 'react'
 import { useRecoilValueLoadable } from 'recoil'
 import { fetchNftTransactionsOnchain } from '../../store'
 

@@ -29,7 +29,8 @@ export const aurory = {
   symbol: 'AUROR',
   creator: '9vwYtcJsH1MskNaixcjgNBnvBDkTBhyg25umod1rgMQL',
   updateAuthority: 'aury7LJUae7a92PBo35vVbP61GX8VbyxFKausvUtBrt',
-  image: 'https://lz4y2kjsj23bm5j5zkjlffqlhu4mkhdckee67ji2w2u4zuzukvka.arweave.net/XnmNKTJOthZ1PcqSspYLPTjFHGJRCe-lGrapzNM0VVQ',
+  image:
+    'https://lz4y2kjsj23bm5j5zkjlffqlhu4mkhdckee67ji2w2u4zuzukvka.arweave.net/XnmNKTJOthZ1PcqSspYLPTjFHGJRCe-lGrapzNM0VVQ',
 }
 
 const all: MetaplexCollectionIdentifier[] = [

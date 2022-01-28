@@ -1,5 +1,5 @@
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
 import { cannedCollections } from '../solana'
 import { ParsedMetadata } from '../solana/types'
 
@@ -7,7 +7,7 @@ const INPUT_DIR = path.join(__dirname, '..', 'public/data')
 
 const getAttributes = (data: ParsedMetadata[]) => {
   const attributesMap = data
-    .flatMap(entry => entry.offchain.attributes)
+    .flatMap((entry) => entry.offchain.attributes)
     .reduce((acc: any, curr: any) => {
       if (!curr) {
         return acc
@@ -23,7 +23,7 @@ const getAttributes = (data: ParsedMetadata[]) => {
       if (!currentArr) {
         return {
           ...acc,
-          [trait_type]: [value]
+          [trait_type]: [value],
         }
       }
 
@@ -43,7 +43,7 @@ const getAttributes = (data: ParsedMetadata[]) => {
   }))
 }
 
-cannedCollections.map(collection => {
+cannedCollections.map((collection) => {
   const inputFile = path.join(INPUT_DIR, `${collection.symbol}.json`)
   const input = JSON.parse(fs.readFileSync(inputFile, 'utf8'))
 
@@ -54,6 +54,6 @@ cannedCollections.map(collection => {
 
   fs.writeFileSync(
     path.join(INPUT_DIR, `${collection.symbol}-AGGREGATION.json`),
-    JSON.stringify(agg),
+    JSON.stringify(agg)
   )
 })

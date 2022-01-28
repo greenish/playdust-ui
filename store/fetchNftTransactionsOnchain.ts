@@ -1,6 +1,6 @@
+import { TransactionResponse } from '@solana/web3.js'
 import { selectorFamily } from 'recoil'
 import * as solana from '../solana'
-import { TransactionResponse } from '@solana/web3.js'
 
 const fetchNftTransactionsOnchain = selectorFamily<
   TransactionResponse[],

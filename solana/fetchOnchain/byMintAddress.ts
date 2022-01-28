@@ -1,10 +1,10 @@
-import { Account } from '@metaplex/js'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
+import { Account } from '@metaplex/js'
 import { Connection, PublicKey } from '@solana/web3.js'
 import getUrl from '../getUrl'
-import { byMintAddress } from './filters'
-import { ParsedOnchain } from '../types'
 import { METADATA_PROGRAM_ID } from '../programIds'
+import { ParsedOnchain } from '../types'
+import { byMintAddress } from './filters'
 
 const getMetadataByMintAddress = async (
   mint: string

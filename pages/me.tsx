@@ -1,7 +1,7 @@
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { Suspense } from 'react'
 import styled from '@emotion/styled'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+import { Suspense } from 'react'
 import OwnedTokens from '../components/token/OwnedTokens'
 
 const ParentContainer = styled.div`

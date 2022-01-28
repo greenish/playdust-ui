@@ -1,6 +1,6 @@
 import { GetProgramAccountsFilter } from '@solana/web3.js'
-import makeMemFilter from './makeMemFilter'
 import { MetaplexCollectionIdentifier } from '../../types'
+import makeMemFilter from './makeMemFilter'
 
 export const byName = (name: string) =>
   makeMemFilter({ offset: 69, query: name })

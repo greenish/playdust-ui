@@ -1,20 +1,14 @@
-import { Account } from '@metaplex/js'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
-import {
-  Connection,
-  PublicKey,
-} from '@solana/web3.js'
+import { Account } from '@metaplex/js'
+import { Connection, PublicKey } from '@solana/web3.js'
 import getUrl from '../getUrl'
-import {
-  byCombination,
-} from './filters'
-import {
-  MetaplexCollectionIdentifier,
-  ParsedOnchain,
-} from '../types'
 import { METADATA_PROGRAM_ID } from '../programIds'
+import { MetaplexCollectionIdentifier, ParsedOnchain } from '../types'
+import { byCombination } from './filters'
 
-const byCollection = async (collection: MetaplexCollectionIdentifier): Promise<ParsedOnchain[]> => {
+const byCollection = async (
+  collection: MetaplexCollectionIdentifier
+): Promise<ParsedOnchain[]> => {
   const url = getUrl()
   const memFilters = byCombination(collection)
 
@@ -26,7 +20,7 @@ const byCollection = async (collection: MetaplexCollectionIdentifier): Promise<P
     }
   )
 
-  return raw.map(m => {
+  return raw.map((m) => {
     const account = new Account(m.pubkey, m.account)
     const metadata = Metadata.from(account)
     const mint = new PublicKey(metadata.data.mint)

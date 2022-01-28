@@ -1,6 +1,6 @@
 import { selectorFamily } from 'recoil'
-import type { ParsedMetadata } from '../solana/types'
 import * as solana from '../solana'
+import type { ParsedMetadata } from '../solana/types'
 
 const fetchNftDetailsOnchain = selectorFamily<ParsedMetadata, string>({
   key: 'fetchNftDetailsOnchain',

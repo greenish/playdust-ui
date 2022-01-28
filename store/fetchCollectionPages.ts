@@ -1,13 +1,8 @@
+import { selector, waitForNone } from 'recoil'
+import type { ParsedMetadata } from '../solana/types'
 import collectionCursor from './collectionCursor'
-import fetchCollection from './fetchCollection'
-import {
-  selector,
-  waitForNone,
-} from 'recoil'
-import type {
-  ParsedMetadata
-} from '../solana/types'
 import collectionIdentifier from './collectionIdentifier'
+import fetchCollection from './fetchCollection'
 
 type FetchCollectionPageOutput = {
   initialized: boolean
@@ -22,7 +17,7 @@ const defaultValue = {
   initialized: false,
   loading: true,
   tokens: [],
-  total: 0
+  total: 0,
 }
 
 const fetchCollectionPages = selector<FetchCollectionPageOutput>({
@@ -37,25 +32,30 @@ const fetchCollectionPages = selector<FetchCollectionPageOutput>({
     const cursor = get(collectionCursor)
     const cursorRange = Array.from(Array(cursor).keys())
 
-    const pages = get(waitForNone(
-      cursorRange.map(entry => fetchCollection({
-        identifier,
-        start: entry * PAGE_SIZE,
-        stop: (entry + 1) * PAGE_SIZE,
-      }))
-    ))
+    const pages = get(
+      waitForNone(
+        cursorRange.map((entry) =>
+          fetchCollection({
+            identifier,
+            start: entry * PAGE_SIZE,
+            stop: (entry + 1) * PAGE_SIZE,
+          })
+        )
+      )
+    )
 
-    const initialized = !!pages.find(entry => entry.state === 'hasValue')
+    const initialized = !!pages.find((entry) => entry.state === 'hasValue')
 
     if (!initialized) {
       return defaultValue
     }
 
-    const loading = !!pages.find(entry => entry.state === 'loading')
+    const loading = !!pages.find((entry) => entry.state === 'loading')
     const tokens = pages
-      .filter(entry => entry.state === 'hasValue')
-      .flatMap(entry => entry.contents.data)
-    const total = pages.find(entry => entry.state === 'hasValue')?.contents?.total || 0
+      .filter((entry) => entry.state === 'hasValue')
+      .flatMap((entry) => entry.contents.data)
+    const total =
+      pages.find((entry) => entry.state === 'hasValue')?.contents?.total || 0
 
     return {
       initialized,
@@ -63,7 +63,7 @@ const fetchCollectionPages = selector<FetchCollectionPageOutput>({
       tokens,
       total,
     }
-  }
+  },
 })
 
 export default fetchCollectionPages

@@ -1,13 +1,8 @@
+import styled from '@emotion/styled'
+import { Card, CardContent, Container, Typography } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { Container } from '@mui/material'
-import {
-  Card,
-  CardContent,
-  Typography,
-} from '@mui/material'
 import { cannedCollections } from '../solana'
-import styled from '@emotion/styled'
 
 const IndexContainer = styled.div`
   display: flex;
@@ -23,30 +18,28 @@ const Home: NextPage = () => {
   return (
     <Container>
       <IndexContainer>
-        {
-          cannedCollections.map(({image, ...collection}) => (
-            <Card
-              key={collection.symbol}
-              onClick={() => router.push({
+        {cannedCollections.map(({ image, ...collection }) => (
+          <Card
+            key={collection.symbol}
+            onClick={() =>
+              router.push({
                 pathname: '/collection',
                 query: { ...collection },
-              })}
-              sx={{
-                cursor: 'pointer',
-                m: 2,
-              }}
-            >
-              <img
-                alt={collection.name}
-                src={image}
-                width={300}
-              />
-              <CardContent>
-                <Typography>{collection.name} ({collection.symbol})</Typography>
-              </CardContent>
-            </Card>
-          ))
-        }
+              })
+            }
+            sx={{
+              cursor: 'pointer',
+              m: 2,
+            }}
+          >
+            <img alt={collection.name} src={image} width={300} />
+            <CardContent>
+              <Typography>
+                {collection.name} ({collection.symbol})
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
       </IndexContainer>
     </Container>
   )

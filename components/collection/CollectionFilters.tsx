@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import {
   Chip,
   FormControl,
@@ -7,9 +8,8 @@ import {
   Select,
   Typography,
 } from '@mui/material'
-import * as store from '../../store'
 import { useRecoilValue } from 'recoil'
-import styled from '@emotion/styled'
+import * as store from '../../store'
 
 const RootContainer = styled.div`
   display: flex;
