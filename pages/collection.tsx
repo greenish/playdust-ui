@@ -5,21 +5,34 @@ import { Container, Typography } from '@mui/material'
 import styled from '@emotion/styled'
 import { MetaplexCollectionIdentifier } from '../solana/types'
 import CollectionContainer from '../components/collection/CollectionContainer'
+import CollectionFilters from '../components/collection/CollectionFilters'
 import { collectionIdentifier } from '../store'
 import { useRecoilState } from 'recoil'
-
-const AbsoluteContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-`
 
 const ParentContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
+  width: 100%;
+`
+
+const RootContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`
+
+const FilterContainer = styled.div`
+  display: flex;
+  width: 300px;
+  padding: 16px;
+`
+
+const TokenFlexContainer = styled.div`
+  display: flex;
   height: 100%;
   width: 100%;
 `
@@ -72,16 +85,21 @@ const Collection: NextPage = () => {
 
   return (
     identifier && (
-      <AbsoluteContainer>
-        <ParentContainer>
-          <CollectionNameContainer>
-            <Typography variant="h3">{identifier.name}</Typography>
-          </CollectionNameContainer>
-          <Suspense fallback={<div />}>
-            <CollectionContainer />
-          </Suspense>
-        </ParentContainer>
-      </AbsoluteContainer>
+      <ParentContainer>
+        <CollectionNameContainer>
+          <Typography variant="h3">{identifier.name}</Typography>
+        </CollectionNameContainer>
+        <Suspense fallback={<div />}>
+          <RootContainer>
+            <FilterContainer>
+              <CollectionFilters />
+            </FilterContainer>
+            <TokenFlexContainer>
+              <CollectionContainer />
+            </TokenFlexContainer>
+          </RootContainer>
+        </Suspense>
+      </ParentContainer>
     )
   )
 }

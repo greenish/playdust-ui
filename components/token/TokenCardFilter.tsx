@@ -12,11 +12,11 @@ import { ParsedMetadata } from '../../solana/types'
 import * as store from '../../store'
 import { useRecoilValue } from 'recoil'
 
-interface QuickFilterProps {
+interface TokenCardFilter {
   metadata: ParsedMetadata
 }
 
-const QuickFilter = ({ metadata }: QuickFilterProps) => {
+const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const filters = useRecoilValue(store.collectionFilters)
   const setFilter = store.useSetCollectionFilter()
@@ -67,4 +67,4 @@ const QuickFilter = ({ metadata }: QuickFilterProps) => {
   )
 }
 
-export default QuickFilter
+export default TokenCardFilter

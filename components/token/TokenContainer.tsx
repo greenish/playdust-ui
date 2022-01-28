@@ -1,23 +1,25 @@
-import { CircularProgress, Container } from '@mui/material'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import TokenCard from './TokenCard'
+import { CircularProgress } from '@mui/material'
+import TokenCard, { dimensions, TokenCardContainer } from './TokenCard'
 import { ParsedMetadata } from '../../solana/types'
 import styled from '@emotion/styled'
+import {
+  AutoSizer,
+  InfiniteLoader,
+  List,
+  ListRowProps,
+  Size,
+} from 'react-virtualized'
+import 'react-virtualized/styles.css'
 
-const InfiniteScrollContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  overflow: scroll;
+const RootContainer = styled.div`
+  height: 100%;
   width: 100%;
-  justify-content: center;
+  display: block;
 `
 
 const TokensContainer = styled.div`
   display: flex;
-  flex: 1;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-evenly;
 `
 
 const LoaderContainer = styled.div`
@@ -35,7 +37,27 @@ const Loader = () => (
   </LoaderContainer>
 )
 
-const scrollId = 'token-container-scrollable-box'
+const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
+  const { cardsPerRow, data } = parent.props
+  const startingIdx = cardsPerRow * index
+  const tokenRange = Array.from(Array(cardsPerRow).keys())
+
+  return (
+    <div key={key} style={style}>
+      <TokensContainer>
+        {tokenRange.map((tokenIdx) => {
+          const token = data[tokenIdx + startingIdx]
+
+          return token ? (
+            <TokenCard key={token.mint} metadata={token} />
+          ) : (
+            <TokenCardContainer key={`empty-${tokenIdx}`} />
+          )
+        })}
+      </TokensContainer>
+    </div>
+  )
+}
 
 interface TokenContainerProps {
   initialized: boolean
@@ -44,35 +66,65 @@ interface TokenContainerProps {
   next?: () => any
 }
 
-const TokenContainer = ({
-  initialized,
+const makeAutoSizedContainer = ({
   tokens,
   hasMore,
-  next = () => null,
-}: TokenContainerProps) => {
-  if (!initialized) {
+  next,
+}: TokenContainerProps) =>
+  function AutoSizedContainer(autoSizerProps: Size) {
+    const cardsPerRow = Math.floor(autoSizerProps.width / dimensions.width)
+    const rowCount = hasMore
+      ? Math.floor(tokens.length / cardsPerRow)
+      : Math.ceil(tokens.length / cardsPerRow)
+
+    return (
+      <div
+        style={{
+          height: autoSizerProps.height,
+          width: autoSizerProps.width,
+        }}
+      >
+        <InfiniteLoader
+          isRowLoaded={({ index }) => {
+            if (!hasMore) {
+              return true
+            }
+
+            return index + 1 < rowCount
+          }}
+          loadMoreRows={async () => {
+            next && next()
+          }}
+          rowCount={rowCount}
+          threshold={2}
+        >
+          {(infinteLoaderProps) => (
+            <List
+              ref={infinteLoaderProps.registerChild}
+              onRowsRendered={infinteLoaderProps.onRowsRendered}
+              height={autoSizerProps.height}
+              rowCount={rowCount}
+              rowHeight={dimensions.height}
+              rowRenderer={RowRenderer}
+              width={autoSizerProps.width}
+              data={tokens}
+              cardsPerRow={cardsPerRow}
+            />
+          )}
+        </InfiniteLoader>
+      </div>
+    )
+  }
+
+const TokenContainer = (props: TokenContainerProps) => {
+  if (!props.initialized) {
     return <Loader />
   }
 
   return (
-    <InfiniteScrollContainer id={scrollId}>
-      <InfiniteScroll
-        scrollableTarget={scrollId}
-        scrollThreshold={0.9}
-        dataLength={tokens.length}
-        next={next}
-        hasMore={hasMore}
-        loader={<Loader />}
-      >
-        <Container>
-          <TokensContainer>
-            {tokens.map((token) => (
-              <TokenCard key={token.mint} metadata={token} />
-            ))}
-          </TokensContainer>
-        </Container>
-      </InfiniteScroll>
-    </InfiniteScrollContainer>
+    <RootContainer>
+      <AutoSizer>{makeAutoSizedContainer(props)}</AutoSizer>
+    </RootContainer>
   )
 }
 

@@ -4,6 +4,7 @@ import TokenContainer from './TokenContainer'
 import styled from '@emotion/styled'
 import { useRecoilValue } from 'recoil'
 import { fetchOwnedOnchain } from '../../store'
+import { Container } from '@mui/material'
 
 const HelperMessageContainer = styled.div`
   display: flex;
@@ -11,6 +12,10 @@ const HelperMessageContainer = styled.div`
   margin-top: 8px;
   justify-content: center;
   font-style: italic;
+`
+
+const ContentContainer = styled(Container)`
+  height: 100%;
 `
 
 interface OwnedTokensProp {
@@ -21,7 +26,7 @@ const OwnedTokens = ({ publicKey }: OwnedTokensProp) => {
   const ownedTokens = useRecoilValue(fetchOwnedOnchain(publicKey))
 
   return (
-    <div>
+    <ContentContainer>
       {ownedTokens.length ? (
         <TokenContainer initialized tokens={ownedTokens} hasMore={false} />
       ) : (
@@ -31,7 +36,7 @@ const OwnedTokens = ({ publicKey }: OwnedTokensProp) => {
           </Typography>
         </HelperMessageContainer>
       )}
-    </div>
+    </ContentContainer>
   )
 }
 
