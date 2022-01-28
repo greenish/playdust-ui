@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
-import collectionSort, { CollectionSortType } from '../../store/collectionSort'
-import { useRecoilState } from 'recoil'
 import {
+  Divider,
+  FormControl,
   InputLabel,
   MenuItem,
-  FormControl,
   Select,
-  Divider,
   Typography,
 } from '@mui/material'
+import { useRecoilState } from 'recoil'
+import collectionSort, { CollectionSortType } from '../../store/collectionSort'
 
 const RootContainer = styled.div`
   display: flex;
@@ -36,12 +36,11 @@ const SortFields = () => {
       <Typography sx={{ marginBottom: 2 }}>Sort</Typography>
       {sort.map((s) => (
         <FormControl key={s.name}>
-          <InputLabel id="demo-simple-select-label">{s.name}</InputLabel>
+          <InputLabel id={`select-${s.name}-label`}>{s.name}</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
+            labelId={`select-${s.name}-label`}
             value={s.selectedValue}
-            label="Age"
+            label={s.name}
             onChange={(e) => changeSort(e.target.value, s)}
           >
             {s.values.map((val) => (

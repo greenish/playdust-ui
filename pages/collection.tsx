@@ -6,6 +6,7 @@ import { Suspense, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import CollectionContainer from '../components/collection/CollectionContainer'
 import CollectionFilters from '../components/collection/CollectionFilters'
+import SortFields from '../components/collection/SortFields'
 import { MetaplexCollectionIdentifier } from '../solana/types'
 import { collectionIdentifier } from '../store'
 
@@ -27,6 +28,7 @@ const RootContainer = styled.div`
 
 const FilterContainer = styled.div`
   display: flex;
+  flex-direction: column;
   width: 300px;
   padding: 16px;
 `
@@ -92,6 +94,7 @@ const Collection: NextPage = () => {
         <Suspense fallback={<div />}>
           <RootContainer>
             <FilterContainer>
+              <SortFields />
               <CollectionFilters />
             </FilterContainer>
             <TokenFlexContainer>
