@@ -5,6 +5,7 @@ import type {
   ParsedMetadata,
 } from '../solana/types'
 import collectionFilters, { CollectionFilterType } from './collectionFilters'
+import collectionSort, { CollectionSortType } from './collectionSort'
 
 const cache: any = {}
 
@@ -42,6 +43,11 @@ const filterEntries = (
   )
 }
 
+const sortEntries = (data: ParsedMetadata[], sort: CollectionSortType[]) => {
+  sort.forEach((s) => data.sort(s.sortFunction(s.selectedValue)))
+  return data
+}
+
 const getData = async (symbol: string): Promise<ParsedMetadata[]> => {
   const cacheForSymbol = cache[symbol]
 
@@ -66,10 +72,11 @@ const fetchCollection = selectorFamily<
     async ({ get }) => {
       const data = await getData(identifier.symbol)
       const filters = get(collectionFilters)
+      const sort = get(collectionSort)
 
       cache[identifier.symbol] = data
 
-      const filtered = filterEntries(data, filters)
+      const filtered = sortEntries(filterEntries(data, filters), sort)
 
       return {
         data: filtered.slice(start, stop),
