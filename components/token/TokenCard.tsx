@@ -3,6 +3,7 @@ import { Card, CardContent, Skeleton, Typography } from '@mui/material'
 import { useState } from 'react'
 import { ParsedMetadata } from '../../solana/types'
 import Link from '../common/Link'
+import Image from '../utils/image'
 import TokenCardFilter from './TokenCardFilter'
 
 const imageSize = 300
@@ -46,11 +47,12 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
         <Link href={href}>
           {offchain?.image && (
             <CardImageContainer>
-              <img
+              <Image
                 alt={name}
-                src={offchain.image}
+                url={offchain.image}
+                width={imageSize}
                 height={imageSize}
-                style={isLoaded ? {} : { display: 'none' }}
+                style={isLoaded ? { objectFit: 'cover' } : { display: 'none' }}
                 onLoad={() => setIsLoaded(true)}
               />
             </CardImageContainer>

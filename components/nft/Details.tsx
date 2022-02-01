@@ -3,7 +3,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Avatar,
   Box,
   List,
   ListItem,
@@ -12,6 +11,7 @@ import {
 } from '@mui/material'
 import { useRecoilValueLoadable } from 'recoil'
 import { fetchNftDetailsOnchain } from '../../store'
+import Image from '../utils/image'
 
 interface DetailsProps {
   mint: string
@@ -30,11 +30,10 @@ const Details = ({ mint }: DetailsProps) => {
 
       return (
         <Box mx={1}>
-          <Avatar
+          <Image
             alt={content.onchain.data.name}
-            src={content.offchain.image}
-            sx={{ width: 200, height: 200 }}
-            variant="rounded"
+            url={content.offchain.image}
+            style={{ width: 500, height: 500 }}
           />
           <h1>{content.onchain.data.name}</h1>
 
