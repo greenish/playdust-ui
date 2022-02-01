@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import {
-  Divider,
   FormControl,
   InputLabel,
   MenuItem,
@@ -14,6 +13,7 @@ const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: 8px;
+  width: 100%;
 `
 
 const SortFields = () => {
@@ -51,7 +51,6 @@ const SortFields = () => {
           </Select>
         </FormControl>
       ))}
-      <Divider sx={{ marginTop: 2 }} />
     </RootContainer>
   )
 }

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Container, Typography } from '@mui/material'
+import { Container, Divider, Typography } from '@mui/material'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { Suspense, useEffect } from 'react'
@@ -26,11 +26,12 @@ const RootContainer = styled.div`
   overflow: hidden;
 `
 
-const FilterContainer = styled.div`
+const AggregationContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 300px;
-  padding: 16px;
+  padding: 0 16px 16px 16px;
 `
 
 const TokenFlexContainer = styled.div`
@@ -39,8 +40,10 @@ const TokenFlexContainer = styled.div`
   width: 100%;
 `
 
-const CollectionNameContainer = styled.div`
-  display: flex;
+const DividerContainer = styled(Divider)`
+  width: 100%;
+  margin-top: 16px;
+  margin-bottom: 16px;
 `
 
 const isValid = (input: any) => typeof input === 'string' && !!input.length
@@ -88,15 +91,15 @@ const Collection: NextPage = () => {
   return (
     identifier && (
       <ParentContainer>
-        <CollectionNameContainer>
-          <Typography variant="h3">{identifier.name}</Typography>
-        </CollectionNameContainer>
         <Suspense fallback={<div />}>
           <RootContainer>
-            <FilterContainer>
+            <AggregationContainer>
+              <Typography>{identifier.name}</Typography>
+              <DividerContainer />
               <SortFields />
+              <DividerContainer />
               <CollectionFilters />
-            </FilterContainer>
+            </AggregationContainer>
             <TokenFlexContainer>
               <CollectionContainer />
             </TokenFlexContainer>

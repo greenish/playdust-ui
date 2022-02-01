@@ -1,11 +1,12 @@
 import styled from '@emotion/styled'
+import { Container } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import Details from '../../components/nft/Details'
 import TradingModule from '../../components/nft/TradingModule'
 import TransactionHistory from '../../components/nft/TransactionHistory'
 
-const PageContainer = styled.div`
+const PageContainer = styled(Container)`
   display: flex;
   flex-direction: column;
   gap: 20px;

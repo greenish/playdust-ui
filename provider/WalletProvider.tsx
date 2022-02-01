@@ -1,5 +1,9 @@
-import { WalletProvider } from '@solana/wallet-adapter-react'
+import {
+  ConnectionProvider,
+  WalletProvider,
+} from '@solana/wallet-adapter-react'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
+import '@solana/wallet-adapter-react-ui/styles.css'
 import {
   LedgerWalletAdapter,
   PhantomWalletAdapter,
@@ -10,14 +14,14 @@ import {
   TorusWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 import { useMemo } from 'react'
-
-require('@solana/wallet-adapter-react-ui/styles.css')
+import getUrl from '../solana/getUrl'
 
 interface WalletProviderProps {
   children: React.ReactNode
 }
 
 const Wallet = ({ children }: WalletProviderProps) => {
+  const endpoint = getUrl()
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
@@ -28,13 +32,15 @@ const Wallet = ({ children }: WalletProviderProps) => {
       new SolletWalletAdapter(),
       new SolletExtensionWalletAdapter(),
     ],
-    []
+    [endpoint]
   )
 
   return (
-    <WalletProvider wallets={wallets}>
-      <WalletModalProvider>{children}</WalletModalProvider>
-    </WalletProvider>
+    <ConnectionProvider endpoint={endpoint}>
+      <WalletProvider autoConnect wallets={wallets}>
+        <WalletModalProvider>{children}</WalletModalProvider>
+      </WalletProvider>
+    </ConnectionProvider>
   )
 }
 

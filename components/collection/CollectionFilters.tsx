@@ -8,7 +8,8 @@ import {
   Select,
   Typography,
 } from '@mui/material'
-import { useRecoilValue } from 'recoil'
+import { useEffect } from 'react'
+import { useRecoilValue, useResetRecoilState } from 'recoil'
 import * as store from '../../store'
 
 const RootContainer = styled.div`
@@ -33,7 +34,10 @@ const ChipItem = styled.div`
 const CollectionFilters = () => {
   const { attributes } = useRecoilValue(store.fetchCollectionAggregation)
   const filters = useRecoilValue(store.collectionFilters)
+  const resetFilters = useResetRecoilState(store.collectionFilters)
   const updateFilters = store.useUpdateCollectionFilters()
+
+  useEffect(() => resetFilters, [])
 
   return (
     <RootContainer>

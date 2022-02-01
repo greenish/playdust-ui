@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { Suspense } from 'react'
 import OwnedTokens from '../components/token/OwnedTokens'
 
@@ -8,8 +7,9 @@ const ParentContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  height: 100%;
+  padding-top: 16px;
+  padding-bottom: 16px;
 `
 
 const Me = () => {
@@ -17,11 +17,12 @@ const Me = () => {
 
   return (
     <ParentContainer>
-      <WalletMultiButton />
-      {wallet.connected && wallet.publicKey && (
+      {wallet.connected && wallet.publicKey ? (
         <Suspense fallback={<div />}>
           <OwnedTokens publicKey={wallet.publicKey} />
         </Suspense>
+      ) : (
+        <i>Connect wallet to view tokens</i>
       )}
     </ParentContainer>
   )

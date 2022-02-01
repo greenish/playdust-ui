@@ -8,7 +8,6 @@ import TokenContainer from './TokenContainer'
 const HelperMessageContainer = styled.div`
   display: flex;
   width: 100%;
-  margin-top: 8px;
   justify-content: center;
   font-style: italic;
 `

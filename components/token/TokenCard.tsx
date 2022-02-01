@@ -25,6 +25,11 @@ const CardContentContainer = styled.div`
   justify-content: space-between;
 `
 
+const CardImageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
 interface TokenCardProps {
   metadata: ParsedMetadata
 }
@@ -40,13 +45,15 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
         <Link href={`nfts/${onchain.mint}`}>
           <a>
             {offchain?.image && (
-              <img
-                alt={name}
-                src={offchain.image}
-                height={imageSize}
-                style={isLoaded ? {} : { display: 'none' }}
-                onLoad={() => setIsLoaded(true)}
-              />
+              <CardImageContainer>
+                <img
+                  alt={name}
+                  src={offchain.image}
+                  height={imageSize}
+                  style={isLoaded ? {} : { display: 'none' }}
+                  onLoad={() => setIsLoaded(true)}
+                />
+              </CardImageContainer>
             )}
             {!isLoaded && (
               <Skeleton
