@@ -1,46 +1,93 @@
-import { atom } from 'recoil'
+import { atom, useRecoilCallback } from 'recoil'
 import { ParsedMetadata } from '../solana/types'
+import collectionCursor from './collectionCursor'
 
-export type CollectionSortType = {
+type CollectionSortOption = {
   name: string
-  values: any[]
-  selectedValue: any
-  sortFunction: Function
+  sortFunction: (a: ParsedMetadata, b: ParsedMetadata) => number
 }
 
-const collectionSort = atom<CollectionSortType[]>({
+export type CollectionSortType = {
+  selectedIndex: number
+  options: {
+    name: string
+    sortFunction: (a: ParsedMetadata, b: ParsedMetadata) => number
+  }[]
+}
+
+const makeRarityOptions = (
+  name: string,
+  primaryName: string,
+  secondaryName: string,
+  primaryFunction: (a: ParsedMetadata, b: ParsedMetadata) => number
+): [CollectionSortOption, CollectionSortOption] => [
+  {
+    name: `${name}: ${primaryName}`,
+    sortFunction: primaryFunction,
+  },
+  {
+    name: `${name}: ${secondaryName}`,
+    sortFunction: (a, b) => -primaryFunction(a, b),
+  },
+]
+
+const collectionSort = atom<CollectionSortType>({
   key: 'collectionSort',
-  default: [
-    {
-      name: 'Name',
-      values: ['asc', 'desc'],
-      selectedValue: 'asc',
-      sortFunction: (value: any) => (a: ParsedMetadata, b: ParsedMetadata) => {
-        if (!value) {
-          return undefined
+  default: {
+    selectedIndex: 0,
+    options: [
+      ...makeRarityOptions(
+        'Rarity Score',
+        'high to low',
+        'low to high',
+        (a, b) => {
+          if (!a.rarityScore || !b.rarityScore) {
+            return 0
+          }
+
+          return b.rarityScore - a.rarityScore
         }
-        if (value === 'asc') {
-          return a.onchain.data.name.localeCompare(
-            b.onchain.data.name,
-            undefined,
-            {
-              numeric: true,
-              sensitivity: 'base',
-            }
-          )
-        } else {
-          return b.onchain.data.name.localeCompare(
-            a.onchain.data.name,
-            undefined,
-            {
-              numeric: true,
-              sensitivity: 'base',
-            }
-          )
+      ),
+      ...makeRarityOptions(
+        'Statistical Rarity',
+        'high to low',
+        'low to high',
+        (a, b) => {
+          if (!a.statisticalRarity || !b.statisticalRarity) {
+            return 0
+          }
+
+          return a.statisticalRarity - b.statisticalRarity
         }
-      },
-    },
-  ],
+      ),
+      ...makeRarityOptions('Name', 'asc', 'desc', (a, b) => {
+        return a.onchain.data.name.localeCompare(
+          b.onchain.data.name,
+          undefined,
+          {
+            numeric: true,
+            sensitivity: 'base',
+          }
+        )
+      }),
+    ],
+  },
 })
+
+export const useSetSelectedSort = () => {
+  const callback = useRecoilCallback(
+    ({ reset, set }) =>
+      async (selectedIndex: number) => {
+        set(collectionSort, (current) => ({
+          ...current,
+          selectedIndex,
+        }))
+        reset(collectionCursor)
+      },
+    []
+  )
+
+  return callback
+}
 
 export default collectionSort

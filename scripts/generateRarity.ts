@@ -94,11 +94,9 @@ cannedCollections.map((collection) => {
   const tokens = getUniqueTokensByName(allTokens)
 
   const withRarity = addRarity(tokens)
-  // const sorted = withRarity.sort((a, b) => a.statisticalRarity - b.statisticalRarity)
-  const sorted = withRarity.sort((a, b) => b.rarityScore - a.rarityScore)
 
   fs.writeFileSync(
     path.join(INPUT_DIR, `${collection.symbol}-RANKED.json`),
-    JSON.stringify(sorted)
+    JSON.stringify(withRarity)
   )
 })

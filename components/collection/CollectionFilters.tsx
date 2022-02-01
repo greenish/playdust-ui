@@ -6,9 +6,8 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  Typography,
 } from '@mui/material'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
 import * as store from '../../store'
 
@@ -36,24 +35,28 @@ const CollectionFilters = () => {
   const filters = useRecoilValue(store.collectionFilters)
   const resetFilters = useResetRecoilState(store.collectionFilters)
   const updateFilters = store.useUpdateCollectionFilters()
+  const [openIdx, setOpenIdx] = useState(-1)
 
   useEffect(() => resetFilters, [])
 
   return (
     <RootContainer>
-      <Typography sx={{ marginLeft: 1 }}>Filters</Typography>
-      {attributes.map((attribute) => (
+      {attributes.map((attribute, idx) => (
         <ItemContainer key={attribute.trait}>
           <FormControl fullWidth>
             <InputLabel>{attribute.trait}</InputLabel>
             <Select
+              open={idx === openIdx}
               multiple
               value={
                 filters.find((entry) => entry.trait === attribute.trait)
                   ?.options || []
               }
+              onOpen={() => setOpenIdx(idx)}
+              onClose={() => setOpenIdx(-1)}
               onChange={(evt) => {
                 updateFilters(attribute.trait, evt.target.value as string[])
+                setOpenIdx(-1)
               }}
               input={<OutlinedInput label={attribute.trait} />}
               renderValue={(selected) => (

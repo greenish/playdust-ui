@@ -15,6 +15,8 @@ export interface ParsedOnchain {
 }
 
 export interface ParsedMetadata extends ParsedOnchain {
+  rarityScore?: number
+  statisticalRarity?: number
   offchain: {
     image: string
     attributes: {

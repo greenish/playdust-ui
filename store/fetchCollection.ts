@@ -43,9 +43,10 @@ const filterEntries = (
   )
 }
 
-const sortEntries = (data: ParsedMetadata[], sort: CollectionSortType[]) => {
-  sort.forEach((s) => data.sort(s.sortFunction(s.selectedValue)))
-  return data
+const sortEntries = (data: ParsedMetadata[], sort: CollectionSortType) => {
+  const { selectedIndex } = sort
+
+  return data.sort(sort.options[selectedIndex].sortFunction)
 }
 
 const getData = async (symbol: string): Promise<ParsedMetadata[]> => {

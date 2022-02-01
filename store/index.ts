@@ -5,6 +5,7 @@ export {
   useUpdateCollectionFilters,
 } from './collectionFilters'
 export { default as collectionIdentifier } from './collectionIdentifier'
+export { default as collectionSort, useSetSelectedSort } from './collectionSort'
 export { default as fetchCollection } from './fetchCollection'
 export { default as fetchCollectionAggregation } from './fetchCollectionAggregation'
 export { default as fetchCollectionOnchain } from './fetchCollectionOnchain'
