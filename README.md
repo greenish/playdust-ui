@@ -57,7 +57,19 @@ Husky and lint-staged are used for optimal linting, to use it run the following 
 yarn husky install
 ```
 
-## API connection
+## Environment variables
+
+The following variables are needed to connect to deployed DBs/APIs:
+
+- OPENSEARCH_USER
+- OPENSEARCH_PASSWORD
+- OPENSEARCH_URL
+- PLAYDUST_API_HOST
+- AUCTION_HOUSE_PATH
+
+These should be added to an `.env` file, values can be found in Vercel
+
+## Local API connection
 
 Enviroment variables are needed to connect to our API, follow these steps for correct configuration
 

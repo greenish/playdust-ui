@@ -1,40 +1,26 @@
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
-import { Account } from '@metaplex/js'
-import { Connection, PublicKey } from '@solana/web3.js'
-import getUrl from '../getUrl'
-import { METADATA_PROGRAM_ID } from '../programIds'
-import { ParsedOnchain } from '../types'
-import { byMintAddress } from './filters'
+import { Connection } from '@solana/web3.js'
+import type OpenSearchSource from '../../types/OpenSearchSource'
+import fetchOffchain from '../fetchOffchain'
 
 const getMetadataByMintAddress = async (
+  endpoint: string,
   mint: string
-): Promise<ParsedOnchain[]> => {
-  if (mint === 'undefined') {
-    return []
-  }
-
-  const url = getUrl()
-  const memFilters = byMintAddress(mint)
-
-  const connection = new Connection(url)
-  const raw = await connection.getProgramAccounts(
-    new PublicKey(METADATA_PROGRAM_ID),
-    {
-      filters: [memFilters],
-    }
-  )
-
-  return raw.map((m) => {
-    const account = new Account(m.pubkey, m.account)
-    const metadata = Metadata.from(account)
-    const mint = new PublicKey(metadata.data.mint)
+): Promise<OpenSearchSource | undefined> => {
+  try {
+    const connection = new Connection(endpoint)
+    const pda = await Metadata.getPDA(mint)
+    const { data } = await Metadata.load(connection, pda)
+    const offChainData = await fetchOffchain(data.data.uri)
 
     return {
-      mint: mint.toBase58(),
-      pda: metadata.pubkey.toBase58(),
-      onchain: metadata.data,
+      mint,
+      data: data.data,
+      offChainData,
     }
-  })
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 export default getMetadataByMintAddress

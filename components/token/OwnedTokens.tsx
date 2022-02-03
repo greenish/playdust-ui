@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Container, Typography } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
-import { fetchOwnedOnchain } from '../../store'
+import { fetchOwned } from '../../store'
 import TokenContainer from './TokenContainer'
 
 const HelperMessageContainer = styled.div`
@@ -21,7 +21,7 @@ interface OwnedTokensProp {
 }
 
 const OwnedTokens = ({ publicKey }: OwnedTokensProp) => {
-  const ownedTokens = useRecoilValue(fetchOwnedOnchain(publicKey))
+  const ownedTokens = useRecoilValue(fetchOwned(publicKey))
 
   return (
     <ContentContainer>

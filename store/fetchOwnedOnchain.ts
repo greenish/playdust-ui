@@ -1,33 +1,18 @@
-import { selectorFamily, waitForNone } from 'recoil'
+import { Connection } from '@solana/web3.js'
+import { selectorFamily } from 'recoil'
 import * as solana from '../solana'
-import type { ParsedMetadata } from '../solana/types'
-import fetchOffchain from './fetchOffchain'
+import type { ParsedOnchain } from '../solana/types'
+import solanaCluster from './solanaCluster'
 
-const fetchOwnedOnchain = selectorFamily<ParsedMetadata[], any>({
-  key: 'fetchCollectionOnchain',
+const fetchOwnedOnchain = selectorFamily<ParsedOnchain[], any>({
+  key: 'fetchOwnedOnchain',
   get: (publicKey) => {
     return async ({ get }) => {
-      const result = await solana.fetchOnchain.byOwner(publicKey)
+      const { endpoint } = get(solanaCluster)
+      const connection = new Connection(endpoint)
+      const result = await solana.fetchOnchain.byOwner(connection, publicKey)
 
-      const offchainData = get(
-        waitForNone(
-          result.map((entry) => fetchOffchain(entry.onchain.data.uri))
-        )
-      )
-
-      return result.map((entry, idx) => {
-        if (offchainData[idx].state === 'hasValue') {
-          return {
-            ...entry,
-            offchain: offchainData[idx].contents,
-          }
-        }
-
-        return {
-          ...entry,
-          offchain: {},
-        }
-      })
+      return result
     }
   },
 })

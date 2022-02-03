@@ -4,6 +4,7 @@ import { IconButton, Paper, Toolbar } from '@mui/material'
 import Link from 'next/link'
 import { ReactNode } from 'react'
 import AppBarSearch from './AppBarSearch'
+import Notifications from './Notifications'
 import WalletButton from './WalletButton'
 
 const appBarHeight = 72
@@ -83,6 +84,7 @@ const AppBar = ({ children }: AppBarProps) => {
       <ChildrenContainer>
         <ChildrenRelativeContainer>{children}</ChildrenRelativeContainer>
       </ChildrenContainer>
+      <Notifications />
     </>
   )
 }

@@ -1,10 +1,19 @@
 import { Person } from '@mui/icons-material'
-import { Button, Menu, MenuItem } from '@mui/material'
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  Menu,
+  MenuItem,
+  Select,
+} from '@mui/material'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { PublicKey } from '@solana/web3.js'
 import Link from 'next/link'
 import { useState } from 'react'
+import { useRecoilState } from 'recoil'
+import * as store from '../../store'
 
 const shortenPublicKey = (pk: PublicKey) => {
   const pkString = pk.toString()
@@ -18,6 +27,9 @@ const WalletButton = () => {
   const walletModal = useWalletModal()
   const wallet = useWallet()
   const open = !!anchorEl
+  const [solanaClusters, setSolanaClusters] = useRecoilState(
+    store.solanaClusters
+  )
 
   const buttonProps =
     wallet.connected && wallet.publicKey
@@ -61,6 +73,30 @@ const WalletButton = () => {
           <Link href="/me">
             <a>View my Tokens</a>
           </Link>
+        </MenuItem>
+        <MenuItem sx={{ p: 2 }}>
+          <FormControl fullWidth>
+            <InputLabel>Network</InputLabel>
+            <Select
+              value={solanaClusters.selectedIndex}
+              label="Network"
+              onChange={(evt) => {
+                const nextIndex = evt.target.value
+                if (typeof nextIndex === 'number') {
+                  setSolanaClusters((curr) => ({
+                    ...curr,
+                    selectedIndex: nextIndex,
+                  }))
+                }
+              }}
+            >
+              {solanaClusters.clusters.map((cluster, idx) => (
+                <MenuItem value={idx} key={cluster.network}>
+                  {cluster.network}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </MenuItem>
       </Menu>
     </>

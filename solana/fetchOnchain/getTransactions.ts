@@ -1,12 +1,10 @@
 import { Connection, PublicKey, TransactionResponse } from '@solana/web3.js'
-import getUrl from '../getUrl'
 
 const getTransactions = async (
+  endpoint: string,
   mint: string
 ): Promise<TransactionResponse[]> => {
-  const url = getUrl()
-
-  const connection = new Connection(url)
+  const connection = new Connection(endpoint)
   const raw = await connection.getSignaturesForAddress(new PublicKey(mint), {
     limit: 20,
   })

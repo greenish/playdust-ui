@@ -13,15 +13,12 @@ import {
   SolletWalletAdapter,
   TorusWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
-import { useMemo } from 'react'
-import getUrl from '../solana/getUrl'
+import { PropsWithChildren, useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
+import * as store from '../store'
 
-interface WalletProviderProps {
-  children: React.ReactNode
-}
-
-const Wallet = ({ children }: WalletProviderProps) => {
-  const endpoint = getUrl()
+const Wallet = ({ children }: PropsWithChildren<{}>) => {
+  const { network, endpoint } = useRecoilValue(store.solanaCluster)
   const wallets = useMemo(
     () => [
       new PhantomWalletAdapter(),
@@ -29,10 +26,10 @@ const Wallet = ({ children }: WalletProviderProps) => {
       new SolflareWalletAdapter(),
       new TorusWalletAdapter(),
       new LedgerWalletAdapter(),
-      new SolletWalletAdapter(),
-      new SolletExtensionWalletAdapter(),
+      new SolletWalletAdapter({ network }),
+      new SolletExtensionWalletAdapter({ network }),
     ],
-    [endpoint]
+    [network]
   )
 
   return (
