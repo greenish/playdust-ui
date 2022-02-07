@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import {
   Box,
   Paper,
@@ -18,6 +19,14 @@ import {
 import { useState } from 'react'
 import { useRecoilValueLoadable } from 'recoil'
 import { fetchNftTransactionsOnchain } from '../../store'
+
+const NoData = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+`
 
 interface TransactionHistoryProps {
   mint: string
@@ -64,6 +73,10 @@ const TransactionHistory = ({ mint }: TransactionHistoryProps) => {
 
   const processData = (data: TransactionResponse[]) => {
     return data.map((item: TransactionResponse) => {
+      if (!item.transaction) {
+        return null
+      }
+
       const render_data = (
         <TableRow key={item.transaction.signatures[0]}>
           <TableCell className="text-center border border-slate-400">
@@ -117,9 +130,6 @@ const TransactionHistory = ({ mint }: TransactionHistoryProps) => {
     case 'hasValue':
       const transactions = data.contents
 
-      if (transactions.length <= 0) {
-        return <></>
-      }
       return (
         <Box mx={1}>
           <Tabs value={tab} onChange={(e, val) => setTab(val)}>
@@ -127,27 +137,33 @@ const TransactionHistory = ({ mint }: TransactionHistoryProps) => {
             <Tab label="Transfers" />
           </Tabs>
           <div>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Signature</TableCell>
-                    <TableCell>Age</TableCell>
-                    <TableCell>Source</TableCell>
-                    <TableCell>Destination</TableCell>
-                    {tab === 0 ? (
-                      <>
-                        <TableCell>Fee</TableCell>
-                        <TableCell>Status</TableCell>
-                      </>
-                    ) : (
-                      <TableCell>Amount</TableCell>
-                    )}
-                  </TableRow>
-                </TableHead>
-                <TableBody>{processData(transactions)}</TableBody>
-              </Table>
-            </TableContainer>
+            {transactions.length ? (
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Signature</TableCell>
+                      <TableCell>Age</TableCell>
+                      <TableCell>Source</TableCell>
+                      <TableCell>Destination</TableCell>
+                      {tab === 0 ? (
+                        <>
+                          <TableCell>Fee</TableCell>
+                          <TableCell>Status</TableCell>
+                        </>
+                      ) : (
+                        <TableCell>Amount</TableCell>
+                      )}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>{processData(transactions)}</TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Paper elevation={3}>
+                <NoData>Transaction data not found</NoData>
+              </Paper>
+            )}
           </div>
         </Box>
       )
