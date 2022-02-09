@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
-import { Button, Divider, InputAdornment, TextField } from '@mui/material'
+import { Button, Divider, MenuItem, Select, TextField } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
-import { useMemo, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import React, { useMemo, useState } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   executeNFTSale,
   makeNFTBid,
@@ -10,6 +10,11 @@ import {
 } from '../../helpers/auctionHouseApi'
 import useConfirmTransaction from '../../hooks/useConfirmTransaction'
 import { fetchOwnedOnchain } from '../../store'
+import currencyToken, {
+  allCurrencies,
+  currency,
+  CurrencyToken,
+} from '../../store/currencyToken'
 
 const ItemsContainer = styled.div`
   display: flex;
@@ -37,14 +42,14 @@ interface TradeNFTProps {
 
 const solanaInputProps = {
   type: 'number',
-  InputProps: {
-    endAdornment: <InputAdornment position="end">SOL</InputAdornment>,
-  },
 }
 
 const TradeNFT = ({ mint, publicKey }: TradeNFTProps) => {
   const owned = useRecoilValue(fetchOwnedOnchain(publicKey))
+  const activeCurrencyToken = useRecoilValue(currencyToken)
+  const allCurrencyTokens = useRecoilValue(allCurrencies)
   const confirmTransaction = useConfirmTransaction()
+  const [currencyState, setCurrencyState] = useRecoilState(currency)
   const [bid, setBid] = useState(0)
   const [listPrice, setListPrice] = useState(0)
   const [salePrice, setSalePrice] = useState(0)
@@ -63,12 +68,29 @@ const TradeNFT = ({ mint, publicKey }: TradeNFTProps) => {
           onChange={(e) => setListPrice(Number(e.target.value))}
           {...solanaInputProps}
         />
+        <Select
+          value={currencyState}
+          sx={{ marginRight: 1 }}
+          onChange={(e) => setCurrencyState(e.target.value)}
+        >
+          <MenuItem value="SOL">SOL</MenuItem>
+          {allCurrencyTokens.map((token: CurrencyToken) => (
+            <MenuItem key={token.tokenSymbol} value={token.tokenSymbol}>
+              {token.tokenSymbol}
+            </MenuItem>
+          ))}
+        </Select>
         <Button
           variant="contained"
           size="large"
           onClick={() =>
             confirmTransaction(
-              makeNFTListing(publicKey.toBase58(), mint, listPrice),
+              makeNFTListing(
+                publicKey.toBase58(),
+                mint,
+                listPrice,
+                activeCurrencyToken.auctionHouseKey
+              ),
               'Listing Successful',
               'Listing Unsuccessful'
             )
@@ -85,6 +107,18 @@ const TradeNFT = ({ mint, publicKey }: TradeNFTProps) => {
           onChange={(e) => setSalePrice(Number(e.target.value))}
           {...solanaInputProps}
         />
+        <Select
+          value={currencyState}
+          sx={{ marginRight: 1 }}
+          onChange={(e) => setCurrencyState(e.target.value)}
+        >
+          <MenuItem value="SOL">SOL</MenuItem>
+          {allCurrencyTokens.map((token: CurrencyToken) => (
+            <MenuItem key={token.tokenSymbol} value={token.tokenSymbol}>
+              {token.tokenSymbol}
+            </MenuItem>
+          ))}
+        </Select>
         <TextFieldContainer
           label="Buyer Address"
           value={buyerAddress}
@@ -99,7 +133,8 @@ const TradeNFT = ({ mint, publicKey }: TradeNFTProps) => {
                 publicKey.toBase58(),
                 mint,
                 salePrice,
-                buyerAddress
+                buyerAddress,
+                activeCurrencyToken.auctionHouseKey
               ),
               'Sale Successful',
               'Sale Unsuccessful'
@@ -119,12 +154,28 @@ const TradeNFT = ({ mint, publicKey }: TradeNFTProps) => {
           onChange={(e) => setBid(Number(e.target.value))}
           {...solanaInputProps}
         />
+        <Select
+          value={currencyState}
+          sx={{ marginRight: 1 }}
+          onChange={(e) => setCurrencyState(e.target.value)}
+        >
+          {allCurrencyTokens.map((token: CurrencyToken) => (
+            <MenuItem key={token.tokenSymbol} value={token.tokenSymbol}>
+              {token.tokenSymbol}
+            </MenuItem>
+          ))}
+        </Select>
         <Button
           variant="contained"
           size="large"
           onClick={() =>
             confirmTransaction(
-              makeNFTBid(publicKey.toBase58(), mint, bid),
+              makeNFTBid(
+                publicKey.toBase58(),
+                mint,
+                bid,
+                activeCurrencyToken.auctionHouseKey
+              ),
               'Bid Placed',
               'Bid Failed'
             )

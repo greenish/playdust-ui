@@ -2,7 +2,7 @@
 const intercept = require('intercept-stdout')
 intercept((text) => (text.includes('Duplicate atom key') ? '' : text))
 
-const { PLAYDUST_API_HOST, AUCTION_HOUSE_PATH } = process.env
+const { PLAYDUST_API_HOST } = process.env
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -13,8 +13,8 @@ const nextConfig = {
       destination: 'https://d11xo727u371rp.cloudfront.net/:path*',
     },
     {
-      source: '/auction-house/:path*',
-      destination: `${PLAYDUST_API_HOST}/${AUCTION_HOUSE_PATH}/:path*`,
+      source: '/playdust-api/:path*',
+      destination: `${PLAYDUST_API_HOST}/:path*`,
     },
   ],
 }

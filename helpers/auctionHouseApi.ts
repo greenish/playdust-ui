@@ -1,15 +1,17 @@
 import axios, { AxiosInstance } from 'axios'
 
 const instance: AxiosInstance = axios.create({
-  baseURL: '/auction-house',
+  baseURL: `/playdust-api`,
 })
 
 export const makeNFTBid = async (
   wallet: string,
   mint: string,
-  buyPrice: number
+  buyPrice: number,
+  auctionHouse: string
 ): Promise<Buffer> => {
-  const { data } = await instance.post(`/bid`, {
+  const prefix = `/auction-house/${auctionHouse}`
+  const { data } = await instance.post(`${prefix}/bid`, {
     wallet,
     mint,
     buyPrice,
@@ -22,9 +24,11 @@ export const makeNFTBid = async (
 export const makeNFTListing = async (
   wallet: string,
   mint: string,
-  buyPrice: number
+  buyPrice: number,
+  auctionHouse: string
 ): Promise<Buffer> => {
-  const { data } = await instance.post(`/ask`, {
+  const prefix = `/auction-house/${auctionHouse}`
+  const { data } = await instance.post(`${prefix}/ask`, {
     wallet,
     mint,
     buyPrice,
@@ -38,9 +42,11 @@ export const executeNFTSale = async (
   wallet: string,
   mint: string,
   buyPrice: number,
-  buyerWallet: string
+  buyerWallet: string,
+  auctionHouse: string
 ): Promise<Buffer> => {
-  const { data } = await instance.post(`/execute-sale`, {
+  const prefix = `/auction-house/${auctionHouse}`
+  const { data } = await instance.post(`${prefix}/execute-sale`, {
     wallet,
     sellerWallet: wallet,
     buyerWallet,
@@ -48,6 +54,12 @@ export const executeNFTSale = async (
     buyPrice,
     tokenSize: 1,
   })
+
+  return data
+}
+
+export const ListPaymentTokens = async () => {
+  const { data } = await instance.get(`/trading/markets`)
 
   return data
 }
