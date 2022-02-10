@@ -28,7 +28,7 @@ const solanaClusters = atom<SolanaClustersType>({
     selectedIndex: 0,
     clusters: [MAINNET, DEVNET],
   },
-  effects_UNSTABLE: [persistAtom],
+  effects: [persistAtom],
 })
 
 export default solanaClusters

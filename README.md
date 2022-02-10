@@ -1,4 +1,4 @@
-# Marketplace Frontend
+# playdust-ui
 
 ## Getting Started
 

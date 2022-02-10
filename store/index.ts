@@ -16,5 +16,15 @@ export { default as fetchOffchain } from './fetchOffchain'
 export { default as fetchOwned } from './fetchOwned'
 export { default as fetchOwnedOnchain } from './fetchOwnedOnchain'
 export { default as notification, useTriggerNotfication } from './notifcation'
+export { default as searchAggregations } from './searchAggregations'
+export { default as searchEdges } from './searchEdges'
+export { default as searchNodes } from './searchNodes'
+export {
+  default as searchQuery,
+  useAddChild,
+  useRemoveChild,
+  useUpdateChild,
+} from './searchQuery'
+export { default as searchQueryChild } from './searchQueryChild'
 export { default as solanaCluster } from './solanaCluster'
 export { default as solanaClusters } from './solanaClusters'

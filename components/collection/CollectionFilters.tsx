@@ -31,7 +31,11 @@ const ChipItem = styled.div`
 `
 
 const CollectionFilters = () => {
-  const { attributes } = useRecoilValue(store.fetchCollectionAggregation)
+  const identifier = useRecoilValue(store.collectionIdentifier)
+  const symbol = identifier?.symbol as string
+  const { attributes } = useRecoilValue(
+    store.fetchCollectionAggregation(symbol)
+  )
   const filters = useRecoilValue(store.collectionFilters)
   const resetFilters = useResetRecoilState(store.collectionFilters)
   const updateFilters = store.useUpdateCollectionFilters()

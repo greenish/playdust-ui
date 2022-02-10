@@ -1,27 +1,21 @@
 import axios from 'axios'
-import { selector } from 'recoil'
-import collectionIdentifier from './collectionIdentifier'
+import { selectorFamily } from 'recoil'
 
-type FetchCollectionAggregationOutput = {
+export type FetchCollectionAggregationOutput = {
   attributes: {
     trait: string
     options: string[]
   }[]
 }
 
-const fetchCollectionAggregation = selector<FetchCollectionAggregationOutput>({
+const fetchCollectionAggregation = selectorFamily<
+  FetchCollectionAggregationOutput,
+  string
+>({
   key: 'fetchCollectionAggregation',
-  get: async ({ get }) => {
-    const identifier = get(collectionIdentifier)
-
-    if (!identifier) {
-      return {
-        attributes: [],
-      }
-    }
-
+  get: (symbol: string) => async () => {
     const { data } = await axios.get<FetchCollectionAggregationOutput>(
-      `/data/${identifier.symbol}-AGGREGATION.json`
+      `/data/${symbol}-AGGREGATION.json`
     )
 
     return data
