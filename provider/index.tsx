@@ -1,16 +1,15 @@
-import { ReactNode } from 'react'
+import { PropsWithChildren } from 'react'
 import { CookiesProvider } from 'react-cookie'
 import { RecoilRoot } from 'recoil'
+import ThemeProvider from './ThemeProvider'
 import WalletProvider from './WalletProvider'
 
-interface ProviderProps {
-  children: ReactNode
-}
-
-const Provider = ({ children }: ProviderProps) => (
+const Provider = ({ children }: PropsWithChildren<{}>) => (
   <RecoilRoot>
     <CookiesProvider>
-      <WalletProvider>{children}</WalletProvider>
+      <ThemeProvider>
+        <WalletProvider>{children}</WalletProvider>
+      </ThemeProvider>
     </CookiesProvider>
   </RecoilRoot>
 )

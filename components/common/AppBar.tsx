@@ -3,7 +3,6 @@ import { Home } from '@mui/icons-material'
 import { IconButton, Paper, Toolbar } from '@mui/material'
 import Link from 'next/link'
 import { ReactNode } from 'react'
-import AppBarSearch from './AppBarSearch'
 import Notifications from './Notifications'
 import WalletButton from './WalletButton'
 
@@ -74,7 +73,6 @@ const AppBar = ({ children }: AppBarProps) => {
                 </a>
               </Link>
             </HomeContainer>
-            <AppBarSearch />
           </AppBarLeftContent>
           <WalletButton />
         </AppBarContent>

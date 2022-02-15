@@ -18,8 +18,9 @@ interface TokenCardFilter {
 
 const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const filters = useRecoilValue(store.collectionFilters)
-  const setFilter = store.useSetCollectionFilter()
+  const addExactAttribute = store.useAddExactAttribute()
+  const updateExactAtrribute = store.useUpdateExactAttribute()
+  const exactAttributes = useRecoilValue(store.searchQueryExactAttributes)
 
   const attributes = metadata.offchain.attributes
 
@@ -35,31 +36,46 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
       >
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormGroup>
-            {attributes.map((attribute) => (
-              <FormControlLabel
-                key={attribute.trait_type}
-                control={
-                  <Checkbox
-                    checked={
-                      !!filters.find(
-                        (entry) =>
-                          entry.trait === attribute.trait_type &&
-                          entry.options.includes(attribute.value)
-                      )
-                    }
-                    onChange={(_evt, nextValue) => {
-                      setFilter(
-                        attribute.trait_type,
-                        attribute.value,
-                        nextValue
-                      )
-                      setAnchorEl(null)
-                    }}
-                  />
-                }
-                label={`${attribute.trait_type}: ${attribute.value}`}
-              />
-            ))}
+            {attributes.map((attribute) => {
+              const found = exactAttributes.find(
+                (entry) =>
+                  entry.trait === attribute.trait_type &&
+                  entry.value?.includes(attribute.value)
+              )
+
+              return (
+                <FormControlLabel
+                  key={attribute.trait_type}
+                  control={
+                    <Checkbox
+                      checked={!!found}
+                      onChange={(_evt, nextValue) => {
+                        if (!found) {
+                          addExactAttribute(
+                            [attribute.value],
+                            attribute.trait_type,
+                            'and'
+                          )
+                        } else {
+                          updateExactAtrribute(
+                            found.id,
+                            {
+                              value: found.value.filter(
+                                (entry) => entry !== attribute.value
+                              ),
+                            },
+                            true
+                          )
+                        }
+
+                        setAnchorEl(null)
+                      }}
+                    />
+                  }
+                  label={`${attribute.trait_type}: ${attribute.value}`}
+                />
+              )
+            })}
           </FormGroup>
         </FormControl>
       </Popover>

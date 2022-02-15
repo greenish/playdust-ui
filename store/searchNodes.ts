@@ -14,12 +14,18 @@ const andOffset = cardWidth + xGap / 2
 export const inputId = 'input'
 export const outputId = 'output'
 
-const createNode = (id: string, x: number, y: number): Node => ({
+const createNode = (
+  id: string,
+  x: number,
+  y: number,
+  handles: object
+): Node => ({
   id,
   type: 'searchNode',
   data: {
     width: cardWidth,
     height: cardHeight,
+    handles,
   },
   position: { x, y },
 })
@@ -44,20 +50,20 @@ const getY = (
 const getIONodes = (queryLength: number, largestColumn: number): Node[] => [
   {
     id: inputId,
-    type: 'input',
+    type: 'handleNode',
     data: { label: 'Input' },
     style: { borderColor: 'black' },
-    position: { x: 100, y: getY(0, 1, largestColumn, false) - 19 },
+    position: { x: 300, y: getY(0, 1, largestColumn, false) },
     sourcePosition: Position.Right,
   },
   {
     id: outputId,
-    type: 'output',
+    type: 'handleNode',
     data: { label: 'Output' },
     style: { borderColor: 'black' },
     position: {
       x: getX(queryLength),
-      y: getY(0, 1, largestColumn, false) - 19,
+      y: getY(0, 1, largestColumn, false),
     },
     targetPosition: Position.Left,
   },
@@ -69,13 +75,23 @@ const searchNodes = selector<(Node | Node<QueryType>)[]>({
     const query = get(searchQuery)
     const largestColumn = Math.max(...query.map((parent) => parent.length))
     const queryNodes = query.flatMap((parent, idx) => {
-      const mainNodes = parent.map((entry, ydx) =>
-        createNode(entry.id, getX(idx), getY(ydx, parent.length, largestColumn))
-      )
+      const mainNodes = parent.map((entry, ydx) => {
+        const x = getX(idx)
+        const y = getY(ydx, parent.length, largestColumn)
+        const handles = {
+          top: ydx !== 0,
+          right: idx !== query.length - 1,
+          bottom: ydx !== parent.length - 1,
+          left: idx !== 0,
+        }
+
+        return createNode(entry.id, x, y, handles)
+      })
+      const isParentLocked = parent.every((entry) => entry.locked)
       const actionNode = {
         id: `${idx}-action`,
         type: 'actionNode',
-        data: { idx, width: cardWidth },
+        data: { idx, width: cardWidth, locked: isParentLocked },
         position: {
           x: getX(idx),
           y: mainNodes[parent.length - 1].position.y + cardHeight + 20,
@@ -84,9 +100,12 @@ const searchNodes = selector<(Node | Node<QueryType>)[]>({
 
       return [...mainNodes, actionNode]
     })
-    const andNodes = query.map((parent, idx) => ({
+    const andNodes = query.slice(0, -1).map((parent, idx) => ({
       id: `${parent[0].id}-and`,
-      type: 'andNode',
+      type: 'handleNode',
+      data: {
+        label: 'AND',
+      },
       position: {
         x: getX(idx) + andOffset,
         y: getY(0, 1, largestColumn, false) + 3,
@@ -94,7 +113,7 @@ const searchNodes = selector<(Node | Node<QueryType>)[]>({
     }))
 
     return [
-      ...getIONodes(query.length, largestColumn),
+      // ...getIONodes(query.length, largestColumn),
       ...queryNodes,
       ...andNodes,
     ]

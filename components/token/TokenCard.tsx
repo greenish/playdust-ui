@@ -6,18 +6,16 @@ import Link from '../common/Link'
 import Image from '../utils/image'
 import TokenCardFilter from './TokenCardFilter'
 
-const imageSize = 300
 export const dimensions = {
-  height: 425,
-  width: 350,
+  height: 350,
+  width: 250,
+  marginRight: 16,
 }
+const imageSize = dimensions.width
 
-export const TokenCardContainer = styled.div`
+export const TokenCardPlaceholder = styled.div`
+  width: ${dimensions.width + dimensions.marginRight}px;
   height: ${dimensions.height}px;
-  width: ${dimensions.width}px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
 `
 
 const CardContentContainer = styled.div`
@@ -42,8 +40,8 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
   const href = `nfts/${onchain.mint}`
 
   return (
-    <TokenCardContainer>
-      <Card sx={{ width: imageSize }}>
+    <div>
+      <Card sx={{ mr: 2 }}>
         <Link href={href}>
           {offchain?.image && (
             <CardImageContainer>
@@ -77,7 +75,7 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
           </CardContentContainer>
         </CardContent>
       </Card>
-    </TokenCardContainer>
+    </div>
   )
 }
 

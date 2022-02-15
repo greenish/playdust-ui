@@ -8,12 +8,12 @@ import { useInterval } from 'react-use'
 import { useRecoilValue } from 'recoil'
 import * as store from '../../store'
 import ActionNode from './ActionNode'
-import AndNode from './AndNode'
+import HandleNode from './HandleNode'
 import SearchNode from './SearchNode'
 
 const nodeTypes = {
   actionNode: ActionNode,
-  andNode: AndNode,
+  handleNode: HandleNode,
   searchNode: SearchNode,
 }
 
@@ -34,10 +34,10 @@ const SearchGraph = () => {
       onLoad={setInstance}
       nodeTypes={nodeTypes}
       snapToGrid={true}
-      defaultZoom={1.5}
       nodesDraggable={false}
       zoomOnScroll={false}
       nodesConnectable={false}
+      paneMoveable={false}
     >
       <Background variant={BackgroundVariant.Dots} gap={20} size={0.5} />
     </ReactFlow>

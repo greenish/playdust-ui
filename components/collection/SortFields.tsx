@@ -6,7 +6,6 @@ import { collectionSort, useSetSelectedSort } from '../../store'
 const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 8px;
   width: 100%;
 `
 
@@ -21,6 +20,7 @@ const SortFields = () => {
       <FormControl>
         <InputLabel>{sortLabel}</InputLabel>
         <Select
+          size="small"
           value={sort.selectedIndex}
           label={sortLabel}
           onChange={(e) => {

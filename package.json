@@ -8,6 +8,7 @@
     "lint": "next lint",
     "prettier:check": "yarn prettier --check '**/*.(ts|tsx|js)'",
     "prettier:write": "yarn prettier --write '**/*.(ts|tsx|js)'",
+    "tsc:check": "tsc --noEmit",
     "gen:meta": "ts-node ./scripts/generateMetadata.ts",
     "gen:agg": "ts-node ./scripts/generateAggregation.ts",
     "gen:rarity": "ts-node ./scripts/generateRarity.ts"

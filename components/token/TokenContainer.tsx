@@ -9,17 +9,12 @@ import {
 } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import { ParsedMetadata } from '../../solana/types'
-import TokenCard, { dimensions, TokenCardContainer } from './TokenCard'
+import TokenCard, { dimensions, TokenCardPlaceholder } from './TokenCard'
 
 const RootContainer = styled.div`
   height: 100%;
   width: 100%;
   display: block;
-`
-
-const TokensContainer = styled.div`
-  display: flex;
-  justify-content: space-evenly;
 `
 
 const LoaderContainer = styled.div`
@@ -44,17 +39,22 @@ const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
 
   return (
     <div key={key} style={style}>
-      <TokensContainer>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: cardsPerRow > 2 ? 'space-between' : 'space-evenly',
+        }}
+      >
         {tokenRange.map((tokenIdx) => {
           const token = data[tokenIdx + startingIdx]
 
           return token ? (
             <TokenCard key={token.mint} metadata={token} />
           ) : (
-            <TokenCardContainer key={`empty-${tokenIdx}`} />
+            <TokenCardPlaceholder key={`empty-${tokenIdx}`} />
           )
         })}
-      </TokensContainer>
+      </div>
     </div>
   )
 }
@@ -72,7 +72,9 @@ const makeAutoSizedContainer = ({
   next,
 }: TokenContainerProps) =>
   function AutoSizedContainer(autoSizerProps: Size) {
-    const cardsPerRow = Math.floor(autoSizerProps.width / dimensions.width)
+    const cardsPerRow = Math.floor(
+      autoSizerProps.width / (dimensions.width + dimensions.marginRight)
+    )
     const rowCount = hasMore
       ? Math.floor(tokens.length / cardsPerRow)
       : Math.ceil(tokens.length / cardsPerRow)

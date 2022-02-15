@@ -11,20 +11,9 @@ interface SearchAttributeProps {
 }
 
 const SearchAttribute = (props: SearchAttributeProps) => {
-  const aggregations = useRecoilValue(store.searchAggregations)
-  const data = useRecoilValue(store.searchQueryChild(props.id))
-  const updateChild = store.useUpdateChild()
-
-  const attributes = useMemo(
-    () =>
-      aggregations.flatMap((entry) =>
-        entry.attributes.map((attribute) => ({
-          ...attribute,
-          trait: `${entry.identifier.symbol}:${attribute.trait}`,
-        }))
-      ),
-    [aggregations]
-  )
+  const attributes = useRecoilValue(store.searchAttributes)
+  const data = useRecoilValue(store.searchQueryExactAttribute(props.id))
+  const updateExactAttribute = store.useUpdateExactAttribute()
 
   const options = useMemo(() => {
     return attributes.find((entry) => entry.trait === data.trait)?.options || []
@@ -37,7 +26,9 @@ const SearchAttribute = (props: SearchAttributeProps) => {
         <Select
           value={data.trait || ''}
           label={traitLabel}
-          onChange={(evt) => updateChild(props.id, { trait: evt.target.value })}
+          onChange={(evt) =>
+            updateExactAttribute(props.id, { trait: evt.target.value })
+          }
         >
           {attributes.map((attribute) => (
             <MenuItem key={attribute.trait} value={attribute.trait}>
@@ -49,10 +40,15 @@ const SearchAttribute = (props: SearchAttributeProps) => {
       <FormControl fullWidth sx={{ mt: 1 }}>
         <InputLabel>{valueLabel}</InputLabel>
         <Select
+          multiple
           disabled={!options.length}
           label={valueLabel}
-          value={data.value || ''}
-          onChange={(evt) => updateChild(props.id, { value: evt.target.value })}
+          value={data.value || []}
+          onChange={(evt) =>
+            updateExactAttribute(props.id, {
+              value: evt.target.value as string[],
+            })
+          }
         >
           {options.map((option) => (
             <MenuItem key={option} value={option}>

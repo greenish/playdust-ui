@@ -4,8 +4,8 @@ import type {
   MetaplexCollectionIdentifier,
   ParsedMetadata,
 } from '../solana/types'
-import collectionFilters, { CollectionFilterType } from './collectionFilters'
 import collectionSort, { CollectionSortType } from './collectionSort'
+import searchQuery, { ComposedQueryType } from './searchQuery'
 
 const cache: any = {}
 
@@ -20,26 +20,39 @@ type FetchCollectionOutput = {
   total: number
 }
 
-const filterEntries = (
-  data: ParsedMetadata[],
-  filters: CollectionFilterType[]
-) => {
-  if (!filters.length) {
+const queryEntries = (data: ParsedMetadata[], query: ComposedQueryType) => {
+  if (!query.length) {
     return data
   }
 
   return data.filter((entry) =>
-    filters.every((filter) => {
-      const found = entry.offchain?.attributes?.find(
-        (attribute: any) => attribute.trait_type === filter.trait
-      )
+    query.every((parent) =>
+      parent.some((child) => {
+        if (!child.value) {
+          return parent.length === 1
+        }
 
-      if (found) {
-        return filter.options.includes(found.value)
-      }
+        if (child.searchType === 'relevance') {
+          return true
+        }
 
-      return false
-    })
+        if (child.field === 'attribute' && Array.isArray(child.value)) {
+          return child.value.some((queryValue) =>
+            entry.offchain.attributes.find(
+              (attribute) =>
+                attribute.trait_type === child.trait &&
+                attribute.value === queryValue
+            )
+          )
+        }
+
+        if (child.field === 'collection') {
+          return entry.onchain.data.name.includes(child.value as string)
+        }
+
+        return true
+      })
+    )
   )
 }
 
@@ -72,16 +85,16 @@ const fetchCollection = selectorFamily<
     ({ identifier, start, stop }) =>
     async ({ get }) => {
       const data = await getData(identifier.symbol)
-      const filters = get(collectionFilters)
+      const query = get(searchQuery)
       const sort = get(collectionSort)
 
       cache[identifier.symbol] = data
 
-      const filtered = sortEntries(filterEntries(data, filters), sort)
+      const queried = sortEntries(queryEntries(data, query), sort)
 
       return {
-        data: filtered.slice(start, stop),
-        total: filtered.length,
+        data: queried.slice(start, stop),
+        total: queried.length,
       }
     },
 })

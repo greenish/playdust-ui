@@ -1,87 +1,139 @@
 import styled from '@emotion/styled'
+import { ChevronRight, ExpandMore } from '@mui/icons-material'
 import {
-  Chip,
+  Button,
+  Checkbox,
   FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
+  FormControlLabel,
+  FormGroup,
 } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
+import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import * as store from '../../store'
+import type { ExactAttributeQuery } from '../../store/searchQuery'
 
 const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
+  overflow: scroll;
 `
 
-const ItemContainer = styled.div`
-  margin: 8px;
-`
+const normalizeOptions = (
+  options: string[],
+  found: ExactAttributeQuery | undefined,
+  isExpanded: boolean
+) => {
+  const normalized = options
+    .map((option) => ({
+      option,
+      checked: !!(found && found.value.includes(option)),
+    }))
+    .sort((a, b) => {
+      if (a.option < b.option) {
+        return -1
+      }
+      if (a.option > b.option) {
+        return 1
+      }
+      return 0
+    })
+    .sort((a, b) => {
+      if (a.checked === b.checked) {
+        return 0
+      }
 
-const ChipContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
+      return a.checked ? -1 : 1
+    })
 
-const ChipItem = styled.div`
-  margin: 2px;
-`
+  if (isExpanded) {
+    return normalized
+  }
+
+  const numChecked = normalized.filter((option) => option.checked).length
+  const sliceAmount = Math.max(numChecked, 5)
+
+  return normalized.slice(0, sliceAmount)
+}
 
 const CollectionFilters = () => {
   const identifier = useRecoilValue(store.collectionIdentifier)
   const symbol = identifier?.symbol as string
-  const { attributes } = useRecoilValue(
-    store.fetchCollectionAggregation(symbol)
-  )
-  const filters = useRecoilValue(store.collectionFilters)
-  const resetFilters = useResetRecoilState(store.collectionFilters)
-  const updateFilters = store.useUpdateCollectionFilters()
-  const [openIdx, setOpenIdx] = useState(-1)
-
-  useEffect(() => resetFilters, [])
+  const attributes = useRecoilValue(store.fetchCollectionAttributes(symbol))
+  const queries = useRecoilValue(store.searchQueryExactAttributes)
+  const addExactAttribute = store.useAddExactAttribute()
+  const updateExactAttribute = store.useUpdateExactAttribute()
+  const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({})
 
   return (
     <RootContainer>
-      {attributes.map((attribute, idx) => (
-        <ItemContainer key={attribute.trait}>
-          <FormControl fullWidth>
-            <InputLabel>{attribute.trait}</InputLabel>
-            <Select
-              open={idx === openIdx}
-              multiple
-              value={
-                filters.find((entry) => entry.trait === attribute.trait)
-                  ?.options || []
+      {attributes.map((attribute) => {
+        const isExpanded = showAll[attribute.trait] || false
+        const found = queries.find((entry) => entry.trait === attribute.trait)
+        const options = normalizeOptions(attribute.options, found, isExpanded)
+
+        return (
+          <FormControl
+            sx={{ m: 1, mb: 2 }}
+            component="fieldset"
+            variant="standard"
+            key={attribute.trait}
+          >
+            <Button
+              size="small"
+              endIcon={isExpanded ? <ExpandMore /> : <ChevronRight />}
+              onClick={() =>
+                setShowAll({ ...showAll, [attribute.trait]: !isExpanded })
               }
-              onOpen={() => setOpenIdx(idx)}
-              onClose={() => setOpenIdx(-1)}
-              onChange={(evt) => {
-                updateFilters(attribute.trait, evt.target.value as string[])
-                setOpenIdx(-1)
-              }}
-              input={<OutlinedInput label={attribute.trait} />}
-              renderValue={(selected) => (
-                <ChipContainer>
-                  {selected.map((value) => (
-                    <ChipItem key={value}>
-                      <Chip label={value} />
-                    </ChipItem>
-                  ))}
-                </ChipContainer>
-              )}
             >
-              {attribute.options.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
+              {attribute.trait}
+            </Button>
+            <FormGroup>
+              {options.map(({ option, checked }) => (
+                <FormControlLabel
+                  key={option}
+                  control={
+                    <Checkbox
+                      size="small"
+                      checked={checked}
+                      onChange={() => {
+                        if (!found) {
+                          return addExactAttribute(
+                            [option],
+                            attribute.trait,
+                            'and'
+                          )
+                        }
+
+                        if (!checked) {
+                          return updateExactAttribute(found.id, {
+                            value: [...found.value, option],
+                          })
+                        }
+
+                        const nextValue = found.value.filter(
+                          (entry) => entry !== option
+                        )
+
+                        return updateExactAttribute(
+                          found.id,
+                          {
+                            value: nextValue,
+                          },
+                          true
+                        )
+                      }}
+                      name={option.toString()}
+                    />
+                  }
+                  label={option}
+                />
               ))}
-            </Select>
+            </FormGroup>
           </FormControl>
-        </ItemContainer>
-      ))}
+        )
+      })}
     </RootContainer>
   )
 }
