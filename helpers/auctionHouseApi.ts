@@ -64,4 +64,35 @@ export const ListPaymentTokens = async () => {
   return data
 }
 
+export const GetNonce = async (wallet: string): Promise<string> => {
+  const { data } = await instance.post('/authentication/nonce', {
+    wallet,
+  })
+
+  return data.nonce
+}
+
+export const GetAuthToken = async (
+  wallet: string,
+  signature: string,
+  nonce: string
+) => {
+  const { data } = await instance.post('/authentication/token', {
+    wallet,
+    signature,
+    nonce,
+  })
+
+  return data.token
+}
+
+export const RefreshToken = async (wallet: string, nonce: string) => {
+  const { data } = await instance.post('/authentication/refresh-token', {
+    wallet,
+    nonce,
+  })
+
+  return data.token
+}
+
 export default instance

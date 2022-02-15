@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import { CookiesProvider } from 'react-cookie'
 import { RecoilRoot } from 'recoil'
 import WalletProvider from './WalletProvider'
 
@@ -8,7 +9,9 @@ interface ProviderProps {
 
 const Provider = ({ children }: ProviderProps) => (
   <RecoilRoot>
-    <WalletProvider>{children}</WalletProvider>
+    <CookiesProvider>
+      <WalletProvider>{children}</WalletProvider>
+    </CookiesProvider>
   </RecoilRoot>
 )
 

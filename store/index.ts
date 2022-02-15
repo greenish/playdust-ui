@@ -1,3 +1,4 @@
+export { default as authToken } from './authToken'
 export { default as collectionCursor } from './collectionCursor'
 export {
   default as collectionFilters,

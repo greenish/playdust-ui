@@ -10,9 +10,16 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { PublicKey } from '@solana/web3.js'
+import base58 from 'bs58'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useCookies } from 'react-cookie'
 import { useRecoilState } from 'recoil'
+import instance, {
+  GetAuthToken,
+  GetNonce,
+  RefreshToken,
+} from '../../helpers/auctionHouseApi'
 import * as store from '../../store'
 
 const shortenPublicKey = (pk: PublicKey) => {
@@ -30,6 +37,56 @@ const WalletButton = () => {
   const [solanaClusters, setSolanaClusters] = useRecoilState(
     store.solanaClusters
   )
+  const [authToken, setAuthToken] = useRecoilState(store.authToken)
+  const [cookies, setCookie] = useCookies(['nonce'])
+
+  useEffect(() => {
+    const { publicKey, signMessage, connected } = wallet
+    if (connected && !authToken.key.length) {
+      let nonceToken = ''
+      GetNonce(publicKey!.toBase58())
+        .then((nonce) => {
+          nonceToken = nonce
+          setCookie('nonce', nonce, { path: '/' })
+          const nonceArray = new TextEncoder().encode(nonce)
+          return signMessage!(nonceArray)
+        })
+        .then((signature) => {
+          const accountSignature = base58.encode(signature)
+          return GetAuthToken(
+            publicKey!.toBase58(),
+            accountSignature,
+            nonceToken
+          )
+        })
+        .then((token) => {
+          instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+          setAuthToken({ key: token, expires_at: new Date(Date.now() + 60000) })
+          instance.interceptors.request.use(
+            async (config) => {
+              if (authToken.expires_at > new Date()) {
+                const token = await RefreshToken(
+                  publicKey!.toBase58(),
+                  nonceToken
+                )
+                setAuthToken({
+                  key: token,
+                  expires_at: new Date(Date.now() + 60000),
+                })
+                instance.defaults.headers.common[
+                  'Authorization'
+                ] = `Bearer ${token}`
+                return config
+              }
+            },
+            (error) => {
+              return Promise.reject(error)
+            }
+          )
+        })
+        .catch((e) => console.error(e))
+    }
+  }, [wallet.connected])
 
   const buttonProps =
     wallet.connected && wallet.publicKey
