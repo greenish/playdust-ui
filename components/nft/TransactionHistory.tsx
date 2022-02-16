@@ -18,6 +18,7 @@ import {
 } from '@solana/web3.js'
 import { useState } from 'react'
 import { useRecoilValueLoadable } from 'recoil'
+import { shortenPublicKey } from '../../helpers/utils'
 import { fetchNftTransactionsOnchain } from '../../store'
 
 const NoData = styled.div`
@@ -63,14 +64,6 @@ const TransactionHistory = ({ mint }: TransactionHistoryProps) => {
     }
   }
 
-  const shortenAddress = (address: string) => {
-    return (
-      address.substring(0, 4) +
-      '...' +
-      address.substring(address.length - 4, address.length)
-    )
-  }
-
   const processData = (data: TransactionResponse[]) => {
     return data.map((item: TransactionResponse) => {
       if (!item.transaction) {
@@ -80,19 +73,19 @@ const TransactionHistory = ({ mint }: TransactionHistoryProps) => {
       const render_data = (
         <TableRow key={item.transaction.signatures[0]}>
           <TableCell className="text-center border border-slate-400">
-            {shortenAddress(item.transaction.signatures[0])}
+            {shortenPublicKey(item.transaction.signatures[0])}
           </TableCell>
           <TableCell className="text-center border border-slate-400">
             {formatTimeAgo(item.blockTime!)}
           </TableCell>
           <TableCell className="text-center border border-slate-400">
-            {shortenAddress(
-              new PublicKey(item.transaction.message.accountKeys[0]).toBase58()
+            {shortenPublicKey(
+              new PublicKey(item.transaction.message.accountKeys[0])
             )}
           </TableCell>
           <TableCell className="text-center border border-slate-400">
-            {shortenAddress(
-              new PublicKey(item.transaction.message.accountKeys[1]).toBase58()
+            {shortenPublicKey(
+              new PublicKey(item.transaction.message.accountKeys[1])
             )}
           </TableCell>
           {tab === 0 ? (

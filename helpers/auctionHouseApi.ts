@@ -64,6 +64,12 @@ export const ListPaymentTokens = async () => {
   return data
 }
 
+export const GetAllOrders = async (mint: string) => {
+  const { data } = await instance.get(`/trading/${mint}/orders`)
+
+  return data
+}
+
 export const GetNonce = async (wallet: string): Promise<string> => {
   const { data } = await instance.post('/authentication/nonce', {
     wallet,

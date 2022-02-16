@@ -73,7 +73,6 @@ const TradeNFT = ({ mint, publicKey }: TradeNFTProps) => {
           sx={{ marginRight: 1 }}
           onChange={(e) => setCurrencyState(e.target.value)}
         >
-          <MenuItem value="SOL">SOL</MenuItem>
           {allCurrencyTokens.map((token: CurrencyToken) => (
             <MenuItem key={token.tokenSymbol} value={token.tokenSymbol}>
               {token.tokenSymbol}

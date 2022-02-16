@@ -4,6 +4,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'
 import Details from '../../components/nft/Details'
+import Orders from '../../components/nft/Orders'
 import TransactionHistory from '../../components/nft/TransactionHistory'
 
 const PageContainer = styled(Container)`
@@ -28,6 +29,7 @@ const Nft: NextPage = () => {
         <Details mint={mint} />
       </Suspense>
       <TransactionHistory mint={mint} />
+      <Orders mint={mint} />
     </PageContainer>
   )
 }

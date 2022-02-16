@@ -9,7 +9,6 @@ import {
 } from '@mui/material'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
-import { PublicKey } from '@solana/web3.js'
 import base58 from 'bs58'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -20,14 +19,8 @@ import instance, {
   GetNonce,
   RefreshToken,
 } from '../../helpers/auctionHouseApi'
+import { shortenPublicKey } from '../../helpers/utils'
 import * as store from '../../store'
-
-const shortenPublicKey = (pk: PublicKey) => {
-  const pkString = pk.toString()
-  const { length } = pkString
-
-  return `${pkString.slice(0, 4)}...${pkString.slice(length - 4)}`
-}
 
 const WalletButton = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
