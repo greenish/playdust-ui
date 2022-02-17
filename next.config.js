@@ -10,7 +10,7 @@ const nextConfig = {
   rewrites: async () => [
     {
       source: '/cdn/:path*',
-      destination: 'https://d11xo727u371rp.cloudfront.net/:path*',
+      destination: 'https://cdn.playdust.dev/api/image:path*',
     },
     {
       source: '/playdust-api/:path*',

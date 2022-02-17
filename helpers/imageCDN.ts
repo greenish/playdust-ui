@@ -1,5 +1,8 @@
-const imageCDN = (url: string) => {
-  const path = url.substring(url.lastIndexOf('/') + 1, url.length)
+const imageCDN = (url: string, width: Number, height: Number) => {
+  let path = `?url=${url}`
+  if (width && height) {
+    path = path.concat(`&d=${width}x${height}`)
+  }
   return `/cdn/${path}`
 }
 
