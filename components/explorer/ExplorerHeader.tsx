@@ -1,6 +1,7 @@
 import { Grid, Stack, Typography } from '@mui/material'
 import { AddressInput } from './AddressInput'
 import { CopyButton } from './CopyButton'
+import { ExternalLinks } from './ExternalLinks'
 
 interface ExplorerHeaderProps {
   label: string
@@ -28,6 +29,7 @@ export const ExplorerHeader = ({
           {value} <CopyButton value={value} />
         </Grid>
       </Grid>
+      <ExternalLinks filter={filter} value={value} />
     </Stack>
   )
 }

@@ -1,13 +1,28 @@
+import { CircularProgress } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { ExplorerContainer, ExplorerHeader } from '../../components/explorer'
+import { Suspense } from 'react'
+import {
+  AccountDetails,
+  AccountOverview,
+  ExplorerContainer,
+  ExplorerHeader,
+} from '../../components/explorer'
 
 const Account: NextPage = () => {
-  const router = useRouter()
+  const { isReady, query } = useRouter()
 
-  const accountId = router.query.id as string
+  const accountId = query.id as string
 
-  return <AccountPage accountId={accountId} />
+  if (!isReady) {
+    return <div />
+  }
+
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      <AccountPage accountId={accountId} />
+    </Suspense>
+  )
 }
 
 interface AccountPageProps {
@@ -18,6 +33,8 @@ const AccountPage = ({ accountId }: AccountPageProps) => {
   return (
     <ExplorerContainer>
       <ExplorerHeader label="Account" filter="account" value={accountId} />
+      <AccountOverview pubkey={accountId} />
+      <AccountDetails pubkey={accountId} />
     </ExplorerContainer>
   )
 }
