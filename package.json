@@ -14,8 +14,10 @@
     "gen:rarity": "ts-node ./scripts/generateRarity.ts"
   },
   "dependencies": {
+    "@bonfida/spl-name-service": "0.1.22",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@metamask/jazzicon": "^2.0.0",
     "@metaplex-foundation/mpl-token-metadata": "^0.0.2",
     "@metaplex/js": "4.1.0",
     "@mui/icons-material": "^5.2.5",

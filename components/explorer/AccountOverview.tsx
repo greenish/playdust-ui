@@ -1,10 +1,11 @@
 import { Box, Grid, Typography } from '@mui/material'
+import { PublicKey } from '@solana/web3.js'
 import { getSpace } from '../../solana/account'
 import { useAccountInfo } from '../../store'
 import { SolBalance } from './SolBalance'
 
 interface AccountOverviewProps {
-  pubkey: string
+  pubkey: PublicKey
 }
 
 export const AccountOverview = ({ pubkey }: AccountOverviewProps) => {
@@ -14,7 +15,7 @@ export const AccountOverview = ({ pubkey }: AccountOverviewProps) => {
     return <div>No data available</div>
   }
 
-  const { data, executable, lamports, owner, rentEpoch } = account
+  const { executable, lamports, owner, rentEpoch } = account
 
   return (
     <Box

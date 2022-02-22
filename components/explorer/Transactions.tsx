@@ -8,23 +8,15 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
+import { PublicKey } from '@solana/web3.js'
 import { DateTime } from 'luxon'
 import { lamportsToSol, pubkeyToString } from '../../helpers/utils'
 import { useAccountHistory } from '../../store'
 import { ExplorerCard } from './ExplorerCard'
-import { AccountLink, BlockLink, TxLink } from './Links'
-
-type TransactionRow = {
-  signature: React.ReactNode
-  block: React.ReactNode
-  time: React.ReactNode
-  instructions: React.ReactNode
-  by: React.ReactNode
-  fee: React.ReactNode
-}
+import { AccountLink, SlotLink, TxLink } from './Links'
 
 interface TransactionsProps {
-  pubkey: string
+  pubkey: PublicKey
 }
 
 export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
@@ -57,7 +49,7 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
 
     const { accountKeys, instructions } = message || {}
 
-    const pubkey = pubkeyToString(accountKeys?.[0])
+    const byPubkey = pubkeyToString(accountKeys?.[0])
 
     const relativeTime = blockTime
       ? DateTime.fromMillis(blockTime * 1000).toRelative()
@@ -71,7 +63,7 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
 
     const signature = <TxLink to={signatures[0]} ellipsis={[30, 0]} />
 
-    const block = <BlockLink to={slot} />
+    const block = <SlotLink to={slot} />
 
     const time = <>{relativeTime}</>
 
@@ -79,7 +71,7 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
       <pre style={{ display: 'none' }}>{JSON.stringify(instructions)}</pre>
     )
 
-    const by = <AccountLink to={pubkey} allowCopy ellipsis={[6, 6]} />
+    const by = <AccountLink to={byPubkey} allowCopy ellipsis={[6, 6]} />
 
     const _fee = <>{fee ? lamportsToSol(fee) : null}</>
 

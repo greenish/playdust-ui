@@ -1,4 +1,5 @@
 import { Box, Tab, Tabs } from '@mui/material'
+import { PublicKey } from '@solana/web3.js'
 import { useState } from 'react'
 import { Domains } from './Domains'
 import { a11yProps, TabPanel } from './TabPanel'
@@ -6,14 +7,14 @@ import { Tokens } from './Tokens'
 import { Transactions } from './Transactions'
 
 interface AccountDetailsProps {
-  pubkey: string
+  pubkey: PublicKey
 }
 
 export const AccountDetails = ({ pubkey }: AccountDetailsProps) => {
   const [value, setValue] = useState(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: any) => {
-    setValue(newValue)
+    setValue(parseInt(newValue))
   }
 
   return (

@@ -11,19 +11,17 @@ import solanaCluster from './solanaCluster'
 
 export const fetchAccountInfo = selectorFamily<
   AccountInfo<Buffer | ParsedAccountData> | null,
-  string
+  any
 >({
   key: 'accountInfo',
   get:
-    (accountId) =>
+    (pubkey) =>
     async ({ get }) => {
       get(pageIdx) // bust this cache every page
 
-      const pubkey = new PublicKey(accountId)
-
       const { endpoint } = get(solanaCluster)
 
-      const connection = new Connection(endpoint)
+      const connection = new Connection(endpoint, 'confirmed')
 
       const { value } = await connection.getParsedAccountInfo(pubkey)
 
@@ -31,5 +29,5 @@ export const fetchAccountInfo = selectorFamily<
     },
 })
 
-export const useAccountInfo = (accountId: string) =>
-  useRecoilValue(fetchAccountInfo(accountId))
+export const useAccountInfo = (pubkey: PublicKey) =>
+  useRecoilValue(fetchAccountInfo(pubkey))

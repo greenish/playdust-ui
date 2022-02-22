@@ -1,4 +1,5 @@
 import { CircularProgress } from '@mui/material'
+import { PublicKey } from '@solana/web3.js'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'
@@ -12,7 +13,7 @@ import {
 const Account: NextPage = () => {
   const { isReady, query } = useRouter()
 
-  const accountId = query.id as string
+  const address = query.id as string
 
   if (!isReady) {
     return <div />
@@ -20,21 +21,33 @@ const Account: NextPage = () => {
 
   return (
     <Suspense fallback={<CircularProgress />}>
-      <AccountPage accountId={accountId} />
+      <AccountPage address={address} />
     </Suspense>
   )
 }
 
 interface AccountPageProps {
-  accountId: string
+  address: string
 }
 
-const AccountPage = ({ accountId }: AccountPageProps) => {
+const AccountPage = ({ address }: AccountPageProps) => {
+  let pubkey: PublicKey | undefined
+
+  try {
+    pubkey = new PublicKey(address)
+  } catch (err) {}
+
   return (
     <ExplorerContainer>
-      <ExplorerHeader label="Account" filter="account" value={accountId} />
-      <AccountOverview pubkey={accountId} />
-      <AccountDetails pubkey={accountId} />
+      <ExplorerHeader label="Account" filter="account" value={address} />
+      {pubkey ? (
+        <>
+          <AccountOverview pubkey={pubkey} />
+          <AccountDetails pubkey={pubkey} />
+        </>
+      ) : (
+        <div>Invalid address</div>
+      )}
     </ExplorerContainer>
   )
 }
