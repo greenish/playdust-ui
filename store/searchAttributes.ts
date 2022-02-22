@@ -1,54 +1,29 @@
-import { selector, waitForNone } from 'recoil'
-import { cannedCollections } from '../solana'
-import fetchCollectionAttributes, {
-  CollectionAttribute,
-} from './fetchCollectionAttributes'
-import searchQuery from './searchQuery'
+import { noWait, selector, useRecoilValue } from 'recoil'
+import api from '../helpers/api'
+import AttributeResponse from '../types/AttributeResponse'
+import searchQueryValid from './searchQueryValid'
 
-interface MultiCollectionAttribute extends CollectionAttribute {
-  symbol: string
-}
-
-const searchAttributes = selector<MultiCollectionAttribute[]>({
+const searchAttributes = selector<AttributeResponse>({
   key: 'searchAttributes',
-  get: ({ get }) => {
-    const query = get(searchQuery)
-    const collections = query.flatMap((parent) =>
-      parent
-        .filter(
-          (entry) =>
-            entry.field === 'collection' &&
-            entry.searchType === 'exact' &&
-            entry.value
-        )
-        .map((entry) => entry.value)
-    )
-    const uniqueCollections = [...new Set(collections)]
-    const identifiers = cannedCollections.filter((entry) =>
-      uniqueCollections.includes(entry.name!)
-    )
-    const loadable = get(
-      waitForNone(
-        identifiers.map((identifier) =>
-          fetchCollectionAttributes(identifier.symbol)
-        )
-      )
-    )
-    const result = loadable.flatMap((entry, idx) => {
-      if (entry.state !== 'hasValue') {
-        return []
-      }
+  get: async ({ get }) => {
+    const query = get(searchQueryValid)
 
-      const identifier = identifiers[idx]
+    const { data } = await api.post<AttributeResponse>('/attributes', query)
 
-      return entry.contents.map((attribute) => ({
-        ...attribute,
-        symbol: identifier.symbol,
-      }))
-    })
-
-    return result
+    return data
   },
 })
+
+let previousValue: AttributeResponse = []
+
+export const useNoWaitSearchAttributes = () => {
+  const loadable = useRecoilValue(noWait(searchAttributes))
+
+  if (loadable.state === 'hasValue') {
+    previousValue = loadable.contents
+  }
+
+  return previousValue
+}
 
 export default searchAttributes

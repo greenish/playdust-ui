@@ -1,16 +1,16 @@
 import { selectorFamily } from 'recoil'
 import api from '../helpers/api'
 import * as solana from '../solana'
-import type OpenSearchSource from '../types/OpenSearchSource'
+import type SearchMetadata from '../types/SearchMetadata'
 import solanaCluster from './solanaCluster'
 
-const fetchNFTDetails = selectorFamily<OpenSearchSource | undefined, string>({
+const fetchNFTDetails = selectorFamily<SearchMetadata | undefined, string>({
   key: 'fetchNFTDetails',
   get:
     (mint: string) =>
     async ({ get }) => {
       try {
-        const { data } = await api.get<OpenSearchSource>(`/nfts/${mint}`)
+        const { data } = await api.get<SearchMetadata>(`/nfts/${mint}`)
 
         if (data) {
           return data

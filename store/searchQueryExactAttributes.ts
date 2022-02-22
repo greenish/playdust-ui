@@ -1,9 +1,13 @@
 import { selector } from 'recoil'
-import searchQuery, { ExactAttributeQuery, QueryType } from './searchQuery'
+import type { ExactAttributeQuery, QueryType } from '../types/ComposedQueryType'
+import searchQuery from './searchQuery'
 
 const isExactAttributeQuery = (
   query: QueryType
-): query is ExactAttributeQuery => true
+): query is ExactAttributeQuery =>
+  'trait' in query &&
+  query.field === 'attribute' &&
+  query.searchType === 'exact'
 
 const searchQueryExactAttributes = selector<ExactAttributeQuery[]>({
   key: 'searchQueryExactAttributes',

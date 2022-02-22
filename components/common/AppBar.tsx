@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Home } from '@mui/icons-material'
+import { Home, SearchRounded } from '@mui/icons-material'
 import { IconButton, Paper, Toolbar } from '@mui/material'
 import Link from 'next/link'
 import { ReactNode } from 'react'
@@ -73,6 +73,13 @@ const AppBar = ({ children }: AppBarProps) => {
                 </a>
               </Link>
             </HomeContainer>
+            <Link href="/search">
+              <a>
+                <IconButton>
+                  <SearchRounded />
+                </IconButton>
+              </a>
+            </Link>
           </AppBarLeftContent>
           <WalletButton />
         </AppBarContent>

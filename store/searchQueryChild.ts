@@ -1,5 +1,6 @@
 import { selectorFamily } from 'recoil'
-import searchQuery, { QueryType } from './searchQuery'
+import type { QueryType } from '../types/ComposedQueryType'
+import searchQuery from './searchQuery'
 
 const searchQueryChild = selectorFamily<QueryType, string>({
   key: 'searchQueryChild',

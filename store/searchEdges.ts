@@ -1,13 +1,13 @@
 import { Edge } from 'react-flow-renderer'
 import { selector } from 'recoil'
-import { inputId, outputId } from './searchNodes'
-import searchQuery, { QueryType } from './searchQuery'
+import type { QueryType } from '../types/ComposedQueryType'
+import searchQuery from './searchQuery'
 
 interface CreateEdgeInput {
   sourceId: string
   sourceHandle?: 'top' | 'left' | 'right' | 'bottom'
   targetId: string
-  targetHandle?: 'top' | 'left' | 'right' | 'bottom'
+  targetHandle?: 'top' | 'left' | 'right' | 'bottom' | 'target'
   label?: string
 }
 
@@ -29,21 +29,6 @@ const createEdge = ({
 
 const getAndId = (parent: QueryType[]) => `${parent[0].id}-and`
 
-const getInputEdges = (parent: QueryType[]) =>
-  parent.map((child) =>
-    createEdge({
-      sourceId: inputId,
-      targetId: child.id,
-      targetHandle: 'left',
-    })
-  )
-
-const getSingleOutputEdge = (parent: QueryType[]) =>
-  createEdge({
-    sourceId: getAndId(parent),
-    targetId: outputId,
-  })
-
 const getOrEdges = (parent: QueryType[]) =>
   parent.slice(0, -1).map((child, idx) =>
     createEdge({
@@ -61,6 +46,7 @@ const getAndSourceEdges = (parent: QueryType[]) =>
       sourceId: child.id,
       sourceHandle: 'right',
       targetId: getAndId(parent),
+      targetHandle: 'target',
     })
   )
 
@@ -80,25 +66,14 @@ const searchEdges = selector<Edge[]>({
     let edges: Edge[] = []
 
     query.forEach((parent, idx) => {
-      if (idx === 0) {
-        const inputEdges = getInputEdges(parent)
-        edges.push(...inputEdges)
-      }
-
-      if (idx === query.length - 1) {
-        const singleOuputEdge = getSingleOutputEdge(parent)
-        edges.push(singleOuputEdge)
-      }
-
       if (idx !== query.length - 1) {
         const andTargetEdges = getAndTargetEdges(parent, query[idx + 1])
-        edges.push(...andTargetEdges)
+        const andSourceEdges = getAndSourceEdges(parent)
+        edges.push(...andTargetEdges, ...andSourceEdges)
       }
 
       const orEdges = getOrEdges(parent)
-      const andSourceEdges = getAndSourceEdges(parent)
-
-      edges.push(...orEdges, ...andSourceEdges)
+      edges.push(...orEdges)
     })
 
     return edges

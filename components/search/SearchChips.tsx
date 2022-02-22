@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Chip, Typography } from '@mui/material'
 import { useRecoilValue } from 'recoil'
 import * as store from '../../store'
-import type { QueryType } from '../../store/searchQuery'
+import type { QueryType } from '../../types/ComposedQueryType'
 
 const ChipContainer = styled.div`
   display: flex;
@@ -23,15 +23,19 @@ const ParenTypography = styled(Typography)`
 `
 
 const getChipLabel = (child: QueryType) => {
-  if (!('trait' in child)) {
-    return child.value || ''
-  }
-
   const value = Array.isArray(child.value)
     ? child.value.join(', ')
     : child.value
 
-  return `${child.trait}: ${value}`
+  if ('trait' in child) {
+    return `${child.trait}: ${value}`
+  }
+
+  if (typeof value === 'object' && 'name' in value) {
+    return value.name
+  }
+
+  return ''
 }
 
 const SearchChips = () => {
@@ -49,7 +53,7 @@ const SearchChips = () => {
               key={child.id}
               label={getChipLabel(child)}
               variant="outlined"
-              onDelete={child.locked ? undefined : () => removeChild(child.id)}
+              onDelete={() => removeChild(child.id)}
             />
           )
 

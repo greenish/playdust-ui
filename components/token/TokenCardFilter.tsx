@@ -9,11 +9,11 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import { ParsedMetadata } from '../../solana/types'
 import * as store from '../../store'
+import SearchMetadata from '../../types/SearchMetadata'
 
 interface TokenCardFilter {
-  metadata: ParsedMetadata
+  metadata: SearchMetadata
 }
 
 const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
@@ -22,7 +22,7 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
   const updateExactAtrribute = store.useUpdateExactAttribute()
   const exactAttributes = useRecoilValue(store.searchQueryExactAttributes)
 
-  const attributes = metadata.offchain.attributes
+  const attributes = metadata.offChainData.attributes!
 
   return (
     <>

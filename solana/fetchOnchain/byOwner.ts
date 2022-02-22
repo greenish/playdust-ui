@@ -1,12 +1,12 @@
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { ParsedOnchain } from '../types'
+import type { SearchMetadataOnChain } from '../../types/SearchMetadata'
 
 const getTokensByOwner = async (
   connection: Connection,
   owner: PublicKey
-): Promise<ParsedOnchain[]> => {
+): Promise<SearchMetadataOnChain[]> => {
   const tokens = await connection.getParsedTokenAccountsByOwner(owner, {
     programId: TOKEN_PROGRAM_ID,
   })
@@ -21,12 +21,11 @@ const getTokensByOwner = async (
       .map(async (token) => {
         const mint = new PublicKey(token.account.data.parsed.info.mint)
         const pda = await Metadata.getPDA(mint)
-        const onchain = await Metadata.load(connection, pda)
+        const { data } = await Metadata.load(connection, pda)
 
         return {
           mint: mint.toBase58(),
-          pda: pda.toBase58(),
-          onchain: onchain.data,
+          data: data.data,
         }
       })
   )

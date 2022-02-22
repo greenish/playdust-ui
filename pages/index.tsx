@@ -3,6 +3,7 @@ import { Card, CardContent, Container, Typography } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { cannedCollections } from '../solana'
+import * as store from '../store'
 
 const IndexContainer = styled.div`
   display: flex;
@@ -14,6 +15,7 @@ const IndexContainer = styled.div`
 
 const Home: NextPage = () => {
   const router = useRouter()
+  const initCollectionQuery = store.useInitializeCollectionQuery()
 
   return (
     <Container>
@@ -21,12 +23,13 @@ const Home: NextPage = () => {
         {cannedCollections.map(({ image, ...collection }) => (
           <Card
             key={collection.symbol}
-            onClick={() =>
+            onClick={() => {
+              initCollectionQuery(collection)
+
               router.push({
-                pathname: '/collection',
-                query: { ...collection },
+                pathname: '/search',
               })
-            }
+            }}
             sx={{
               cursor: 'pointer',
               m: 2,

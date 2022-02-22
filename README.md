@@ -65,9 +65,8 @@ The following variables are needed to connect to deployed DBs/APIs:
 - OPENSEARCH_PASSWORD
 - OPENSEARCH_URL
 - PLAYDUST_API_HOST
-- AUCTION_HOUSE_PATH
 
-These should be added to an `.env` file, values can be found in Vercel
+These should be added to an `.env` file, values can be found in [Vercel](https://vercel.com/playdust/playdust-ui/settings/environment-variables)
 
 ## Local API connection
 

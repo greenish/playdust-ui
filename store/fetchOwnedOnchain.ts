@@ -1,10 +1,10 @@
 import { Connection } from '@solana/web3.js'
 import { selectorFamily } from 'recoil'
 import * as solana from '../solana'
-import type { ParsedOnchain } from '../solana/types'
+import type { SearchMetadataOnChain } from '../types/SearchMetadata'
 import solanaCluster from './solanaCluster'
 
-const fetchOwnedOnchain = selectorFamily<ParsedOnchain[], any>({
+const fetchOwnedOnchain = selectorFamily<SearchMetadataOnChain[], any>({
   key: 'fetchOwnedOnchain',
   get: (publicKey) => {
     return async ({ get }) => {

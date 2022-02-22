@@ -8,7 +8,7 @@ import {
   Size,
 } from 'react-virtualized'
 import 'react-virtualized/styles.css'
-import { ParsedMetadata } from '../../solana/types'
+import SearchMetadata from '../../types/SearchMetadata'
 import TokenCard, { dimensions, TokenCardPlaceholder } from './TokenCard'
 
 const RootContainer = styled.div`
@@ -20,7 +20,6 @@ const RootContainer = styled.div`
 const LoaderContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
   margin-top: 24px;
   margin-bottom: 24px;
   width: 100%;
@@ -61,7 +60,7 @@ const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
 
 interface TokenContainerProps {
   initialized: boolean
-  tokens: ParsedMetadata[]
+  tokens: SearchMetadata[]
   hasMore: boolean
   next?: () => any
 }

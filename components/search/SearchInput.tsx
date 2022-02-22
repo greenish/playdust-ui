@@ -9,7 +9,7 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import * as store from '../../store'
 import SearchChips from './SearchChips'
@@ -24,12 +24,21 @@ const RootContainer = styled.div`
 const SearchInput = () => {
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const attributes = useRecoilValue(store.searchAttributes)
+  const attributes = store.useNoWaitSearchAttributes()
   const exactAttributes = useRecoilValue(store.searchQueryExactAttributes)
   const addExactAttribute = store.useAddExactAttribute()
   const isQueryValid = useRecoilValue(store.isSearchQueryValid)
   const clearSearchQuery = store.useClearSearchQuery()
   const updateExactAttribute = store.useUpdateExactAttribute()
+  const setSearchQueryValid = store.useSetSearchQueryValid()
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', setSearchQueryValid)
+
+    return () => {
+      window.removeEventListener('beforeunload', setSearchQueryValid)
+    }
+  }, [])
 
   const height = useMemo(() => {
     return window.innerHeight * 0.8

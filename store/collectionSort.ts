@@ -1,6 +1,5 @@
 import { atom, useRecoilCallback } from 'recoil'
 import { ParsedMetadata } from '../solana/types'
-import collectionCursor from './collectionCursor'
 
 type CollectionSortOption = {
   name: string
@@ -82,7 +81,6 @@ export const useSetSelectedSort = () => {
           ...current,
           selectedIndex,
         }))
-        reset(collectionCursor)
       },
     []
   )

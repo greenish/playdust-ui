@@ -13,7 +13,6 @@ const ActionNode = ({ data }: NodeComponentProps) => {
   const [operation] = useState<'and' | 'or'>('and')
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>()
 
-  const addExactCollection = store.useAddExactCollection()
   const addExactAttribute = store.useAddExactAttribute()
   const addRelevance = store.useAddRelevance()
 
@@ -39,11 +38,6 @@ const ActionNode = ({ data }: NodeComponentProps) => {
           onClick={() => addExactAttribute([], '', operation, data.idx)}
         >
           Attribute Exact
-        </MenuItemHandler>
-        <MenuItemHandler
-          onClick={() => addExactCollection('', operation, data.idx)}
-        >
-          Collection Exact
         </MenuItemHandler>
         <MenuItemHandler
           onClick={() => addRelevance('attribute', '', operation, 50, data.idx)}
@@ -74,7 +68,7 @@ const ActionNode = ({ data }: NodeComponentProps) => {
         fullWidth
         size="small"
         endIcon={<ArrowForward />}
-        onClick={(evt) => {
+        onClick={() => {
           addExactAttribute([], '', 'and', data.idx)
         }}
       >

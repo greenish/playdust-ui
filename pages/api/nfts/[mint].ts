@@ -1,6 +1,6 @@
 import esb from 'elastic-builder'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import openSearch from '../../../helpers/openSearch'
+import postQuery from '../../../api/helpers/postQuery'
 
 const handler = async (
   req: NextApiRequest,
@@ -11,7 +11,7 @@ const handler = async (
     .requestBodySearch()
     .query(esb.matchQuery('mint', mint))
     .toJSON()
-  const result = await openSearch(requestBody)
+  const result = await postQuery(requestBody)
   const source = result?.hits?.hits[0]?._source
 
   res.status(200).json(source)

@@ -1,8 +1,8 @@
 import { useRecoilValue } from 'recoil'
 import * as store from '../../store'
-import SearchAttribute from './SearchAttribute'
-import SearchCollection from './SearchCollection'
-import SearchRelevance from './SearchRelevance'
+import SearchAttributeNode from './SearchAttributeNode'
+import SearchCollectionNode from './SearchCollectionNode'
+import SearchRelevanceNode from './SearchRelevanceNode'
 
 interface SearchValueProps {
   id: string
@@ -16,14 +16,14 @@ const SearchValue = (props: SearchValueProps) => {
   }
 
   if (data.searchType === 'relevance') {
-    return <SearchRelevance id={props.id} />
+    return <SearchRelevanceNode id={props.id} />
   }
 
   switch (data.field) {
     case 'collection':
-      return <SearchCollection id={props.id} />
+      return <SearchCollectionNode id={props.id} />
     case 'attribute':
-      return <SearchAttribute id={props.id} />
+      return <SearchAttributeNode id={props.id} />
     default:
       return <></>
   }

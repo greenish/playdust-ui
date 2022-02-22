@@ -14,9 +14,24 @@ const CloseContainer = styled.div`
   margin-top: -8px;
 `
 
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+`
+
 const getStyle = (show: boolean): Partial<CSSProperties> => ({
   visibility: show ? 'visible' : 'hidden',
 })
+
+const humanize = (value: string) =>
+  value
+    .match(/[A-Za-z][a-z]*/g)
+    ?.map(
+      ([firstLetter, ...rest]) => `${firstLetter.toUpperCase()}${rest.join('')}`
+    )
+    .join(' ')
 
 const SearchNode = ({ id, data }: NodeComponentProps) => {
   const removeChild = store.useRemoveChild()
@@ -30,16 +45,16 @@ const SearchNode = ({ id, data }: NodeComponentProps) => {
   return (
     <>
       <Card sx={{ width: data.width, height: data.height }}>
-        <CardContent>
+        <CardContent sx={{ width: '100%', height: '100%' }}>
           <CloseContainer>
-            <Typography>{query.field}</Typography>
-            {!query.locked && (
-              <IconButton size="small" onClick={() => removeChild(id)}>
-                <Close fontSize="small" />
-              </IconButton>
-            )}
+            <Typography>{humanize(query.field)}</Typography>
+            <IconButton size="small" onClick={() => removeChild(id)}>
+              <Close fontSize="small" />
+            </IconButton>
           </CloseContainer>
-          <SearchValue id={id} />
+          <ContentContainer>
+            <SearchValue id={id} />
+          </ContentContainer>
         </CardContent>
       </Card>
       <Handle

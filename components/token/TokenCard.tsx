@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Card, CardContent, Skeleton, Typography } from '@mui/material'
 import { useState } from 'react'
-import { ParsedMetadata } from '../../solana/types'
+import SearchMetadata from '../../types/SearchMetadata'
 import Link from '../common/Link'
 import Image from '../utils/image'
 import TokenCardFilter from './TokenCardFilter'
@@ -30,27 +30,32 @@ const CardImageContainer = styled.div`
 `
 
 interface TokenCardProps {
-  metadata: ParsedMetadata
+  metadata: SearchMetadata
 }
 
 const TokenCard = ({ metadata }: TokenCardProps) => {
   const [isLoaded, setIsLoaded] = useState(false)
-  const { offchain, onchain } = metadata
-  const { name } = onchain.data
-  const href = `nfts/${onchain.mint}`
+  const { offChainData, mint, data } = metadata
+  const href = `nfts/${mint}`
 
   return (
     <div>
-      <Card sx={{ mr: 2 }}>
+      <Card sx={{ mr: 2, width: dimensions.width }}>
         <Link href={href}>
-          {offchain?.image && (
+          {offChainData?.image && (
             <CardImageContainer>
               <Image
-                alt={name}
-                url={offchain.image}
-                width={imageSize}
-                height={imageSize}
-                style={isLoaded ? { objectFit: 'cover' } : { display: 'none' }}
+                alt={offChainData.name}
+                url={offChainData.image}
+                style={
+                  isLoaded
+                    ? {
+                        objectFit: 'cover',
+                        width: dimensions.width,
+                        height: dimensions.width,
+                      }
+                    : { display: 'none' }
+                }
                 onLoad={() => setIsLoaded(true)}
               />
             </CardImageContainer>
@@ -69,9 +74,11 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
         <CardContent>
           <CardContentContainer>
             <Typography>
-              <Link href={href}>{name}</Link>
+              <Link href={href}>{offChainData?.name || data?.name}</Link>
             </Typography>
-            {offchain.attributes && <TokenCardFilter metadata={metadata} />}
+            {offChainData?.attributes && (
+              <TokenCardFilter metadata={metadata} />
+            )}
           </CardContentContainer>
         </CardContent>
       </Card>

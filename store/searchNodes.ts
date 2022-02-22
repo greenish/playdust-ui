@@ -1,6 +1,7 @@
-import { Node, Position } from 'react-flow-renderer'
+import { Node } from 'react-flow-renderer'
 import { selector } from 'recoil'
-import searchQuery, { QueryType } from './searchQuery'
+import type { QueryType } from '../types/ComposedQueryType'
+import searchQuery from './searchQuery'
 
 const cardHeight = 175
 const yPaddingBottom = 75
@@ -47,28 +48,6 @@ const getY = (
   return totalOffset * yTotal + searchNodeOffset
 }
 
-const getIONodes = (queryLength: number, largestColumn: number): Node[] => [
-  {
-    id: inputId,
-    type: 'handleNode',
-    data: { label: 'Input' },
-    style: { borderColor: 'black' },
-    position: { x: 300, y: getY(0, 1, largestColumn, false) },
-    sourcePosition: Position.Right,
-  },
-  {
-    id: outputId,
-    type: 'handleNode',
-    data: { label: 'Output' },
-    style: { borderColor: 'black' },
-    position: {
-      x: getX(queryLength),
-      y: getY(0, 1, largestColumn, false),
-    },
-    targetPosition: Position.Left,
-  },
-]
-
 const searchNodes = selector<(Node | Node<QueryType>)[]>({
   key: 'searchNodes',
   get: ({ get }) => {
@@ -112,11 +91,7 @@ const searchNodes = selector<(Node | Node<QueryType>)[]>({
       },
     }))
 
-    return [
-      // ...getIONodes(query.length, largestColumn),
-      ...queryNodes,
-      ...andNodes,
-    ]
+    return [...queryNodes, ...andNodes]
   },
 })
 

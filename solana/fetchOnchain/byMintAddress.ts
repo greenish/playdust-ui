@@ -1,12 +1,12 @@
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { Connection } from '@solana/web3.js'
-import type OpenSearchSource from '../../types/OpenSearchSource'
+import type SearchMetadata from '../../types/SearchMetadata'
 import fetchOffchain from '../fetchOffchain'
 
 const getMetadataByMintAddress = async (
   endpoint: string,
   mint: string
-): Promise<OpenSearchSource | undefined> => {
+): Promise<SearchMetadata | undefined> => {
   try {
     const connection = new Connection(endpoint)
     const pda = await Metadata.getPDA(mint)

@@ -1,51 +1,22 @@
 import { nanoid } from 'nanoid'
-import { atom, useRecoilState, useSetRecoilState } from 'recoil'
+import {
+  atom,
+  useRecoilCallback,
+  useRecoilState,
+  useSetRecoilState,
+} from 'recoil'
 import { recoilPersist } from 'recoil-persist'
+import { MetaplexCollectionIdentifier } from '../solana/types'
+import ComposedQueryType, {
+  ExactAttributeContent,
+  FieldType,
+  OperationType,
+  QueryContent,
+  QueryType,
+} from '../types/ComposedQueryType'
+import searchQueryValid from './searchQueryValid'
 
 const { persistAtom } = recoilPersist()
-
-export type FieldType = 'collection' | 'attribute'
-export type SearchType = 'exact' | 'relevance'
-
-export interface QueryId {
-  id: string
-  locked?: boolean
-}
-
-interface ExactCollectionContent {
-  field: 'collection'
-  searchType: 'exact'
-  value: string
-}
-interface ExactCollectionQuery extends ExactCollectionContent, QueryId {}
-
-interface ExactAttributeContent {
-  field: 'attribute'
-  searchType: 'exact'
-  value: string[]
-  trait: string
-}
-export interface ExactAttributeQuery extends ExactAttributeContent, QueryId {}
-
-interface RelevanceContent {
-  field: string
-  searchType: 'relevance'
-  value: string
-  relevance: number
-}
-interface RelevanceQuery extends RelevanceContent, QueryId {}
-
-export type OperationType = 'and' | 'or'
-type QueryContent =
-  | ExactCollectionContent
-  | ExactAttributeContent
-  | RelevanceContent
-export type QueryType =
-  | ExactCollectionQuery
-  | ExactAttributeQuery
-  | RelevanceQuery
-
-export type ComposedQueryType = QueryType[][]
 
 const searchQuery = atom<ComposedQueryType>({
   key: 'searchQuery',
@@ -56,14 +27,14 @@ const searchQuery = atom<ComposedQueryType>({
 export const useInitializeCollectionQuery = () => {
   const setter = useSetRecoilState(searchQuery)
 
-  return (value: string) => {
+  return (collectionValue: MetaplexCollectionIdentifier) => {
     setter([
       [
         {
           id: nanoid(),
           field: 'collection',
           searchType: 'exact',
-          value,
+          value: collectionValue,
           locked: true,
         },
       ],
@@ -107,7 +78,11 @@ const useAddChild = () => {
 export const useAddExactCollection = () => {
   const addChild = useAddChild()
 
-  return (value: string, operation: OperationType, at?: number) => {
+  return (
+    value: MetaplexCollectionIdentifier,
+    operation: OperationType,
+    at?: number
+  ) => {
     addChild(
       {
         field: 'collection',
@@ -229,6 +204,18 @@ export const useClearSearchQuery = () => {
         .filter((parent) => parent.length > 0)
     )
   }
+}
+
+export const useSetSearchQueryValid = () => {
+  const setter = useSetRecoilState(searchQuery)
+
+  const callback = useRecoilCallback(({ snapshot }) => async () => {
+    const valid = await snapshot.getPromise(searchQueryValid)
+
+    setter(valid)
+  })
+
+  return callback
 }
 
 export default searchQuery
