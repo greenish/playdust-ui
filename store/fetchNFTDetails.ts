@@ -10,7 +10,7 @@ const fetchNFTDetails = selectorFamily<SearchMetadata | undefined, string>({
     (mint: string) =>
     async ({ get }) => {
       try {
-        const { data } = await api.get<SearchMetadata>(`/nfts/${mint}`)
+        const { data } = await api.get<SearchMetadata>(`/mint?address=${mint}`)
 
         if (data) {
           return data
