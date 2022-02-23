@@ -1,4 +1,6 @@
 import styled from '@emotion/styled'
+import { useEffect } from 'react'
+import { useRecoilValue } from 'recoil'
 import * as store from '../../store'
 import TokenContainer from '../token/TokenContainer'
 
@@ -9,7 +11,15 @@ const NoTokensContainer = styled.div`
 `
 
 const SearchResults = () => {
-  const { results, initialized } = store.useNoWaitSearchResult()
+  const current = useRecoilValue(store.searchResults)
+  const { results, initialized, total } = current
+  const fetchMoreSearchResults = store.useFetchMoreSearchResults()
+  const searchQueryValid = useRecoilValue(store.searchQueryValid)
+  const initializeSearchResults = store.useInitializeSearchResults()
+
+  useEffect(() => {
+    initializeSearchResults(searchQueryValid)
+  }, [searchQueryValid])
 
   if (initialized && results.length === 0) {
     return (
@@ -23,8 +33,10 @@ const SearchResults = () => {
     <TokenContainer
       initialized={initialized}
       tokens={results}
-      hasMore={false}
-      next={() => null}
+      total={total}
+      next={async () => {
+        return fetchMoreSearchResults(current)
+      }}
     />
   )
 }

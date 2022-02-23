@@ -19,6 +19,7 @@ export const TokenCardPlaceholder = styled.div`
 `
 
 const CardContentContainer = styled.div`
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -30,23 +31,24 @@ const CardImageContainer = styled.div`
 `
 
 interface TokenCardProps {
-  metadata: SearchMetadata
+  metadata?: SearchMetadata
+  loading: boolean
 }
 
 const TokenCard = ({ metadata }: TokenCardProps) => {
   const [isLoaded, setIsLoaded] = useState(false)
-  const { offChainData, mint, data } = metadata
-  const href = `nfts/${mint}`
+  const { image, name } = metadata?.offChainData || {}
+  const href = `nfts/${metadata?.mint}`
 
   return (
     <div>
       <Card sx={{ mr: 2, width: dimensions.width }}>
         <Link href={href}>
-          {offChainData?.image && (
+          {image && (
             <CardImageContainer>
               <Image
-                alt={offChainData.name}
-                url={offChainData.image}
+                alt={name}
+                url={image}
                 style={
                   isLoaded
                     ? {
@@ -74,9 +76,9 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
         <CardContent>
           <CardContentContainer>
             <Typography>
-              <Link href={href}>{offChainData?.name || data?.name}</Link>
+              <Link href={href}>{name || metadata?.data?.name}</Link>
             </Typography>
-            {offChainData?.attributes && (
+            {metadata && metadata.offChainData?.attributes && (
               <TokenCardFilter metadata={metadata} />
             )}
           </CardContentContainer>

@@ -23,21 +23,11 @@ export {
 } from './searchAttributes'
 export { default as searchEdges } from './searchEdges'
 export { default as searchNodes } from './searchNodes'
-export {
-  default as searchQuery,
-  useAddExactAttribute,
-  useAddExactCollection,
-  useAddRelevance,
-  useClearSearchQuery,
-  useInitializeCollectionQuery,
-  useRemoveChild,
-  useSetSearchQueryValid,
-  useUpdateChild,
-  useUpdateExactAttribute,
-} from './searchQuery'
+export * from './searchQuery'
 export { default as searchQueryChild } from './searchQueryChild'
 export { default as searchQueryExactAttribute } from './searchQueryExactAttribute'
 export { default as searchQueryExactAttributes } from './searchQueryExactAttributes'
-export { default as searchResult, useNoWaitSearchResult } from './searchResult'
+export * from './searchQueryValid'
+export * from './searchResults'
 export { default as solanaCluster } from './solanaCluster'
 export { default as solanaClusters } from './solanaClusters'

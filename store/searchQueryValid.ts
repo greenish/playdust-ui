@@ -2,7 +2,7 @@ import { selector } from 'recoil'
 import { queryValidationPredicate } from './isSearchQueryValid'
 import searchQuery from './searchQuery'
 
-const searchQueryValid = selector({
+export const searchQueryValid = selector({
   key: 'searchQueryValid',
   get: ({ get }) => {
     const query = get(searchQuery)

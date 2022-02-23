@@ -26,7 +26,11 @@ const OwnedTokens = ({ publicKey }: OwnedTokensProp) => {
   return (
     <ContentContainer>
       {ownedTokens.length ? (
-        <TokenContainer initialized tokens={ownedTokens} hasMore={false} />
+        <TokenContainer
+          initialized
+          tokens={ownedTokens}
+          total={ownedTokens.length}
+        />
       ) : (
         <HelperMessageContainer>
           <Typography>

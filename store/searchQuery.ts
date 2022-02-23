@@ -18,7 +18,7 @@ import searchQueryValid from './searchQueryValid'
 
 const { persistAtom } = recoilPersist()
 
-const searchQuery = atom<ComposedQueryType>({
+export const searchQuery = atom<ComposedQueryType>({
   key: 'searchQuery',
   default: [],
   effects: [persistAtom],
