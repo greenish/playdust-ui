@@ -69,8 +69,8 @@ const WalletButton = () => {
                 instance.defaults.headers.common[
                   'Authorization'
                 ] = `Bearer ${token}`
-                return config
               }
+              return config
             },
             (error) => {
               return Promise.reject(error)
