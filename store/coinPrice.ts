@@ -19,4 +19,4 @@ export const fetchCoinPrice = selectorFamily<any, string>({
 export const useCoinPrice = (coin: string) =>
   useRecoilValue(fetchCoinPrice(coin))
 
-export const useSOLPrice = (coin: string) => useCoinPrice('solana')
+export const useSOLPrice = () => useCoinPrice('solana')

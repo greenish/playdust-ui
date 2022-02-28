@@ -1,23 +1,43 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { ExplorerContainer, ExplorerHeader } from '../../components/explorer'
+import { Suspense } from 'react'
+import {
+  BlockDetails,
+  BlockOverview,
+  ExplorerContainer,
+  ExplorerHeader,
+} from '../../components/explorer'
+import { useBlock } from '../../store'
 
 const Block: NextPage = () => {
-  const router = useRouter()
+  const { isReady, query } = useRouter()
 
-  const slot = router.query.id as string
+  const slot = query.id as string
 
-  return <BlockPage slot={slot} />
+  if (!isReady) {
+    return <div />
+  }
+
+  return (
+    <Suspense fallback={<div>Loading</div>}>
+      <BlockPage slot={Number(slot)} />
+    </Suspense>
+  )
 }
 
 interface BlockPageProps {
-  slot: string
+  slot: number
 }
 
 const BlockPage = ({ slot }: BlockPageProps) => {
+  const block = useBlock(slot)
+  console.log('bp::block', slot, block)
+
   return (
     <ExplorerContainer>
-      <ExplorerHeader label="Block" filter="block" value={slot} />
+      <ExplorerHeader label="Block" filter="block" value={slot.toString()} />
+      <BlockOverview slot={slot} />
+      <BlockDetails slot={slot} />
     </ExplorerContainer>
   )
 }
