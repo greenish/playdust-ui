@@ -1,7 +1,8 @@
 import { Box, Grid, Typography } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
+import { useRouter } from 'next/router'
 import { getSpace } from '../../solana/account'
-import { useAccountInfo } from '../../store'
+import { useAccountDetails, useAccountInfo } from '../../store'
 import { SolBalance } from './SolBalance'
 
 interface AccountOverviewProps {
@@ -9,13 +10,20 @@ interface AccountOverviewProps {
 }
 
 export const AccountOverview = ({ pubkey }: AccountOverviewProps) => {
+  const router = useRouter()
   const account = useAccountInfo(pubkey)
+  const details = useAccountDetails(pubkey)
 
   if (!account) {
     return <div>No data available</div>
   }
 
   const { executable, lamports, owner, rentEpoch } = account
+  const { isToken } = details
+
+  if (isToken) {
+    router.push(`/token/${router.query.id}`)
+  }
 
   return (
     <Box

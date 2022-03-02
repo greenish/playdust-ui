@@ -1,6 +1,7 @@
 export { default as authToken } from './authToken'
 export * from './coinPrice'
 export { default as collectionSort, useSetSelectedSort } from './collectionSort'
+export * from './fetchAccountDetails'
 export * from './fetchAccountHistory'
 export * from './fetchAccountInfo'
 export * from './fetchBlock'
