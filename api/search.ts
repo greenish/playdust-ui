@@ -29,7 +29,8 @@ const handler = async (
     }
 
     const query = req.body.query as ComposedQueryType
-    const esQuery = getComposedQuery(query, 25)
+    const sort = req.body.sort as Object
+    const esQuery = getComposedQuery(query, 25, sort)
     const result = await postQuery(esQuery, true)
 
     res.json(cleanResult(result))

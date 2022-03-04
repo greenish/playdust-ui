@@ -7,7 +7,11 @@ const createOrQuery = (entries: QueryType[]) => ({
   },
 })
 
-const getComposedQuery = (query: ComposedQueryType, resultSize: number) => {
+const getComposedQuery = (
+  query: ComposedQueryType,
+  resultSize: number,
+  sortAttribute: Object = {}
+) => {
   const result = query.map((parent) => {
     if (parent.length === 1) {
       const firstChild = parent[0]
@@ -17,7 +21,7 @@ const getComposedQuery = (query: ComposedQueryType, resultSize: number) => {
     return createOrQuery(parent)
   })
 
-  return {
+  const composedQuery: any = {
     size: resultSize === undefined ? 25 : resultSize,
     query: {
       bool: {
@@ -25,6 +29,12 @@ const getComposedQuery = (query: ComposedQueryType, resultSize: number) => {
       },
     },
   }
+
+  if (Object.keys(sortAttribute).length) {
+    composedQuery.sort = [sortAttribute]
+  }
+
+  return composedQuery
 }
 
 export default getComposedQuery

@@ -1,16 +1,15 @@
 import { atom, useRecoilCallback } from 'recoil'
-import { ParsedMetadata } from '../solana/types'
 
 type CollectionSortOption = {
   name: string
-  sortFunction: (a: ParsedMetadata, b: ParsedMetadata) => number
+  sortAttribute: Object
 }
 
 export type CollectionSortType = {
   selectedIndex: number
   options: {
     name: string
-    sortFunction: (a: ParsedMetadata, b: ParsedMetadata) => number
+    sortAttribute: Object
   }[]
 }
 
@@ -18,15 +17,23 @@ const makeRarityOptions = (
   name: string,
   primaryName: string,
   secondaryName: string,
-  primaryFunction: (a: ParsedMetadata, b: ParsedMetadata) => number
+  attribute: string
 ): [CollectionSortOption, CollectionSortOption] => [
   {
     name: `${name}: ${primaryName}`,
-    sortFunction: primaryFunction,
+    sortAttribute: {
+      [attribute]: {
+        order: primaryName,
+      },
+    },
   },
   {
     name: `${name}: ${secondaryName}`,
-    sortFunction: (a, b) => -primaryFunction(a, b),
+    sortAttribute: {
+      [attribute]: {
+        order: secondaryName,
+      },
+    },
   },
 ]
 
@@ -35,7 +42,7 @@ const collectionSort = atom<CollectionSortType>({
   default: {
     selectedIndex: 0,
     options: [
-      ...makeRarityOptions(
+      /*...makeRarityOptions(
         'Rarity Score',
         'high to low',
         'low to high',
@@ -58,17 +65,8 @@ const collectionSort = atom<CollectionSortType>({
 
           return a.statisticalRarity - b.statisticalRarity
         }
-      ),
-      ...makeRarityOptions('Name', 'asc', 'desc', (a, b) => {
-        return a.onchain.data.name.localeCompare(
-          b.onchain.data.name,
-          undefined,
-          {
-            numeric: true,
-            sensitivity: 'base',
-          }
-        )
-      }),
+      ),*/
+      ...makeRarityOptions('Name', 'asc', 'desc', 'offChainData.name.keyword'),
     ],
   },
 })

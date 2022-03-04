@@ -20,7 +20,6 @@ const SortFields = () => {
       <FormControl>
         <InputLabel>{sortLabel}</InputLabel>
         <Select
-          disabled
           size="small"
           value={sort.selectedIndex}
           label={sortLabel}

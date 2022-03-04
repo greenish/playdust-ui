@@ -23,11 +23,12 @@ export const useInitializeSearchResults = () => {
   const setter = useSetRecoilState(searchResults)
   const resetter = useResetRecoilState(searchResults)
 
-  return async (queryValid: ComposedQueryType) => {
+  return async (queryValid: ComposedQueryType, sortAttribute: Object = {}) => {
     resetter()
 
     const { data } = await api.post<SearchResponse>('/search', {
       query: queryValid,
+      sort: sortAttribute,
     })
 
     return setter({

@@ -15,11 +15,13 @@ const SearchResults = () => {
   const { results, initialized, total } = current
   const fetchMoreSearchResults = store.useFetchMoreSearchResults()
   const searchQueryValid = useRecoilValue(store.searchQueryValid)
+  const sortAttributes = useRecoilValue(store.collectionSort)
   const initializeSearchResults = store.useInitializeSearchResults()
 
   useEffect(() => {
-    initializeSearchResults(searchQueryValid)
-  }, [searchQueryValid])
+    const selectedSort = sortAttributes.options[sortAttributes.selectedIndex]
+    initializeSearchResults(searchQueryValid, selectedSort.sortAttribute)
+  }, [searchQueryValid, sortAttributes])
 
   if (initialized && results.length === 0) {
     return (
