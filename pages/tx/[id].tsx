@@ -1,23 +1,43 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { ExplorerContainer, ExplorerHeader } from '../../components/explorer'
+import { Suspense } from 'react'
+import {
+  AccountInputs,
+  ExplorerContainer,
+  ExplorerHeader,
+  InstructionDetails,
+  ProgramLog,
+  TransactionOverview,
+} from '../../components/explorer'
 
 const Tx: NextPage = () => {
-  const router = useRouter()
+  const { isReady, query } = useRouter()
 
-  const txId = router.query.id as string
+  const signature = query.id as string
 
-  return <TxPage txId={txId} />
+  if (!isReady) {
+    return <div />
+  }
+
+  return (
+    <Suspense fallback={<div>Loading</div>}>
+      <TxPage signature={signature} />
+    </Suspense>
+  )
 }
 
 interface TxPageProps {
-  txId: string
+  signature: string
 }
 
-const TxPage = ({ txId }: TxPageProps) => {
+const TxPage = ({ signature }: TxPageProps) => {
   return (
     <ExplorerContainer>
-      <ExplorerHeader label="Transaction" filter="tx" value={txId} />
+      <ExplorerHeader label="Transaction" filter="tx" value={signature} />
+      <TransactionOverview signature={signature} />
+      <AccountInputs signature={signature} />
+      <InstructionDetails signature={signature} />
+      <ProgramLog signature={signature} />
     </ExplorerContainer>
   )
 }

@@ -67,22 +67,22 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
 
     const time = <>{relativeTime}</>
 
-    const _instructions = (
+    const formattedInstructions = (
       <pre style={{ display: 'none' }}>{JSON.stringify(instructions)}</pre>
     )
 
     const by = <AccountLink to={byPubkey} allowCopy ellipsis={[6, 6]} />
 
-    const _fee = <>{fee ? lamportsToSol(fee) : null}</>
+    const feeAsSol = <>{fee ? lamportsToSol(fee) : null}</>
 
     const row = {
       status,
       signature,
       block,
       time,
-      instructions: _instructions,
+      instructions: formattedInstructions,
       by,
-      fee: _fee,
+      fee: feeAsSol,
     }
 
     return row
