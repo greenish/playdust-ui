@@ -20,8 +20,6 @@ export const TokenOverview = ({ pubkey }: TokenOverviewProps) => {
     json,
   } = nftData
 
-  const { image } = json
-
   const icon = tokenDetails?.logoURI ? (
     <img
       src={tokenDetails.logoURI}
@@ -40,7 +38,7 @@ export const TokenOverview = ({ pubkey }: TokenOverviewProps) => {
               bgcolor: 'background.paper',
             }}
           >
-            <img src={image} width={150} />
+            <img src={json?.image} width={150} />
             <Typography variant="h5" component="h2" gutterBottom>
               {name}
             </Typography>

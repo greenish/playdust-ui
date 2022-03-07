@@ -7,7 +7,6 @@ import {
   ExplorerContainer,
   ExplorerHeader,
 } from '../../components/explorer'
-import { useBlock } from '../../store'
 
 const Block: NextPage = () => {
   const { isReady, query } = useRouter()
@@ -30,8 +29,6 @@ interface BlockPageProps {
 }
 
 const BlockPage = ({ slot }: BlockPageProps) => {
-  const block = useBlock(slot)
-
   return (
     <ExplorerContainer>
       <ExplorerHeader label="Block" filter="block" value={slot.toString()} />

@@ -40,9 +40,6 @@ export const TransactionOverviewContent = ({
     },
   } = tx
 
-  console.log('tx', tx)
-  console.log('status', status)
-
   const { err, fee = 0 } = meta || {}
 
   const result = err ? (
