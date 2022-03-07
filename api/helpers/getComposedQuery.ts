@@ -1,3 +1,4 @@
+import { SearchSort } from '../../store'
 import ComposedQueryType, { QueryType } from '../../types/ComposedQueryType'
 import createSingleQuery from './createSingleQuery'
 
@@ -7,10 +8,16 @@ const createOrQuery = (entries: QueryType[]) => ({
   },
 })
 
+const sortMappings: {
+  [key: string]: string
+} = {
+  name: 'offChainData.name.keyword',
+}
+
 const getComposedQuery = (
   query: ComposedQueryType,
   resultSize: number,
-  sortAttribute: Object = {}
+  sort?: SearchSort
 ) => {
   const result = query.map((parent) => {
     if (parent.length === 1) {
@@ -25,13 +32,51 @@ const getComposedQuery = (
     size: resultSize === undefined ? 25 : resultSize,
     query: {
       bool: {
+        // TODO remove once there is a soluton on backend
+        must_not: [
+          {
+            term: {
+              'data.name.keyword': '',
+            },
+          },
+          {
+            term: {
+              'data.name.keyword': ' ',
+            },
+          },
+          {
+            term: {
+              'data.name.keyword': '  ',
+            },
+          },
+          {
+            term: {
+              'data.name.keyword': '   ',
+            },
+          },
+          {
+            term: {
+              'data.name.keyword': '    ',
+            },
+          },
+          {
+            term: {
+              'data.name.keyword': '     ',
+            },
+          },
+        ],
         filter: result,
       },
     },
   }
 
-  if (Object.keys(sortAttribute).length) {
-    composedQuery.sort = [sortAttribute]
+  const sortMapping = sort && sortMappings[sort.field]
+  if (sortMapping) {
+    composedQuery.sort = [
+      {
+        [sortMapping]: sort.direction,
+      },
+    ]
   }
 
   return composedQuery

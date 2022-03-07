@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { Card, CardContent, Container, Typography } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { getCollectionHash } from '../helpers/searchHash'
 import { cannedCollections } from '../solana'
 import * as store from '../store'
 
@@ -24,10 +25,11 @@ const Home: NextPage = () => {
           <Card
             key={collection.symbol}
             onClick={() => {
-              initCollectionQuery(collection)
+              const hash = getCollectionHash(collection)
 
               router.push({
                 pathname: '/search',
+                hash,
               })
             }}
             sx={{

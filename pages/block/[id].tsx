@@ -31,7 +31,6 @@ interface BlockPageProps {
 
 const BlockPage = ({ slot }: BlockPageProps) => {
   const block = useBlock(slot)
-  console.log('bp::block', slot, block)
 
   return (
     <ExplorerContainer>

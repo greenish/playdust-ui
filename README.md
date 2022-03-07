@@ -68,7 +68,7 @@ The following variables are needed to connect to deployed DBs/APIs:
 
 These should be added to an `.env` file, values can be found in [Vercel](https://vercel.com/playdust/playdust-ui/settings/environment-variables)
 
-NOTE: If the values of these variables are sent via Discord, a `/` may get appended to the OPENSEARCH_URL/PLAYDUST_API_HOST values. If the additional '/' are not removed, the local deployment will be unable to properly query OpenSearch. 
+NOTE: If the values of these variables are sent via Discord, a `/` may get appended to the OPENSEARCH_URL/PLAYDUST_API_HOST values. If the additional '/' are not removed, the local deployment will be unable to properly query OpenSearch.
 
 ## Local API connection
 

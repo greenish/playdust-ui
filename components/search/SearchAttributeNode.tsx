@@ -26,6 +26,7 @@ const SearchAttributeNode = (props: SearchAttributeProps) => {
         <Select
           value={data.trait || ''}
           label={traitLabel}
+          readOnly
           onChange={(evt) =>
             updateExactAttribute(props.id, { trait: evt.target.value })
           }

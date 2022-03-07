@@ -1,11 +1,19 @@
-import { atom, useResetRecoilState, useSetRecoilState } from 'recoil'
+import {
+  atom,
+  noWait,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil'
+import { SearchSort } from '.'
 import api from '../helpers/api'
+import AttributeResponse from '../types/AttributeResponse'
 import ComposedQueryType from '../types/ComposedQueryType'
 import SearchResponse from '../types/SearchResponse'
 
 interface SearchResults extends SearchResponse {
-  pageCount: number
   initialized: boolean
+  attributes: AttributeResponse
 }
 
 export const searchResults = atom<SearchResults>({
@@ -13,28 +21,30 @@ export const searchResults = atom<SearchResults>({
   default: {
     initialized: false,
     results: [],
+    attributes: [],
     total: 0,
     cursor: '',
-    pageCount: 0,
   },
 })
 
-export const useInitializeSearchResults = () => {
+export const useFetchSearchResults = () => {
   const setter = useSetRecoilState(searchResults)
   const resetter = useResetRecoilState(searchResults)
 
-  return async (queryValid: ComposedQueryType, sortAttribute: Object = {}) => {
+  return async (queryValid: ComposedQueryType, sort: SearchSort) => {
     resetter()
+    const [searchResult, attributeResult] = await Promise.all([
+      api.post<SearchResponse>('/search', {
+        query: queryValid,
+        sort,
+      }),
+      api.post<AttributeResponse>('/attributes', queryValid),
+    ])
 
-    const { data } = await api.post<SearchResponse>('/search', {
-      query: queryValid,
-      sort: sortAttribute,
-    })
-
-    return setter({
+    setter({
       initialized: true,
-      pageCount: 1,
-      ...data,
+      ...searchResult.data,
+      attributes: attributeResult.data,
     })
   }
 }
@@ -51,9 +61,19 @@ export const useFetchMoreSearchResults = () => {
       ...state,
       cursor: data.cursor,
       results: [...state.results, ...data.results],
-      pageCount: state.pageCount + 1,
     }))
   }
+}
+
+let previousValue: AttributeResponse = []
+export const useNoWaitSearchAttributes = () => {
+  const loadable = useRecoilValue(noWait(searchResults))
+
+  if (loadable.state === 'hasValue') {
+    previousValue = loadable.contents.attributes
+  }
+
+  return previousValue
 }
 
 export default searchResults

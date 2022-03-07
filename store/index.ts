@@ -1,6 +1,5 @@
 export { default as authToken } from './authToken'
 export * from './coinPrice'
-export { default as collectionSort, useSetSelectedSort } from './collectionSort'
 export * from './fetchAccountDetails'
 export * from './fetchAccountHistory'
 export * from './fetchAccountInfo'
@@ -20,10 +19,6 @@ export * from './fetchUserDomains'
 export { default as isSearchQueryValid } from './isSearchQueryValid'
 export { default as notification, useTriggerNotfication } from './notifcation'
 export * from './pageIdx'
-export {
-  default as searchAttributes,
-  useNoWaitSearchAttributes,
-} from './searchAttributes'
 export { default as searchEdges } from './searchEdges'
 export { default as searchNodes } from './searchNodes'
 export * from './searchQuery'
@@ -32,5 +27,7 @@ export { default as searchQueryExactAttribute } from './searchQueryExactAttribut
 export { default as searchQueryExactAttributes } from './searchQueryExactAttributes'
 export * from './searchQueryValid'
 export * from './searchResults'
+export * from './searchSort'
+export * from './searchSortSelected'
 export { default as solanaCluster } from './solanaCluster'
 export { default as solanaClusters } from './solanaClusters'

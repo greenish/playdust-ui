@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { SearchSort } from '../store'
 import ComposedQueryType from '../types/ComposedQueryType'
 import SearchMetadata from '../types/SearchMetadata'
 import SearchResponse from '../types/SearchResponse'
@@ -29,7 +30,8 @@ const handler = async (
     }
 
     const query = req.body.query as ComposedQueryType
-    const sort = req.body.sort as Object
+    const sort = req.body.sort as SearchSort
+
     const esQuery = getComposedQuery(query, 25, sort)
     const result = await postQuery(esQuery, true)
 

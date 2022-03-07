@@ -5,7 +5,6 @@ import {
   useRecoilState,
   useSetRecoilState,
 } from 'recoil'
-import { recoilPersist } from 'recoil-persist'
 import { MetaplexCollectionIdentifier } from '../solana/types'
 import ComposedQueryType, {
   ExactAttributeContent,
@@ -14,14 +13,12 @@ import ComposedQueryType, {
   QueryContent,
   QueryType,
 } from '../types/ComposedQueryType'
+import { queryValidationPredicate } from './isSearchQueryValid'
 import searchQueryValid from './searchQueryValid'
-
-const { persistAtom } = recoilPersist()
 
 export const searchQuery = atom<ComposedQueryType>({
   key: 'searchQuery',
   default: [],
-  effects: [persistAtom],
 })
 
 export const useInitializeCollectionQuery = () => {
@@ -214,6 +211,33 @@ export const useSetSearchQueryValid = () => {
 
     setter(valid)
   })
+
+  return callback
+}
+
+export const useBootstrapSearchQuery = () => {
+  const setter = useSetRecoilState(searchQuery)
+
+  const callback = (payload: any) => {
+    try {
+      const parsedQuery = payload as any[][]
+      const withIds = parsedQuery.map((parent) =>
+        parent.map((child) => ({
+          id: nanoid(),
+          ...child,
+        }))
+      )
+      const isValid = withIds.flat().every(queryValidationPredicate)
+
+      if (!isValid) {
+        throw new Error()
+      }
+
+      setter(withIds)
+    } catch (e) {
+      console.error('unable to bootstrap search query:', e)
+    }
+  }
 
   return callback
 }

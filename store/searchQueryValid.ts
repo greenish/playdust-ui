@@ -6,9 +6,9 @@ export const searchQueryValid = selector({
   key: 'searchQueryValid',
   get: ({ get }) => {
     const query = get(searchQuery)
-    const result = query.map((parent) =>
-      parent.filter(queryValidationPredicate)
-    )
+    const result = query
+      .map((parent) => parent.filter(queryValidationPredicate))
+      .filter((entry) => entry.length > 0)
 
     return result
   },

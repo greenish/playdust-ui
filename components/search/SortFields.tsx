@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useRecoilValue } from 'recoil'
-import { collectionSort, useSetSelectedSort } from '../../store'
+import * as store from '../../store'
 
 const RootContainer = styled.div`
   display: flex;
@@ -12,8 +12,8 @@ const RootContainer = styled.div`
 const sortLabel = 'Sort'
 
 const SortFields = () => {
-  const sort = useRecoilValue(collectionSort)
-  const setSort = useSetSelectedSort()
+  const sort = useRecoilValue(store.searchSort)
+  const setSort = store.useSetSelectedSort()
 
   return (
     <RootContainer>

@@ -49,7 +49,7 @@ const normalizeOptions = (
 }
 
 const AttributeFilters = () => {
-  const attributes = useRecoilValue(store.searchAttributes)
+  const { attributes } = useRecoilValue(store.searchResults)
   const queries = useRecoilValue(store.searchQueryExactAttributes)
   const addExactAttribute = store.useAddExactAttribute()
   const updateExactAttribute = store.useUpdateExactAttribute()
