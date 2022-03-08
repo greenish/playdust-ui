@@ -2,8 +2,8 @@ import styled from '@emotion/styled'
 import { Container, Typography } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
+import TokenContainer from '../../src/search/components/TokenContainer'
 import { fetchOwned } from '../../store'
-import TokenContainer from './TokenContainer'
 
 const HelperMessageContainer = styled.div`
   display: flex;

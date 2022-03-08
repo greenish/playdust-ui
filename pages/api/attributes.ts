@@ -1,1 +1,1 @@
-export { default } from '../../api/attributes'
+export { default } from '../../src/search/api/attributes'

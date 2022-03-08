@@ -1,6 +1,6 @@
 import esb from 'elastic-builder'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import postQuery from '../../api/helpers/postQuery'
+import postQuery from '../../src/search/api/helpers/postQuery'
 
 const handler = async (
   req: NextApiRequest,

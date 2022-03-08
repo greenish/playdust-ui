@@ -2,9 +2,9 @@ import styled from '@emotion/styled'
 import { Card, CardContent, Container, Typography } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { getCollectionHash } from '../helpers/searchHash'
 import { cannedCollections } from '../solana'
-import * as store from '../store'
+import { getCollectionHash } from '../src/search/helpers/searchHash'
+import * as store from '../src/search/store'
 
 const IndexContainer = styled.div`
   display: flex;
