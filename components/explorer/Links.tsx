@@ -1,13 +1,12 @@
-import Link from 'next/link'
 import { ellipsisify } from '../../helpers/utils'
 import { CopyButton } from './CopyButton'
+import Link from './Link'
 
 export interface ExplorerLinkProps {
   url?: string
   to: string | number
   label?: string
   allowCopy?: boolean
-  noLink?: boolean
   ellipsis?: any
 }
 
@@ -15,25 +14,18 @@ export function ExplorerLink({
   url,
   to,
   label,
-  noLink,
   allowCopy,
   ellipsis,
 }: ExplorerLinkProps) {
   const display =
     label || (ellipsis ? ellipsisify('' + to, ellipsis[0], ellipsis[1]) : to)
 
-  const content = noLink ? (
-    <span>{display}</span>
-  ) : (
-    <Link href={`${url}/${to}`}>
-      <a>{display}</a>
-    </Link>
-  )
-
   return (
     <>
       {allowCopy && <CopyButton value={to} />}
-      {content}
+      <Link href={`${url}/${to}`}>
+        <a>{display}</a>
+      </Link>
     </>
   )
 }
@@ -52,4 +44,8 @@ export function ProgramLink(props: ExplorerLinkProps) {
 
 export function TxLink(props: ExplorerLinkProps) {
   return <ExplorerLink url="/tx" {...props} />
+}
+
+export function EpochLink(props: ExplorerLinkProps) {
+  return <ExplorerLink url="/epoch" {...props} />
 }

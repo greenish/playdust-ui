@@ -60,7 +60,7 @@ export const TransactionOverviewContent = ({
         Signature
       </Grid>
       <Grid item xs={12} md={10}>
-        <TxLink to={signatures[0]} noLink allowCopy />
+        <TxLink to={signatures[0]} allowCopy />
       </Grid>
       <Grid item xs={12} md={2}>
         Block
