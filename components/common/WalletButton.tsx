@@ -1,6 +1,7 @@
 import { Person } from '@mui/icons-material'
 import {
   Button,
+  ButtonGroup,
   FormControl,
   InputLabel,
   Menu,
@@ -9,16 +10,10 @@ import {
 } from '@mui/material'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
-import base58 from 'bs58'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useRecoilState } from 'recoil'
-import instance, {
-  GetAuthToken,
-  GetNonce,
-  RefreshToken,
-} from '../../helpers/auctionHouseApi'
 import { shortenPublicKey } from '../../helpers/utils'
 import * as store from '../../store'
 
@@ -30,62 +25,16 @@ const WalletButton = () => {
   const [solanaClusters, setSolanaClusters] = useRecoilState(
     store.solanaClusters
   )
-  const [authToken, setAuthToken] = useRecoilState(store.authToken)
-  const [cookies, setCookie] = useCookies(['nonce'])
-
-  useEffect(() => {
-    const { publicKey, signMessage, connected } = wallet
-    if (connected && !authToken.key.length) {
-      let nonceToken = ''
-      GetNonce(publicKey!.toBase58())
-        .then((nonce) => {
-          nonceToken = nonce
-          setCookie('nonce', nonce, { path: '/' })
-          const nonceArray = new TextEncoder().encode(nonce)
-          return signMessage!(nonceArray)
-        })
-        .then((signature) => {
-          const accountSignature = base58.encode(signature)
-          return GetAuthToken(
-            publicKey!.toBase58(),
-            accountSignature,
-            nonceToken
-          )
-        })
-        .then((token) => {
-          instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
-          setAuthToken({ key: token, expires_at: new Date(Date.now() + 60000) })
-          instance.interceptors.request.use(
-            async (config) => {
-              if (authToken.expires_at > new Date()) {
-                const token = await RefreshToken(
-                  publicKey!.toBase58(),
-                  nonceToken
-                )
-                setAuthToken({
-                  key: token,
-                  expires_at: new Date(Date.now() + 60000),
-                })
-                instance.defaults.headers.common[
-                  'Authorization'
-                ] = `Bearer ${token}`
-              }
-              return config
-            },
-            (error) => {
-              return Promise.reject(error)
-            }
-          )
-        })
-        .catch((e) => console.error(e))
-    }
-  }, [wallet.connected])
+  const router = useRouter()
+  const [cookies, setCookie, removeCookie] = useCookies([
+    'authToken',
+    'expires_at',
+  ])
 
   const buttonProps =
     wallet.connected && wallet.publicKey
       ? {
           children: shortenPublicKey(wallet.publicKey),
-          startIcon: <Person />,
           onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
             setAnchorEl(event.currentTarget),
         }
@@ -96,7 +45,12 @@ const WalletButton = () => {
 
   return (
     <>
-      <Button {...buttonProps} variant="outlined" />
+      <ButtonGroup variant="outlined" aria-label="outlined button group">
+        <Button onClick={() => router.push('/me')}>
+          <Person />
+        </Button>
+        <Button {...buttonProps} />
+      </ButtonGroup>
       <Menu
         open={open}
         anchorEl={anchorEl}
@@ -114,15 +68,12 @@ const WalletButton = () => {
           sx={{ p: 2 }}
           onClick={() => {
             wallet.disconnect()
+            removeCookie('authToken')
+            removeCookie('expires_at')
             setAnchorEl(null)
           }}
         >
           Disconnect
-        </MenuItem>
-        <MenuItem sx={{ p: 2 }}>
-          <Link href="/me">
-            <a>View my Tokens</a>
-          </Link>
         </MenuItem>
         <MenuItem sx={{ p: 2 }}>
           <FormControl fullWidth>
