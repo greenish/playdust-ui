@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import AttributeResponse from '../types/AttributeResponse'
-import ComposedQueryType, {
-  ExactAttributeQuery,
-} from '../types/ComposedQueryType'
+import ComposedQueryType, { AttributeQuery } from '../types/ComposedQueryType'
 import getAttributeAggQuery from './helpers/getAttributeAggQuery'
 import getComposedQuery from './helpers/getComposedQuery'
 import postQuery from './helpers/postQuery'
@@ -18,17 +16,13 @@ const handler = async (
 
   const exactAttributeQueries = query.flatMap((parent) =>
     parent.filter((child) => {
-      if (
-        'trait' in child &&
-        child.searchType === 'exact' &&
-        child.field === 'attribute'
-      ) {
+      if ('trait' in child && child.field === 'attribute') {
         return true
       }
 
       return false
     })
-  ) as ExactAttributeQuery[]
+  ) as AttributeQuery[]
 
   const modifiedQueries = exactAttributeQueries.map((entry) => {
     const withoutValue = query.map((parent) =>

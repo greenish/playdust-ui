@@ -19,14 +19,16 @@ const getComposedQuery = (
   resultSize: number,
   sort?: SearchSort
 ) => {
-  const result = query.map((parent) => {
-    if (parent.length === 1) {
-      const firstChild = parent[0]
-      return createSingleQuery(firstChild)
-    }
+  const result = query
+    .map((parent) => {
+      if (parent.length === 1) {
+        const firstChild = parent[0]
+        return createSingleQuery(firstChild)
+      }
 
-    return createOrQuery(parent)
-  })
+      return createOrQuery(parent)
+    })
+    .filter(Boolean)
 
   const composedQuery: any = {
     size: resultSize === undefined ? 25 : resultSize,

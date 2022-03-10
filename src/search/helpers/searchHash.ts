@@ -43,9 +43,7 @@ export const getCollectionHash = (
     [
       {
         field: 'collection',
-        searchType: 'exact',
         value: collectionValue,
-        locked: true,
       },
     ],
   ]

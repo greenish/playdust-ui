@@ -24,13 +24,10 @@ const RootContainer = styled.div`
 const SearchInput = () => {
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const attributes = store.useNoWaitSearchAttributes()
-  const exactAttributes = useRecoilValue(store.searchQueryExactAttributes)
-  const addExactAttribute = store.useAddExactAttribute()
   const isQueryValid = useRecoilValue(store.isSearchQueryValid)
-  const clearSearchQuery = store.useClearSearchQuery()
-  const updateExactAttribute = store.useUpdateExactAttribute()
   const setSearchQueryValid = store.useSetSearchQueryValid()
+  const addText = store.useAddText()
+  const clearSearchQuery = store.useClearSearchQuery()
 
   useEffect(() => {
     window.addEventListener('beforeunload', setSearchQueryValid)
@@ -46,26 +43,6 @@ const SearchInput = () => {
 
   const handleClose = () => isQueryValid && setOpen(false)
 
-  const flattenedAttributes = attributes.flatMap((entry) =>
-    entry.options.map((option) => ({
-      trait: entry.trait,
-      option,
-    }))
-  )
-
-  const value = [
-    {
-      trait: 'default',
-      option: 'default',
-    },
-    ...flattenedAttributes.filter((entry) =>
-      exactAttributes.find(
-        (query) =>
-          query.trait === entry.trait && query.value.includes(entry.option)
-      )
-    ),
-  ]
-
   return (
     <RootContainer>
       <Autocomplete
@@ -73,39 +50,24 @@ const SearchInput = () => {
         open={searchOpen}
         onOpen={() => setSearchOpen(true)}
         onClose={() => setSearchOpen(false)}
-        onChange={(_evt, value) => {
-          setSearchOpen(false)
-          if (value.length === 0) {
+        onChange={(_evt, [_placeholder, value], reason) => {
+          if (reason === 'clear') {
             return clearSearchQuery()
           }
 
-          const newValue = value[value.length - 1]
-          const found = exactAttributes.find(
-            (entry) => entry.trait === newValue.trait
-          )
-
-          if (found) {
-            return updateExactAttribute(
-              found.id,
-              {
-                value: [...found.value, newValue.option],
-              },
-              true
-            )
+          if (value && value.length) {
+            addText(value, 'and')
           }
-
-          addExactAttribute([newValue.option], newValue.trait, 'and')
         }}
+        freeSolo
         multiple
         fullWidth
-        groupBy={(entry) => entry.trait}
-        getOptionLabel={(option) => option.option.toString()}
-        value={value}
-        options={flattenedAttributes}
+        value={['1']}
+        options={[]}
         renderTags={() => <SearchChips />}
         filterSelectedOptions
         renderInput={(params) => (
-          <TextField {...params} label="Filters" placeholder="Add Filters..." />
+          <TextField {...params} label="Search" placeholder="Search..." />
         )}
       />
       <Button

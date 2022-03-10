@@ -18,9 +18,9 @@ interface TokenCardFilter {
 
 const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const addExactAttribute = store.useAddExactAttribute()
-  const updateExactAtrribute = store.useUpdateExactAttribute()
-  const exactAttributes = useRecoilValue(store.searchQueryExactAttributes)
+  const addAttribute = store.useAddAttribute()
+  const updateAtrribute = store.useUpdateAttribute()
+  const exactAttributes = useRecoilValue(store.searchQueryAttributes)
 
   const attributes = metadata.offChainData.attributes!
 
@@ -51,13 +51,13 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
                       checked={!!found}
                       onChange={(_evt, nextValue) => {
                         if (!found) {
-                          addExactAttribute(
+                          addAttribute(
                             [attribute.value],
                             attribute.trait_type,
                             'and'
                           )
                         } else {
-                          updateExactAtrribute(
+                          updateAtrribute(
                             found.id,
                             {
                               value: found.value.filter(

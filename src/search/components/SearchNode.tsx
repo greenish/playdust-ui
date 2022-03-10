@@ -5,6 +5,7 @@ import { CSSProperties } from 'react'
 import { Handle, NodeComponentProps, Position } from 'react-flow-renderer'
 import { useRecoilValue } from 'recoil'
 import * as store from '../store'
+import { QueryType } from '../types/ComposedQueryType'
 import SearchValue from './SearchValue'
 
 const CloseContainer = styled.div`
@@ -25,13 +26,20 @@ const getStyle = (show: boolean): Partial<CSSProperties> => ({
   visibility: show ? 'visible' : 'hidden',
 })
 
-const humanize = (value: string) =>
-  value
-    .match(/[A-Za-z][a-z]*/g)
-    ?.map(
-      ([firstLetter, ...rest]) => `${firstLetter.toUpperCase()}${rest.join('')}`
-    )
-    .join(' ')
+const getTitle = (query: QueryType) => {
+  switch (query.field) {
+    case 'text':
+      return 'Search by:'
+    default:
+      return query.field
+        .match(/[A-Za-z][a-z]*/g)
+        ?.map(
+          ([firstLetter, ...rest]) =>
+            `${firstLetter.toUpperCase()}${rest.join('')}`
+        )
+        .join(' ')
+  }
+}
 
 const SearchNode = ({ id, data }: NodeComponentProps) => {
   const removeChild = store.useRemoveChild()
@@ -47,7 +55,7 @@ const SearchNode = ({ id, data }: NodeComponentProps) => {
       <Card sx={{ width: data.width, height: data.height }}>
         <CardContent sx={{ width: '100%', height: '100%' }}>
           <CloseContainer>
-            <Typography>{humanize(query.field)}</Typography>
+            <Typography>{getTitle(query)}</Typography>
             <IconButton size="small" onClick={() => removeChild(id)}>
               <Close fontSize="small" />
             </IconButton>

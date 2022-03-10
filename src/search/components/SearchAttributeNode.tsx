@@ -11,8 +11,8 @@ interface SearchAttributeProps {
 }
 
 const SearchAttributeNode = (props: SearchAttributeProps) => {
-  const data = useRecoilValue(store.searchQueryExactAttribute(props.id))
-  const updateExactAttribute = store.useUpdateExactAttribute()
+  const data = useRecoilValue(store.searchQueryAttribute(props.id))
+  const updateAttribute = store.useUpdateAttribute()
   const attributes = store.useNoWaitSearchAttributes()
 
   const options = useMemo(() => {
@@ -26,9 +26,8 @@ const SearchAttributeNode = (props: SearchAttributeProps) => {
         <Select
           value={data.trait || ''}
           label={traitLabel}
-          readOnly
           onChange={(evt) =>
-            updateExactAttribute(props.id, { trait: evt.target.value })
+            updateAttribute(props.id, { trait: evt.target.value })
           }
         >
           {attributes.map((attribute) => (
@@ -46,7 +45,7 @@ const SearchAttributeNode = (props: SearchAttributeProps) => {
           label={valueLabel}
           value={data.value || []}
           onChange={(evt) =>
-            updateExactAttribute(props.id, {
+            updateAttribute(props.id, {
               value: evt.target.value as string[],
             })
           }

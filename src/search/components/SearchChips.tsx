@@ -23,19 +23,18 @@ const ParenTypography = styled(Typography)`
 `
 
 const getChipLabel = (child: QueryType) => {
-  const value = Array.isArray(child.value)
-    ? child.value.join(', ')
-    : child.value
+  switch (child.field) {
+    case 'attribute':
+      return `${child.trait}: ${child.value.join(', ')}`
+    case 'collection':
+      return `Collection: ${child.value.name}`
+    case 'text':
+      return child.value
+    default:
+      const n: never = child
 
-  if ('trait' in child) {
-    return `${child.trait}: ${value}`
+      return n
   }
-
-  if (typeof value === 'object' && 'name' in value) {
-    return value.name
-  }
-
-  return ''
 }
 
 const SearchChips = () => {

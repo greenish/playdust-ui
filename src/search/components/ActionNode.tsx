@@ -13,8 +13,7 @@ const ActionNode = ({ data }: NodeComponentProps) => {
   const [operation] = useState<'and' | 'or'>('and')
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>()
 
-  const addExactAttribute = store.useAddExactAttribute()
-  const addRelevance = store.useAddRelevance()
+  const addAttribute = store.useAddAttribute()
 
   const open = !!anchorEl
   const onClose = () => {
@@ -35,21 +34,9 @@ const ActionNode = ({ data }: NodeComponentProps) => {
     <RoootContainer sx={{ width: data.width }}>
       <Menu open={open} anchorEl={anchorEl} onClose={onClose}>
         <MenuItemHandler
-          onClick={() => addExactAttribute([], '', operation, data.idx)}
+          onClick={() => addAttribute([], '', operation, data.idx)}
         >
           Attribute Exact
-        </MenuItemHandler>
-        <MenuItemHandler
-          onClick={() => addRelevance('attribute', '', operation, 50, data.idx)}
-        >
-          Attribute Relevance
-        </MenuItemHandler>
-        <MenuItemHandler
-          onClick={() =>
-            operation && addRelevance('collection', '', operation, 50, data.idx)
-          }
-        >
-          Collection Relevance
         </MenuItemHandler>
       </Menu>
       {!data.locked && (
@@ -57,8 +44,8 @@ const ActionNode = ({ data }: NodeComponentProps) => {
           size="small"
           fullWidth
           endIcon={<ArrowDownward />}
-          onClick={(evt) => {
-            addExactAttribute([], '', 'or', data.idx)
+          onClick={() => {
+            addAttribute([], '', 'or', data.idx)
           }}
         >
           OR
@@ -69,7 +56,7 @@ const ActionNode = ({ data }: NodeComponentProps) => {
         size="small"
         endIcon={<ArrowForward />}
         onClick={() => {
-          addExactAttribute([], '', 'and', data.idx)
+          addAttribute([], '', 'and', data.idx)
         }}
       >
         AND

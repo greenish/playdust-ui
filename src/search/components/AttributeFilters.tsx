@@ -10,7 +10,7 @@ import {
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import * as store from '../store'
-import type { ExactAttributeQuery } from '../types/ComposedQueryType'
+import type { AttributeQuery } from '../types/ComposedQueryType'
 
 const RootContainer = styled.div`
   display: flex;
@@ -22,7 +22,7 @@ const RootContainer = styled.div`
 
 const normalizeOptions = (
   options: string[],
-  found: ExactAttributeQuery | undefined,
+  found: AttributeQuery | undefined,
   isExpanded: boolean
 ) => {
   const normalized = options
@@ -50,9 +50,9 @@ const normalizeOptions = (
 
 const AttributeFilters = () => {
   const { attributes } = useRecoilValue(store.searchResults)
-  const queries = useRecoilValue(store.searchQueryExactAttributes)
-  const addExactAttribute = store.useAddExactAttribute()
-  const updateExactAttribute = store.useUpdateExactAttribute()
+  const queries = useRecoilValue(store.searchQueryAttributes)
+  const addAttribute = store.useAddAttribute()
+  const updateAttribute = store.useUpdateAttribute()
   const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({})
 
   return (
@@ -88,15 +88,11 @@ const AttributeFilters = () => {
                       checked={checked}
                       onChange={() => {
                         if (!found) {
-                          return addExactAttribute(
-                            [option],
-                            attribute.trait,
-                            'and'
-                          )
+                          return addAttribute([option], attribute.trait, 'and')
                         }
 
                         if (!checked) {
-                          return updateExactAttribute(found.id, {
+                          return updateAttribute(found.id, {
                             value: [...found.value, option],
                           })
                         }
@@ -105,7 +101,7 @@ const AttributeFilters = () => {
                           (entry) => entry !== option
                         )
 
-                        return updateExactAttribute(
+                        return updateAttribute(
                           found.id,
                           {
                             value: nextValue,

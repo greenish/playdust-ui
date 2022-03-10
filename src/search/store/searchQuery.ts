@@ -7,8 +7,7 @@ import {
 } from 'recoil'
 import { MetaplexCollectionIdentifier } from '../../../solana/types'
 import ComposedQueryType, {
-  ExactAttributeContent,
-  FieldType,
+  AttributeContent,
   OperationType,
   QueryContent,
   QueryType,
@@ -29,9 +28,7 @@ export const useInitializeCollectionQuery = () => {
         {
           id: nanoid(),
           field: 'collection',
-          searchType: 'exact',
           value: collectionValue,
-          locked: true,
         },
       ],
     ])
@@ -71,7 +68,7 @@ const useAddChild = () => {
   }
 }
 
-export const useAddExactCollection = () => {
+export const useAddCollection = () => {
   const addChild = useAddChild()
 
   return (
@@ -82,7 +79,6 @@ export const useAddExactCollection = () => {
     addChild(
       {
         field: 'collection',
-        searchType: 'exact',
         value,
       },
       operation,
@@ -91,7 +87,7 @@ export const useAddExactCollection = () => {
   }
 }
 
-export const useAddExactAttribute = () => {
+export const useAddAttribute = () => {
   const addChild = useAddChild()
 
   return (
@@ -103,7 +99,6 @@ export const useAddExactAttribute = () => {
     addChild(
       {
         field: 'attribute',
-        searchType: 'exact',
         value,
         trait,
       },
@@ -113,21 +108,13 @@ export const useAddExactAttribute = () => {
   }
 }
 
-export const useAddRelevance = () => {
+export const useAddText = () => {
   const addChild = useAddChild()
 
-  return (
-    field: FieldType,
-    value: string,
-    operation: OperationType,
-    relevance?: number,
-    at?: number
-  ) => {
+  return (value: string, operation: OperationType, at?: number) => {
     addChild(
       {
-        field,
-        searchType: 'relevance',
-        relevance: relevance || 50,
+        field: 'text',
         value,
       },
       operation,
@@ -136,13 +123,13 @@ export const useAddRelevance = () => {
   }
 }
 
-export const useUpdateExactAttribute = () => {
+export const useUpdateAttribute = () => {
   const updateChild = useUpdateChild()
   const removeChild = useRemoveChild()
 
   return (
     id: string,
-    update: Partial<ExactAttributeContent>,
+    update: Partial<AttributeContent>,
     clearOnEmpty = false
   ) => {
     if (

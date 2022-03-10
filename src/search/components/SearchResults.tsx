@@ -66,7 +66,7 @@ const SearchResults = () => {
   if (initialized && results.length === 0) {
     return (
       <NoTokensContainer>
-        <i>add filters to view tokens...</i>
+        <i>no tokens found...</i>
       </NoTokensContainer>
     )
   }
