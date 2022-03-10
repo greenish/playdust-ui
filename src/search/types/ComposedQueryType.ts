@@ -1,5 +1,3 @@
-import { MetaplexCollectionIdentifier } from '../../../solana/types'
-
 export type FieldType = 'collection' | 'attribute' | 'text'
 
 export interface QueryId {
@@ -7,9 +5,12 @@ export interface QueryId {
   locked?: boolean
 }
 
-interface CollectionContent {
+export interface CollectionContent {
   field: 'collection'
-  value: MetaplexCollectionIdentifier
+  value: {
+    id: string
+    name: string
+  }
 }
 export interface CollectionQuery extends CollectionContent, QueryId {}
 

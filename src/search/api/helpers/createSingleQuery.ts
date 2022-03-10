@@ -41,10 +41,7 @@ const createSingleQuery = (child: QueryType) => {
 
       return {
         bool: {
-          must: [
-            { term: { 'updateAuthority.keyword': value.updateAuthority } },
-            { term: { 'data.symbol.keyword': value.symbol } },
-          ],
+          must: [{ term: { 'heuristicCollectionId.keyword': value.id } }],
         },
       }
     }

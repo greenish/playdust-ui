@@ -2,9 +2,8 @@ import styled from '@emotion/styled'
 import { Card, CardContent, Container, Typography } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { cannedCollections } from '../solana'
 import { getCollectionHash } from '../src/search/helpers/searchHash'
-import * as store from '../src/search/store'
+import testCollections from '../src/search/testCollections'
 
 const IndexContainer = styled.div`
   display: flex;
@@ -16,14 +15,13 @@ const IndexContainer = styled.div`
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const initCollectionQuery = store.useInitializeCollectionQuery()
 
   return (
     <Container>
       <IndexContainer>
-        {cannedCollections.map(({ image, ...collection }) => (
+        {testCollections.map((collection) => (
           <Card
-            key={collection.symbol}
+            key={collection.id}
             onClick={() => {
               const hash = getCollectionHash(collection)
 
@@ -35,13 +33,11 @@ const Home: NextPage = () => {
             sx={{
               cursor: 'pointer',
               m: 2,
+              width: '100%',
             }}
           >
-            <img alt={collection.name} src={image} width={300} />
             <CardContent>
-              <Typography>
-                {collection.name} ({collection.symbol})
-              </Typography>
+              <Typography>{collection.name}</Typography>
             </CardContent>
           </Card>
         ))}

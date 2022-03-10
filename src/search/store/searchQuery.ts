@@ -5,9 +5,9 @@ import {
   useRecoilState,
   useSetRecoilState,
 } from 'recoil'
-import { MetaplexCollectionIdentifier } from '../../../solana/types'
 import ComposedQueryType, {
   AttributeContent,
+  CollectionContent,
   OperationType,
   QueryContent,
   QueryType,
@@ -22,13 +22,13 @@ export const searchQuery = atom<ComposedQueryType>({
 export const useInitializeCollectionQuery = () => {
   const setter = useSetRecoilState(searchQuery)
 
-  return (collectionValue: MetaplexCollectionIdentifier) => {
+  return (value: CollectionContent['value']) => {
     setter([
       [
         {
           id: nanoid(),
           field: 'collection',
-          value: collectionValue,
+          value,
         },
       ],
     ])
@@ -72,7 +72,7 @@ export const useAddCollection = () => {
   const addChild = useAddChild()
 
   return (
-    value: MetaplexCollectionIdentifier,
+    value: CollectionContent['value'],
     operation: OperationType,
     at?: number
   ) => {

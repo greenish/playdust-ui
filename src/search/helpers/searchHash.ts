@@ -1,6 +1,5 @@
 import qs from 'qs'
-import { MetaplexCollectionIdentifier } from '../../../solana/types'
-import ComposedQueryType from '../types/ComposedQueryType'
+import ComposedQueryType, { CollectionQuery } from '../types/ComposedQueryType'
 
 export const parseHash = (): any => {
   try {
@@ -37,7 +36,7 @@ export const stringifyHash = (
 }
 
 export const getCollectionHash = (
-  collectionValue: MetaplexCollectionIdentifier
+  collectionValue: CollectionQuery['value']
 ) => {
   const seed: any[][] = [
     [
