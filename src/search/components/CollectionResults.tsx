@@ -15,7 +15,7 @@ const RootContainer = styled.div`
   margin-bottom: ${bottomSpace}px;
   padding-left: 16px;
   min-height: ${totalHeight}px;
-  overflow-x: scroll;
+  overflow-x: auto;
 `
 
 const CollectionResults = () => {

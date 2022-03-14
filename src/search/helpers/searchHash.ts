@@ -1,4 +1,5 @@
 import qs from 'qs'
+import type { SearchSortValue } from '../store'
 import ComposedQueryType from '../types/ComposedQueryType'
 
 export const parseHash = (): any => {
@@ -6,7 +7,7 @@ export const parseHash = (): any => {
     const params = window.location.hash.slice(1)
     const parsed = qs.parse(params) as any
     const parsedQuery = Object.values(qs.parse(parsed.query)) as any[][]
-    const result = { query: parsedQuery, sortIdx: parseInt(parsed.sortIdx) }
+    const result = { query: parsedQuery, sort: parsed.sort }
 
     return result
   } catch {
@@ -22,17 +23,17 @@ export const isHashEmpty = (): boolean => {
 
 export const stringifyHash = (
   searchQueryValid: ComposedQueryType,
-  selectedIndex = 0
+  sort?: SearchSortValue
 ) => {
   const withoutIds = searchQueryValid.map((parent) =>
     parent.map(({ id, ...rest }) => rest)
   )
-  const stringified = qs.stringify({
+  const raw = {
     query: withoutIds,
-    sortIdx: selectedIndex,
-  })
+    sort,
+  }
 
-  return stringified
+  return qs.stringify(raw)
 }
 
 export const getCollectionHash = (collectionId: string) => {

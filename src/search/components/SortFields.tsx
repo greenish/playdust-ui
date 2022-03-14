@@ -12,9 +12,10 @@ const RootContainer = styled.div`
 const sortLabel = 'Sort'
 
 const SortFields = () => {
-  const sort = useRecoilValue(store.searchSort)
+  const selected = useRecoilValue(store.searchSortSelected)
   const { initialized, nfts } = useRecoilValue(store.searchResults)
   const setSort = store.useSetSelectedSort()
+  const options = useRecoilValue(store.searchSortVisibleOptions)
 
   if (!initialized || !nfts.results.length) {
     return <></>
@@ -26,18 +27,14 @@ const SortFields = () => {
         <InputLabel>{sortLabel}</InputLabel>
         <Select
           size="small"
-          value={sort.selectedIndex}
+          value={selected.name}
           label={sortLabel}
-          onChange={(e) => {
-            const nextIdx = e.target.value
-
-            if (typeof nextIdx === 'number') {
-              setSort(nextIdx)
-            }
+          onChange={(evt) => {
+            setSort(evt.target.value)
           }}
         >
-          {sort.options.map(({ name }, idx) => (
-            <MenuItem key={name} value={idx}>
+          {options.map(({ name }) => (
+            <MenuItem key={name} value={name}>
               {name}
             </MenuItem>
           ))}

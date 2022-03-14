@@ -23,23 +23,20 @@ const SearchResults = () => {
   const fetchMoreSearchResults = store.useFetchMoreSearchResults()
   const searchQueryValid = useRecoilValue(store.searchQueryValid)
   const bootstrapSearchQuery = store.useBootstrapSearchQuery()
-  const setSelectedSort = store.useSetSelectedSort()
-  const selectedSort = useRecoilValue(store.searchSortSelected)
-  const { selectedIndex } = useRecoilValue(store.searchSort)
+  const setSelectedSort = store.useSetSelectedSortByValue()
+  const searchSortSelected = useRecoilValue(store.searchSortSelected)
   const [didMount, setDidMount] = useState(false)
 
   const updateFromHash = useCallback(() => {
     const payload = parseHash()
     bootstrapSearchQuery(payload.query)
 
-    if (typeof payload.sortIdx === 'number' && !isNaN(payload.sortIdx)) {
-      setSelectedSort(payload.sortIdx)
-    }
+    setSelectedSort(payload.sort)
   }, [])
 
   useEffect(() => {
     if (isHashEmpty()) {
-      fetchSearchResults(searchQueryValid, selectedSort.sort)
+      fetchSearchResults(searchQueryValid, searchSortSelected.value)
     } else {
       updateFromHash()
     }
@@ -57,12 +54,12 @@ const SearchResults = () => {
     if (didMount) {
       router.push({
         pathname: router.pathname,
-        hash: stringifyHash(searchQueryValid, selectedIndex),
+        hash: stringifyHash(searchQueryValid, searchSortSelected.value),
       })
 
-      fetchSearchResults(searchQueryValid, selectedSort.sort)
+      fetchSearchResults(searchQueryValid, searchSortSelected.value)
     }
-  }, [searchQueryValid, selectedSort.sort])
+  }, [searchQueryValid, searchSortSelected.value])
 
   if (initialized && results.length === 0) {
     return (

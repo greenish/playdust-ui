@@ -1,13 +1,14 @@
-import { atom, useRecoilCallback } from 'recoil'
+import { atom, useSetRecoilState } from 'recoil'
 
-export interface SearchSort {
-  field: string
-  direction: string
+export interface SearchSortValue {
+  field: 'name' | 'relevance'
+  direction: 'asc' | 'desc'
 }
 
-type SearchSortOption = {
+export type SearchSortOption = {
   name: string
-  sort: SearchSort
+  value: SearchSortValue
+  selected?: boolean
 }
 
 export type SearchSortType = {
@@ -17,45 +18,62 @@ export type SearchSortType = {
 
 const makeSortOption = (
   name: string,
-  primaryName: string,
-  secondaryName: string,
-  field: string
+  field: SearchSortValue['field']
 ): [SearchSortOption, SearchSortOption] => [
   {
-    name: `${name}: ${primaryName}`,
-    sort: {
+    name: `${name}: asc`,
+    value: {
       field,
-      direction: primaryName,
+      direction: 'asc',
     },
   },
   {
-    name: `${name}: ${secondaryName}`,
-    sort: {
+    name: `${name}: desc`,
+    value: {
       field,
-      direction: secondaryName,
+      direction: 'desc',
     },
   },
 ]
 
-export const searchSort = atom<SearchSortType>({
-  key: 'searchSort',
-  default: {
-    selectedIndex: 0,
-    options: [...makeSortOption('Name', 'asc', 'desc', 'name')],
-  },
+export const searchSortOptions = atom<SearchSortOption[]>({
+  key: 'searchSortOptions',
+  default: [
+    {
+      name: 'Relevance',
+      value: {
+        field: 'relevance',
+        direction: 'desc',
+      },
+    },
+    ...makeSortOption('Name', 'name'),
+  ],
 })
 
 export const useSetSelectedSort = () => {
-  const callback = useRecoilCallback(
-    ({ set }) =>
-      async (selectedIndex: number) => {
-        set(searchSort, (current) => ({
-          ...current,
-          selectedIndex,
-        }))
-      },
-    []
-  )
+  const setter = useSetRecoilState(searchSortOptions)
 
-  return callback
+  return (name: string) => {
+    setter((options) =>
+      options.map((entry) => ({
+        ...entry,
+        selected: entry.name === name,
+      }))
+    )
+  }
+}
+
+export const useSetSelectedSortByValue = () => {
+  const setter = useSetRecoilState(searchSortOptions)
+
+  return (value: SearchSortValue) => {
+    setter((options) =>
+      options.map((entry) => ({
+        ...entry,
+        selected:
+          entry.value.field === value?.field &&
+          entry.value.direction === value?.direction,
+      }))
+    )
+  }
 }

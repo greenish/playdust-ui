@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import SearchMetadata from '../../../types/SearchMetadata'
-import { SearchSort } from '../store'
+import { SearchSortValue } from '../store'
 import ComposedQueryType from '../types/ComposedQueryType'
 import { SearchNFTResponse } from '../types/SearchResponse'
 import getNFTQuery from './helpers/getNFTQuery'
@@ -30,7 +30,7 @@ const handler = async (
     }
 
     const query = req.body.query as ComposedQueryType
-    const sort = req.body.sort as SearchSort
+    const sort = req.body.sort as SearchSortValue
 
     const esQuery = getNFTQuery(query, 25, sort)
     const result = await postNFTQuery(esQuery, true)

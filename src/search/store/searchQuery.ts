@@ -11,7 +11,7 @@ import ComposedQueryType, {
   QueryContent,
   QueryType,
 } from '../types/ComposedQueryType'
-import { queryValidationPredicate, searchQueryValid } from './'
+import * as store from './'
 
 export const searchQuery = atom<ComposedQueryType>({
   key: 'searchQuery',
@@ -122,8 +122,13 @@ export const useAddAttribute = () => {
 
 export const useAddText = () => {
   const addChild = useAddChild()
+  const setSelectedSortByValue = store.useSetSelectedSortByValue()
 
   return (value: string, operation: OperationType, at?: number) => {
+    setSelectedSortByValue({
+      field: 'relevance',
+      direction: 'desc',
+    })
     addChild(
       {
         field: 'text',
@@ -205,7 +210,7 @@ export const useSetSearchQueryValid = () => {
   const setter = useSetRecoilState(searchQuery)
 
   const callback = useRecoilCallback(({ snapshot }) => async () => {
-    const valid = await snapshot.getPromise(searchQueryValid)
+    const valid = await snapshot.getPromise(store.searchQueryValid)
 
     setter(valid)
   })
@@ -225,7 +230,7 @@ export const useBootstrapSearchQuery = () => {
           ...child,
         }))
       )
-      const isValid = withIds.flat().every(queryValidationPredicate)
+      const isValid = withIds.flat().every(store.queryValidationPredicate)
 
       if (!isValid) {
         throw new Error()

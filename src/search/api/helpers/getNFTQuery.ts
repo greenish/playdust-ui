@@ -1,4 +1,4 @@
-import { SearchSort } from '../../store'
+import { SearchSortValue } from '../../store'
 import ComposedQueryType, { QueryType } from '../../types/ComposedQueryType'
 import createSingleNFTQuery from './createSingleNFTQuery'
 
@@ -17,7 +17,7 @@ const sortMappings: {
 const getNFTQuery = (
   query: ComposedQueryType,
   resultSize: number,
-  sort?: SearchSort
+  sort?: SearchSortValue
 ) => {
   const result = query
     .map((parent) => {
@@ -31,7 +31,7 @@ const getNFTQuery = (
     .filter(Boolean)
 
   const baseQuery = {
-    filter: result,
+    [sort?.field === 'relevance' ? 'must' : 'filter']: result,
   }
 
   const nftQuery: any = {

@@ -6,7 +6,7 @@ import {
   useResetRecoilState,
   useSetRecoilState,
 } from 'recoil'
-import { isCollectionQuery, SearchSort } from '.'
+import { isCollectionQuery, SearchSortValue } from '.'
 import api from '../../../helpers/api'
 import AttributeResponse from '../types/AttributeResponse'
 import ComposedQueryType from '../types/ComposedQueryType'
@@ -52,7 +52,7 @@ export const useFetchSearchResults = () => {
 
   return useRecoilCallback(
     ({ snapshot }) =>
-      async (queryValid: ComposedQueryType, sort: SearchSort) => {
+      async (queryValid: ComposedQueryType, sort: SearchSortValue) => {
         const isCollectionQueryValue = await snapshot.getPromise(
           isCollectionQuery
         )

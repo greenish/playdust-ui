@@ -1,11 +1,12 @@
 import { selector } from 'recoil'
-import { searchSort } from './searchSort'
+import * as store from './'
 
-export const searchSortSelected = selector({
+export const searchSortSelected = selector<store.SearchSortOption>({
   key: 'searchSortSelected',
   get: ({ get }) => {
-    const sort = get(searchSort)
+    const options = get(store.searchSortVisibleOptions)
+    const result = options.find((entry) => entry.selected) || options[0]
 
-    return sort.options[sort.selectedIndex]
+    return result
   },
 })
