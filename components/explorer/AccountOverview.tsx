@@ -1,6 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { useRouter } from 'next/router'
-import { useAccountDetails, useAccountInfo } from '../../store'
+import { FunctionComponent } from 'react'
+import { useAccountInfo } from '../../store'
 import {
   ConfigAccount,
   NonceAccount,
@@ -15,7 +16,7 @@ import {
 interface AccountOverviewProps {
   pubkey: PublicKey
 }
-const map: Record<string, any> = {
+const map: Record<string, FunctionComponent<AccountOverviewProps>> = {
   'bpf-upgradeable-loader': UpgradeableLoaderAccount,
   stake: StakeAccount,
   'spl-token': TokenAccount,
@@ -28,19 +29,10 @@ const map: Record<string, any> = {
 export const AccountOverview = (props: AccountOverviewProps) => {
   const router = useRouter()
   const account = useAccountInfo(props.pubkey)
-  const details = useAccountDetails(props.pubkey)
 
   const accountData = account?.data as ParsedAccountData
 
-  const { isToken } = details
-
-  if (isToken) {
-    router.push(`/token/${router.query.id}`)
-  }
-
-  const AccountOverviewComponent =
-    ('parsed' in accountData ? map[accountData?.program] : undefined) ||
-    UnknownAccount
+  const AccountOverviewComponent = map[accountData?.program] || UnknownAccount
 
   return <AccountOverviewComponent {...props} />
 }

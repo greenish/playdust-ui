@@ -1,6 +1,6 @@
 import { ellipsisify } from '../../helpers/utils'
 import { CopyButton } from './CopyButton'
-import Link from './Link'
+import { Link } from './Link'
 
 export interface ExplorerLinkProps {
   url?: string

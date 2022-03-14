@@ -1,67 +1,110 @@
 import { Grid } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
+import { useRecoilValue } from 'recoil'
+import { addressLabel, displayAddress } from '../../../helpers/tx'
 import { getSpace } from '../../../solana/account'
-import { useAccountInfo } from '../../../store'
+import { solanaCluster, useAccountInfo, useTokenRegistry } from '../../../store'
 import { ExplorerCard } from '../ExplorerCard'
+import { AccountLink } from '../Links'
 import { SolBalance } from '../SolBalance'
 
 interface UnknownAccountProps {
   pubkey: PublicKey
 }
 
+// To test this component use:
+// NativeLoader1111111111111111111111111111111 (no account, just pubkey)
 export const UnknownAccountContent = ({ pubkey }: UnknownAccountProps) => {
   const account = useAccountInfo(pubkey)
+  const tokenRegistry = useTokenRegistry()
+  const cluster = useRecoilValue(solanaCluster)
 
-  if (!account) {
-    return <div>No data available</div>
+  // Even if there is no matching account, we still display the pubkey
+
+  const details = account || {
+    executable: false,
+    owner: undefined,
+    lamports: undefined,
+    data: undefined,
   }
 
-  const { executable, lamports, owner, rentEpoch } = account
+  const label = addressLabel(pubkey.toBase58(), cluster.network, tokenRegistry)
+
+  const assignedProgramId = (() => {
+    if (!details.owner) {
+      return null
+    }
+
+    const owner = details.owner.toBase58()
+
+    try {
+      const addressToDisplay = displayAddress(
+        owner,
+        cluster.network,
+        tokenRegistry
+      )
+      return <AccountLink to={owner} label={addressToDisplay} />
+    } catch (err) {
+      return JSON.stringify(details.owner)
+    }
+  })()
+
+  const space = getSpace(account)
 
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} md={2}>
-        SOL Balance
+        Address
       </Grid>
       <Grid item xs={12} md={10}>
-        <SolBalance lamports={lamports} />
+        <AccountLink to={pubkey.toBase58()} allowCopy />
       </Grid>
+      {label && (
+        <>
+          <Grid item xs={12} md={2}>
+            Address Label
+          </Grid>
+          <Grid item xs={12} md={10}>
+            {label}
+          </Grid>
+        </>
+      )}
       <Grid item xs={12} md={2}>
-        SPL Token Balance
+        Balance (SOL)
       </Grid>
       <Grid item xs={12} md={10}>
-        0
+        <SolBalance lamports={details?.lamports || 0} />
       </Grid>
-      <Grid item xs={12} md={2}>
-        Rent Epoch
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {rentEpoch}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Stake
-      </Grid>
-      <Grid item xs={12} md={10}>
-        0
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Allocated Data Size
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {getSpace(account)}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Owner
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {JSON.stringify(owner)}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Executable
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {executable ? 'Yes' : 'No'}
-      </Grid>
+      {space !== undefined && (
+        <>
+          <Grid item xs={12} md={2}>
+            Allocated Data Size
+          </Grid>
+          <Grid item xs={12} md={10}>
+            {space} byte(s)
+          </Grid>
+        </>
+      )}
+      {assignedProgramId && (
+        <>
+          <Grid item xs={12} md={2}>
+            Assigned Program Id
+          </Grid>
+          <Grid item xs={12} md={10}>
+            {assignedProgramId}
+          </Grid>
+        </>
+      )}
+      {details && (
+        <>
+          <Grid item xs={12} md={2}>
+            Executable
+          </Grid>
+          <Grid item xs={12} md={10}>
+            {details.executable ? 'Yes' : 'No'}
+          </Grid>
+        </>
+      )}
     </Grid>
   )
 }

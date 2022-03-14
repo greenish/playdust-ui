@@ -1,6 +1,7 @@
 import { Box, Tab, Tabs } from '@mui/material'
-import { PublicKey } from '@solana/web3.js'
-import { useState } from 'react'
+import { ParsedAccountData, PublicKey } from '@solana/web3.js'
+import { FunctionComponent, useState } from 'react'
+import { useAccountInfo } from '../../store'
 import { Domains } from './Domains'
 import { a11yProps, TabPanel } from './TabPanel'
 import { Tokens } from './Tokens'
@@ -10,7 +11,7 @@ interface AccountDetailsProps {
   pubkey: PublicKey
 }
 
-export const AccountDetails = ({ pubkey }: AccountDetailsProps) => {
+export const UnknownAccountDetails = ({ pubkey }: AccountDetailsProps) => {
   const [value, setValue] = useState(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: any) => {
@@ -41,4 +42,31 @@ export const AccountDetails = ({ pubkey }: AccountDetailsProps) => {
       </TabPanel>
     </>
   )
+}
+
+const UpgradeableLoaderAccountDetails = UnknownAccountDetails
+const StakeAccountDetails = UnknownAccountDetails
+const TokenAccountDetails = UnknownAccountDetails
+const NonceAccountDetails = UnknownAccountDetails
+const VoteAccountDetails = UnknownAccountDetails
+const SysvarAccountDetails = UnknownAccountDetails
+const ConfigAccountDetails = UnknownAccountDetails
+
+const map: Record<string, FunctionComponent<AccountDetailsProps>> = {
+  'bpf-upgradeable-loader': UpgradeableLoaderAccountDetails,
+  stake: StakeAccountDetails,
+  'spl-token': TokenAccountDetails,
+  nonce: NonceAccountDetails,
+  vote: VoteAccountDetails,
+  sysvar: SysvarAccountDetails,
+  config: ConfigAccountDetails,
+}
+
+export const AccountDetails = (props: AccountDetailsProps) => {
+  const account = useAccountInfo(props.pubkey)
+
+  const AccountDetailsComponent =
+    map[(account?.data as ParsedAccountData)?.program] || UnknownAccountDetails
+
+  return <AccountDetailsComponent {...props} />
 }

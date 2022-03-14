@@ -5,7 +5,7 @@ export function getSpace(
   account: AccountInfo<Buffer | ParsedAccountData> | null
 ) {
   if (!account) {
-    return 0
+    return undefined
   }
   let space: number
   if (!('parsed' in account.data)) {

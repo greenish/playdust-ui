@@ -1,19 +1,13 @@
 import { PublicKey } from '@solana/web3.js'
-import { useAccountInfo } from '../../../store'
 import { ExplorerCard } from '../ExplorerCard'
+import { TokenOverview } from '../TokenOverview'
 
 interface TokenAccountProps {
   pubkey: PublicKey
 }
 
 export const TokenAccountContent = ({ pubkey }: TokenAccountProps) => {
-  const account = useAccountInfo(pubkey)
-
-  if (!account) {
-    return <div>No data available</div>
-  }
-
-  return <div>Token Placeholder</div>
+  return <TokenOverview pubkey={pubkey} />
 }
 
 export const TokenAccount = (props: TokenAccountProps) => {

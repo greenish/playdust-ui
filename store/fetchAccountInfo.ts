@@ -17,6 +17,10 @@ export const fetchAccountInfo = selectorFamily<
   get:
     (pubkey) =>
     async ({ get }) => {
+      if (!pubkey) {
+        return null
+      }
+
       get(pageIdx) // bust this cache every page
 
       const { endpoint } = get(solanaCluster)
@@ -29,5 +33,5 @@ export const fetchAccountInfo = selectorFamily<
     },
 })
 
-export const useAccountInfo = (pubkey: PublicKey) =>
+export const useAccountInfo = (pubkey: PublicKey | undefined) =>
   useRecoilValue(fetchAccountInfo(pubkey))
