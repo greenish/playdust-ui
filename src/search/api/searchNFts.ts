@@ -2,11 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import SearchMetadata from '../../../types/SearchMetadata'
 import { SearchSort } from '../store'
 import ComposedQueryType from '../types/ComposedQueryType'
-import SearchResponse from '../types/SearchResponse'
-import getComposedQuery from './helpers/getComposedQuery'
-import postQuery, { postScrollQuery } from './helpers/postQuery'
+import { SearchNFTResponse } from '../types/SearchResponse'
+import getNFTQuery from './helpers/getNFTQuery'
+import { postNFTQuery, postScrollQuery } from './helpers/postQuery'
 
-const cleanResult = (result: any) => {
+const cleanResult = (result: any): SearchNFTResponse => {
   const hits = result.hits.hits as any[]
 
   const results = hits.map((entry) => entry._source) as SearchMetadata[]
@@ -18,7 +18,7 @@ const cleanResult = (result: any) => {
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<SearchResponse>
+  res: NextApiResponse<SearchNFTResponse>
 ) => {
   try {
     const prevCursor = req.body.cursor as string
@@ -32,12 +32,12 @@ const handler = async (
     const query = req.body.query as ComposedQueryType
     const sort = req.body.sort as SearchSort
 
-    const esQuery = getComposedQuery(query, 25, sort)
-    const result = await postQuery(esQuery, true)
+    const esQuery = getNFTQuery(query, 25, sort)
+    const result = await postNFTQuery(esQuery, true)
 
     res.json(cleanResult(result))
   } catch (e) {
-    res.status(500)
+    res.status(500).end()
   }
 }
 

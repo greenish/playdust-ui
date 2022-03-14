@@ -23,7 +23,7 @@ const Home: NextPage = () => {
           <Card
             key={collection.id}
             onClick={() => {
-              const hash = getCollectionHash(collection)
+              const hash = getCollectionHash(collection.id)
 
               router.push({
                 pathname: '/search',

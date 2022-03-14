@@ -13,7 +13,12 @@ const sortLabel = 'Sort'
 
 const SortFields = () => {
   const sort = useRecoilValue(store.searchSort)
+  const { initialized, nfts } = useRecoilValue(store.searchResults)
   const setSort = store.useSetSelectedSort()
+
+  if (!initialized || !nfts.results.length) {
+    return <></>
+  }
 
   return (
     <RootContainer>

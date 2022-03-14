@@ -17,7 +17,8 @@ const SearchResults = () => {
   const router = useRouter()
   const location = useLocation()
   const current = useRecoilValue(store.searchResults)
-  const { results, initialized, total } = current
+  const { nfts, initialized } = current
+  const { results, total } = nfts
   const fetchSearchResults = store.useFetchSearchResults()
   const fetchMoreSearchResults = store.useFetchMoreSearchResults()
   const searchQueryValid = useRecoilValue(store.searchQueryValid)
@@ -73,7 +74,7 @@ const SearchResults = () => {
 
   return (
     <TokenContainer
-      initialized={initialized}
+      initialized={true}
       tokens={results}
       total={total}
       next={async () => {

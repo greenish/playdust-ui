@@ -1,3 +1,5 @@
+export * from './collectionById'
+export * from './isCollectionQuery'
 export * from './isSearchQueryValid'
 export * from './searchEdges'
 export * from './searchNodes'

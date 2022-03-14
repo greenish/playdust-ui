@@ -7,10 +7,7 @@ export interface QueryId {
 
 export interface CollectionContent {
   field: 'collection'
-  value: {
-    id: string
-    name: string
-  }
+  value: string
 }
 export interface CollectionQuery extends CollectionContent, QueryId {}
 

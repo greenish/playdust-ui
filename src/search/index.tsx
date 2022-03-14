@@ -1,43 +1,32 @@
 import styled from '@emotion/styled'
-import { CircularProgress, Divider } from '@mui/material'
+import { CircularProgress } from '@mui/material'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { Suspense } from 'react'
+import { useRecoilValue } from 'recoil'
 import AttributeFilters from './components/AttributeFilters'
-import SearchInput from './components/SearchInput'
+import CollectionResults from './components/CollectionResults'
 import SearchResults from './components/SearchResults'
 import SortFields from './components/SortFields'
+import * as store from './store'
 
 const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   height: 100%;
-  width: 100%;
-`
-
-const TopContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 60px;
+  overflow: hidden;
 `
 
 const LeftContainer = styled.div`
   width: 300px;
   margin-right: 8px;
   margin-left: 16px;
-`
-
-const BottomContainer = styled.div`
   display: flex;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+  flex-direction: column;
 `
 
-const SearchInputContainer = styled.div`
-  margin-right: 16px;
-  width: 100%;
+const SortContainer = styled.div`
+  padding-top: 8px;
 `
 
 const TokenContainer = styled.div`
@@ -47,45 +36,46 @@ const TokenContainer = styled.div`
   overflow: scroll;
 `
 
-const DividerContainer = styled(Divider)`
-  margin: 8px 16px;
-`
-
 const SpinnerContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-top: 24px;
+`
+
+const ResultsContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  border: soild 1px green;
 `
 
 const Search: NextPage = () => {
+  const { initialized } = useRecoilValue(store.searchResults)
+
   return (
-    <RootContainer>
-      <TopContainer>
-        <LeftContainer>
-          <SortFields />
-        </LeftContainer>
-        <SearchInputContainer>
-          <SearchInput />
-        </SearchInputContainer>
-      </TopContainer>
-      <DividerContainer />
-      <BottomContainer>
-        <Suspense
-          fallback={
-            <SpinnerContainer>
-              <CircularProgress />
-            </SpinnerContainer>
-          }
-        >
+    <>
+      {!initialized && (
+        <SpinnerContainer>
+          <CircularProgress />
+        </SpinnerContainer>
+      )}
+      <RootContainer>
+        <CollectionResults />
+        <ResultsContainer>
           <LeftContainer>
+            <SortContainer>
+              <SortFields />
+            </SortContainer>
             <AttributeFilters />
           </LeftContainer>
           <TokenContainer>
             <SearchResults />
           </TokenContainer>
-        </Suspense>
-      </BottomContainer>
-    </RootContainer>
+        </ResultsContainer>
+      </RootContainer>
+    </>
   )
 }
 

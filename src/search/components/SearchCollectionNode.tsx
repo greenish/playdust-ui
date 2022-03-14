@@ -17,8 +17,8 @@ const SearchCollectionNode = (props: SearchCollectionNodeProps) => {
   return (
     <FormControl fullWidth sx={{ mt: 1 }}>
       <InputLabel>{label}</InputLabel>
-      <Select value={value.name} label={label} readOnly>
-        <MenuItem value={value.name}>{value.name}</MenuItem>
+      <Select value={value} label={label} readOnly>
+        <MenuItem value={value}>{value}</MenuItem>
       </Select>
     </FormControl>
   )

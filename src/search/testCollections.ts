@@ -1,5 +1,9 @@
 const testCollections = [
   {
+    name: 'Degen Apes',
+    id: '5c50fbae-d7ff-456f-8f9a-f79cc9396743',
+  },
+  {
     name: 'Shadowy Super Coder',
     id: 'fc2b3fb4-24a3-48b2-8484-e7545e80a899',
   },

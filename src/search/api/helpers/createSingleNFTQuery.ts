@@ -5,7 +5,7 @@ import {
   TextQuery,
 } from '../../types/ComposedQueryType'
 
-const createSingleQuery = (child: QueryType) => {
+const createSingleNFTQuery = (child: QueryType) => {
   switch (child.field) {
     case 'attribute': {
       const { trait, value } = child as AttributeQuery
@@ -41,7 +41,7 @@ const createSingleQuery = (child: QueryType) => {
 
       return {
         bool: {
-          must: [{ term: { 'heuristicCollectionId.keyword': value.id } }],
+          must: [{ term: { 'heuristicCollectionId.keyword': value } }],
         },
       }
     }
@@ -54,11 +54,7 @@ const createSingleQuery = (child: QueryType) => {
           query: {
             multi_match: {
               query: value,
-              fields: [
-                'data.name',
-                'data.symbol',
-                'offChainData.attributes.value',
-              ],
+              fields: ['data.name', 'offChainData.attributes.value'],
               fuzziness: 'AUTO',
             },
           },
@@ -71,4 +67,4 @@ const createSingleQuery = (child: QueryType) => {
   }
 }
 
-export default createSingleQuery
+export default createSingleNFTQuery

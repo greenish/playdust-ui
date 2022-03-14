@@ -1,5 +1,5 @@
 import qs from 'qs'
-import ComposedQueryType, { CollectionQuery } from '../types/ComposedQueryType'
+import ComposedQueryType from '../types/ComposedQueryType'
 
 export const parseHash = (): any => {
   try {
@@ -15,9 +15,9 @@ export const parseHash = (): any => {
 }
 
 export const isHashEmpty = (): boolean => {
-  const hash = window.location.hash
+  const hash = qs.parse(window.location.hash.slice(1))
 
-  return hash.length === 0
+  return !('query' in hash)
 }
 
 export const stringifyHash = (
@@ -35,14 +35,12 @@ export const stringifyHash = (
   return stringified
 }
 
-export const getCollectionHash = (
-  collectionValue: CollectionQuery['value']
-) => {
+export const getCollectionHash = (collectionId: string) => {
   const seed: any[][] = [
     [
       {
         field: 'collection',
-        value: collectionValue,
+        value: collectionId,
       },
     ],
   ]

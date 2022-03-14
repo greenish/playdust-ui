@@ -24,11 +24,15 @@ export const postScrollQuery = async (scrollId: string) => {
   return postAxios(query, '/_search/scroll')
 }
 
-const postQuery = async (query: object, addScroll?: boolean) => {
+export const postNFTQuery = async (query: object, addScroll?: boolean) => {
   const scrollParam = addScroll ? '?scroll=1m' : ''
   const path = `/nft-metadata/_search${scrollParam}`
 
   return postAxios(query, path)
 }
 
-export default postQuery
+export const postCollectionQuery = async (query: object) => {
+  const path = `/nft-collection/_search`
+
+  return postAxios(query, path)
+}

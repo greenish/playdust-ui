@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { Chip, Typography } from '@mui/material'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import * as store from '../store'
-import type { QueryType } from '../types/ComposedQueryType'
+import type { CollectionQuery, QueryType } from '../types/ComposedQueryType'
 
 const ChipContainer = styled.div`
   display: flex;
@@ -22,12 +22,24 @@ const ParenTypography = styled(Typography)`
   margin-top: -2px;
 `
 
+const CollectionChip = ({ value }: CollectionQuery) => {
+  const { state, contents } = useRecoilValueLoadable(
+    store.collectionById(value)
+  )
+
+  if (state === 'hasValue') {
+    return <span>Collection: {contents.name || contents.symbol}</span>
+  }
+
+  return <span>Collection:</span>
+}
+
 const getChipLabel = (child: QueryType) => {
   switch (child.field) {
     case 'attribute':
       return `${child.trait}: ${child.value.join(', ')}`
     case 'collection':
-      return `Collection: ${child.value.name}`
+      return <CollectionChip {...child} />
     case 'text':
       return child.value
     default:

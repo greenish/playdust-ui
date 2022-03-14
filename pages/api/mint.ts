@@ -1,6 +1,6 @@
 import esb from 'elastic-builder'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import postQuery from '../../src/search/api/helpers/postQuery'
+import { postNFTQuery } from '../../src/search/api/helpers/postQuery'
 
 const handler = async (
   req: NextApiRequest,
@@ -13,7 +13,7 @@ const handler = async (
       .requestBodySearch()
       .query(esb.matchQuery('mint', mintAddress))
       .toJSON()
-    const result = await postQuery(requestBody)
+    const result = await postNFTQuery(requestBody)
     const source = result?.hits?.hits[0]?._source
 
     res.status(200).json(source)

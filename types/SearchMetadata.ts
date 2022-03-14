@@ -24,4 +24,5 @@ export default interface SearchMetadata {
       family: string
     }
   }
+  heuristicCollectionId?: string
 }

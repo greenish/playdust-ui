@@ -2,8 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import AttributeResponse from '../types/AttributeResponse'
 import ComposedQueryType, { AttributeQuery } from '../types/ComposedQueryType'
 import getAttributeAggQuery from './helpers/getAttributeAggQuery'
-import getComposedQuery from './helpers/getComposedQuery'
-import postQuery from './helpers/postQuery'
+import getNFTQuery from './helpers/getNFTQuery'
+import { postNFTQuery } from './helpers/postQuery'
 
 const handler = async (
   req: NextApiRequest,
@@ -11,7 +11,7 @@ const handler = async (
 ) => {
   const query: ComposedQueryType = req.body
 
-  const esQuery = getComposedQuery(query, 0)
+  const esQuery = getNFTQuery(query, 0)
   const aggQuery = getAttributeAggQuery()
 
   const exactAttributeQueries = query.flatMap((parent) =>
@@ -38,12 +38,12 @@ const handler = async (
       })
     )
 
-    return getComposedQuery(withoutValue as ComposedQueryType, 0)
+    return getNFTQuery(withoutValue as ComposedQueryType, 0)
   })
 
   const allAggs = await Promise.all(
     [esQuery, ...modifiedQueries].map((entry) =>
-      postQuery({
+      postNFTQuery({
         ...aggQuery,
         ...entry,
       })

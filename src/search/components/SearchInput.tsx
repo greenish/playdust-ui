@@ -67,7 +67,7 @@ const SearchInput = () => {
         renderTags={() => <SearchChips />}
         filterSelectedOptions
         renderInput={(params) => (
-          <TextField {...params} label="Search" placeholder="Search..." />
+          <TextField {...params} placeholder="Search..." />
         )}
       />
       <Button

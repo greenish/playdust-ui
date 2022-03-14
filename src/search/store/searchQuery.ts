@@ -7,7 +7,6 @@ import {
 } from 'recoil'
 import ComposedQueryType, {
   AttributeContent,
-  CollectionContent,
   OperationType,
   QueryContent,
   QueryType,
@@ -22,7 +21,7 @@ export const searchQuery = atom<ComposedQueryType>({
 export const useInitializeCollectionQuery = () => {
   const setter = useSetRecoilState(searchQuery)
 
-  return (value: CollectionContent['value']) => {
+  return (value: string) => {
     setter([
       [
         {
@@ -31,6 +30,23 @@ export const useInitializeCollectionQuery = () => {
           value,
         },
       ],
+    ])
+  }
+}
+
+export const usePrependCollectionQuery = () => {
+  const setter = useSetRecoilState(searchQuery)
+
+  return (value: string) => {
+    setter((state) => [
+      [
+        {
+          id: nanoid(),
+          field: 'collection',
+          value,
+        },
+      ],
+      ...state,
     ])
   }
 }
@@ -71,11 +87,7 @@ const useAddChild = () => {
 export const useAddCollection = () => {
   const addChild = useAddChild()
 
-  return (
-    value: CollectionContent['value'],
-    operation: OperationType,
-    at?: number
-  ) => {
+  return (value: string, operation: OperationType, at?: number) => {
     addChild(
       {
         field: 'collection',

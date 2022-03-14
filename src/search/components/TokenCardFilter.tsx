@@ -1,5 +1,6 @@
 import { FilterAlt } from '@mui/icons-material'
 import {
+  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -21,8 +22,10 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
   const addAttribute = store.useAddAttribute()
   const updateAtrribute = store.useUpdateAttribute()
   const exactAttributes = useRecoilValue(store.searchQueryAttributes)
-
+  const isCollectionQuery = useRecoilValue(store.isCollectionQuery)
   const attributes = metadata.offChainData.attributes!
+  const prependCollectionQuery = store.usePrependCollectionQuery()
+  const { heuristicCollectionId } = metadata
 
   return (
     <>
@@ -36,6 +39,13 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
       >
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormGroup>
+            {!isCollectionQuery && heuristicCollectionId && (
+              <Button
+                onClick={() => prependCollectionQuery(heuristicCollectionId)}
+              >
+                Search in Collection
+              </Button>
+            )}
             {attributes.map((attribute) => {
               const found = exactAttributes.find(
                 (entry) =>
@@ -45,11 +55,11 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
 
               return (
                 <FormControlLabel
-                  key={attribute.trait_type}
+                  key={`${attribute.trait_type}:${attribute.value}`}
                   control={
                     <Checkbox
                       checked={!!found}
-                      onChange={(_evt, nextValue) => {
+                      onChange={(_evt) => {
                         if (!found) {
                           addAttribute(
                             [attribute.value],

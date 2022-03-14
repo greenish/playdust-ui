@@ -1,9 +1,17 @@
 import type SearchMetadata from '../../../types/SearchMetadata'
 
-interface SearchResponse {
+export interface SearchNFTResponse {
   results: SearchMetadata[]
   total: number
   cursor: string
 }
 
-export default SearchResponse
+export interface SearchCollectionResponse {
+  results: {
+    id: string
+    symbol: string
+    name: string
+    description: string
+    family?: string
+  }[]
+}
