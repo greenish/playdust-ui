@@ -22,9 +22,9 @@ const SearchResults = () => {
   const fetchSearchResults = store.useFetchSearchResults()
   const fetchMoreSearchResults = store.useFetchMoreSearchResults()
   const searchQueryValid = useRecoilValue(store.searchQueryValid)
+  const searchSortSelected = useRecoilValue(store.searchSortSelected)
   const bootstrapSearchQuery = store.useBootstrapSearchQuery()
   const setSelectedSort = store.useSetSelectedSortByValue()
-  const searchSortSelected = useRecoilValue(store.searchSortSelected)
   const [didMount, setDidMount] = useState(false)
 
   const updateFromHash = useCallback(() => {

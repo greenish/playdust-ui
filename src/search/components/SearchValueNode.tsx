@@ -1,14 +1,15 @@
 import { useRecoilValue } from 'recoil'
 import * as store from '../store'
+import RangeNode from './RangeNode'
 import SearchAttributeNode from './SearchAttributeNode'
 import SearchCollectionNode from './SearchCollectionNode'
 import SearchTextNode from './SearchTextNode'
 
-interface SearchValueProps {
+interface SearchValueNodeProps {
   id: string
 }
 
-const SearchValue = (props: SearchValueProps) => {
+const SearchValueNode = (props: SearchValueNodeProps) => {
   const data = useRecoilValue(store.searchQueryChild(props.id))
 
   if (!data) {
@@ -22,9 +23,13 @@ const SearchValue = (props: SearchValueProps) => {
       return <SearchAttributeNode id={props.id} />
     case 'text':
       return <SearchTextNode id={props.id} />
+    case 'range':
+      return <RangeNode id={props.id} />
     default:
-      return <></>
+      const n: never = data
+
+      return n
   }
 }
 
-export default SearchValue
+export default SearchValueNode

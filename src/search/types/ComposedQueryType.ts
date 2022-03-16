@@ -1,4 +1,4 @@
-export type FieldType = 'collection' | 'attribute' | 'text'
+export type FieldType = 'collection' | 'attribute' | 'text' | 'range'
 
 export interface QueryId {
   id: string
@@ -24,9 +24,25 @@ interface TextContent {
 }
 export interface TextQuery extends TextContent, QueryId {}
 
+export interface RangeContent {
+  field: 'range'
+  value: string
+  min: number
+  max: number
+}
+export interface RangeQuery extends RangeContent, QueryId {}
+
 export type OperationType = 'and' | 'or'
-export type QueryContent = CollectionContent | AttributeContent | TextContent
-export type QueryType = CollectionQuery | AttributeQuery | TextQuery
+export type QueryContent =
+  | CollectionContent
+  | AttributeContent
+  | TextContent
+  | RangeContent
+export type QueryType =
+  | CollectionQuery
+  | AttributeQuery
+  | TextQuery
+  | RangeQuery
 
 type ComposedQueryType = QueryType[][]
 

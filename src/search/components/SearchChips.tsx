@@ -34,6 +34,9 @@ const CollectionChip = ({ value }: CollectionQuery) => {
   return <span>Collection:</span>
 }
 
+const capitalize = (input: string) =>
+  `${input[0].toUpperCase()}${input.slice(1)}`
+
 const getChipLabel = (child: QueryType) => {
   switch (child.field) {
     case 'attribute':
@@ -42,6 +45,8 @@ const getChipLabel = (child: QueryType) => {
       return <CollectionChip {...child} />
     case 'text':
       return child.value
+    case 'range':
+      return `${capitalize(child.value)}: ${child.min}-${child.max} SOL`
     default:
       const n: never = child
 
@@ -50,7 +55,7 @@ const getChipLabel = (child: QueryType) => {
 }
 
 const SearchChips = () => {
-  const query = useRecoilValue(store.searchQuery)
+  const query = useRecoilValue(store.searchQueryValid)
   const removeChild = store.useRemoveChild()
 
   return (

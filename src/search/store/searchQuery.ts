@@ -10,6 +10,7 @@ import ComposedQueryType, {
   OperationType,
   QueryContent,
   QueryType,
+  RangeContent,
 } from '../types/ComposedQueryType'
 import * as store from './'
 
@@ -34,11 +35,15 @@ export const useInitializeCollectionQuery = () => {
   }
 }
 
+const isRange = (parent: QueryType[]) =>
+  parent.length === 1 && parent[0].field === 'range'
+
 export const usePrependCollectionQuery = () => {
   const setter = useSetRecoilState(searchQuery)
 
   return (value: string) => {
     setter((state) => [
+      ...state.filter(isRange),
       [
         {
           id: nanoid(),
@@ -46,7 +51,7 @@ export const usePrependCollectionQuery = () => {
           value,
         },
       ],
-      ...state,
+      ...state.filter((parent) => !isRange(parent)),
     ])
   }
 }
@@ -57,7 +62,7 @@ const useAddChild = () => {
   return (content: QueryContent, operation: OperationType, at?: number) => {
     const currX = at === undefined ? state.length : at
 
-    const newNode: QueryType = {
+    let newNode: QueryType = {
       id: nanoid(),
       ...content,
     }
@@ -140,6 +145,29 @@ export const useAddText = () => {
   }
 }
 
+export const useAddRange = () => {
+  const addChild = useAddChild()
+
+  return (value: Omit<RangeContent, 'field'>) => {
+    addChild(
+      {
+        field: 'range',
+        ...value,
+      },
+      'and',
+      -1
+    )
+  }
+}
+
+export const useUpdateRange = () => {
+  const updateChild = useUpdateChild()
+
+  return (id: string) => (update: Partial<RangeContent>) => {
+    updateChild(id, update)
+  }
+}
+
 export const useUpdateAttribute = () => {
   const updateChild = useUpdateChild()
   const removeChild = useRemoveChild()
@@ -198,11 +226,7 @@ export const useClearSearchQuery = () => {
   const setter = useSetRecoilState(searchQuery)
 
   return () => {
-    setter((state) =>
-      state
-        .map((parent) => parent.filter((child) => child.locked))
-        .filter((parent) => parent.length > 0)
-    )
+    setter([])
   }
 }
 

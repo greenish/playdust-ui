@@ -66,11 +66,11 @@ export const searchNodes = selector<(Node | Node<QueryType>)[]>({
 
         return createNode(entry.id, x, y, handles)
       })
-      const isParentLocked = parent.every((entry) => entry.locked)
+      const isRange = parent.length === 1 && parent[0].field === 'range'
       const actionNode = {
         id: `${idx}-action`,
         type: 'actionNode',
-        data: { idx, width: cardWidth, locked: isParentLocked },
+        data: { idx, width: cardWidth, disableOr: isRange },
         position: {
           x: getX(idx),
           y: mainNodes[parent.length - 1].position.y + cardHeight + 20,

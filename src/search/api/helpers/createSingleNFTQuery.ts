@@ -61,6 +61,15 @@ const createSingleNFTQuery = (child: QueryType) => {
         },
       }
     }
+    case 'range':
+      return {
+        range: {
+          lastListPrice: {
+            gte: child.min,
+            lte: child.max,
+          },
+        },
+      }
     default: {
       return false
     }

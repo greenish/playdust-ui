@@ -39,7 +39,7 @@ const ActionNode = ({ data }: NodeComponentProps) => {
           Attribute Exact
         </MenuItemHandler>
       </Menu>
-      {!data.locked && (
+      {!data.disableOr && (
         <Button
           size="small"
           fullWidth

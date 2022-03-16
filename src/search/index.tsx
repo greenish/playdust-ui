@@ -3,10 +3,9 @@ import { CircularProgress } from '@mui/material'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
-import AttributeFilters from './components/AttributeFilters'
 import CollectionResults from './components/CollectionResults'
 import SearchResults from './components/SearchResults'
-import SortFields from './components/SortFields'
+import SearchSideBar from './components/SearchSideBar'
 import * as store from './store'
 
 const RootContainer = styled.div`
@@ -15,18 +14,6 @@ const RootContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-`
-
-const LeftContainer = styled.div`
-  width: 300px;
-  margin-right: 8px;
-  margin-left: 16px;
-  display: flex;
-  flex-direction: column;
-`
-
-const SortContainer = styled.div`
-  padding-top: 8px;
 `
 
 const TokenContainer = styled.div`
@@ -64,12 +51,7 @@ const Search: NextPage = () => {
       <RootContainer>
         <CollectionResults />
         <ResultsContainer>
-          <LeftContainer>
-            <SortContainer>
-              <SortFields />
-            </SortContainer>
-            <AttributeFilters />
-          </LeftContainer>
+          <SearchSideBar />
           <TokenContainer>
             <SearchResults />
           </TokenContainer>

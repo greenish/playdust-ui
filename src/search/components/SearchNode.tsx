@@ -6,7 +6,7 @@ import { Handle, NodeComponentProps, Position } from 'react-flow-renderer'
 import { useRecoilValue } from 'recoil'
 import * as store from '../store'
 import { QueryType } from '../types/ComposedQueryType'
-import SearchValue from './SearchValue'
+import SearchValueNode from './SearchValueNode'
 
 const CloseContainer = styled.div`
   display: flex;
@@ -30,6 +30,8 @@ const getTitle = (query: QueryType) => {
   switch (query.field) {
     case 'text':
       return 'Search by:'
+    case 'range':
+      return `Filter by ${query.value} (SOL):`
     default:
       return query.field
         .match(/[A-Za-z][a-z]*/g)
@@ -61,7 +63,7 @@ const SearchNode = ({ id, data }: NodeComponentProps) => {
             </IconButton>
           </CloseContainer>
           <ContentContainer>
-            <SearchValue id={id} />
+            <SearchValueNode id={id} />
           </ContentContainer>
         </CardContent>
       </Card>
