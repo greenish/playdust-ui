@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
+import { FunctionComponent } from 'react'
 import { useAccountInfo } from '../../../store'
 import { ErrorCard } from '../ErrorCard'
 import { ExplorerCard } from '../ExplorerCard'
@@ -169,7 +170,7 @@ const ValidatorInfo = (props: ConfigAccountProps) => {
   )
 }
 
-const map: Record<string, any> = {
+const map: Record<string, FunctionComponent<ConfigAccountProps>> = {
   stakeConfig: StakeConfig,
   validatorInfo: ValidatorInfo,
 }

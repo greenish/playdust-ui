@@ -1,6 +1,7 @@
 import { Box, Grid, Typography } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { DateTime } from 'luxon'
+import { FunctionComponent } from 'react'
 import { useAccountInfo } from '../../../store'
 import { ErrorCard } from '../ErrorCard'
 import { ExplorerCard } from '../ExplorerCard'
@@ -12,6 +13,7 @@ interface SysvarAccountProps {
 }
 
 // SysvarC1ock11111111111111111111111111111111
+// History
 const SysvarAccountClock = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -72,6 +74,7 @@ const SysvarAccountClock = ({ pubkey }: SysvarAccountProps) => {
 }
 
 // SysvarRent111111111111111111111111111111111
+// History
 const SysvarAccountRent = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -123,6 +126,7 @@ const SysvarAccountRent = ({ pubkey }: SysvarAccountProps) => {
 }
 
 // SysvarRewards111111111111111111111111111111
+// History
 const SysvarAccountRewards = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -167,6 +171,7 @@ const SysvarAccountRewards = ({ pubkey }: SysvarAccountProps) => {
 }
 
 // SysvarEpochSchedu1e111111111111111111111111
+// History
 const SysvarAccountEpochSchedule = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -230,6 +235,7 @@ const SysvarAccountEpochSchedule = ({ pubkey }: SysvarAccountProps) => {
 }
 
 // SysvarFees111111111111111111111111111111111
+// History
 const SysvarAccountFees = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -269,6 +275,7 @@ const SysvarAccountFees = ({ pubkey }: SysvarAccountProps) => {
 }
 
 // SysvarRecentB1ockHashes11111111111111111111
+// History | Blockhashes
 const SysvarAccountRecentBlockhashes = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -301,7 +308,8 @@ const SysvarAccountRecentBlockhashes = ({ pubkey }: SysvarAccountProps) => {
   )
 }
 
-// /SysvarS1otHashes111111111111111111111111111
+// SysvarS1otHashes111111111111111111111111111
+// History | Slot Hashses
 const SysvarAccountSlotHashes = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -335,6 +343,7 @@ const SysvarAccountSlotHashes = ({ pubkey }: SysvarAccountProps) => {
 }
 
 // SysvarS1otHistory11111111111111111111111111
+// History
 const SysvarAccountSlotHistory = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -383,6 +392,7 @@ const SysvarAccountSlotHistory = ({ pubkey }: SysvarAccountProps) => {
 }
 
 // SysvarStakeHistory1111111111111111111111111
+// History | Stake History
 const SysvarAccountStakeHistory = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -413,7 +423,7 @@ const SysvarAccountStakeHistory = ({ pubkey }: SysvarAccountProps) => {
   )
 }
 
-const map: Record<string, any> = {
+const map: Record<string, FunctionComponent<SysvarAccountProps>> = {
   clock: SysvarAccountClock,
   rent: SysvarAccountRent,
   rewards: SysvarAccountRewards,

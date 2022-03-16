@@ -23,6 +23,7 @@ export const ErrorCard = ({
         </Typography>
       )}
       {message || 'An error occurred'}
+      {children}
     </Box>
   )
 }

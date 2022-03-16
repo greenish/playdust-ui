@@ -1,12 +1,12 @@
 import { Box, Chip, Grid, Typography } from '@mui/material'
 import { DateTime } from 'luxon'
-import { lamportsToSol } from '../../helpers/utils'
 import {
   useRawTransaction,
   useSignatureStatus,
 } from '../../store/fetchTransaction'
 import { ExplorerCard } from './ExplorerCard'
 import { SlotLink, TxLink } from './Links'
+import { SolBalance } from './SolBalance'
 
 interface TransactionOverviewProps {
   signature: string
@@ -28,7 +28,6 @@ export const TransactionOverviewContent = ({
     slot,
     transaction: {
       message: {
-        accountKeys,
         header: {
           numReadonlySignedAccounts,
           numReadonlyUnsignedAccounts,
@@ -84,7 +83,7 @@ export const TransactionOverviewContent = ({
         Fee
       </Grid>
       <Grid item xs={12} md={10}>
-        {lamportsToSol(fee)} SOL
+        <SolBalance lamports={fee} />
       </Grid>
       <Grid item xs={12} md={2}>
         Confirmation Status

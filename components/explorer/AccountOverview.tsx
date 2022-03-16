@@ -1,5 +1,4 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { useRouter } from 'next/router'
 import { FunctionComponent } from 'react'
 import { useAccountInfo } from '../../store'
 import {
@@ -27,7 +26,6 @@ const map: Record<string, FunctionComponent<AccountOverviewProps>> = {
 }
 
 export const AccountOverview = (props: AccountOverviewProps) => {
-  const router = useRouter()
   const account = useAccountInfo(props.pubkey)
 
   const accountData = account?.data as ParsedAccountData

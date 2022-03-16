@@ -1,13 +1,15 @@
 import BN from 'bn.js'
 import { lamportsToSolString } from '../../helpers/utils'
 
-export function SolBalance({
-  lamports,
-  maximumFractionDigits = 9,
-}: {
-  lamports: number | BN
+interface SolBalanceProps {
+  lamports?: number | BN
   maximumFractionDigits?: number
-}) {
+}
+
+export function SolBalance({
+  lamports = 0,
+  maximumFractionDigits = 9,
+}: SolBalanceProps) {
   return (
     <span>
       ◎

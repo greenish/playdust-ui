@@ -10,10 +10,11 @@ import {
 } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { DateTime } from 'luxon'
-import { lamportsToSol, pubkeyToString } from '../../helpers/utils'
+import { pubkeyToString } from '../../helpers/utils'
 import { useAccountHistory } from '../../store'
 import { ExplorerCard } from './ExplorerCard'
 import { AccountLink, SlotLink, TxLink } from './Links'
+import { SolBalance } from './SolBalance'
 
 interface TransactionsProps {
   pubkey: PublicKey
@@ -73,7 +74,7 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
 
     const by = <AccountLink to={byPubkey} allowCopy ellipsis={[6, 6]} />
 
-    const feeAsSol = <>{fee ? lamportsToSol(fee) : null}</>
+    const feeAsSol = <SolBalance lamports={fee} />
 
     const row = {
       status,

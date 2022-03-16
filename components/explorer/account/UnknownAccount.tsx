@@ -35,9 +35,9 @@ export const UnknownAccountContent = ({ pubkey }: UnknownAccountProps) => {
       return null
     }
 
-    const owner = details.owner.toBase58()
-
     try {
+      const owner = details.owner.toBase58()
+
       const addressToDisplay = displayAddress(
         owner,
         cluster.network,

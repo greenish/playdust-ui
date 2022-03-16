@@ -11,10 +11,10 @@ import {
   Typography,
 } from '@mui/material'
 import { ParsedMessageAccount } from '@solana/web3.js'
-import { lamportsToSol } from '../../helpers/utils'
 import { useParsedConfirmedTransaction } from '../../store/fetchTransaction'
 import { ExplorerCard } from './ExplorerCard'
 import { AccountLink } from './Links'
+import { SolBalance } from './SolBalance'
 
 interface AccountInputsProps {
   signature: string
@@ -66,10 +66,14 @@ export const AccountInputsContent = ({ signature }: AccountInputsProps) => {
                   <TableCell>
                     <AccountLink to={pk} allowCopy />
                   </TableCell>
-                  <TableCell>{lamportsToSol(preBalance)}</TableCell>
-                  <TableCell>{lamportsToSol(postBalance)}</TableCell>
                   <TableCell>
-                    {lamportsToSol(preBalance - postBalance)}
+                    <SolBalance lamports={preBalance} />
+                  </TableCell>
+                  <TableCell>
+                    <SolBalance lamports={postBalance} />
+                  </TableCell>
+                  <TableCell>
+                    <SolBalance lamports={preBalance - postBalance} />
                   </TableCell>
                   <TableCell>
                     {idx === 0 && <Chip color="info" label="Fee Payer" />}

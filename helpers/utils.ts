@@ -1,5 +1,6 @@
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
+import bs58 from 'bs58'
 
 /*
  * ellipsisify
@@ -65,3 +66,33 @@ export function range(from: number, to: number, step: number) {
 
 export const shortenPublicKey = (pk: PublicKey | string) =>
   ellipsisify(pk.toString(), 4, 4)
+
+function validateEthTxHash(str?: string): boolean {
+  if (!str) return false
+  return /^0x([A-Fa-f0-9]{64})$/.test(str)
+}
+
+export type SearchType = 'account' | 'block' | 'tx'
+
+export interface ParsedAddressInput {
+  query: string
+  filter: SearchType
+}
+
+export function isAddressTx(raw: string) {
+  const decoded = bs58.decode(raw)
+  return decoded.length === 64
+}
+
+export function getSearchType(str: string): SearchType {
+  if (validateEthTxHash(str) || str.length === 88 || str.length === 87) {
+    return 'tx'
+  } else if (!str.match(/\D/)) {
+    return 'block'
+  }
+  return 'account'
+}
+
+export function parseAddressInput(str: string): ParsedAddressInput {
+  return { query: str, filter: getSearchType(str) }
+}

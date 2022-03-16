@@ -1,6 +1,6 @@
 import { Grid, Tooltip } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { PropsWithChildren } from 'react'
+import { FunctionComponent, PropsWithChildren } from 'react'
 import { useRecoilValue } from 'recoil'
 import { addressLabel } from '../../../helpers/tx'
 import { getSpace } from '../../../solana/account'
@@ -311,7 +311,7 @@ export const UpgradeableProgramBuffer = (
   )
 }
 
-const map: Record<string, any> = {
+const map: Record<string, FunctionComponent<UpgradeableLoaderAccountProps>> = {
   program: UpgradeableProgram,
   programData: UpgradeableProgramData,
   buffer: UpgradeableProgramBuffer,
