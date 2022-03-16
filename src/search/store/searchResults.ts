@@ -6,7 +6,6 @@ import {
   useResetRecoilState,
   useSetRecoilState,
 } from 'recoil'
-import { isCollectionQuery, SearchSortValue } from '.'
 import api from '../../../helpers/api'
 import AttributeResponse from '../types/AttributeResponse'
 import ComposedQueryType from '../types/ComposedQueryType'
@@ -14,6 +13,7 @@ import {
   SearchCollectionResponse,
   SearchNFTResponse,
 } from '../types/SearchResponse'
+import * as store from './'
 
 const routes = {
   nftSearch: '/search-nfts',
@@ -49,35 +49,67 @@ export const searchResults = atom<SearchResults>({
 export const useFetchSearchResults = () => {
   const setter = useSetRecoilState(searchResults)
   const resetter = useResetRecoilState(searchResults)
+  const controllerSetter = useSetRecoilState(store.searchResultsController)
 
   return useRecoilCallback(
     ({ snapshot }) =>
-      async (queryValid: ComposedQueryType, sort: SearchSortValue) => {
+      async (queryValid: ComposedQueryType, sort: store.SearchSortValue) => {
         const isCollectionQueryValue = await snapshot.getPromise(
-          isCollectionQuery
+          store.isCollectionQuery
+        )
+        const previousController = await snapshot.getPromise(
+          store.searchResultsController
         )
         resetter()
 
-        const [nftResult, collectionResult, attributeResult] =
-          await Promise.all([
-            api.post<SearchNFTResponse>(routes.nftSearch, {
-              query: queryValid,
-              sort,
-            }),
-            isCollectionQueryValue
-              ? { data: initialState.collections }
-              : api.post<SearchCollectionResponse>(routes.collectionSearch, {
-                  query: queryValid,
-                }),
-            api.post<AttributeResponse>(routes.attributes, queryValid),
-          ])
+        if (previousController) {
+          previousController.abort()
+        }
 
-        setter({
-          initialized: true,
-          nfts: nftResult.data,
-          collections: collectionResult.data,
-          attributes: attributeResult.data,
-        })
+        const controller = new AbortController()
+        controllerSetter(controller)
+        const config = { signal: controller.signal }
+
+        try {
+          const [nftResult, collectionResult, attributeResult] =
+            await Promise.all([
+              api.post<SearchNFTResponse>(
+                routes.nftSearch,
+                {
+                  query: queryValid,
+                  sort,
+                },
+                config
+              ),
+              isCollectionQueryValue
+                ? { data: initialState.collections }
+                : api.post<SearchCollectionResponse>(
+                    routes.collectionSearch,
+                    {
+                      query: queryValid,
+                    },
+                    config
+                  ),
+              api.post<AttributeResponse>(
+                routes.attributes,
+                queryValid,
+                config
+              ),
+            ])
+
+          controllerSetter(undefined)
+
+          setter({
+            initialized: true,
+            nfts: nftResult.data,
+            collections: collectionResult.data,
+            attributes: attributeResult.data,
+          })
+        } catch (err: any) {
+          if (err.message !== 'canceled') {
+            console.error(err)
+          }
+        }
       }
   )
 }
