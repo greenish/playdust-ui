@@ -58,6 +58,8 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
                       }
                     : { display: 'none' }
                 }
+                width={dimensions.width}
+                height={dimensions.width}
                 onLoad={() => setIsLoaded(true)}
               />
             </CardImageContainer>
