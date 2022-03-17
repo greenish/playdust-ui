@@ -1,9 +1,23 @@
+import { SearchFilterFields } from '../../store'
 import {
   AttributeQuery,
   CollectionQuery,
   QueryType,
   TextQuery,
 } from '../../types/ComposedQueryType'
+
+const getRangeField = (field: SearchFilterFields) => {
+  switch (field) {
+    case 'list-price':
+      return 'lastListPrice'
+    case 'sale-price':
+      return 'lastTradePrice'
+    default:
+      const n: never = field
+
+      return n
+  }
+}
 
 const createSingleNFTQuery = (child: QueryType) => {
   switch (child.field) {
@@ -62,9 +76,11 @@ const createSingleNFTQuery = (child: QueryType) => {
       }
     }
     case 'range':
+      const rangeField = getRangeField(child.value)
+
       return {
         range: {
-          lastListPrice: {
+          [rangeField]: {
             gte: child.min,
             lte: child.max,
           },

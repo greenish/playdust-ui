@@ -1,3 +1,5 @@
+import { SearchFilterFields } from '../store'
+
 export type FieldType = 'collection' | 'attribute' | 'text' | 'range'
 
 export interface QueryId {
@@ -26,7 +28,7 @@ export interface TextQuery extends TextContent, QueryId {}
 
 export interface RangeContent {
   field: 'range'
-  value: string
+  value: SearchFilterFields
   min: number
   max: number
 }

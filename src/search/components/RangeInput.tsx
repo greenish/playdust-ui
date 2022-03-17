@@ -2,10 +2,11 @@ import styled from '@emotion/styled'
 import { Check } from '@mui/icons-material'
 import { IconButton, TextField, Typography } from '@mui/material'
 import { Dispatch, SetStateAction, useMemo, useState } from 'react'
+import { SearchFilterFields } from '../store'
 import { RangeContent } from '../types/ComposedQueryType'
 
 interface RangeInputProps {
-  value: string
+  value: SearchFilterFields
   min: number | undefined
   max: number | undefined
   onApply: (newValue: Omit<RangeContent, 'field'>) => any
@@ -50,7 +51,7 @@ const RangeInput = (props: RangeInputProps) => {
   const [max, setMax] = useState(props.max)
 
   const disabled = useMemo(() => {
-    if (!min || !max) {
+    if (min === undefined || max === undefined) {
       return true
     }
 
