@@ -4,7 +4,7 @@ const createSingleCollectionQuery = (entry: QueryType) => {
   return {
     multi_match: {
       query: entry.value,
-      fields: ['name^2', 'symbol', 'description'],
+      fields: ['name^2', 'symbol^2', 'description'],
       fuzziness: 'AUTO',
     },
   }
@@ -32,18 +32,6 @@ const getNFTQuery = (query: ComposedQueryType) => {
     size: 10,
     query: {
       bool: {
-        must_not: [
-          {
-            term: {
-              'symbol.keyword': '',
-            },
-          },
-          {
-            term: {
-              'name.keyword': '',
-            },
-          },
-        ],
         must: result,
       },
     },

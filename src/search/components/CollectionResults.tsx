@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
-import { Card, CardContent, Typography } from '@mui/material'
 import { useRecoilValue } from 'recoil'
 import * as store from '../store'
+import CollectionCard from './CollectionCard'
+import CollectionOverview from './CollectionOverview'
 
 const cardSize = 250
 const topSpace = 8
@@ -18,42 +19,42 @@ const RootContainer = styled.div`
   overflow-x: auto;
 `
 
+const OverviewContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`
+
 const CollectionResults = () => {
   const { collections } = useRecoilValue(store.searchResults)
   const { results } = collections
   const initCollectionQuery = store.useInitializeCollectionQuery()
+  const isCollectionQuery = useRecoilValue(store.isCollectionQuery)
+  const { initialized } = useRecoilValue(store.searchResults)
 
-  if (results.length === 0) {
+  if (!initialized || (results.length === 0 && !isCollectionQuery)) {
     return <></>
   }
 
   return (
     <RootContainer>
-      {results
-        .filter((collection) => !!collection.name)
-        .map((collection) => (
-          <Card
-            key={collection.id}
-            sx={{
-              height: cardSize,
-              minWidth: cardSize,
-              mr: 2,
-              cursor: 'pointer',
-            }}
-            onClick={() => initCollectionQuery(collection.id)}
-          >
-            <CardContent
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '100%',
-              }}
-            >
-              <Typography sx={{ fontSize: 14 }}>{collection.name}</Typography>
-            </CardContent>
-          </Card>
-        ))}
+      {isCollectionQuery ? (
+        <OverviewContainer>
+          <CollectionOverview />
+        </OverviewContainer>
+      ) : (
+        results
+          .filter((collection) => !!collection.name)
+          .map((collection) => (
+            <CollectionCard
+              key={collection.id}
+              {...collection}
+              cardSize={250}
+              onClick={initCollectionQuery}
+            />
+          ))
+      )}
     </RootContainer>
   )
 }

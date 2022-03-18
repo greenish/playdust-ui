@@ -24,15 +24,14 @@ export const postScrollQuery = async (scrollId: string) => {
   return postAxios(query, '/_search/scroll')
 }
 
-export const postNFTQuery = async (query: object, addScroll?: boolean) => {
-  const scrollParam = addScroll ? '?scroll=1m' : ''
-  const path = `/nft-metadata/_search${scrollParam}`
+const makePostQuery =
+  (index: string) => async (query: object, addScroll?: boolean) => {
+    const scrollParam = addScroll ? '?scroll=1m' : ''
+    const path = `/${index}/_search${scrollParam}`
 
-  return postAxios(query, path)
-}
+    return postAxios(query, path)
+  }
 
-export const postCollectionQuery = async (query: object) => {
-  const path = `/nft-collection/_search`
-
-  return postAxios(query, path)
-}
+export const postNFTQuery = makePostQuery('nft-metadata')
+export const postCollectionQuery = makePostQuery('nft-collection')
+export const postTransactionQuery = makePostQuery('nft-transaction')

@@ -6,12 +6,26 @@ export interface SearchNFTResponse {
   cursor: string
 }
 
+export interface CollectionResponse {
+  id: string
+  symbol: string
+  name: string
+  description: string
+  family?: string
+  elementCount: number
+}
+
+interface SimilarCollection extends CollectionResponse {
+  volume: number
+}
+
+export interface CollectionOverviewResponse extends CollectionResponse {
+  volume: number
+  listedItems: number
+  floorPrice: number
+  similar: SimilarCollection[]
+}
+
 export interface SearchCollectionResponse {
-  results: {
-    id: string
-    symbol: string
-    name: string
-    description: string
-    family?: string
-  }[]
+  results: CollectionResponse[]
 }

@@ -20,7 +20,8 @@ const TokenContainer = styled.div`
   display: flex;
   height: 100%;
   width: 100%;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 `
 
 const SpinnerContainer = styled.div`
@@ -35,7 +36,6 @@ const ResultsContainer = styled.div`
   height: 100%;
   overflow: hidden;
   display: flex;
-  border: soild 1px green;
 `
 
 const Search: NextPage = () => {
