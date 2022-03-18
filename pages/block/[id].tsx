@@ -1,12 +1,7 @@
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'
-import {
-  BlockDetails,
-  BlockOverview,
-  ExplorerContainer,
-  ExplorerHeader,
-} from '../../components/explorer'
+import { BlockPage } from '../../src/explorer/pages/BlockPage'
 
 const Block: NextPage = () => {
   const { isReady, query } = useRouter()
@@ -23,19 +18,4 @@ const Block: NextPage = () => {
     </Suspense>
   )
 }
-
-interface BlockPageProps {
-  slot: number
-}
-
-const BlockPage = ({ slot }: BlockPageProps) => {
-  return (
-    <ExplorerContainer>
-      <ExplorerHeader label="Block" filter="block" value={slot.toString()} />
-      <BlockOverview slot={slot} />
-      <BlockDetails slot={slot} />
-    </ExplorerContainer>
-  )
-}
-
 export default Block

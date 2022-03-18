@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
-import { pageIdx } from '../../store'
+import { pageIdx } from '../../src/explorer/store'
 
 // Used to invalidate recoil caches
 export const PageIndexer = () => {
