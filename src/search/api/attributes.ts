@@ -9,9 +9,10 @@ const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<AttributeResponse>
 ) => {
-  const query: ComposedQueryType = req.body
+  const query: ComposedQueryType = req.body.query
+  const onlyListed = Boolean(req.body.onlyListed)
 
-  const esQuery = getNFTQuery(query, 0)
+  const esQuery = getNFTQuery(query, 0, undefined, onlyListed)
   const aggQuery = getAttributeAggQuery()
 
   const exactAttributeQueries = query.flatMap((parent) =>

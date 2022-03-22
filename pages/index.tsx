@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Card, CardContent, Container, Typography } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { getCollectionHash } from '../src/search/helpers/searchHash'
+import * as searchStore from '../src/search/store'
 import testCollections from '../src/search/testCollections'
 
 const IndexContainer = styled.div`
@@ -15,6 +15,7 @@ const IndexContainer = styled.div`
 
 const Home: NextPage = () => {
   const router = useRouter()
+  const initCollection = searchStore.useInitializeCollectionQuery()
 
   return (
     <Container>
@@ -23,11 +24,10 @@ const Home: NextPage = () => {
           <Card
             key={collection.id}
             onClick={() => {
-              const hash = getCollectionHash(collection.id)
+              initCollection(collection.id)
 
               router.push({
                 pathname: '/search',
-                hash,
               })
             }}
             sx={{

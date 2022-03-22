@@ -12,12 +12,15 @@ const sortMappings: {
   [key: string]: string
 } = {
   name: 'offChainData.name.keyword',
+  'list-price': 'lastListPrice',
+  'sale-price': 'lastTradePrice',
 }
 
 const getNFTQuery = (
   query: ComposedQueryType,
   resultSize: number,
-  sort?: SearchSortValue
+  sort?: SearchSortValue,
+  onlyListed?: boolean
 ) => {
   const result = query
     .map((parent) => {
@@ -30,8 +33,18 @@ const getNFTQuery = (
     })
     .filter(Boolean)
 
+  const filterKey = sort?.field === 'relevance' ? 'must' : 'filter'
   const baseQuery = {
-    [sort?.field === 'relevance' ? 'must' : 'filter']: result,
+    [filterKey]: onlyListed
+      ? [
+          ...result,
+          {
+            term: {
+              listed: true,
+            },
+          },
+        ]
+      : result,
   }
 
   const nftQuery: any = {

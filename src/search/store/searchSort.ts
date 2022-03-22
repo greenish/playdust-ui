@@ -1,7 +1,8 @@
-import { atom, useSetRecoilState } from 'recoil'
+import { atom, useRecoilState, useSetRecoilState } from 'recoil'
+import * as store from './'
 
 export interface SearchSortValue {
-  field: 'name' | 'relevance'
+  field: 'name' | 'relevance' | 'list-price' | 'sale-price'
   direction: 'asc' | 'desc'
 }
 
@@ -47,19 +48,30 @@ export const searchSortOptions = atom<SearchSortOption[]>({
       },
     },
     ...makeSortOption('Name', 'name'),
+    ...makeSortOption('List Price', 'list-price'),
+    ...makeSortOption('Sale Price', 'sale-price'),
   ],
 })
 
 export const useSetSelectedSort = () => {
-  const setter = useSetRecoilState(searchSortOptions)
+  const [options, setter] = useRecoilState(searchSortOptions)
+  const onlyListedSetter = useSetRecoilState(store.searchOnlyListed)
 
   return (name: string) => {
-    setter((options) =>
-      options.map((entry) => ({
+    const nextOptions = options.map((entry) => {
+      const selected = entry.name === name
+
+      if (selected && entry.value.field === 'list-price') {
+        onlyListedSetter(true)
+      }
+
+      return {
         ...entry,
-        selected: entry.name === name,
-      }))
-    )
+        selected,
+      }
+    })
+
+    setter(nextOptions)
   }
 }
 

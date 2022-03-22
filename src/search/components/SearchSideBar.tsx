@@ -3,6 +3,7 @@ import { Divider } from '@mui/material'
 import { useRecoilValue } from 'recoil'
 import * as store from '../store'
 import AttributeFilters from './AttributeFilters'
+import OnlyListedSwitch from './OnlyListedSwitch'
 import RangeFilters from './RangeFilters'
 import SortFields from './SortFields'
 
@@ -15,7 +16,7 @@ const RootContainer = styled.div`
 `
 
 const SortContainer = styled.div`
-  padding-top: 8px;
+  padding: 8px 0;
 `
 
 const SearchSideBar = () => {
@@ -30,6 +31,8 @@ const SearchSideBar = () => {
       <SortContainer>
         <SortFields />
       </SortContainer>
+      <Divider />
+      <OnlyListedSwitch />
       <RangeFilters />
       <Divider />
       <AttributeFilters />

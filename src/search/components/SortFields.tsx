@@ -12,7 +12,7 @@ const RootContainer = styled.div`
 const sortLabel = 'Sort'
 
 const SortFields = () => {
-  const selected = useRecoilValue(store.searchSortSelected)
+  const sort = useRecoilValue(store.searchSortActual)
   const { initialized, nfts } = useRecoilValue(store.searchResults)
   const setSort = store.useSetSelectedSort()
   const options = useRecoilValue(store.searchSortVisibleOptions)
@@ -27,7 +27,7 @@ const SortFields = () => {
         <InputLabel>{sortLabel}</InputLabel>
         <Select
           size="small"
-          value={selected.name}
+          value={sort.name}
           label={sortLabel}
           onChange={(evt) => {
             setSort(evt.target.value)

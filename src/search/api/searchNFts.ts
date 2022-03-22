@@ -31,8 +31,9 @@ const handler = async (
 
     const query = req.body.query as ComposedQueryType
     const sort = req.body.sort as SearchSortValue
+    const onlyListed = Boolean(req.body.onlyListed)
 
-    const esQuery = getNFTQuery(query, 25, sort)
+    const esQuery = getNFTQuery(query, 50, sort, onlyListed)
     const result = await postNFTQuery(esQuery, true)
 
     res.json(cleanResult(result))

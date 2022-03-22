@@ -7,8 +7,8 @@ import {
   useSetRecoilState,
 } from 'recoil'
 import api from '../../../helpers/api'
+import { fetchSearchResults } from '../helpers/fetchSearchResults'
 import AttributeResponse from '../types/AttributeResponse'
-import ComposedQueryType from '../types/ComposedQueryType'
 import {
   SearchCollectionResponse,
   SearchNFTResponse,
@@ -21,7 +21,7 @@ const routes = {
   attributes: '/attributes',
 }
 
-interface SearchResults {
+export interface SearchResults {
   initialized: boolean
   attributes: AttributeResponse
   collections: SearchCollectionResponse
@@ -51,67 +51,47 @@ export const useFetchSearchResults = () => {
   const resetter = useResetRecoilState(searchResults)
   const controllerSetter = useSetRecoilState(store.searchResultsController)
 
-  return useRecoilCallback(
-    ({ snapshot }) =>
-      async (queryValid: ComposedQueryType, sort: store.SearchSortValue) => {
-        const isCollectionQueryValue = await snapshot.getPromise(
-          store.isCollectionQuery
-        )
-        const previousController = await snapshot.getPromise(
-          store.searchResultsController
-        )
-        resetter()
+  return useRecoilCallback(({ snapshot }) => async () => {
+    const [
+      queryValid,
+      sort,
+      isCollectionQuery,
+      previousController,
+      onlyListed,
+    ] = await Promise.all([
+      snapshot.getPromise(store.searchQueryValid),
+      snapshot.getPromise(store.searchSortActual),
+      snapshot.getPromise(store.isCollectionQuery),
+      snapshot.getPromise(store.searchResultsController),
+      snapshot.getPromise(store.searchOnlyListed),
+    ])
 
-        if (previousController) {
-          previousController.abort()
-        }
+    if (previousController) {
+      previousController.abort()
+    }
 
-        const controller = new AbortController()
-        controllerSetter(controller)
-        const config = { signal: controller.signal }
+    try {
+      resetter()
+      const controller = new AbortController()
+      controllerSetter(controller)
 
-        try {
-          const [nftResult, collectionResult, attributeResult] =
-            await Promise.all([
-              api.post<SearchNFTResponse>(
-                routes.nftSearch,
-                {
-                  query: queryValid,
-                  sort,
-                },
-                config
-              ),
-              isCollectionQueryValue
-                ? { data: initialState.collections }
-                : api.post<SearchCollectionResponse>(
-                    routes.collectionSearch,
-                    {
-                      query: queryValid,
-                    },
-                    config
-                  ),
-              api.post<AttributeResponse>(
-                routes.attributes,
-                queryValid,
-                config
-              ),
-            ])
+      const nextValue = await fetchSearchResults(
+        queryValid,
+        sort.value,
+        !!onlyListed,
+        isCollectionQuery,
+        controller
+      )
 
-          controllerSetter(undefined)
+      controllerSetter(undefined)
 
-          setter({
-            initialized: true,
-            nfts: nftResult.data,
-            collections: collectionResult.data,
-            attributes: attributeResult.data,
-          })
-        } catch (err: any) {
-          if (err.message !== 'canceled') {
-            console.error(err)
-          }
-        }
+      setter(nextValue)
+    } catch (err: any) {
+      if (err.message !== 'canceled') {
+        console.error(err)
       }
-  )
+    }
+  })
 }
 
 export const useFetchMoreSearchResults = () => {

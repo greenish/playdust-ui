@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
-import { useDeepCompareEffect, useLocation } from 'react-use'
-import { useRecoilValue } from 'recoil'
-import { isHashEmpty, parseHash, stringifyHash } from '../helpers/searchHash'
+import { useLocation } from 'react-use'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { isHashEmpty, parseHash } from '../helpers/searchHash'
 import * as store from '../store'
 import TokenContainer from './TokenContainer'
 
@@ -16,27 +16,32 @@ const NoTokensContainer = styled.div`
 const SearchResults = () => {
   const router = useRouter()
   const location = useLocation()
+  const [didMount, setDidMount] = useState(false)
   const current = useRecoilValue(store.searchResults)
-  const { nfts, initialized } = current
-  const { results, total } = nfts
+  const searchHash = useRecoilValue(store.searchHash)
   const fetchSearchResults = store.useFetchSearchResults()
   const fetchMoreSearchResults = store.useFetchMoreSearchResults()
-  const searchQueryValid = useRecoilValue(store.searchQueryValid)
-  const searchSortSelected = useRecoilValue(store.searchSortSelected)
   const bootstrapSearchQuery = store.useBootstrapSearchQuery()
   const setSelectedSort = store.useSetSelectedSortByValue()
-  const [didMount, setDidMount] = useState(false)
+  const setOnlyListed = useSetRecoilState(store.searchOnlyListed)
 
   const updateFromHash = useCallback(() => {
     const payload = parseHash()
     bootstrapSearchQuery(payload.query)
-
     setSelectedSort(payload.sort)
+    setOnlyListed(payload.onlyListed)
   }, [])
 
   useEffect(() => {
     if (isHashEmpty()) {
-      fetchSearchResults(searchQueryValid, searchSortSelected.value)
+      if (searchHash.length > 0) {
+        router.replace({
+          pathname: router.pathname,
+          hash: searchHash,
+        })
+      }
+
+      fetchSearchResults()
     } else {
       updateFromHash()
     }
@@ -50,16 +55,19 @@ const SearchResults = () => {
     }
   }, [location])
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     if (didMount) {
       router.push({
         pathname: router.pathname,
-        hash: stringifyHash(searchQueryValid, searchSortSelected.value),
+        hash: searchHash,
       })
 
-      fetchSearchResults(searchQueryValid, searchSortSelected.value)
+      fetchSearchResults()
     }
-  }, [searchQueryValid, searchSortSelected.value])
+  }, [searchHash])
+
+  const { nfts, initialized } = current
+  const { results, total } = nfts
 
   if (initialized && results.length === 0) {
     return (
