@@ -15,7 +15,6 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { Suspense } from 'react'
 import { useRecoilValue } from 'recoil'
 import { fetchNFTDetails } from '../../store'
-import Image from '../utils/image'
 import TradeNFT from './TradeNFT'
 
 const ImageTradeContainer = styled.div`
@@ -38,10 +37,10 @@ const Details = ({ mint }: DetailsProps) => {
     <Box mx={1}>
       <ImageTradeContainer>
         <div>
-          <Image
-            alt={details.data.name}
-            url={details.offChainData.image}
-            style={{ height: 500 }}
+          <img
+            alt={details.data.name || ''}
+            src={details.offChainData.image}
+            height={500}
           />
           <h1>{details.data.name}</h1>
         </div>

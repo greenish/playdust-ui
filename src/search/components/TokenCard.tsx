@@ -1,9 +1,10 @@
 import styled from '@emotion/styled'
-import { Card, CardContent, Skeleton, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useState } from 'react'
 import Link from '../../../components/common/Link'
-import Image from '../../../components/utils/image'
 import SearchMetadata from '../../../types/SearchMetadata'
+import getNFTImageUrl from '../helpers/getNFTImageUrl'
+import ImageCard from './ImageCard'
 import TokenCardFilter from './TokenCardFilter'
 
 export const dimensions = {
@@ -18,18 +19,6 @@ export const TokenCardPlaceholder = styled.div`
   height: ${dimensions.height}px;
 `
 
-const CardContentContainer = styled.div`
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
-
-const CardImageContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`
-
 interface TokenCardProps {
   metadata?: SearchMetadata
   loading: boolean
@@ -41,52 +30,22 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
   const href = `nfts/${metadata?.mint}`
 
   return (
-    <div>
-      <Card sx={{ mr: 2, width: dimensions.width }}>
-        <Link href={href}>
-          {image && (
-            <CardImageContainer>
-              <Image
-                alt={name}
-                url={image}
-                style={
-                  isLoaded
-                    ? {
-                        objectFit: 'cover',
-                        width: dimensions.width,
-                        height: dimensions.width,
-                      }
-                    : { display: 'none' }
-                }
-                width={dimensions.width}
-                height={dimensions.width}
-                onLoad={() => setIsLoaded(true)}
-              />
-            </CardImageContainer>
+    <ImageCard
+      imageSize={imageSize}
+      src={image && getNFTImageUrl(image, imageSize, imageSize)}
+      href={href}
+      content={
+        <>
+          <Typography>
+            <Link href={href}>{name || metadata?.data?.name}</Link>
+          </Typography>
+          {metadata && metadata.offChainData?.attributes && (
+            <TokenCardFilter metadata={metadata} />
           )}
-          {!isLoaded && (
-            <Skeleton
-              sx={{
-                height: imageSize,
-                width: imageSize,
-              }}
-              animation="wave"
-              variant="rectangular"
-            />
-          )}
-        </Link>
-        <CardContent>
-          <CardContentContainer>
-            <Typography>
-              <Link href={href}>{name || metadata?.data?.name}</Link>
-            </Typography>
-            {metadata && metadata.offChainData?.attributes && (
-              <TokenCardFilter metadata={metadata} />
-            )}
-          </CardContentContainer>
-        </CardContent>
-      </Card>
-    </div>
+        </>
+      }
+      contentHeight="70px"
+    />
   )
 }
 

@@ -1,4 +1,4 @@
-const imageCDN = (url: string, width: Number, height: Number) => {
+const getNFTImageUrl = (url: string, width: number, height: number) => {
   let path = `?url=${url}`
   if (width && height) {
     path = path.concat(`&d=${width}x${height}`)
@@ -6,4 +6,4 @@ const imageCDN = (url: string, width: Number, height: Number) => {
   return `/cdn/${path}`
 }
 
-export default imageCDN
+export default getNFTImageUrl

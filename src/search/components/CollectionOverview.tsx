@@ -69,7 +69,7 @@ const CollectionOverview = () => {
     <RootContainer>
       <CardContainer>
         {collection.state === 'hasValue' && (
-          <CollectionCard {...collection.contents} cardSize={200} />
+          <CollectionCard {...collection.contents} cardSize={170} />
         )}
       </CardContainer>
       <ChipContainer>

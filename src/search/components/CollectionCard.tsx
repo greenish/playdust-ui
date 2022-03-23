@@ -1,5 +1,6 @@
-import { Card, CardContent, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { CollectionResponse } from '../types/SearchResponse'
+import ImageCard from './ImageCard'
 
 interface CollectionCardProps extends CollectionResponse {
   cardSize: number
@@ -22,27 +23,15 @@ const CollectionCard = ({
   onClick,
 }: CollectionCardProps) => {
   return (
-    <Card
-      sx={{
-        height: cardSize,
-        width: cardSize,
-        minWidth: cardSize,
-        mr: 2,
-        cursor: onClick ? 'pointer' : 'auto',
-      }}
-      onClick={() => onClick && onClick(id)}
-    >
-      <CardContent
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100%',
-        }}
-      >
-        <Typography sx={{ fontSize: 14 }}>{getLabel(name, symbol)}</Typography>
-      </CardContent>
-    </Card>
+    <ImageCard
+      imageSize={cardSize}
+      src={`/api/collection-image?id=${id}&s=${cardSize}`}
+      content={
+        <Typography sx={{ fontSize: 12 }}>{getLabel(name, symbol)}</Typography>
+      }
+      onClick={onClick ? () => onClick(id) : undefined}
+      contentHeight="40px"
+    />
   )
 }
 

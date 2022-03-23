@@ -44,16 +44,14 @@ const CollectionResults = () => {
           <CollectionOverview />
         </OverviewContainer>
       ) : (
-        results
-          .filter((collection) => !!collection.name)
-          .map((collection) => (
-            <CollectionCard
-              key={collection.id}
-              {...collection}
-              cardSize={250}
-              onClick={initCollectionQuery}
-            />
-          ))
+        results.map((collection) => (
+          <CollectionCard
+            key={collection.id}
+            {...collection}
+            cardSize={200}
+            onClick={initCollectionQuery}
+          />
+        ))
       )}
     </RootContainer>
   )
