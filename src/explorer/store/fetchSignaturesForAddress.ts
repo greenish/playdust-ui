@@ -16,10 +16,12 @@ export const fetchSignaturesForAddress = selectorFamily<
       const { endpoint } = get(solanaCluster)
       const connection = new Connection(endpoint)
 
-      // TODO: possibly use getConfirmedSignaturesForAddress2
-      const signatures = await connection.getSignaturesForAddress(pubkey, {
-        limit: 10,
-      })
+      const signatures = await connection.getConfirmedSignaturesForAddress2(
+        pubkey,
+        {
+          limit: 10,
+        }
+      )
 
       return signatures
     },

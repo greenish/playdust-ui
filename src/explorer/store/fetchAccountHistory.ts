@@ -1,11 +1,9 @@
 import {
   ConfirmedSignatureInfo,
-  Connection,
   PublicKey,
   TransactionResponse,
 } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue, waitForAll } from 'recoil'
-import solanaCluster from '../../../store/solanaCluster'
 import { fetchSignaturesForAddress } from './fetchSignaturesForAddress'
 import { fetchRawTransaction } from './fetchTransaction'
 
@@ -22,9 +20,6 @@ export const fetchAccountHistory = selectorFamily<
   get:
     (pubkey) =>
     async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
-      const connection = new Connection(endpoint)
-
       const signatures = get(fetchSignaturesForAddress(pubkey))
 
       const transactions = get(

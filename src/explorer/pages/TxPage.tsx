@@ -1,4 +1,4 @@
-import { isAddressTx } from '../../../helpers/utils'
+import { getSearchType } from '../../../helpers/routing'
 import {
   AccountInputs,
   ErrorCard,
@@ -14,16 +14,20 @@ interface TxPageProps {
 }
 
 export const TxPage = ({ signature }: TxPageProps) => {
-  const content = isAddressTx(signature) ? (
-    <>
-      <TransactionOverview signature={signature} />
-      <AccountInputs signature={signature} />
-      <InstructionDetails signature={signature} />
-      <ProgramLog signature={signature} />
-    </>
-  ) : (
-    <ErrorCard message={`Signature "${signature}" is not valid`} />
-  )
+  const content = (() => {
+    if (getSearchType(signature) !== 'tx') {
+      return <ErrorCard message={`Signature "${signature}" is not valid`} />
+    }
+
+    return (
+      <>
+        <TransactionOverview signature={signature} />
+        <AccountInputs signature={signature} />
+        <InstructionDetails signature={signature} />
+        <ProgramLog signature={signature} />
+      </>
+    )
+  })()
 
   return (
     <ExplorerContainer>

@@ -1,24 +1,24 @@
 import { Box, Grid, Typography } from '@mui/material'
+import { PublicKey } from '@solana/web3.js'
+import { useRouter } from 'next/router'
 import { useAccountDetails } from '../store'
-import { NFTOverview } from './NFTOverview'
 
 const IDENTICON_WIDTH = 64
 
 type TokenOverviewProps = {
-  pubkey: any
+  pubkey: PublicKey
 }
 
 export const TokenOverview = ({ pubkey }: TokenOverviewProps) => {
-  let details = useAccountDetails(pubkey)
+  const router = useRouter()
+  const details = useAccountDetails(pubkey)
 
   const { nftData, isMetaplexNFT, tokenDetails } = details
 
-  const {
-    metadata: {
-      data: { name, symbol },
-    },
-    json,
-  } = nftData
+  if (isMetaplexNFT && nftData) {
+    router.push(`/nfts/${pubkey.toBase58()}`)
+    return null
+  }
 
   const icon = tokenDetails?.logoURI ? (
     <img
@@ -30,45 +30,24 @@ export const TokenOverview = ({ pubkey }: TokenOverviewProps) => {
   ) : null
 
   return (
-    <>
-      {isMetaplexNFT && nftData ? (
-        <>
-          <Box
-            sx={{
-              bgcolor: 'background.paper',
-            }}
-          >
-            <img src={json?.image} width={150} />
-            <Typography variant="h5" component="h2" gutterBottom>
-              {name}
-            </Typography>
-            <Typography variant="h6" component="h3" gutterBottom>
-              {symbol}
-            </Typography>
-          </Box>
-          <NFTOverview details={details} />
-        </>
-      ) : (
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-          }}
-        >
-          <Grid container spacing={2}>
-            <Grid item xs="auto">
-              {icon}
-            </Grid>
-            <Grid item>
-              <Typography variant="h5" component="h2" gutterBottom>
-                Token
-              </Typography>
-              <Typography variant="h6" component="h2" gutterBottom>
-                {tokenDetails?.name || 'Unknown Token'}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
-      )}
-    </>
+    <Box
+      sx={{
+        bgcolor: 'background.paper',
+      }}
+    >
+      <Grid container spacing={2}>
+        <Grid item xs="auto">
+          {icon}
+        </Grid>
+        <Grid item>
+          <Typography variant="h5" component="h2" gutterBottom>
+            Token
+          </Typography>
+          <Typography variant="h6" component="h2" gutterBottom>
+            {tokenDetails?.name || 'Unknown Token'}
+          </Typography>
+        </Grid>
+      </Grid>
+    </Box>
   )
 }

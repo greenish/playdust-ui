@@ -9,8 +9,10 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import { getSearchType } from '../../../helpers/routing'
 import * as store from '../store'
 import SearchChips from './SearchChips'
 import SearchGraph from './SearchGraph'
@@ -22,6 +24,7 @@ const RootContainer = styled.div`
 `
 
 const SearchInput = () => {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const isQueryValid = useRecoilValue(store.isSearchQueryValid)
@@ -55,8 +58,16 @@ const SearchInput = () => {
             return clearSearchQuery()
           }
 
-          if (value && value.length) {
+          if (!value || !value.length) {
+            return
+          }
+
+          const searchType = getSearchType(value)
+
+          if (!searchType) {
             addText(value, 'and')
+          } else {
+            router.push(`/${searchType}/${value.trim()}`)
           }
         }}
         freeSolo

@@ -4,7 +4,8 @@ import { IconButton, Paper, Toolbar } from '@mui/material'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode } from 'react'
-import SeachInput from '../../src/search/components/SearchInput'
+import { showSearchInput } from '../../helpers/routing'
+import SearchInput from '../../src/search/components/SearchInput'
 import Notifications from './Notifications'
 import WalletButton from './WalletButton'
 
@@ -92,8 +93,8 @@ const AppBar = ({ children }: AppBarProps) => {
             </Link>
           </AppBarLeftContent>
           <SearchInputContainer>
-            {router.isReady && router.pathname.startsWith('/search') && (
-              <SeachInput />
+            {router.isReady && showSearchInput(router.pathname) && (
+              <SearchInput />
             )}
           </SearchInputContainer>
           <div>

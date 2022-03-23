@@ -1,5 +1,4 @@
 import { Grid, Stack, Typography } from '@mui/material'
-import { AddressInput } from './AddressInput'
 import { CopyButton } from './CopyButton'
 import { ExternalLinks } from './ExternalLinks'
 
@@ -22,9 +21,7 @@ export const ExplorerHeader = ({
             {label}
           </Typography>
         </Grid>
-        <Grid item xs={6}>
-          <AddressInput />
-        </Grid>
+        <Grid item xs={6}></Grid>
         <Grid item xs={12}>
           {value} <CopyButton value={value} />
         </Grid>

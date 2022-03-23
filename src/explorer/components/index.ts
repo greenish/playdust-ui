@@ -1,7 +1,6 @@
 export * from './AccountDetails'
 export * from './AccountInputs'
 export * from './AccountOverview'
-export * from './AddressInput'
 export * from './BlockDetails'
 export * from './BlockOverview'
 export * from './CopyButton'
