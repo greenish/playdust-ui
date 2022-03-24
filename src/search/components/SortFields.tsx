@@ -17,7 +17,7 @@ const SortFields = () => {
   const setSort = store.useSetSelectedSort()
   const options = useRecoilValue(store.searchSortVisibleOptions)
 
-  if (!initialized || !nfts.results.length) {
+  if (!initialized || !nfts.length) {
     return <></>
   }
 

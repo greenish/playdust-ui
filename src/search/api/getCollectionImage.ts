@@ -41,8 +41,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     const result = await postNFTQuery(query)
     const images = result.hits.hits.map(
-      (entry: any) => entry._source.offChainData.image
-    ) as string[]
+      (entry) => entry._source.offChainData.image
+    )
 
     const cdnPaths = images.map(
       (image) =>

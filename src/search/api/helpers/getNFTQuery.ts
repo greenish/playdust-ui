@@ -47,7 +47,7 @@ const getNFTQuery = (
       : result,
   }
 
-  const nftQuery: any = {
+  const nftQuery: { [key: string]: any } = {
     size: resultSize === undefined ? 25 : resultSize,
     query: {
       bool:

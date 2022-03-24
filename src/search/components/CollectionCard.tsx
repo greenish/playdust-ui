@@ -1,8 +1,8 @@
 import { Typography } from '@mui/material'
-import { CollectionResponse } from '../types/SearchResponse'
+import type { CollectionSource } from '../types/OpenSearchIndex'
 import ImageCard from './ImageCard'
 
-interface CollectionCardProps extends CollectionResponse {
+interface CollectionCardProps extends CollectionSource {
   cardSize: number
   onClick?: (id: string) => any
 }

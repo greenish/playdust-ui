@@ -2,8 +2,8 @@ import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
 import { useState } from 'react'
 import Link from '../../../components/common/Link'
-import SearchMetadata from '../../../types/SearchMetadata'
 import getNFTImageUrl from '../helpers/getNFTImageUrl'
+import { NFTSource } from '../types/OpenSearchIndex'
 import ImageCard from './ImageCard'
 import TokenCardFilter from './TokenCardFilter'
 
@@ -20,7 +20,7 @@ export const TokenCardPlaceholder = styled.div`
 `
 
 interface TokenCardProps {
-  metadata?: SearchMetadata
+  metadata?: NFTSource
   loading: boolean
 }
 

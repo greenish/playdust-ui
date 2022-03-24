@@ -1,19 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { SearchCollectionResponse } from '../types/SearchResponse'
+import { CollectionSource } from '../types/OpenSearchIndex'
 import { postCollectionQuery } from './helpers/postQuery'
-
-const cleanResult = (result: any) => {
-  const hits = result.hits.hits as any[]
-  const results = hits.map(
-    (entry) => entry._source
-  ) as SearchCollectionResponse['results']
-
-  return { results }
-}
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<SearchCollectionResponse>
+  res: NextApiResponse<CollectionSource[]>
 ) => {
   try {
     const ids = req.body as string[]
@@ -31,9 +22,10 @@ const handler = async (
       },
     }
 
-    const result = await postCollectionQuery(esQuery)
+    const response = await postCollectionQuery(esQuery)
+    const results = response.hits.hits.map((entry) => entry._source)
 
-    res.json(cleanResult(result))
+    res.json(results)
   } catch (e) {
     res.status(500).end()
   }

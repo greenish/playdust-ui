@@ -16,7 +16,7 @@ const createOrQuery = (entries: QueryType[]) => ({
   },
 })
 
-const getNFTQuery = (query: ComposedQueryType) => {
+const createCollectionQuery = (query: ComposedQueryType) => {
   const result = query
     .map((parent) => {
       if (parent.length === 1) {
@@ -30,6 +30,9 @@ const getNFTQuery = (query: ComposedQueryType) => {
 
   const composedQuery = {
     size: 10,
+    _source: {
+      exclude: ['attributes'],
+    },
     query: {
       bool: {
         must: result,
@@ -40,4 +43,18 @@ const getNFTQuery = (query: ComposedQueryType) => {
   return composedQuery
 }
 
-export default getNFTQuery
+const getCollectionQuery = (query: ComposedQueryType) => {
+  const freeTextSearches = query
+    .map((parent) => parent.filter((child) => child.field === 'text'))
+    .filter((parent) => parent.length)
+
+  if (!freeTextSearches.length) {
+    return undefined
+  }
+
+  const collectionQuery = createCollectionQuery(freeTextSearches) as object
+
+  return collectionQuery
+}
+
+export default getCollectionQuery

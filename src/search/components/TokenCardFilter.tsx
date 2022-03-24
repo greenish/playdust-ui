@@ -10,11 +10,11 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import SearchMetadata from '../../../types/SearchMetadata'
 import * as store from '../store'
+import { NFTSource } from '../types/OpenSearchIndex'
 
 interface TokenCardFilter {
-  metadata: SearchMetadata
+  metadata: NFTSource
 }
 
 const TokenCardFilter = ({ metadata }: TokenCardFilter) => {

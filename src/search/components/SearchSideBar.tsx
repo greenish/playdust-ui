@@ -22,7 +22,7 @@ const SortContainer = styled.div`
 const SearchSideBar = () => {
   const { initialized, nfts } = useRecoilValue(store.searchResults)
 
-  if (!initialized || !nfts.results.length) {
+  if (!initialized || !nfts.length) {
     return <></>
   }
 

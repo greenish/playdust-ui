@@ -1,14 +1,12 @@
 import { selectorFamily } from 'recoil'
 import api from '../../../helpers/api'
-import { SearchCollectionResponse } from '../types/SearchResponse'
+import { CollectionSource } from '../types/OpenSearchIndex'
 
 export const collectionById = selectorFamily({
   key: 'collectionById',
   get: (id) => async () => {
-    const { data } = await api.post<SearchCollectionResponse>('/collections', [
-      id,
-    ])
+    const { data } = await api.post<CollectionSource[]>('/collections', [id])
 
-    return data.results[0]
+    return data[0]
   },
 })

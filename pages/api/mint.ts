@@ -1,10 +1,11 @@
 import esb from 'elastic-builder'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { postNFTQuery } from '../../src/search/api/helpers/postQuery'
+import { NFTSource } from '../../src/search/types/OpenSearchIndex'
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<Promise<any>>
+  res: NextApiResponse<NFTSource>
 ) => {
   const mintAddress = req.query.address
 

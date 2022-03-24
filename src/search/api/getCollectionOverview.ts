@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {
-  CollectionOverviewResponse,
-  CollectionResponse,
-  SearchCollectionResponse,
-} from '../types/SearchResponse'
+import { CollectionSource } from '../types/OpenSearchIndex'
+import { CollectionOverviewResponse } from '../types/SearchResponse'
 import {
   postCollectionQuery,
   postNFTQuery,
@@ -44,10 +41,7 @@ const fetchSimilarResults = async (collectionId: string) => {
   }
 
   const similarResult = await postCollectionQuery(similarQuery)
-  const hits = similarResult.hits.hits as any[]
-  const results = hits.map(
-    (entry) => entry._source
-  ) as SearchCollectionResponse['results']
+  const results = similarResult.hits.hits.map((entry) => entry._source)
 
   return results
 }
@@ -89,7 +83,7 @@ const fetchListedResults = async (collectionId: string) => {
 }
 
 const fetchTotalVolume = async (
-  collections: CollectionResponse[],
+  collections: CollectionSource[],
   collectionId: string
 ) => {
   const ids = collections.map((entry) => entry.id)

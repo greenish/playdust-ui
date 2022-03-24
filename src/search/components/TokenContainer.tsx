@@ -9,7 +9,7 @@ import {
   Size,
 } from 'react-virtualized'
 import 'react-virtualized/styles.css'
-import SearchMetadata from '../../../types/SearchMetadata'
+import { NFTSource } from '../types/OpenSearchIndex'
 import TokenCard, { dimensions, TokenCardPlaceholder } from './TokenCard'
 
 const RootContainer = styled.div`
@@ -65,7 +65,7 @@ const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
 
 interface TokenContainerProps {
   initialized: boolean
-  tokens: SearchMetadata[]
+  tokens: NFTSource[]
   total: number
   next?: () => any
 }

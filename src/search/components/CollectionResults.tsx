@@ -28,12 +28,11 @@ const OverviewContainer = styled.div`
 
 const CollectionResults = () => {
   const { collections } = useRecoilValue(store.searchResults)
-  const { results } = collections
   const initCollectionQuery = store.useInitializeCollectionQuery()
   const isCollectionQuery = useRecoilValue(store.isCollectionQuery)
   const { initialized } = useRecoilValue(store.searchResults)
 
-  if (!initialized || (results.length === 0 && !isCollectionQuery)) {
+  if (!initialized || (collections.length === 0 && !isCollectionQuery)) {
     return <></>
   }
 
@@ -44,7 +43,7 @@ const CollectionResults = () => {
           <CollectionOverview />
         </OverviewContainer>
       ) : (
-        results.map((collection) => (
+        collections.map((collection) => (
           <CollectionCard
             key={collection.id}
             {...collection}

@@ -66,10 +66,9 @@ const SearchResults = () => {
     }
   }, [searchHash])
 
-  const { nfts, initialized } = current
-  const { results, total } = nfts
+  const { nfts, initialized, total } = current
 
-  if (initialized && results.length === 0) {
+  if (initialized && nfts.length === 0) {
     return (
       <NoTokensContainer>
         <i>no tokens found...</i>
@@ -80,7 +79,7 @@ const SearchResults = () => {
   return (
     <TokenContainer
       initialized={true}
-      tokens={results}
+      tokens={nfts}
       total={total}
       next={async () => {
         return fetchMoreSearchResults(current)
