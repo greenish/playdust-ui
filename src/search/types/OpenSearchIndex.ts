@@ -36,6 +36,7 @@ export interface NFTSource {
     }
   }
   heuristicCollectionId?: string
+  lastListPrice?: number
 }
 
 export interface CollectionSource {

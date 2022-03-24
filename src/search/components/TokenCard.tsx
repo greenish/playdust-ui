@@ -1,11 +1,34 @@
 import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
-import { useState } from 'react'
 import Link from '../../../components/common/Link'
 import getNFTImageUrl from '../helpers/getNFTImageUrl'
 import { NFTSource } from '../types/OpenSearchIndex'
 import ImageCard from './ImageCard'
 import TokenCardFilter from './TokenCardFilter'
+
+const CardContentContainer = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+`
+
+const CardTextContainer = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: center;
+`
+
+const CardText = styled(Typography)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+const TokenCardFilterContainer = styled.div`
+  margin-left: 8px;
+`
 
 export const dimensions = {
   height: 350,
@@ -25,9 +48,9 @@ interface TokenCardProps {
 }
 
 const TokenCard = ({ metadata }: TokenCardProps) => {
-  const [isLoaded, setIsLoaded] = useState(false)
   const { image, name } = metadata?.offChainData || {}
   const href = `nfts/${metadata?.mint}`
+  const lastListPrice = metadata?.lastListPrice
 
   return (
     <ImageCard
@@ -35,16 +58,23 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
       src={image && getNFTImageUrl(image, imageSize, imageSize)}
       href={href}
       content={
-        <>
-          <Typography>
-            <Link href={href}>{name || metadata?.data?.name}</Link>
-          </Typography>
-          {metadata && metadata.offChainData?.attributes && (
-            <TokenCardFilter metadata={metadata} />
-          )}
-        </>
+        <CardContentContainer>
+          <CardTextContainer>
+            <CardText>
+              <Link href={href}>{name || metadata?.data?.name}</Link>
+            </CardText>
+            {lastListPrice && (
+              <CardText sx={{ fontSize: '90%' }}>{lastListPrice} SOL</CardText>
+            )}
+          </CardTextContainer>
+          <TokenCardFilterContainer>
+            {metadata && metadata.offChainData?.attributes && (
+              <TokenCardFilter metadata={metadata} />
+            )}
+          </TokenCardFilterContainer>
+        </CardContentContainer>
       }
-      contentHeight="70px"
+      contentHeight="80px"
     />
   )
 }

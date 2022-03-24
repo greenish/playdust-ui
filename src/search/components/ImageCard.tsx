@@ -8,8 +8,8 @@ import LazyImage from '../../../components/utils/LazyImage'
 const CardContentContainer = styled.div`
   height: 100%;
   width: 100%;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 12px;
+  padding-right: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
