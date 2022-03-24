@@ -4,13 +4,9 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import base58 from 'bs58'
 import { Suspense } from 'react'
 import { useCookies } from 'react-cookie'
+import Info from '../components/profile/Info'
 import OwnedTokens from '../components/token/OwnedTokens'
-import instance from '../helpers/api'
-import {
-  GetAuthToken,
-  GetNonce,
-  RefreshToken,
-} from '../helpers/auctionHouseApi'
+import instance, { GetAuthToken, GetNonce } from '../helpers/auctionHouseApi'
 
 const ParentContainer = styled.div`
   display: flex;
@@ -26,15 +22,16 @@ const SignInButton = styled(Button)`
 `
 
 const Me = () => {
-  const TOKEN_TTL = 15 * 60 * 1000
+  const TOKEN_TTL = 60 * 1000
   const wallet = useWallet()
-  const [cookies, setCookie] = useCookies(['authToken', 'expires_at'])
+  const [cookies, setCookie] = useCookies(['authToken', 'expires_at', 'nonce'])
 
   const signIn = () => {
     const { publicKey, signMessage, connected } = wallet
+    const pubKey = publicKey!.toBase58()
+    let nonceToken = ''
     if (connected && !cookies.authToken) {
-      let nonceToken = ''
-      GetNonce(publicKey!.toBase58())
+      GetNonce(pubKey)
         .then((nonce) => {
           nonceToken = nonce
           const nonceArray = new TextEncoder().encode(nonce)
@@ -42,43 +39,17 @@ const Me = () => {
         })
         .then((signature) => {
           const accountSignature = base58.encode(signature)
-          return GetAuthToken(
-            publicKey!.toBase58(),
-            accountSignature,
-            nonceToken
-          )
+          return GetAuthToken(pubKey, accountSignature, nonceToken)
         })
-        .then((token) => {
+        .then(({ token, nonce }) => {
+          nonceToken = nonce
+          instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
+          const expires_at = new Date(Date.now() + TOKEN_TTL).getTime()
+          setCookie('nonce', nonce, { path: '/' })
           setCookie('authToken', token, { path: '/' })
-          setCookie('expires_at', new Date(Date.now() + TOKEN_TTL).getTime(), {
+          setCookie('expires_at', expires_at, {
             path: '/',
           })
-          instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
-          instance.interceptors.request.use(
-            async (config) => {
-              if (new Date(cookies.expires_at) <= new Date()) {
-                const token = await RefreshToken(
-                  publicKey!.toBase58(),
-                  nonceToken
-                )
-                setCookie('authToken', token, { path: '/' })
-                setCookie(
-                  'expires_at',
-                  new Date(Date.now() + TOKEN_TTL).getTime(),
-                  {
-                    path: '/',
-                  }
-                )
-                instance.defaults.headers.common[
-                  'Authorization'
-                ] = `Bearer ${token}`
-              }
-              return config
-            },
-            (error) => {
-              return Promise.reject(error)
-            }
-          )
         })
         .catch((e) => console.error(e))
     }
@@ -92,7 +63,11 @@ const Me = () => {
             <SignInButton variant="contained" onClick={() => signIn()}>
               Sign In
             </SignInButton>
-          ) : null}
+          ) : (
+            <Suspense fallback={<div />}>
+              <Info publicKey={wallet.publicKey} />
+            </Suspense>
+          )}
           <Typography variant="h5" gutterBottom>
             My Tokens
           </Typography>

@@ -31,6 +31,7 @@
     "@solana/wallet-adapter-wallets": "^0.14.2",
     "@solana/web3.js": "^1.31.0",
     "axios": "^0.25.0",
+    "axios-auth-refresh": "^3.2.2",
     "bn.js": "^5.2.0",
     "bs58": "^4.0.1",
     "copy-text-to-clipboard": "^3.0.1",

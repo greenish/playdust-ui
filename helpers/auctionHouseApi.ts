@@ -1,4 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
+import createAuthRefreshInterceptor from 'axios-auth-refresh'
+import { Profile } from '../types/profile'
 
 const instance: AxiosInstance = axios.create({
   baseURL: `/playdust-api`,
@@ -89,7 +91,7 @@ export const GetAuthToken = async (
     nonce,
   })
 
-  return data.token
+  return data
 }
 
 export const RefreshToken = async (wallet: string, nonce: string) => {
@@ -99,6 +101,47 @@ export const RefreshToken = async (wallet: string, nonce: string) => {
   })
 
   return data.token
+}
+
+export const GetUserProfile = async (wallet: string, nonce: string) => {
+  const { data } = await instance.get(`/user-profile/${wallet}?nonce=${nonce}`)
+
+  return data
+}
+
+export const UpdateProfile = async (
+  profile: Profile,
+  wallet: string,
+  nonce: string
+) => {
+  try {
+    await instance.post(`/user-profile/${wallet}`, { ...profile, nonce })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const autoRefresh = (
+  pubKey: string,
+  nonce: string,
+  authToken: string
+) => {
+  instance.defaults.headers.common.Authorization = `Bearer ${authToken}`
+  createAuthRefreshInterceptor(
+    instance,
+    (failedRequest) =>
+      RefreshToken(pubKey, nonce)
+        .then((token) => {
+          failedRequest.response.config.headers[
+            'Authorization'
+          ] = `Bearer ${token}`
+          return Promise.resolve()
+        })
+        .catch(() => Promise.reject()),
+    {
+      statusCodes: [401, 403, 400],
+    }
+  )
 }
 
 export default instance

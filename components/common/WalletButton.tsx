@@ -11,9 +11,10 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useRecoilState } from 'recoil'
+import { autoRefresh } from '../../helpers/auctionHouseApi'
 import { shortenPublicKey } from '../../helpers/utils'
 import * as store from '../../store'
 
@@ -29,6 +30,7 @@ const WalletButton = () => {
   const [cookies, setCookie, removeCookie] = useCookies([
     'authToken',
     'expires_at',
+    'nonce',
   ])
 
   const buttonProps =
@@ -42,6 +44,13 @@ const WalletButton = () => {
           children: 'Connect Wallet',
           onClick: () => walletModal.setVisible(true),
         }
+
+  useEffect(() => {
+    if (cookies && wallet.connected) {
+      const pubKey = wallet.publicKey?.toBase58()!
+      autoRefresh(pubKey, cookies.nonce, cookies.authToken)
+    }
+  }, [wallet])
 
   return (
     <>
