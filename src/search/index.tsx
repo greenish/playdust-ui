@@ -4,6 +4,7 @@ import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useRecoilValue } from 'recoil'
 import CollectionResults from './components/CollectionResults'
+import SearchInput from './components/SearchInput'
 import SearchResults from './components/SearchResults'
 import SearchSideBar from './components/SearchSideBar'
 import * as store from './store'
@@ -14,6 +15,10 @@ const RootContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
+`
+
+const SearchInputContainer = styled.div`
+  padding: 8px 16px;
 `
 
 const TokenContainer = styled.div`
@@ -42,22 +47,23 @@ const Search: NextPage = () => {
   const { initialized } = useRecoilValue(store.searchResults)
 
   return (
-    <>
-      {!initialized && (
-        <SpinnerContainer>
-          <CircularProgress />
-        </SpinnerContainer>
-      )}
-      <RootContainer>
-        <CollectionResults />
-        <ResultsContainer>
-          <SearchSideBar />
-          <TokenContainer>
-            <SearchResults />
-          </TokenContainer>
-        </ResultsContainer>
-      </RootContainer>
-    </>
+    <RootContainer>
+      <SearchInputContainer>
+        <SearchInput />
+        {!initialized && (
+          <SpinnerContainer>
+            <CircularProgress />
+          </SpinnerContainer>
+        )}
+      </SearchInputContainer>
+      <CollectionResults />
+      <ResultsContainer>
+        <SearchSideBar />
+        <TokenContainer>
+          <SearchResults />
+        </TokenContainer>
+      </ResultsContainer>
+    </RootContainer>
   )
 }
 

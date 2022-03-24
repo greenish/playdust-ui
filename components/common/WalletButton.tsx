@@ -1,12 +1,12 @@
 import { Person } from '@mui/icons-material'
 import {
-  Button,
-  ButtonGroup,
+  Fab,
   FormControl,
   InputLabel,
   Menu,
   MenuItem,
   Select,
+  Typography,
 } from '@mui/material'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
@@ -54,12 +54,9 @@ const WalletButton = () => {
 
   return (
     <>
-      <ButtonGroup variant="outlined" aria-label="outlined button group">
-        <Button onClick={() => router.push('/me')}>
-          <Person />
-        </Button>
-        <Button {...buttonProps} />
-      </ButtonGroup>
+      <Fab {...buttonProps} size="small">
+        <Person />
+      </Fab>
       <Menu
         open={open}
         anchorEl={anchorEl}
@@ -69,10 +66,17 @@ const WalletButton = () => {
           horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
+        sx={{ ml: 2 }}
       >
+        <Typography sx={{ p: 2 }}>
+          {wallet.publicKey && shortenPublicKey(wallet.publicKey)}
+        </Typography>
+        <MenuItem sx={{ p: 2 }} onClick={() => router.push('/me')}>
+          View Profile
+        </MenuItem>
         <MenuItem
           sx={{ p: 2 }}
           onClick={() => {

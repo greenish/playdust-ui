@@ -62,7 +62,7 @@ const ImageCard = ({
 
   return (
     <div>
-      <Card sx={{ mr: 2, width: imageSize }}>
+      <Card sx={{ mr: 2, width: imageSize }} square>
         <LinkWrapper href={href} onClick={onClick}>
           {src && (
             <CardImageContainer>

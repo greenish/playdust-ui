@@ -23,6 +23,12 @@ const RootContainer = styled.div`
   width: 100%;
 `
 
+const TextFieldInput = styled(TextField)(() => ({
+  '& fieldset': {
+    borderRadius: 0,
+  },
+}))
+
 const SearchInput = () => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -31,6 +37,7 @@ const SearchInput = () => {
   const setSearchQueryValid = store.useSetSearchQueryValid()
   const addText = store.useAddText()
   const clearSearchQuery = store.useClearSearchQuery()
+  const searchQueryValid = useRecoilValue(store.searchQueryValid)
 
   useEffect(() => {
     window.addEventListener('beforeunload', setSearchQueryValid)
@@ -78,18 +85,17 @@ const SearchInput = () => {
         renderTags={() => <SearchChips />}
         filterSelectedOptions
         renderInput={(params) => (
-          <TextField {...params} placeholder="Search..." />
+          <TextFieldInput {...params} placeholder="Search..." />
         )}
       />
       <Button
         variant="contained"
         onClick={() => setOpen(true)}
+        disableElevation
         sx={{
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-          marginLeft: '-3px',
-          zIndex: 10,
+          borderRadius: 0,
         }}
+        disabled={searchQueryValid.length === 0}
       >
         <ManageSearch />
       </Button>

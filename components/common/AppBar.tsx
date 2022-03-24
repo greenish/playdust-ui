@@ -1,66 +1,49 @@
 import styled from '@emotion/styled'
-import { Home, SearchRounded } from '@mui/icons-material'
-import { IconButton, Paper, Toolbar } from '@mui/material'
+import { Home } from '@mui/icons-material'
+import { createTheme, IconButton, Paper, ThemeProvider } from '@mui/material'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { ReactNode } from 'react'
-import { showSearchInput } from '../../helpers/routing'
-import SearchInput from '../../src/search/components/SearchInput'
 import Notifications from './Notifications'
 import WalletButton from './WalletButton'
 
-const appBarHeight = 72
-const appBarBottomMargin = 16
-const appBarOffset = appBarHeight + appBarBottomMargin
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+})
 
-const AppBarContainer = styled(Paper)`
-  position: sticky;
+const appBarWidth = 64
+
+const VerticalAppBar = styled(Paper)`
+  position: absolute;
   top: 0;
-  height: ${appBarHeight}px;
-  width: 100%;
+  left: 0;
+  height: 100%;
+  width: ${appBarWidth}px;
+`
+
+const VerticalAppBarContent = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  overflow: hidden;
-`
-
-const AppBarPaddingContainer = styled.div`
-  position: sticky;
-  top: ${appBarHeight}px;
-  height: ${appBarBottomMargin}px;
-`
-
-const AppBarContent = styled(Toolbar)`
-  display: flex;
   justify-content: space-between;
-  width: 100%;
-`
-
-const AppBarLeftContent = styled.div`
-  display: flex;
-  align-items: center;
-`
-
-const HomeContainer = styled.div`
-  margin-right: 8px;
-`
-
-const SearchInputContainer = styled.div`
-  display: flex;
-  flex: 1;
-  padding: 0 16px;
+  height: 100%;
+  padding: 16px 8px;
 `
 
 const ChildrenContainer = styled.div`
   position: absolute;
-  top: ${appBarOffset}px;
-  left: 0;
+  top: 8px;
+  left: ${appBarWidth}px;
   bottom: 0;
   right: 0;
+  overflow: hidden;
 `
 
 const ChildrenRelativeContainer = styled.div`
   position: relative;
   height: 100%;
+  overflow: auto;
 `
 
 interface AppBarProps {
@@ -68,14 +51,12 @@ interface AppBarProps {
 }
 
 const AppBar = ({ children }: AppBarProps) => {
-  const router = useRouter()
-
   return (
     <>
-      <AppBarContainer elevation={3}>
-        <AppBarContent>
-          <AppBarLeftContent>
-            <HomeContainer>
+      <ThemeProvider theme={theme}>
+        <VerticalAppBar square elevation={3}>
+          <VerticalAppBarContent>
+            <div>
               <Link href="/">
                 <a>
                   <IconButton>
@@ -83,26 +64,11 @@ const AppBar = ({ children }: AppBarProps) => {
                   </IconButton>
                 </a>
               </Link>
-            </HomeContainer>
-            <Link href="/search">
-              <a>
-                <IconButton>
-                  <SearchRounded />
-                </IconButton>
-              </a>
-            </Link>
-          </AppBarLeftContent>
-          <SearchInputContainer>
-            {router.isReady && showSearchInput(router.pathname) && (
-              <SearchInput />
-            )}
-          </SearchInputContainer>
-          <div>
+            </div>
             <WalletButton />
-          </div>
-        </AppBarContent>
-      </AppBarContainer>
-      <AppBarPaddingContainer />
+          </VerticalAppBarContent>
+        </VerticalAppBar>
+      </ThemeProvider>
       <ChildrenContainer>
         <ChildrenRelativeContainer>{children}</ChildrenRelativeContainer>
       </ChildrenContainer>
