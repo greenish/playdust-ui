@@ -65,3 +65,21 @@ export function range(from: number, to: number, step: number) {
 
 export const shortenPublicKey = (pk: PublicKey | string) =>
   ellipsisify(pk.toString(), 4, 4)
+
+export function normalizeTokenAmount(
+  raw: string | number,
+  decimals: number
+): number {
+  let rawTokens: number
+  if (typeof raw === 'string') rawTokens = parseInt(raw)
+  else rawTokens = raw
+  return rawTokens / Math.pow(10, decimals)
+}
+
+export function abbreviatedNumber(value: number, fixed = 1) {
+  if (value < 1e3) return value
+  if (value >= 1e3 && value < 1e6) return +(value / 1e3).toFixed(fixed) + 'K'
+  if (value >= 1e6 && value < 1e9) return +(value / 1e6).toFixed(fixed) + 'M'
+  if (value >= 1e9 && value < 1e12) return +(value / 1e9).toFixed(fixed) + 'B'
+  if (value >= 1e12) return +(value / 1e12).toFixed(fixed) + 'T'
+}

@@ -4,9 +4,9 @@ import { useAccountInfo } from '../store'
 import {
   ConfigAccount,
   NonceAccount,
+  SPLTokenAccount,
   StakeAccount,
   SysvarAccount,
-  TokenAccount,
   UnknownAccount,
   UpgradeableLoaderAccount,
   VoteAccount,
@@ -18,7 +18,7 @@ interface AccountOverviewProps {
 const map: Record<string, FunctionComponent<AccountOverviewProps>> = {
   'bpf-upgradeable-loader': UpgradeableLoaderAccount,
   stake: StakeAccount,
-  'spl-token': TokenAccount,
+  'spl-token': SPLTokenAccount,
   nonce: NonceAccount,
   vote: VoteAccount,
   sysvar: SysvarAccount,
@@ -27,6 +27,8 @@ const map: Record<string, FunctionComponent<AccountOverviewProps>> = {
 
 export const AccountOverview = (props: AccountOverviewProps) => {
   const account = useAccountInfo(props.pubkey)
+
+  console.log('account', props.pubkey, account)
 
   const accountData = account?.data as ParsedAccountData
 

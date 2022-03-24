@@ -18,7 +18,7 @@ import {
 } from '../store'
 import { ExplorerCard } from './ExplorerCard'
 import { Identicon } from './Identicon'
-import { AccountLink, SlotLink } from './Links'
+import { AccountLink, SlotLink, TxLink } from './Links'
 
 interface TokenHoldingsProps {
   pubkey: PublicKey
@@ -175,7 +175,7 @@ export const TokenHistoryRow = ({ mintAndSignature }: TokenHistoryRowProps) => {
   const instructionType = '???' // TODO
 
   const transactionSignature = (
-    <AccountLink to={tx.transaction.signatures[0]} allowCopy />
+    <TxLink to={tx.transaction.signatures[0]} allowCopy />
   )
 
   const row = {
