@@ -1,49 +1,44 @@
-import styled from '@emotion/styled'
-import { Box, Typography } from '@mui/material'
 import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridRowsProp,
-} from '@mui/x-data-grid'
-import { useEffect, useState } from 'react'
-import { GetAllOrders } from '../../helpers/auctionHouseApi'
-import { shortenPublicKey } from '../../helpers/utils'
-
-const DataGridContainer = styled.div`
-  height: 300px;
-  width: 100%;
-`
+  Box,
+  Button,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  Typography,
+} from '@mui/material'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { Fragment, useEffect, useState } from 'react'
+import { cancelNFTBid, GetAllOrders } from '../../helpers/auctionHouseApi'
+import useConfirmTransaction from '../../hooks/useConfirmTransaction'
 
 type OrderProps = {
   mint: string
 }
 
-const Orders = ({ mint }: OrderProps) => {
-  const [rows, setRows] = useState<GridRowsProp>([])
+type Bid = {
+  id: string
+  mint: string
+  treasuryMint: string
+  wallet: string
+  txHash: string
+  qty: number
+  price: number
+  side: string
+  isActive: boolean
+}
 
-  const columns: GridColDef[] = [
-    {
-      field: 'walletKey',
-      headerName: 'Wallet',
-      width: 150,
-      renderCell: (params: GridRenderCellParams) =>
-        shortenPublicKey(params.value),
-    },
-    { field: 'price', headerName: 'Price', width: 150 },
-    { field: 'side', headerName: 'Side', width: 150 },
-    { field: 'qty', headerName: 'Quantity', width: 150 },
-    {
-      field: 'market',
-      headerName: 'Market',
-      width: 150,
-      renderCell: (params: GridRenderCellParams) => params.value.tokenSymbol,
-    },
-  ]
+const Orders = ({ mint }: OrderProps) => {
+  const [rows, setRows] = useState<Bid[]>([])
+  const { publicKey } = useWallet()
+  const confirmTransaction = useConfirmTransaction()
 
   useEffect(() => {
     GetAllOrders(mint).then((data) => {
-      setRows(data)
+      if (data.bids) {
+        setRows(data.bids)
+      }
     })
   }, [])
 
@@ -52,13 +47,47 @@ const Orders = ({ mint }: OrderProps) => {
       <Typography gutterBottom variant="h6">
         Orders
       </Typography>
-      <DataGridContainer>
-        <DataGrid
-          rows={rows!}
-          columns={columns}
-          getRowId={(row) => row.txHash}
-        />
-      </DataGridContainer>
+      <Paper>
+        {rows.length ? (
+          <List>
+            {rows.map((e: any, index: number) => (
+              <Fragment key={index}>
+                <ListItem
+                  secondaryAction={
+                    <>
+                      {publicKey && e.wallet === publicKey!.toBase58() ? (
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() =>
+                            confirmTransaction(
+                              cancelNFTBid(e.wallet, e.mint, e.price),
+                              'Cancel Successful',
+                              'Cancel Unsuccessful'
+                            )
+                          }
+                        >
+                          Cancel Bid
+                        </Button>
+                      ) : null}
+                    </>
+                  }
+                >
+                  <ListItemText
+                    primary={e.wallet}
+                    secondary={`Price: ${e.price}`}
+                  />
+                </ListItem>
+                {index < rows.length - 1 ? <Divider component="li" /> : null}
+              </Fragment>
+            ))}
+          </List>
+        ) : (
+          <Typography align="center" sx={{ padding: 2 }}>
+            No orders for this NFT
+          </Typography>
+        )}
+      </Paper>
     </Box>
   )
 }

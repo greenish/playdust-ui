@@ -6,14 +6,31 @@ const instance: AxiosInstance = axios.create({
   baseURL: `/playdust-api`,
 })
 
+const TREASURY_MINT = 'So11111111111111111111111111111111111111112'
+
+const prefix = `/auction-house/${TREASURY_MINT}`
+
 export const makeNFTBid = async (
   wallet: string,
   mint: string,
-  buyPrice: number,
-  auctionHouse: string
+  buyPrice: number
 ): Promise<Buffer> => {
-  const prefix = `/auction-house/${auctionHouse}`
   const { data } = await instance.post(`${prefix}/bid`, {
+    wallet,
+    mint,
+    buyPrice,
+    tokenSize: 1,
+  })
+
+  return data
+}
+
+export const cancelNFTBid = async (
+  wallet: string,
+  mint: string,
+  buyPrice: number
+): Promise<Buffer> => {
+  const { data } = await instance.post(`${prefix}/cancel-bid`, {
     wallet,
     mint,
     buyPrice,
@@ -26,10 +43,8 @@ export const makeNFTBid = async (
 export const makeNFTListing = async (
   wallet: string,
   mint: string,
-  buyPrice: number,
-  auctionHouse: string
-): Promise<Buffer> => {
-  const prefix = `/auction-house/${auctionHouse}`
+  buyPrice: number
+): Promise<any> => {
   const { data } = await instance.post(`${prefix}/ask`, {
     wallet,
     mint,
@@ -40,21 +55,28 @@ export const makeNFTListing = async (
   return data
 }
 
-export const executeNFTSale = async (
+export const cancelNFTListing = async (
   wallet: string,
   mint: string,
-  buyPrice: number,
-  buyerWallet: string,
-  auctionHouse: string
-): Promise<Buffer> => {
-  const prefix = `/auction-house/${auctionHouse}`
-  const { data } = await instance.post(`${prefix}/execute-sale`, {
+  buyPrice: number
+): Promise<any> => {
+  const { data } = await instance.post(`${prefix}/cancel-ask`, {
     wallet,
-    sellerWallet: wallet,
-    buyerWallet,
     mint,
     buyPrice,
     tokenSize: 1,
+  })
+
+  return data
+}
+
+export const executeNFTSale = async (
+  requestData: any,
+  txBuff: number[]
+): Promise<any> => {
+  const { data } = await instance.post(`${prefix}/execute`, {
+    ...requestData,
+    txBuff,
   })
 
   return data

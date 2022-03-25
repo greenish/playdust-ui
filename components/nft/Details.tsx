@@ -1,19 +1,25 @@
 import styled from '@emotion/styled'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import FactCheckIcon from '@mui/icons-material/FactCheck'
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  Avatar,
   Box,
+  Card,
+  CardContent,
+  CardHeader,
   CircularProgress,
+  Grid,
   List,
   ListItem,
+  ListItemIcon,
   ListItemText,
   Typography,
 } from '@mui/material'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { Suspense } from 'react'
 import { useRecoilValue } from 'recoil'
+import { shortenPublicKey } from '../../helpers/utils'
 import { fetchNFTDetails } from '../../store'
 import TradeNFT from './TradeNFT'
 
@@ -50,42 +56,74 @@ const Details = ({ mint }: DetailsProps) => {
           </Suspense>
         )}
       </ImageTradeContainer>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Creators</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <List dense={true}>
-            {details.data.creators?.map((e) => (
-              <ListItem key={e.address}>
-                <ListItemText primary={e.address} />
-              </ListItem>
-            ))}
-          </List>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>Attributes</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <List dense={true}>
-            {details.offChainData.attributes?.map((e) => (
-              <ListItem key={e.trait_type}>
-                <ListItemText primary={e.trait_type} secondary={e.value} />
-              </ListItem>
-            ))}
-          </List>
-        </AccordionDetails>
-      </Accordion>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: '#2196f3' }}>
+                  <PeopleAltIcon />
+                </Avatar>
+              }
+              title="Creators"
+            />
+            <CardContent>
+              <List dense={true} disablePadding>
+                {details.data.creators?.map((e) => (
+                  <ListItem
+                    key={e.address}
+                    secondaryAction={
+                      <Typography variant="subtitle2">{e.share}%</Typography>
+                    }
+                  >
+                    {e.verified ? (
+                      <ListItemIcon>
+                        <CheckCircleIcon />
+                      </ListItemIcon>
+                    ) : null}
+                    <ListItemText
+                      inset={!e.verified}
+                      primary={shortenPublicKey(e.address)}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardHeader
+              avatar={
+                <Avatar sx={{ bgcolor: '#f50057' }}>
+                  <FactCheckIcon />
+                </Avatar>
+              }
+              title="Attributes"
+            />
+            <CardContent>
+              <Grid container spacing={2}>
+                {details.offChainData.attributes?.map((e) => (
+                  <Grid
+                    item
+                    xs={6}
+                    md={4}
+                    key={e.trait_type}
+                    sx={{ padding: 2 }}
+                  >
+                    <Typography align="center" variant="body1" gutterBottom>
+                      <strong>{e.trait_type}</strong>
+                    </Typography>
+                    <Typography align="center" variant="body2">
+                      {e.value}
+                    </Typography>
+                  </Grid>
+                ))}
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     </Box>
   )
 }
