@@ -8,7 +8,7 @@ interface ExternalLinkProps {
 
 export function ExternalLink({ label, url }: ExternalLinkProps) {
   return (
-    <Link href={url} target="_blank" rel="noreferrer" pr={4}>
+    <Link href={url} target="_blank" rel="noopener noreferrer">
       {label || url}
     </Link>
   )

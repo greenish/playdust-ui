@@ -1,7 +1,8 @@
-import { Grid } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
+import { compact } from '../../../../helpers/utils'
 import { useAccountInfo } from '../../store'
 import { ExplorerCard } from '../ExplorerCard'
+import { ExplorerGrid } from '../ExplorerGrid'
 import { AccountLink } from '../Links'
 import { SolBalance } from '../SolBalance'
 
@@ -20,40 +21,20 @@ export const NonceAccountContent = ({ pubkey }: NonceAccountProps) => {
 
   const { lamports } = account
 
-  return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={2}>
-        Address
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <AccountLink to={pubkey.toBase58()} allowCopy />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        SOL Balance
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <SolBalance lamports={lamports} />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Authority
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <AccountLink to={parsed.info.authority} allowCopy />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Blockhash
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <code>{parsed.info.blockhash}</code>
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Fee
-      </Grid>
-      <Grid item xs={12} md={10}>
+  const rows = compact([
+    ['Address', <AccountLink to={pubkey.toBase58()} allowCopy />],
+    ['SOL Balance', <SolBalance lamports={lamports} />],
+    ['Authority', <AccountLink to={parsed.info.authority} allowCopy />],
+    ['Blockhash', <code>{parsed.info.blockhash}</code>],
+    [
+      'Fee',
+      <>
         {parsed.info.feeCalculator.lamportsPerSignature} lamports per signature
-      </Grid>
-    </Grid>
-  )
+      </>,
+    ],
+  ])
+
+  return <ExplorerGrid rows={rows} />
 }
 
 export const NonceAccount = (props: NonceAccountProps) => {

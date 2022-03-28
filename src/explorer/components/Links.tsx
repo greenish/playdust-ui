@@ -24,7 +24,7 @@ export function ExplorerLink({
     <>
       {allowCopy && <CopyButton value={to} />}
       <Link href={`${url}/${to}`}>
-        <a>{display}</a>
+        <pre style={{ display: 'inline' }}>{display}</pre>
       </Link>
     </>
   )

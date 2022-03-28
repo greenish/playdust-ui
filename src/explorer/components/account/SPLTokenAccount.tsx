@@ -46,8 +46,6 @@ const map: Record<string, FunctionComponent<SPLTokenAccountProps>> = {
 export const SPLTokenAccount = (props: SPLTokenAccountProps) => {
   const account = useAccountInfo(props.pubkey)
 
-  console.log('account', account)
-
   const accountData = account?.data as ParsedAccountData
 
   if (accountData?.program !== 'spl-token') {

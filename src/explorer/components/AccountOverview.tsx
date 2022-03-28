@@ -28,8 +28,6 @@ const map: Record<string, FunctionComponent<AccountOverviewProps>> = {
 export const AccountOverview = (props: AccountOverviewProps) => {
   const account = useAccountInfo(props.pubkey)
 
-  console.log('account', props.pubkey, account)
-
   const accountData = account?.data as ParsedAccountData
 
   const AccountOverviewComponent = map[accountData?.program] || UnknownAccount

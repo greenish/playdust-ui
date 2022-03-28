@@ -83,3 +83,19 @@ export function abbreviatedNumber(value: number, fixed = 1) {
   if (value >= 1e9 && value < 1e12) return +(value / 1e9).toFixed(fixed) + 'B'
   if (value >= 1e12) return +(value / 1e12).toFixed(fixed) + 'T'
 }
+
+export function compact(array?: any[]) {
+  let resIndex = 0
+  const result: any[] = []
+
+  if (!array) {
+    return result
+  }
+
+  for (const value of array) {
+    if (value) {
+      result[resIndex++] = value
+    }
+  }
+  return result
+}

@@ -3,6 +3,7 @@ import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { ReactNode } from 'react'
 import {
   abbreviatedNumber,
+  compact,
   normalizeTokenAmount,
 } from '../../../../../helpers/utils'
 import {
@@ -11,6 +12,7 @@ import {
   useCoinGecko,
   useTokenRegistry,
 } from '../../../store'
+import { ExplorerGrid } from '../../ExplorerGrid'
 import { ExternalLink } from '../../ExternalLinks'
 import { AccountLink } from '../../Links'
 
@@ -175,62 +177,18 @@ export const FungibleTokenMintAccountDetails = ({
 
   const tagChips = tags.map((tag: string) => <Chip key={tag} label={tag} />)
 
-  return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={2}>
-        Address
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <AccountLink to={pubkey.toBase58()} allowCopy />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Current Supply
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {normalizeTokenAmount(supply, decimals)}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Website
-      </Grid>
-      {!data?.parsed?.info?.isInitialized && (
-        <>
-          <Grid item xs={12} md={2}>
-            Status
-          </Grid>
-          <Grid item xs={12} md={10}>
-            Uninitialized
-          </Grid>
-        </>
-      )}
-      <Grid item xs={12} md={10}>
-        <ExternalLink url={website} />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Mint Authority
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <AccountLink to={mintAuthority} allowCopy />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Freeze Authority
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <AccountLink to={freezeAuthority} allowCopy />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Decimals
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {decimals}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Tags
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {tagChips}
-      </Grid>
-    </Grid>
-  )
+  const rows = compact([
+    ['Address', <AccountLink to={pubkey.toBase58()} allowCopy />],
+    ['Current Supply', normalizeTokenAmount(supply, decimals)],
+    ['Website', <ExternalLink url={website} />],
+    !data?.parsed?.info?.isInitialized && ['Status', 'Uninitialized'],
+    ['Mint Authority', <AccountLink to={mintAuthority} allowCopy />],
+    ['Freeze Authority', <AccountLink to={freezeAuthority} allowCopy />],
+    ['Decimals', decimals],
+    ['Tags', tagChips],
+  ])
+
+  return <ExplorerGrid rows={rows} />
 }
 
 export const FungibleTokenMintAccount = (props: TokenOverviewProps) => {

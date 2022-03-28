@@ -1,11 +1,12 @@
-import { Grid } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
+import { compact } from '../../../../helpers/utils'
 import { solanaCluster } from '../../../../store'
 import { getSpace } from '../../helpers/account'
 import { addressLabel, displayAddress } from '../../helpers/tx'
 import { useAccountInfo, useTokenRegistry } from '../../store'
 import { ExplorerCard } from '../ExplorerCard'
+import { ExplorerGrid } from '../ExplorerGrid'
 import { AccountLink } from '../Links'
 import { SolBalance } from '../SolBalance'
 
@@ -52,62 +53,16 @@ export const UnknownAccountContent = ({ pubkey }: UnknownAccountProps) => {
 
   const space = getSpace(account)
 
-  return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={2}>
-        Address
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <AccountLink to={pubkey.toBase58()} allowCopy />
-      </Grid>
-      {label && (
-        <>
-          <Grid item xs={12} md={2}>
-            Address Label
-          </Grid>
-          <Grid item xs={12} md={10}>
-            {label}
-          </Grid>
-        </>
-      )}
-      <Grid item xs={12} md={2}>
-        Balance (SOL)
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <SolBalance lamports={details?.lamports || 0} />
-      </Grid>
-      {space !== undefined && (
-        <>
-          <Grid item xs={12} md={2}>
-            Allocated Data Size
-          </Grid>
-          <Grid item xs={12} md={10}>
-            {space} byte(s)
-          </Grid>
-        </>
-      )}
-      {assignedProgramId && (
-        <>
-          <Grid item xs={12} md={2}>
-            Assigned Program Id
-          </Grid>
-          <Grid item xs={12} md={10}>
-            {assignedProgramId}
-          </Grid>
-        </>
-      )}
-      {details && (
-        <>
-          <Grid item xs={12} md={2}>
-            Executable
-          </Grid>
-          <Grid item xs={12} md={10}>
-            {details.executable ? 'Yes' : 'No'}
-          </Grid>
-        </>
-      )}
-    </Grid>
-  )
+  const rows = compact([
+    ['Address', <AccountLink to={pubkey.toBase58()} allowCopy />],
+    label && ['Address Label', label],
+    ['Balance (SOL)', <SolBalance lamports={details?.lamports || 0} />],
+    space !== undefined && ['Allocated Data Size', `${space} byte(s)`],
+    assignedProgramId && ['Assigned Program Id', assignedProgramId],
+    details && ['Executable', details.executable ? 'Yes' : 'No'],
+  ])
+
+  return <ExplorerGrid rows={rows} />
 }
 
 export const UnknownAccount = (props: UnknownAccountProps) => {

@@ -1,10 +1,12 @@
-import { Box, Chip, Grid, Typography } from '@mui/material'
+import { Box, Chip, Typography } from '@mui/material'
 import { DateTime } from 'luxon'
+import { compact } from '../../../helpers/utils'
 import {
   useRawTransaction,
   useSignatureStatus,
 } from '../store/fetchTransaction'
 import { ExplorerCard } from './ExplorerCard'
+import { ExplorerGrid } from './ExplorerGrid'
 import { SlotLink, TxLink } from './Links'
 import { SolBalance } from './SolBalance'
 
@@ -53,58 +55,18 @@ export const TransactionOverviewContent = ({
       )
     : ''
 
-  return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={2}>
-        Signature
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <TxLink to={signatures[0]} allowCopy />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Block
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <SlotLink to={slot} allowCopy />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Timestamp
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {localeTime}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Result
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {result}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Fee
-      </Grid>
-      <Grid item xs={12} md={10}>
-        <SolBalance lamports={fee} />
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Confirmation Status
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {status?.confirmationStatus}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Confirmations
-      </Grid>
-      <Grid item xs={12} md={10}>
-        {status?.confirmations ?? 'max'}
-      </Grid>
-      <Grid item xs={12} md={2}>
-        Previous Block Hash
-      </Grid>
-      <Grid item xs={12} md={2}>
-        {recentBlockhash}
-      </Grid>
-    </Grid>
-  )
+  const rows = compact([
+    ['Signature', <TxLink to={signatures[0]} allowCopy />],
+    ['Block', <SlotLink to={slot} allowCopy />],
+    ['Timestamp', localeTime],
+    ['Result', result],
+    ['Fee', <SolBalance lamports={fee} />],
+    ['Confirmation Status', status?.confirmationStatus],
+    ['Confirmations', status?.confirmations ?? 'max'],
+    ['Previous Block Hash', recentBlockhash],
+  ])
+
+  return <ExplorerGrid rows={rows} />
 }
 
 export const TransactionOverview = (props: TransactionOverviewProps) => {

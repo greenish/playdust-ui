@@ -57,14 +57,14 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
       : ''
 
     const status = err ? (
-      <Chip color="error" label="Error" />
+      <Chip color="error" label="Error" size="small" />
     ) : (
-      <Chip color="success" label="Sucess" />
+      <Chip color="success" label="Sucess" size="small" />
     )
 
-    const signature = <TxLink to={signatures[0]} ellipsis={[30, 0]} />
+    const signature = <TxLink to={signatures[0]} ellipsis={[30, 0]} allowCopy />
 
-    const block = <SlotLink to={slot} />
+    const block = <SlotLink to={slot} allowCopy />
 
     const time = <>{relativeTime}</>
 
