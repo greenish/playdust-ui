@@ -139,7 +139,7 @@ export const UpdateProfile = async (
   try {
     await instance.post(`/user-profile/${wallet}`, { ...profile, nonce })
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }
 

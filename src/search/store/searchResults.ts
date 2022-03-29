@@ -1,12 +1,7 @@
-import {
-  atom,
-  noWait,
-  useRecoilCallback,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil'
+import { nanoid } from 'nanoid'
+import { atom, noWait, selector, useRecoilState, useRecoilValue } from 'recoil'
 import api from '../../../helpers/api'
+import ComposedQueryType from '../types/ComposedQueryType'
 import {
   AttributeResponse,
   SearchCursorResponse,
@@ -14,12 +9,7 @@ import {
 } from '../types/SearchResponse'
 import * as store from './'
 
-export interface SearchResults extends SearchResponse {
-  initialized: boolean
-}
-
 const initialState = {
-  initialized: false,
   attributes: [],
   total: 0,
   cursor: '',
@@ -27,71 +17,58 @@ const initialState = {
   collections: [],
 }
 
-export const searchResults = atom<SearchResults>({
-  key: 'searchResult',
-  default: initialState,
+export const searchResults = atom<SearchResponse>({
+  key: 'searchResults',
+  default: selector<SearchResponse>({
+    key: 'searchResults/default',
+    get: async ({ get }) => {
+      const serialized = get(store.searchSerializedActual)
+
+      try {
+        const parsed = JSON.parse(serialized)
+        const query = parsed.query as ComposedQueryType
+
+        if (query.length === 0) {
+          return initialState
+        }
+
+        const cleaned = {
+          ...parsed,
+          query: query.map((parent) =>
+            parent.map((child) => ({
+              ...child,
+              id: nanoid(),
+            }))
+          ),
+        }
+
+        const { data } = await api.post<SearchResponse>('/search', cleaned)
+
+        return data
+      } catch (err: any) {
+        if (err.message !== 'canceled') {
+          console.error(err)
+        }
+
+        return initialState
+      }
+    },
+  }),
 })
 
-export const useFetchSearchResults = () => {
-  const setter = useSetRecoilState(searchResults)
-  const resetter = useResetRecoilState(searchResults)
-  const controllerSetter = useSetRecoilState(store.searchResultsController)
-
-  return useRecoilCallback(({ snapshot }) => async () => {
-    const [queryValid, sort, previousController, onlyListed] =
-      await Promise.all([
-        snapshot.getPromise(store.searchQueryValid),
-        snapshot.getPromise(store.searchSortActual),
-        snapshot.getPromise(store.searchResultsController),
-        snapshot.getPromise(store.searchOnlyListed),
-      ])
-
-    if (previousController) {
-      previousController.abort()
-    }
-
-    try {
-      resetter()
-      const controller = new AbortController()
-      controllerSetter(controller)
-
-      const { data } = await api.post<SearchResponse>(
-        '/search',
-        {
-          query: queryValid,
-          sort: sort.value,
-          onlyListed,
-        },
-        { signal: controller.signal }
-      )
-
-      controllerSetter(undefined)
-
-      setter({
-        initialized: true,
-        ...data,
-      })
-    } catch (err: any) {
-      if (err.message !== 'canceled') {
-        console.error(err)
-      }
-    }
-  })
-}
-
 export const useFetchMoreSearchResults = () => {
-  const setter = useSetRecoilState(searchResults)
+  const [current, setter] = useRecoilState(searchResults)
 
-  return async (current: SearchResults) => {
+  return async () => {
     const { data } = await api.post<SearchCursorResponse>('/search-cursor', {
       cursor: current.cursor,
     })
 
-    setter((state) => ({
-      ...state,
+    setter({
+      ...current,
       cursor: data.cursor,
-      nfts: [...state.nfts, ...data.nfts],
-    }))
+      nfts: [...current.nfts, ...data.nfts],
+    })
   }
 }
 

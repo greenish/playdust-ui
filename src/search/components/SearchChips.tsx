@@ -54,7 +54,11 @@ const getChipLabel = (child: QueryType) => {
   }
 }
 
-const SearchChips = () => {
+interface SearchChipsProps {
+  disabled: boolean
+}
+
+const SearchChips = ({ disabled }: SearchChipsProps) => {
   const query = useRecoilValue(store.searchQueryValid)
   const removeChild = store.useRemoveChild()
 
@@ -65,6 +69,7 @@ const SearchChips = () => {
         const chips = parent.flatMap((child, ydx) => {
           const chip = (
             <Chip
+              disabled={disabled}
               size="small"
               key={child.id}
               label={getChipLabel(child)}

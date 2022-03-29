@@ -30,9 +30,8 @@ const CollectionResults = () => {
   const { collections } = useRecoilValue(store.searchResults)
   const initCollectionQuery = store.useInitializeCollectionQuery()
   const isCollectionQuery = useRecoilValue(store.isCollectionQuery)
-  const { initialized } = useRecoilValue(store.searchResults)
 
-  if (!initialized || (collections.length === 0 && !isCollectionQuery)) {
+  if (collections.length === 0 && !isCollectionQuery) {
     return <></>
   }
 

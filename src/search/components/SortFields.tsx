@@ -13,11 +13,11 @@ const sortLabel = 'Sort'
 
 const SortFields = () => {
   const sort = useRecoilValue(store.searchSortActual)
-  const { initialized, nfts } = useRecoilValue(store.searchResults)
+  const { nfts } = useRecoilValue(store.searchResults)
   const setSort = store.useSetSelectedSort()
   const options = useRecoilValue(store.searchSortVisibleOptions)
 
-  if (!initialized || !nfts.length) {
+  if (!nfts.length) {
     return <></>
   }
 

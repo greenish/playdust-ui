@@ -1,12 +1,12 @@
 import styled from '@emotion/styled'
 import { CircularProgress } from '@mui/material'
-import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
-import { useRecoilValue } from 'recoil'
+import { Suspense, useEffect } from 'react'
+import { useSetRecoilState } from 'recoil'
+import type WindowProps from '../app/types/WindowProps'
 import CollectionResults from './components/CollectionResults'
-import SearchInput from './components/SearchInput'
 import SearchResults from './components/SearchResults'
 import SearchSideBar from './components/SearchSideBar'
+import useSyncSerializedSearch from './hooks/useSyncSerializedSearch'
 import * as store from './store'
 
 const RootContainer = styled.div`
@@ -15,10 +15,6 @@ const RootContainer = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
-`
-
-const SearchInputContainer = styled.div`
-  padding: 8px 16px;
 `
 
 const TokenContainer = styled.div`
@@ -43,38 +39,46 @@ const ResultsContainer = styled.div`
   display: flex;
 `
 
-const Search: NextPage = () => {
-  const { initialized } = useRecoilValue(store.searchResults)
+const Search = ({ setState, state }: WindowProps) => {
+  const setQuery = store.useSetSearchQuery()
+  const setSelectedSort = store.useSetSelectedSort()
+  const setOnlyListed = useSetRecoilState(store.searchOnlyListed)
+
+  useSyncSerializedSearch(setState)
+
+  useEffect(() => {
+    if (state !== '') {
+      try {
+        const { query, sort, onlyListed } = JSON.parse(state)
+
+        setQuery(query)
+        setSelectedSort(sort)
+        setOnlyListed(onlyListed)
+      } catch (e) {
+        setState('')
+      }
+    }
+  }, [])
 
   return (
     <RootContainer>
-      <SearchInputContainer>
-        <SearchInput />
-        {!initialized && (
+      <Suspense
+        fallback={
           <SpinnerContainer>
             <CircularProgress />
           </SpinnerContainer>
-        )}
-      </SearchInputContainer>
-      <CollectionResults />
-      <ResultsContainer>
-        <SearchSideBar />
-        <TokenContainer>
-          <SearchResults />
-        </TokenContainer>
-      </ResultsContainer>
+        }
+      >
+        <CollectionResults />
+        <ResultsContainer>
+          <SearchSideBar />
+          <TokenContainer>
+            <SearchResults />
+          </TokenContainer>
+        </ResultsContainer>
+      </Suspense>
     </RootContainer>
   )
 }
 
-const Page = () => {
-  const { isReady } = useRouter()
-
-  if (!isReady) {
-    return <div />
-  }
-
-  return <Search />
-}
-
-export default Page
+export default Search

@@ -242,25 +242,25 @@ export const useSetSearchQueryValid = () => {
   return callback
 }
 
-export const useBootstrapSearchQuery = () => {
+export const useSetSearchQuery = () => {
   const setter = useSetRecoilState(searchQuery)
 
-  const callback = (payload: any) => {
+  const callback = (nextState: any) => {
     try {
-      const parsedQuery = payload as any[][]
-      const withIds = parsedQuery.map((parent) =>
+      const isValid = nextState.flat().every(store.queryValidationPredicate)
+      const query = nextState as ComposedQueryType
+      const cleaned = query.map((parent) =>
         parent.map((child) => ({
-          id: nanoid(),
           ...child,
+          id: nanoid(),
         }))
       )
-      const isValid = withIds.flat().every(store.queryValidationPredicate)
 
       if (!isValid) {
         throw new Error()
       }
 
-      setter(withIds)
+      setter(cleaned)
     } catch (e) {
       console.error('unable to bootstrap search query:', e)
     }

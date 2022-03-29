@@ -23,16 +23,11 @@ const run = async () => {
     .filter((collection) => !fs.existsSync(getOutputPath(collection.symbol)))
     .map(async (collection) => {
       let count = 0
-      console.log('fetching onchain data for', collection.symbol)
       const onchain = await fetchOnchain.byCollection(collection)
-      console.log('finished fetching onchain data for', collection.symbol)
 
       const offchainPromises = onchain.map(async (meta) => {
         const { uri } = meta.onchain.data
         const offchain = await queue.push(uri)
-        console.log(
-          `${collection.symbol}: fetched offchain ${++count}/${onchain.length}`
-        )
 
         return {
           ...meta,
@@ -49,8 +44,6 @@ const run = async () => {
     })
 
   await Promise.all(collectionPromises)
-
-  console.log('\n\nFinished')
 }
 
 run()

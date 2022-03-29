@@ -46,7 +46,7 @@ export async function getEditionInfo(
       }
     }
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
 
   return {

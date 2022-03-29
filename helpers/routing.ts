@@ -21,10 +21,3 @@ export function getSearchType(str: string): SearchType {
 
   return undefined
 }
-
-const searchInputPaths = ['/search', '/account/[id]', '/tx/[id]', '/block/[id]']
-
-export function showSearchInput(pathname: string) {
-  const x = searchInputPaths.find((path) => pathname.startsWith(path))
-  return !!x
-}

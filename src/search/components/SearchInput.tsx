@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import { getSearchType } from '../../../helpers/routing'
 import * as store from '../store'
 import SearchChips from './SearchChips'
@@ -38,6 +38,7 @@ const SearchInput = () => {
   const addText = store.useAddText()
   const clearSearchQuery = store.useClearSearchQuery()
   const searchQueryValid = useRecoilValue(store.searchQueryValid)
+  const { state } = useRecoilValueLoadable(store.searchResults)
 
   useEffect(() => {
     window.addEventListener('beforeunload', setSearchQueryValid)
@@ -52,6 +53,7 @@ const SearchInput = () => {
   }, [window.innerHeight])
 
   const handleClose = () => isQueryValid && setOpen(false)
+  const disabled = state === 'loading'
 
   return (
     <RootContainer>
@@ -82,8 +84,9 @@ const SearchInput = () => {
         fullWidth
         value={['1']}
         options={[]}
-        renderTags={() => <SearchChips />}
+        renderTags={() => <SearchChips disabled={disabled} />}
         filterSelectedOptions
+        disabled={disabled}
         renderInput={(params) => (
           <TextFieldInput {...params} placeholder="Search..." />
         )}
@@ -95,7 +98,7 @@ const SearchInput = () => {
         sx={{
           borderRadius: 0,
         }}
-        disabled={searchQueryValid.length === 0}
+        disabled={searchQueryValid.length === 0 || disabled}
       >
         <ManageSearch />
       </Button>
