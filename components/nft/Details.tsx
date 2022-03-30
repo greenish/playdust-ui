@@ -24,8 +24,9 @@ import { Suspense, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { getNFTCensorStatus } from '../../helpers/auctionHouseApi'
 import { shortenPublicKey } from '../../helpers/utils'
+import FlaggedModal from '../../src/search/components/FlaggedModal'
+import * as store from '../../src/search/store'
 import { fetchNFTDetails } from '../../store'
-import FlaggedModal from '../utils/FlaggedModal'
 import TradeNFT from './TradeNFT'
 
 const ImageTradeContainer = styled.div`
@@ -70,12 +71,12 @@ enum NFTStatus {
 }
 
 const Details = ({ mint }: DetailsProps) => {
-  const [open, setOpen] = useState(false)
   const details = useRecoilValue(fetchNFTDetails(mint))
   const [censored, setCensored] = useState(false)
   const [nsfw, setNSFW] = useState(false)
   const [visible, setVisible] = useState(false)
   const { publicKey } = useWallet()
+  const openFlaggedModal = store.useOpenFlaggedModal()
 
   useEffect(() => {
     getNFTCensorStatus(mint)
@@ -98,8 +99,9 @@ const Details = ({ mint }: DetailsProps) => {
 
   return (
     <Box mx={1}>
+      <FlaggedModal />
       <ReportButton
-        onClick={() => setOpen(true)}
+        onClick={() => openFlaggedModal(mint, 'NFT')}
         color="error"
         variant="outlined"
       >
@@ -226,7 +228,6 @@ const Details = ({ mint }: DetailsProps) => {
           </Card>
         </Grid>
       </Grid>
-      <FlaggedModal open={open} setOpen={setOpen} id={mint} type="NFT" />
     </Box>
   )
 }

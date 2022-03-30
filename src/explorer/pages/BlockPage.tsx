@@ -1,3 +1,4 @@
+import WindowProps from '../../app/types/WindowProps'
 import {
   BlockDetails,
   BlockOverview,
@@ -5,11 +6,9 @@ import {
   ExplorerHeader,
 } from '../components'
 
-interface BlockPageProps {
-  slot: number
-}
+export const BlockPage = ({ state }: WindowProps) => {
+  const slot = Number(state)
 
-export const BlockPage = ({ slot }: BlockPageProps) => {
   return (
     <ExplorerContainer>
       <ExplorerHeader label="Block" filter="block" value={slot.toString()} />

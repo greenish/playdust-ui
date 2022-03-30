@@ -1,8 +1,11 @@
 import styled from '@emotion/styled'
 import { Chip, Typography } from '@mui/material'
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import * as store from '../store'
-import type { CollectionQuery, QueryType } from '../types/ComposedQueryType'
+import * as searchStore from '../../search/store'
+import type {
+  CollectionQuery,
+  QueryType,
+} from '../../search/types/ComposedQueryType'
 
 const ChipContainer = styled.div`
   display: flex;
@@ -24,7 +27,7 @@ const ParenTypography = styled(Typography)`
 
 const CollectionChip = ({ value }: CollectionQuery) => {
   const { state, contents } = useRecoilValueLoadable(
-    store.collectionById(value)
+    searchStore.collectionById(value)
   )
 
   if (state === 'hasValue') {
@@ -56,11 +59,12 @@ const getChipLabel = (child: QueryType) => {
 
 interface SearchChipsProps {
   disabled: boolean
+  removeTab: () => void
 }
 
-const SearchChips = ({ disabled }: SearchChipsProps) => {
-  const query = useRecoilValue(store.searchQueryValid)
-  const removeChild = store.useRemoveChild()
+const SearchChips = ({ disabled, removeTab }: SearchChipsProps) => {
+  const query = useRecoilValue(searchStore.searchQueryValid)
+  const removeChild = searchStore.useRemoveChild()
 
   return (
     <ChipContainer>
@@ -74,7 +78,9 @@ const SearchChips = ({ disabled }: SearchChipsProps) => {
               key={child.id}
               label={getChipLabel(child)}
               variant="outlined"
-              onDelete={() => removeChild(child.id)}
+              onDelete={() => {
+                query.flat().length === 1 ? removeTab() : removeChild(child.id)
+              }}
             />
           )
 

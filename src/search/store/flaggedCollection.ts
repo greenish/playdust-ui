@@ -1,11 +1,28 @@
-import { atom } from 'recoil'
+import { atom, useSetRecoilState } from 'recoil'
 
-export const flaggedModal = atom<boolean>({
-  key: 'flaggedModal',
-  default: false,
+interface FlaggedType {
+  id: string
+  type: 'Collection' | 'NFT' | undefined
+  open: boolean
+}
+
+export const flagged = atom<FlaggedType>({
+  key: 'flagged',
+  default: {
+    open: false,
+    id: '',
+    type: undefined,
+  },
 })
 
-export const flaggedId = atom<string>({
-  key: 'flaggedId',
-  default: '',
-})
+export const useOpenFlaggedModal = () => {
+  const setter = useSetRecoilState(flagged)
+
+  return (id: string, type: 'Collection' | 'NFT') => {
+    setter({
+      id,
+      type,
+      open: true,
+    })
+  }
+}

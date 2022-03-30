@@ -49,7 +49,7 @@ const TopContainer = styled.div`
 
 const ChildrenContainer = styled.div`
   position: absolute;
-  top: 8px;
+  top: 0;
   left: ${appBarWidth}px;
   bottom: 0;
   right: 0;
@@ -96,6 +96,8 @@ const AppBar = ({ children }: AppBarProps) => {
     return <></>
   }
 
+  const inWindowManager = router.pathname === '/'
+
   return (
     <>
       <ThemeProvider theme={theme}>
@@ -111,8 +113,13 @@ const AppBar = ({ children }: AppBarProps) => {
               {tabs.map((tab, idx) => (
                 <TabButton
                   key={tab.id}
-                  isActive={tab.id === selectedTab?.id}
-                  onClick={() => setSelectedTab(tab.id)}
+                  isActive={inWindowManager && tab.id === selectedTab?.id}
+                  onClick={() => {
+                    if (!inWindowManager) {
+                      router.push('/')
+                    }
+                    setSelectedTab(tab.id)
+                  }}
                 >
                   <Typography>{idx + 1}</Typography>
                 </TabButton>
@@ -123,7 +130,7 @@ const AppBar = ({ children }: AppBarProps) => {
                 </IconButton>
               )}
             </TopContainer>
-            <WalletButton />
+            <WalletButton active={!inWindowManager} />
           </VerticalAppBarContent>
         </VerticalAppBar>
       </ThemeProvider>

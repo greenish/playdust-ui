@@ -54,7 +54,11 @@ export const AccountInputsContent = ({ signature }: AccountInputsProps) => {
           {message.accountKeys.map(
             (account: ParsedMessageAccount, idx: number) => {
               const { pubkey } = account
-              const pk = pubkey.toString()
+              let pk = ''
+
+              try {
+                pk = pubkey.toString()
+              } catch {}
               const preBalance = preBalances?.[idx] ?? 0
               const postBalance = postBalances?.[idx] ?? 0
 

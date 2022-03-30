@@ -13,17 +13,12 @@ import {
 } from '@mui/material'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useState } from 'react'
+import { useRecoilValue, useResetRecoilState } from 'recoil'
 import {
   setCollectionCensorStatus,
   setNFTCensorStatus,
-} from '../../helpers/auctionHouseApi'
-
-type FlaggedModalProps = {
-  open: boolean
-  setOpen: Function
-  id: string
-  type: string
-}
+} from '../../../helpers/auctionHouseApi'
+import * as store from '../store'
 
 enum CensorStatus {
   Censored,
@@ -31,10 +26,12 @@ enum CensorStatus {
   Other,
 }
 
-const FlaggedModal = ({ open, setOpen, id, type }: FlaggedModalProps) => {
+const FlaggedModal = () => {
   const [selected, setSelected] = useState(0)
   const [reason, setReason] = useState('')
   const { publicKey } = useWallet()
+  const { open, type, id } = useRecoilValue(store.flagged)
+  const close = useResetRecoilState(store.flagged)
 
   const handleSave = () => {
     if (type === 'NFT') {
@@ -42,11 +39,11 @@ const FlaggedModal = ({ open, setOpen, id, type }: FlaggedModalProps) => {
     } else {
       setCollectionCensorStatus(id, publicKey!.toBase58(), selected)
     }
-    setOpen(false)
+    close()
   }
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={open} onClose={() => close()}>
       <DialogTitle>Report</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -80,7 +77,7 @@ const FlaggedModal = ({ open, setOpen, id, type }: FlaggedModalProps) => {
         ) : null}
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
+        <Button onClick={() => close()}>Cancel</Button>
         <Button onClick={handleSave}>Save</Button>
       </DialogActions>
     </Dialog>

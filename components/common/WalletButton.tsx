@@ -18,7 +18,7 @@ import { autoRefresh } from '../../helpers/auctionHouseApi'
 import { shortenPublicKey } from '../../helpers/utils'
 import * as store from '../../store'
 
-const WalletButton = () => {
+const WalletButton = ({ active }: { active: boolean }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const walletModal = useWalletModal()
   const wallet = useWallet()
@@ -27,7 +27,7 @@ const WalletButton = () => {
     store.solanaClusters
   )
   const router = useRouter()
-  const [cookies, setCookie, removeCookie] = useCookies([
+  const [cookies, _setCookie, removeCookie] = useCookies([
     'authToken',
     'expires_at',
     'nonce',
@@ -54,7 +54,7 @@ const WalletButton = () => {
 
   return (
     <>
-      <Fab {...buttonProps} size="small">
+      <Fab {...buttonProps} size="small" color={active ? 'primary' : 'default'}>
         <Person />
       </Fab>
       <Menu

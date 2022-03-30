@@ -3,19 +3,20 @@ import { ManageSearch, Warning } from '@mui/icons-material'
 import {
   Autocomplete,
   Button,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   TextField,
   Tooltip,
 } from '@mui/material'
-import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import { getSearchType } from '../../../helpers/routing'
-import * as store from '../store'
+import SearchGraph from '../../search/components/SearchGraph'
+import * as searchStore from '../../search/store'
+import getWindowType from '../helpers/getWindowType'
+import WindowProps from '../types/WindowProps'
 import SearchChips from './SearchChips'
-import SearchGraph from './SearchGraph'
 
 const RootContainer = styled.div`
   display: flex;
@@ -29,16 +30,15 @@ const TextFieldInput = styled(TextField)(() => ({
   },
 }))
 
-const SearchInput = () => {
-  const router = useRouter()
+const SearchInput = ({ addTab, state, type, removeTab }: WindowProps) => {
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
-  const isQueryValid = useRecoilValue(store.isSearchQueryValid)
-  const setSearchQueryValid = store.useSetSearchQueryValid()
-  const addText = store.useAddText()
-  const clearSearchQuery = store.useClearSearchQuery()
-  const searchQueryValid = useRecoilValue(store.searchQueryValid)
-  const { state } = useRecoilValueLoadable(store.searchResults)
+  const isQueryValid = useRecoilValue(searchStore.isSearchQueryValid)
+  const setSearchQueryValid = searchStore.useSetSearchQueryValid()
+  const addText = searchStore.useAddText()
+  const searchQueryValid = useRecoilValue(searchStore.searchQueryValid)
+  const loadable = useRecoilValueLoadable(searchStore.searchResults)
+  const isSearchable = type === 'search' || type === 'home'
 
   useEffect(() => {
     window.addEventListener('beforeunload', setSearchQueryValid)
@@ -53,7 +53,7 @@ const SearchInput = () => {
   }, [window.innerHeight])
 
   const handleClose = () => isQueryValid && setOpen(false)
-  const disabled = state === 'loading'
+  const disabled = loadable.state === 'loading' || !isSearchable
 
   return (
     <RootContainer>
@@ -64,31 +64,43 @@ const SearchInput = () => {
         onClose={() => setSearchOpen(false)}
         onChange={(_evt, [_placeholder, value], reason) => {
           if (reason === 'clear') {
-            return clearSearchQuery()
+            return removeTab()
           }
 
           if (!value || !value.length) {
             return
           }
 
-          const searchType = getSearchType(value)
-
-          if (!searchType) {
-            addText(value, 'and')
-          } else {
-            router.push(`/${searchType}/${value.trim()}`)
+          if (getWindowType(value) !== 'search') {
+            return addTab(value)
           }
+
+          return addText(value, 'and')
         }}
         freeSolo
         multiple
         fullWidth
         value={['1']}
         options={[]}
-        renderTags={() => <SearchChips disabled={disabled} />}
+        renderTags={() =>
+          isSearchable ? (
+            <SearchChips disabled={disabled} removeTab={removeTab} />
+          ) : (
+            <Chip
+              size="small"
+              label={state}
+              variant="outlined"
+              onDelete={() => removeTab()}
+            />
+          )
+        }
         filterSelectedOptions
         disabled={disabled}
         renderInput={(params) => (
-          <TextFieldInput {...params} placeholder="Search..." />
+          <TextFieldInput
+            {...params}
+            placeholder={isSearchable ? 'Search...' : ''}
+          />
         )}
       />
       <Button

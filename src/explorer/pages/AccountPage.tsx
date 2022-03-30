@@ -1,4 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
+import WindowProps from '../../app/types/WindowProps'
 import {
   AccountDetails,
   AccountOverview,
@@ -6,11 +7,8 @@ import {
   ExplorerHeader,
 } from '../components'
 
-interface AccountPageProps {
-  address: string
-}
-
-export const AccountPage = ({ address }: AccountPageProps) => {
+export const AccountPage = ({ state }: WindowProps) => {
+  const address = state
   let pubkey: PublicKey | undefined
 
   try {

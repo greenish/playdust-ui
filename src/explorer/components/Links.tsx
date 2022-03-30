@@ -23,7 +23,7 @@ export function ExplorerLink({
   return (
     <>
       {allowCopy && <CopyButton value={to} />}
-      <Link href={`${url}/${to}`}>
+      <Link href={`${url}=${to}`}>
         <pre style={{ display: 'inline' }}>{display}</pre>
       </Link>
     </>
@@ -31,21 +31,21 @@ export function ExplorerLink({
 }
 
 export function AccountLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="/account" {...props} />
+  return <ExplorerLink url="?account" {...props} />
 }
 
 export function SlotLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="/block" {...props} />
+  return <ExplorerLink url="?slot" {...props} />
 }
 
 export function ProgramLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="/program" {...props} />
+  return <ExplorerLink url="?program" {...props} />
 }
 
 export function TxLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="/tx" {...props} />
+  return <ExplorerLink url="?tx" {...props} />
 }
 
 export function EpochLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="/epoch" {...props} />
+  return <ExplorerLink url="?epoch" {...props} />
 }

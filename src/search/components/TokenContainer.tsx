@@ -47,11 +47,12 @@ const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
       >
         {tokenRange.map((tokenIdx) => {
           const actualIdx = startingIdx + tokenIdx
+          const metadata = tokens[actualIdx]
 
           return actualIdx < total ? (
             <TokenCard
-              key={actualIdx}
-              metadata={tokens[actualIdx]}
+              key={metadata?.mint || actualIdx}
+              metadata={metadata}
               loading={isLoading}
             />
           ) : (

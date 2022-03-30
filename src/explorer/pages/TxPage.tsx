@@ -1,4 +1,5 @@
-import { getSearchType } from '../../../helpers/routing'
+import getWindowType from '../../app/helpers/getWindowType'
+import WindowProps from '../../app/types/WindowProps'
 import {
   AccountInputs,
   ErrorCard,
@@ -9,13 +10,10 @@ import {
   TransactionOverview,
 } from '../components'
 
-interface TxPageProps {
-  signature: string
-}
-
-export const TxPage = ({ signature }: TxPageProps) => {
+export const TxPage = ({ state }: WindowProps) => {
+  const signature = state
   const content = (() => {
-    if (getSearchType(signature) !== 'tx') {
+    if (getWindowType(signature) !== 'transaction') {
       return <ErrorCard message={`Signature "${signature}" is not valid`} />
     }
 

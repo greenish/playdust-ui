@@ -2,11 +2,7 @@ import styled from '@emotion/styled'
 import FlagIcon from '@mui/icons-material/Flag'
 import { Chip, IconButton, Tooltip } from '@mui/material'
 import { useMemo } from 'react'
-import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil'
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import * as store from '../store'
 import CollectionCard from './CollectionCard'
 
@@ -49,8 +45,7 @@ const CollectionOverview = () => {
     store.collectionOverview(collectionId)
   )
   const initCollectionQuery = store.useInitializeCollectionQuery()
-  const setOpen = useSetRecoilState(store.flaggedModal)
-  const setId = useSetRecoilState(store.flaggedId)
+  const openFlaggedModal = store.useOpenFlaggedModal()
 
   const { volume, floorPrice, listedItems, similar, elementCount } =
     useMemo(() => {
@@ -81,10 +76,7 @@ const CollectionOverview = () => {
     <RootContainer>
       <Tooltip title="Report this collection">
         <ReportButton
-          onClick={() => {
-            setId(collectionId)
-            setOpen(true)
-          }}
+          onClick={() => openFlaggedModal(collectionId, 'Collection')}
         >
           <FlagIcon />
         </ReportButton>

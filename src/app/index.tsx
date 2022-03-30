@@ -1,9 +1,11 @@
 import styled from '@emotion/styled'
+import { CircularProgress } from '@mui/material'
 import { useRouter } from 'next/router'
+import { Suspense, useEffect, useMemo } from 'react'
 import { RecoilRoot, useRecoilValue } from 'recoil'
-import Search from '../search'
-import SearchInput from '../search/components/SearchInput'
-import Home from './components/Home'
+import SearchInput from './components/SearchInput'
+import WindowSwitch from './components/WindowSwitch'
+import getWindowType from './helpers/getWindowType'
 import * as store from './store'
 import WindowProps from './types/WindowProps'
 
@@ -15,13 +17,20 @@ const RootContainer = styled.div`
 `
 
 const SearchInputContainer = styled.div`
-  padding: 8px 16px;
+  padding: 16px;
   position: sticky;
   width: 100%;
 `
 
 const ContentContainer = styled.div`
   overflow: auto;
+`
+
+const SpinnerContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
 `
 
 const App = () => {
@@ -31,32 +40,59 @@ const App = () => {
   const addTab = store.useAddTab()
   const removeTab = store.useRemoveTab()
 
+  const props = useMemo<WindowProps>(() => {
+    const currentId = selectedTab?.id || ''
+    const state = selectedTab?.state[0] || ''
+    const removeCurrentTab = () => removeTab(currentId)
+
+    const props: WindowProps = {
+      state,
+      setState: (nextState: string) => {
+        nextState === '' ? removeCurrentTab : setTabState(nextState, currentId)
+      },
+      addTab,
+      removeTab: removeCurrentTab,
+      type: getWindowType(state),
+    }
+
+    return props
+  }, [selectedTab])
+
+  useEffect(() => {
+    const handleRouteChange = (nextPath: string) => {
+      if (nextPath.startsWith('/?')) {
+        const nextState = nextPath.slice(nextPath.indexOf('=') + 1)
+        props.setState(nextState)
+      }
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [props])
+
   if (!router.isReady) {
     return <></>
-  }
-
-  const props: WindowProps = {
-    state: selectedTab?.state[0] || '',
-    setState: (nextState: string) => {
-      const id = selectedTab?.id || ''
-
-      nextState === '' ? removeTab(id) : setTabState(nextState, id)
-    },
-    addTab,
   }
 
   return (
     <RecoilRoot key={selectedTab?.id || 'home'}>
       <RootContainer>
         <SearchInputContainer>
-          <SearchInput />
+          <SearchInput {...props} />
         </SearchInputContainer>
         <ContentContainer>
-          {props.state === '' ? (
-            <Home {...props} />
-          ) : (
-            <Search key={props.state} {...props} />
-          )}
+          <Suspense
+            fallback={
+              <SpinnerContainer>
+                <CircularProgress />
+              </SpinnerContainer>
+            }
+          >
+            <WindowSwitch {...props} />
+          </Suspense>
         </ContentContainer>
       </RootContainer>
     </RecoilRoot>
