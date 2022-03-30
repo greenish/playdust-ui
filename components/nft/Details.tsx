@@ -2,6 +2,8 @@ import styled from '@emotion/styled'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import FactCheckIcon from '@mui/icons-material/FactCheck'
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import {
   Avatar,
   Box,
@@ -17,8 +19,9 @@ import {
   Typography,
 } from '@mui/material'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import { getNFTCensorStatus } from '../../helpers/auctionHouseApi'
 import { shortenPublicKey } from '../../helpers/utils'
 import { fetchNFTDetails } from '../../store'
 import TradeNFT from './TradeNFT'
@@ -27,13 +30,59 @@ const ImageTradeContainer = styled.div`
   display: flex;
 `
 
+const BlurImage = styled.img`
+  filter: blur(1.5rem);
+`
+
+const BlurImageContainer = styled.div`
+  overflow: hidden;
+`
+
+const CensoredContainer = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+`
+
+const VisibilityContainer = styled.div`
+  cursor: pointer;
+  padding: 5px 8px;
+  position: absolute;
+  z-index: 10;
+`
+
 interface DetailsProps {
   mint: string
 }
 
+enum NFTStatus {
+  Censored,
+  NSFW,
+}
+
 const Details = ({ mint }: DetailsProps) => {
   const details = useRecoilValue(fetchNFTDetails(mint))
+  const [censored, setCensored] = useState(false)
+  const [nsfw, setNSFW] = useState(false)
+  const [visible, setVisible] = useState(false)
   const { publicKey } = useWallet()
+
+  useEffect(() => {
+    getNFTCensorStatus(mint)
+      .then((data) => {
+        if (data.type === NFTStatus.Censored) {
+          setCensored(true)
+        } else if (data.type === NFTStatus.NSFW) {
+          setNSFW(true)
+        }
+      })
+      .catch((e) => {
+        setCensored(false)
+        setNSFW(false)
+      })
+  }, [details])
 
   if (!details) {
     return <Typography>Unable to fecth {mint}</Typography>
@@ -43,17 +92,55 @@ const Details = ({ mint }: DetailsProps) => {
     <Box mx={1}>
       <ImageTradeContainer>
         <div>
-          <img
-            alt={details.data.name || ''}
-            src={details.offChainData.image}
-            height={500}
-          />
+          {censored || nsfw ? (
+            <BlurImageContainer>
+              {nsfw ? (
+                <VisibilityContainer>
+                  {visible ? (
+                    <VisibilityOffIcon onClick={() => setVisible(false)} />
+                  ) : (
+                    <VisibilityIcon onClick={() => setVisible(true)} />
+                  )}
+                </VisibilityContainer>
+              ) : null}
+              {visible ? (
+                <img
+                  alt={details.data.name || ''}
+                  src={details.offChainData.image}
+                  height={500}
+                />
+              ) : (
+                <BlurImage
+                  alt={details.data.name || ''}
+                  src={details.offChainData.image}
+                  height={500}
+                />
+              )}
+            </BlurImageContainer>
+          ) : (
+            <img
+              alt={details.data.name || ''}
+              src={details.offChainData.image}
+              height={500}
+            />
+          )}
           <h1>{details.data.name}</h1>
         </div>
         {publicKey && (
-          <Suspense fallback={<CircularProgress />}>
-            <TradeNFT mint={mint} publicKey={publicKey} />
-          </Suspense>
+          <>
+            {censored ? (
+              <CensoredContainer>
+                <Typography color="error" variant="h5">
+                  NFT censored
+                </Typography>
+                <Typography color="#757575">Trading not available</Typography>
+              </CensoredContainer>
+            ) : (
+              <Suspense fallback={<CircularProgress />}>
+                <TradeNFT mint={mint} publicKey={publicKey} />
+              </Suspense>
+            )}
+          </>
         )}
       </ImageTradeContainer>
       <Grid container spacing={3}>

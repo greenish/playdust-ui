@@ -166,4 +166,10 @@ export const autoRefresh = (
   )
 }
 
+export const getNFTCensorStatus = async (mint: string) => {
+  const { data } = await instance.get(`/censor/mint/${mint}`)
+
+  return data
+}
+
 export default instance
