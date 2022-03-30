@@ -1,22 +1,31 @@
 import {
   ConfirmedSignatureInfo,
+  ParsedConfirmedTransaction,
   PublicKey,
   TransactionResponse,
 } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue, waitForAll } from 'recoil'
 import { fetchSignaturesForAddress } from './fetchSignaturesForAddress'
-import { fetchRawTransaction } from './fetchTransaction'
+import {
+  fetchParsedConfirmedTransaction,
+  fetchRawTransaction,
+} from './fetchTransaction'
 
 export interface SignaturesAndTransactions {
   signatures: ConfirmedSignatureInfo[]
   transactions: (TransactionResponse | null)[]
 }
 
-export const fetchAccountHistory = selectorFamily<
+export interface SignaturesAndParsedTransactions {
+  signatures: ConfirmedSignatureInfo[]
+  transactions: (ParsedConfirmedTransaction | null)[]
+}
+
+export const fetchRawAccountHistory = selectorFamily<
   SignaturesAndTransactions,
   any
 >({
-  key: 'accountHistory',
+  key: 'rawAccountHistory',
   get:
     (pubkey) =>
     async ({ get }) => {
@@ -37,11 +46,62 @@ export const fetchAccountHistory = selectorFamily<
     },
 })
 
+export const useRawAccountHistory = (pubkey: PublicKey) =>
+  useRecoilValue(fetchRawAccountHistory(pubkey))
+
+export const fetchAccountHistory = selectorFamily<
+  SignaturesAndParsedTransactions,
+  any
+>({
+  key: 'accountHistory',
+  get:
+    (pubkey) =>
+    async ({ get }) => {
+      const signatures = get(fetchSignaturesForAddress(pubkey))
+
+      const transactions = get(
+        waitForAll(
+          signatures.map((signature) => {
+            return fetchParsedConfirmedTransaction(signature.signature)
+          })
+        )
+      )
+
+      return {
+        signatures,
+        transactions,
+      }
+    },
+})
+
 export const useAccountHistory = (pubkey: PublicKey) =>
   useRecoilValue(fetchAccountHistory(pubkey))
 
-export const fetchAccountHistories = selectorFamily<
+export const fetchRawAccountHistories = selectorFamily<
   SignaturesAndTransactions[],
+  any[]
+>({
+  key: 'rawAccountHistories',
+  get:
+    (pubkeys) =>
+    async ({ get }) => {
+      const allSignaturesAndTransactions = get(
+        waitForAll(
+          pubkeys.map((pubkey: PublicKey) => {
+            return fetchRawAccountHistory(pubkey)
+          })
+        )
+      )
+
+      return allSignaturesAndTransactions
+    },
+})
+
+export const useRawAccountHistories = (pubkeys: PublicKey[]) =>
+  useRecoilValue(fetchRawAccountHistories(pubkeys))
+
+export const fetchAccountHistories = selectorFamily<
+  SignaturesAndParsedTransactions[],
   any[]
 >({
   key: 'accountHistories',

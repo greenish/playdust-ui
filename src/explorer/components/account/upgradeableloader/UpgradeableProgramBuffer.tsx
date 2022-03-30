@@ -2,6 +2,7 @@ import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { compact } from '../../../../../helpers/utils'
 import { getSpace } from '../../../helpers/account'
 import { useAccountInfo } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink } from '../../Links'
@@ -47,8 +48,11 @@ export const UpgradeableProgramBuffer = (
   props: UpgradeableLoaderAccountProps
 ) => {
   return (
-    <ExplorerCard skeleton="table" title="Program Deploy Buffer Account">
-      <UpgradeableProgramBufferContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Program Deploy Buffer Account">
+        <UpgradeableProgramBufferContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

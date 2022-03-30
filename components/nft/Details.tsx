@@ -70,7 +70,7 @@ enum NFTStatus {
   NSFW,
 }
 
-const Details = ({ mint }: DetailsProps) => {
+export const Details = ({ mint }: DetailsProps) => {
   const details = useRecoilValue(fetchNFTDetails(mint))
   const [censored, setCensored] = useState(false)
   const [nsfw, setNSFW] = useState(false)

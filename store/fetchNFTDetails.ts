@@ -12,7 +12,7 @@ const fetchNFTDetails = selectorFamily<SearchMetadata | undefined, string>({
       try {
         const { data } = await api.get<SearchMetadata>(`/mint?address=${mint}`)
 
-        if (data) {
+        if (0 && data) {
           return data
         }
 

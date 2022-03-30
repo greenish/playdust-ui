@@ -59,7 +59,7 @@ type Ask = {
   isActive: boolean
 }
 
-const TradeNFT = ({ mint, publicKey }: TradeNFTProps) => {
+export const TradeNFT = ({ mint, publicKey }: TradeNFTProps) => {
   const owned = useRecoilValue(fetchOwnedOnchain(publicKey))
   const confirmTransaction = useConfirmTransaction()
   const [bid, setBid] = useState(0)

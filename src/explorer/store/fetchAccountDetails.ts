@@ -91,7 +91,7 @@ export const fetchAccountDetails = selectorFamily<AccountDetails, any>({
           await Metadata.getPDA(pubkey as PublicKey)
         )
         if (metadata) {
-          const editionInfo = await getEditionInfo(metadata, connection)
+          const editionInfo = await getEditionInfo(connection, metadata)
           const id = pubkeyToString(pubkey as PublicKey)
           const metadataJSON = await getMetaDataJSON(id, metadata.data)
           nftData = {
@@ -113,8 +113,42 @@ export const fetchAccountDetails = selectorFamily<AccountDetails, any>({
     },
 })
 
-export const useAccountDetails = (accountId: PublicKey) =>
-  useRecoilValue(fetchAccountDetails(accountId))
+export const fetchEditionInfo = selectorFamily<any, any>({
+  key: 'editionInfo',
+  get:
+    (pubkey: PublicKey) =>
+    async ({ get }) => {
+      const { endpoint } = get(solanaCluster)
 
-export const useAccountDetailsLoadable = (accountId: PublicKey) =>
-  useRecoilValueLoadable(fetchAccountDetails(accountId))
+      const connection = new Connection(endpoint)
+
+      let parsedAccount = await connection.getParsedAccountInfo(
+        pubkey as PublicKey
+      )
+
+      const data = parsedAccount?.value?.data as ParsedAccountData
+
+      if (data?.parsed?.type === 'mint') {
+        const metadata = await Metadata.load(
+          connection,
+          await Metadata.getPDA(pubkey as PublicKey)
+        )
+
+        if (metadata) {
+          const editionInfo = await getEditionInfo(connection, metadata)
+          return editionInfo
+        }
+      }
+
+      return null
+    },
+})
+
+export const useAccountDetails = (pubkey: PublicKey) =>
+  useRecoilValue(fetchAccountDetails(pubkey))
+
+export const useAccountDetailsLoadable = (pubkey: PublicKey) =>
+  useRecoilValueLoadable(fetchAccountDetails(pubkey))
+
+export const useEditionInfo = (pubkey: PublicKey) =>
+  useRecoilValue(fetchEditionInfo(pubkey))

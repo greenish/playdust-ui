@@ -1,6 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { compact } from '../../../../../helpers/utils'
 import { useAccountInfo } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { ExternalLink } from '../../ExternalLinks'
@@ -54,8 +55,11 @@ const ValidatorInfoContent = ({ pubkey }: ConfigAccountProps) => {
 // 7qUt9itGTzT7QLNTbmoPwXCKR93pd4i8TqZp1BEj5ah8
 export const ValidatorInfo = (props: ConfigAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Validator Info">
-      <ValidatorInfoContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Validator Info">
+        <ValidatorInfoContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

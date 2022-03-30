@@ -4,7 +4,7 @@ import solanaCluster from '../../../store/solanaCluster'
 import { pageIdx } from './pageIdx'
 
 export type TokenAccountBalancePairWithOwner = TokenAccountBalancePair & {
-  owner?: PublicKey
+  owner?: string
 }
 
 export const fetchLargestAccounts = selectorFamily<
@@ -34,10 +34,10 @@ export const fetchLargestAccounts = selectorFamily<
               )
             ).value
             if (accountInfo && 'parsed' in accountInfo.data) {
-              const info = accountInfo.data as any
+              const owner = accountInfo.data.parsed.info.owner as any
               return {
                 ...account,
-                owner: info.owner,
+                owner,
               }
             }
             return account

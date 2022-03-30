@@ -1,6 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { compact } from '../../../../../helpers/utils'
 import { useAccountInfo } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink } from '../../Links'
@@ -45,8 +46,11 @@ const StakeConfigContent = ({ pubkey }: ConfigAccountProps) => {
 
 export const StakeConfig = (props: ConfigAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Stake Config">
-      <StakeConfigContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Stake Config">
+        <StakeConfigContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

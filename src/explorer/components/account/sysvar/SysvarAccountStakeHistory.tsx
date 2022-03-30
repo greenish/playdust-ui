@@ -1,5 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { useAccountInfo } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink } from '../../Links'
@@ -9,8 +10,6 @@ interface SysvarAccountProps {
   pubkey: PublicKey
 }
 
-// SysvarStakeHistory1111111111111111111111111
-// History | Stake History
 const SysvarAccountStakeHistoryContent = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -26,10 +25,15 @@ const SysvarAccountStakeHistoryContent = ({ pubkey }: SysvarAccountProps) => {
   return <ExplorerGrid rows={rows} />
 }
 
+// SysvarStakeHistory1111111111111111111111111
+// History | Stake History
 export const SysvarAccountStakeHistory = (props: SysvarAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Sysvar: Stake History">
-      <SysvarAccountStakeHistoryContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Sysvar: Stake History">
+        <SysvarAccountStakeHistoryContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

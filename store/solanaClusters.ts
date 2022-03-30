@@ -6,7 +6,7 @@ const { persistAtom } = recoilPersist()
 
 const MAINNET = {
   network: WalletAdapterNetwork.Mainnet,
-  endpoint: 'https://api.mainnet-beta.solana.com',
+  endpoint: 'https://explorer-api.mainnet-beta.solana.com/', // 'https://solana-api.projectserum.com', 'https://api.mainnet-beta.solana.com',
 }
 
 const DEVNET = {

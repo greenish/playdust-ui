@@ -1,5 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { useAccountInfo } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink } from '../../Links'
@@ -28,8 +29,11 @@ const SysvarAccountSlotHashesContent = ({ pubkey }: SysvarAccountProps) => {
 
 export const SysvarAccountSlotHashes = (props: SysvarAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Sysvar: Slot Hashes">
-      <SysvarAccountSlotHashesContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Sysvar: Slot Hashes">
+        <SysvarAccountSlotHashesContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

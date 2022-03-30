@@ -1,35 +1,26 @@
+import { Chip } from '@mui/material'
+import { PublicKey } from '@solana/web3.js'
+import { pubkeyToString, toRelative } from '../../../helpers/utils'
+import { useRawAccountHistory } from '../store'
+import { ExplorerCard } from './ExplorerCard'
+import { AccountLink, SlotLink, TxLink } from './Links'
+import { SolBalance } from './SolBalance'
 import {
-  Chip,
-  Paper,
+  DataCell,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-} from '@mui/material'
-import { PublicKey } from '@solana/web3.js'
-import { pubkeyToString, toRelative } from '../../../helpers/utils'
-import { useAccountHistory } from '../store'
-import { ExplorerCard } from './ExplorerCard'
-import { AccountLink, SlotLink, TxLink } from './Links'
-import { SolBalance } from './SolBalance'
+} from './Table'
 
 interface TransactionsProps {
   pubkey: PublicKey
 }
 
 export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
-  const { signatures, transactions } = useAccountHistory(pubkey)
-
-  // Use to x-ref signatures against transactions
-  const signatureMap = signatures.reduce(
-    (accum: Record<string, any>, signature) => {
-      accum[signature.signature] = signature
-      return accum
-    },
-    {}
-  )
+  const { transactions } = useRawAccountHistory(pubkey)
 
   const rows = transactions.map((transaction) => {
     if (!transaction) {
@@ -94,15 +85,15 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
             key={idx}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
-            <TableCell component="th" scope="row">
+            <DataCell component="th" scope="row">
               {row.status}
-            </TableCell>
-            <TableCell>{row.signature}</TableCell>
-            <TableCell>{row.block}</TableCell>
-            <TableCell>{row.time}</TableCell>
-            <TableCell>{row.instructions}</TableCell>
-            <TableCell>{row.by}</TableCell>
-            <TableCell>{row.fee}</TableCell>
+            </DataCell>
+            <DataCell>{row.signature}</DataCell>
+            <DataCell>{row.block}</DataCell>
+            <DataCell>{row.time}</DataCell>
+            <DataCell>{row.instructions}</DataCell>
+            <DataCell>{row.by}</DataCell>
+            <DataCell>{row.fee}</DataCell>
           </TableRow>
         )
       })
@@ -113,7 +104,7 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
     )
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer>
       <Table>
         <TableHead>
           <TableRow>

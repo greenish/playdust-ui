@@ -2,6 +2,7 @@ import {
   Box,
   Grid,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableRow,
@@ -65,13 +66,17 @@ export const ExplorerGrid = ({ rows }: ExplorerGridProps) => {
   })
 
   return (
-    <TableContainer
+    <Box
       sx={{
         backgroundColor: '#efefef',
         borderRadius: '12px',
       }}
     >
-      <Table>{content}</Table>
-    </TableContainer>
+      <TableContainer>
+        <Table>
+          <TableBody>{content}</TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   )
 }

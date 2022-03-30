@@ -5,8 +5,8 @@ export const EpochPage = ({ state }: WindowProps) => {
   const epoch = Number(state)
 
   return (
-    <ExplorerContainer>
-      <ExplorerHeader label="Epoch" filter="epoch" value={epoch.toString()} />
+    <ExplorerContainer filter="epoch" value={epoch.toString()}>
+      <ExplorerHeader label="Epoch" />
       <EpochOverview epoch={epoch} />
     </ExplorerContainer>
   )

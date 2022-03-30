@@ -1,6 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { toLocaleString } from '../../../../helpers/utils'
 import { useAccountInfo } from '../../store'
+import { AccountDetails } from '../AccountDetails'
 import { ExplorerCard } from '../ExplorerCard'
 import { ExplorerGrid } from '../ExplorerGrid'
 import { AccountLink, SlotLink } from '../Links'
@@ -60,8 +61,11 @@ export const VoteAccountContent = ({ pubkey }: VoteAccountProps) => {
 // Fx9gdBmp4Rer7rxu139ofGKcx3iffKS91gg2kFUeBvjD
 export const VoteAccount = (props: VoteAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Vote Overview">
-      <VoteAccountContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Vote Overview">
+        <VoteAccountContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

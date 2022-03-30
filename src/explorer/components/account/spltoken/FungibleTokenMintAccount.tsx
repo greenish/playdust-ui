@@ -1,6 +1,7 @@
-import { Box, Chip, Grid, Typography } from '@mui/material'
+import { Box, Chip, Grid, Stack, Typography } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { ReactNode } from 'react'
+import { Instructions, Transfers } from '.'
 import {
   abbreviatedNumber,
   compact,
@@ -13,8 +14,12 @@ import {
   useTokenRegistry,
 } from '../../../store'
 import { ExplorerGrid } from '../../ExplorerGrid'
+import { ExplorerTab, ExplorerTabs } from '../../ExplorerTabs'
 import { ExternalLink } from '../../ExternalLinks'
 import { AccountLink } from '../../Links'
+import { Transactions } from '../../Transactions'
+import { Distribution } from './Distribution'
+import { Metadata } from './Metadata'
 
 const IDENTICON_WIDTH = 64
 
@@ -94,11 +99,9 @@ export const FungibleTokenMintAccountStats = ({
 }: TokenOverviewProps) => {
   const tokenRegistry = useTokenRegistry()
 
-  const {
-    extensions: { coingeckoId },
-  } = tokenRegistry.get(pubkey.toBase58())
+  const tokenDetails = tokenRegistry.get(pubkey.toBase58())
 
-  const info = useCoinGecko(coingeckoId)
+  const info = useCoinGecko(tokenDetails?.extensions?.coingeckoId)
 
   let tokenPriceInfo
   let tokenPriceDecimals = 2
@@ -147,14 +150,14 @@ export const FungibleTokenMintAccountStats = ({
         <TokenStats
           header="Market Cap"
           details={abbreviatedNumber(market_cap)}
-          footer={last_updated}
+          footer={<>{last_updated.toString()}</>}
         />
       </Grid>
     </Grid>
   )
 }
 
-export const FungibleTokenMintAccountDetails = ({
+export const FungibleTokenMintAccountOverview = ({
   pubkey,
 }: TokenOverviewProps) => {
   const account = useAccountInfo(pubkey)
@@ -191,12 +194,27 @@ export const FungibleTokenMintAccountDetails = ({
   return <ExplorerGrid rows={rows} />
 }
 
+export const FungibleTokenMintAccountDetails = ({
+  pubkey,
+}: TokenOverviewProps) => {
+  const tabs: ExplorerTab[] = [
+    ['History', Transactions],
+    ['Transfers', Transfers],
+    ['Instructions', Instructions],
+    ['Distribution', Distribution],
+    ['Metadata', Metadata],
+  ]
+
+  return <ExplorerTabs tabs={tabs} pubkey={pubkey} />
+}
+
 export const FungibleTokenMintAccount = (props: TokenOverviewProps) => {
   return (
-    <>
+    <Stack spacing={2}>
       <FungibleTokenMintAccountHeader {...props} />
       <FungibleTokenMintAccountStats {...props} />
+      <FungibleTokenMintAccountOverview {...props} />
       <FungibleTokenMintAccountDetails {...props} />
-    </>
+    </Stack>
   )
 }

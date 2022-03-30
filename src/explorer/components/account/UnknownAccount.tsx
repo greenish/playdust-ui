@@ -1,10 +1,9 @@
 import { PublicKey } from '@solana/web3.js'
-import { useRecoilValue } from 'recoil'
 import { compact } from '../../../../helpers/utils'
-import { solanaCluster } from '../../../../store'
 import { getSpace } from '../../helpers/account'
 import { addressLabel, displayAddress } from '../../helpers/tx'
-import { useAccountInfo, useTokenRegistry } from '../../store'
+import { useAccountInfo, useSolanaCluster, useTokenRegistry } from '../../store'
+import { AccountDetails } from '../AccountDetails'
 import { ExplorerCard } from '../ExplorerCard'
 import { ExplorerGrid } from '../ExplorerGrid'
 import { AccountLink } from '../Links'
@@ -16,10 +15,10 @@ interface UnknownAccountProps {
 
 // To test this component use:
 // NativeLoader1111111111111111111111111111111 (no account, just pubkey)
-export const UnknownAccountContent = ({ pubkey }: UnknownAccountProps) => {
+export const UnknownAccountOverview = ({ pubkey }: UnknownAccountProps) => {
   const account = useAccountInfo(pubkey)
   const tokenRegistry = useTokenRegistry()
-  const cluster = useRecoilValue(solanaCluster)
+  const cluster = useSolanaCluster()
 
   // Even if there is no matching account, we still display the pubkey
 
@@ -67,8 +66,11 @@ export const UnknownAccountContent = ({ pubkey }: UnknownAccountProps) => {
 
 export const UnknownAccount = (props: UnknownAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Overview">
-      <UnknownAccountContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Overview">
+        <UnknownAccountOverview {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

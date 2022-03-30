@@ -1,5 +1,4 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { useRouter } from 'next/router'
 import { FunctionComponent } from 'react'
 import { useAccountDetails, useAccountInfo } from '../../store'
 import { ErrorCard } from '../ErrorCard'
@@ -7,6 +6,7 @@ import { ExplorerCard } from '../ExplorerCard'
 import {
   FungibleTokenMintAccount,
   MultisigAccount,
+  NonFungibleTokenMintAccount,
   TokenAccount,
 } from './spltoken'
 
@@ -16,14 +16,12 @@ interface SPLTokenAccountProps {
 
 const TokenMintAccountContent = (props: SPLTokenAccountProps) => {
   const { pubkey } = props
-  const router = useRouter()
   const details = useAccountDetails(pubkey)
 
   const { nftData, isMetaplexNFT } = details
 
   if (isMetaplexNFT && nftData) {
-    router.push(`/nfts/${pubkey.toBase58()}`)
-    return null
+    return <NonFungibleTokenMintAccount {...props} />
   }
 
   return <FungibleTokenMintAccount {...props} />
@@ -31,7 +29,7 @@ const TokenMintAccountContent = (props: SPLTokenAccountProps) => {
 
 export const TokenMintAccount = (props: SPLTokenAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Token Mint Account">
+    <ExplorerCard skeleton="table">
       <TokenMintAccountContent {...props} />
     </ExplorerCard>
   )
@@ -52,11 +50,11 @@ export const SPLTokenAccount = (props: SPLTokenAccountProps) => {
     return <ErrorCard message="Invalid account program" />
   }
 
-  const TokenAccountOverviewComponent = map[accountData?.parsed?.type]
+  const TokenAccountComponent = map[accountData?.parsed?.type]
 
-  if (!TokenAccountOverviewComponent) {
+  if (!TokenAccountComponent) {
     return <ErrorCard message="Invalid account type" />
   }
 
-  return <TokenAccountOverviewComponent {...props} />
+  return <TokenAccountComponent {...props} />
 }

@@ -8,6 +8,7 @@ import {
   useVerifiableBuilds,
   VerifiableBuild,
 } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink, SlotLink } from '../../Links'
@@ -87,8 +88,11 @@ const UpgradeableProgramContent = ({
 // FsJ3A3u2vn5cTVofAjvy6y5kwABJAqYWpe4975bi2epH
 export const UpgradeableProgram = (props: UpgradeableLoaderAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Upgradeable Program">
-      <UpgradeableProgramContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Upgradeable Program">
+        <UpgradeableProgramContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

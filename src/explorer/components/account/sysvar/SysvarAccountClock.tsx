@@ -1,6 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { toLocaleString } from '../../../../../helpers/utils'
 import { useAccountInfo } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink, EpochLink, SlotLink } from '../../Links'
@@ -10,8 +11,6 @@ interface SysvarAccountProps {
   pubkey: PublicKey
 }
 
-// SysvarC1ock11111111111111111111111111111111
-// History
 export const SysvarAccountClockContent = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -38,10 +37,15 @@ export const SysvarAccountClockContent = ({ pubkey }: SysvarAccountProps) => {
   return <ExplorerGrid rows={rows} />
 }
 
+// SysvarC1ock11111111111111111111111111111111
+// History
 export const SysvarAccountClock = (props: SysvarAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Sysvar: Clock">
-      <SysvarAccountClockContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Sysvar: Clock">
+        <SysvarAccountClockContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

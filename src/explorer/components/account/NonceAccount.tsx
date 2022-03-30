@@ -1,6 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { compact } from '../../../../helpers/utils'
 import { useAccountInfo } from '../../store'
+import { AccountDetails } from '../AccountDetails'
 import { ExplorerCard } from '../ExplorerCard'
 import { ExplorerGrid } from '../ExplorerGrid'
 import { AccountLink } from '../Links'
@@ -41,6 +42,7 @@ export const NonceAccount = (props: NonceAccountProps) => {
   return (
     <ExplorerCard skeleton="table" title="Nonce Overview">
       <NonceAccountContent {...props} />
+      <AccountDetails pubkey={props.pubkey} />
     </ExplorerCard>
   )
 }

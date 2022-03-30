@@ -1,5 +1,6 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { useAccountInfo } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink, SlotLink } from '../../Links'
@@ -9,8 +10,6 @@ interface SysvarAccountProps {
   pubkey: PublicKey
 }
 
-// SysvarEpochSchedu1e111111111111111111111111
-// History
 const SysvarAccountEpochScheduleContent = ({ pubkey }: SysvarAccountProps) => {
   const account = useAccountInfo(pubkey)
 
@@ -42,10 +41,15 @@ const SysvarAccountEpochScheduleContent = ({ pubkey }: SysvarAccountProps) => {
   return <ExplorerGrid rows={rows} />
 }
 
+// SysvarEpochSchedu1e111111111111111111111111
+// History
 export const SysvarAccountEpochSchedule = (props: SysvarAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Sysvar: Epoch Schedule">
-      <SysvarAccountEpochScheduleContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Sysvar: Epoch Schedule">
+        <SysvarAccountEpochScheduleContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

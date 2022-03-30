@@ -21,8 +21,8 @@ export const ConfigAccount = ({ pubkey }: ConfigAccountProps) => {
     return <ErrorCard />
   }
 
-  const Section =
+  const Account =
     map[(account.data as ParsedAccountData).parsed.type] || ErrorCard
 
-  return <Section pubkey={pubkey} />
+  return <Account pubkey={pubkey} />
 }

@@ -1,5 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { useAccountInfo } from '../../../store'
+import { AccountDetails } from '../../AccountDetails'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink } from '../../Links'
@@ -9,8 +10,6 @@ interface SysvarAccountProps {
   pubkey: PublicKey
 }
 
-// SysvarRecentB1ockHashes11111111111111111111
-// History | Blockhashes
 export const SysvarAccountRecentBlockhashesContent = ({
   pubkey,
 }: SysvarAccountProps) => {
@@ -28,10 +27,15 @@ export const SysvarAccountRecentBlockhashesContent = ({
   return <ExplorerGrid rows={rows} />
 }
 
+// SysvarRecentB1ockHashes11111111111111111111
+// History | Blockhashes
 export const SysvarAccountRecentBlockhashes = (props: SysvarAccountProps) => {
   return (
-    <ExplorerCard skeleton="table" title="Sysvar: Recent Blockhashes">
-      <SysvarAccountRecentBlockhashesContent {...props} />
-    </ExplorerCard>
+    <>
+      <ExplorerCard skeleton="table" title="Sysvar: Recent Blockhashes">
+        <SysvarAccountRecentBlockhashesContent {...props} />
+      </ExplorerCard>
+      <AccountDetails pubkey={props.pubkey} />
+    </>
   )
 }

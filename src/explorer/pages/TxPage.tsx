@@ -28,8 +28,8 @@ export const TxPage = ({ state }: WindowProps) => {
   })()
 
   return (
-    <ExplorerContainer>
-      <ExplorerHeader label="Transaction" filter="tx" value={signature} />
+    <ExplorerContainer filter="tx" value={signature}>
+      <ExplorerHeader label="Transaction" />
       {content}
     </ExplorerContainer>
   )

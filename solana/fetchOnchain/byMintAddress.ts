@@ -10,12 +10,12 @@ const getMetadataByMintAddress = async (
   try {
     const connection = new Connection(endpoint)
     const pda = await Metadata.getPDA(mint)
-    const { data } = await Metadata.load(connection, pda)
-    const offChainData = await fetchOffchain(data.data.uri)
+    const metadata = await Metadata.load(connection, pda)
+    const offChainData = await fetchOffchain(metadata.data.data.uri)
 
     return {
       mint,
-      data: data.data,
+      data: metadata.data.data,
       offChainData,
     }
   } catch (e) {

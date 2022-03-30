@@ -38,7 +38,7 @@ interface timeDivisions {
   name: Intl.RelativeTimeFormatUnit
 }
 
-const TransactionHistory = ({ mint }: TransactionHistoryProps) => {
+export const TransactionHistory = ({ mint }: TransactionHistoryProps) => {
   const [tab, setTab] = useState(0)
   const data = useRecoilValueLoadable(fetchNftTransactionsOnchain(mint))
 

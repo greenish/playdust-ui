@@ -11,9 +11,9 @@ import {
 import { ConfirmedSignatureInfo, PublicKey } from '@solana/web3.js'
 import {
   SignaturesAndTransactions,
-  useAccountHistories,
   useParsedConfirmedTransaction,
   useParsedTokenAccountsByOwner,
+  useRawAccountHistories,
   useTokenRegistry,
 } from '../store'
 import { ExplorerCard } from './ExplorerCard'
@@ -204,7 +204,7 @@ export const TokenHistoryContent = ({ pubkey }: TokenHistoryProps) => {
 
   const tokenPubkeys = tokens.map((token) => token.pubkey)
 
-  const histories = useAccountHistories(tokenPubkeys)
+  const histories = useRawAccountHistories(tokenPubkeys)
 
   const zipped = tokens.reduce(
     (accum: Record<string, SignaturesAndTransactions>, token, idx) => {

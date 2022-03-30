@@ -29,7 +29,7 @@ type Bid = {
   isActive: boolean
 }
 
-const Orders = ({ mint }: OrderProps) => {
+export const Orders = ({ mint }: OrderProps) => {
   const [rows, setRows] = useState<Bid[]>([])
   const { publicKey } = useWallet()
   const confirmTransaction = useConfirmTransaction()
