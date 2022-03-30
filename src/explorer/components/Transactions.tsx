@@ -9,8 +9,7 @@ import {
   TableRow,
 } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
-import { DateTime } from 'luxon'
-import { pubkeyToString } from '../../../helpers/utils'
+import { pubkeyToString, toRelative } from '../../../helpers/utils'
 import { useAccountHistory } from '../store'
 import { ExplorerCard } from './ExplorerCard'
 import { AccountLink, SlotLink, TxLink } from './Links'
@@ -52,9 +51,7 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
 
     const byPubkey = pubkeyToString(accountKeys?.[0])
 
-    const relativeTime = blockTime
-      ? DateTime.fromMillis(blockTime * 1000).toRelative()
-      : ''
+    const relativeTime = toRelative(blockTime)
 
     const status = err ? (
       <Chip color="error" label="Error" size="small" />

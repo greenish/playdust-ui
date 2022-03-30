@@ -1,5 +1,5 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { DateTime } from 'luxon'
+import { toLocaleString } from '../../../../helpers/utils'
 import { useAccountInfo } from '../../store'
 import { ExplorerCard } from '../ExplorerCard'
 import { ExplorerGrid } from '../ExplorerGrid'
@@ -19,10 +19,7 @@ export const VoteAccountContent = ({ pubkey }: VoteAccountProps) => {
 
   const voteAccount = (account.data as ParsedAccountData).parsed
 
-  const dt = DateTime.fromSeconds(
-    voteAccount.info.lastTimestamp.timestamp * 1000
-  )
-  const lastTimestamp = dt.toLocaleString(DateTime.DATETIME_FULL)
+  const lastTimestamp = toLocaleString(voteAccount.info.lastTimestamp.timestamp)
 
   const rows = [
     ['SOL Balance', <SolBalance lamports={account.lamports} />],

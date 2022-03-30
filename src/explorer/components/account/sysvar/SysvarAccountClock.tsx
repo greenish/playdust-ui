@@ -1,5 +1,5 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { DateTime } from 'luxon'
+import { toLocaleString } from '../../../../../helpers/utils'
 import { useAccountInfo } from '../../../store'
 import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
@@ -21,8 +21,7 @@ export const SysvarAccountClockContent = ({ pubkey }: SysvarAccountProps) => {
 
   const parsed = (account.data as ParsedAccountData).parsed
 
-  const dt = DateTime.fromSeconds(parsed.info.unixTimestamp * 1000)
-  const timestamp = dt.toLocaleString(DateTime.DATETIME_FULL)
+  const timestamp = toLocaleString(parsed.info.unixTimestamp)
 
   const rows = [
     ['Address', <AccountLink to={pubkey.toBase58()} allowCopy />],

@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { DateTime } from 'luxon'
-import { lamportsToSol } from '../../../helpers/utils'
+import { lamportsToSol, toLocaleString } from '../../../helpers/utils'
 import { useBlock, useSOLPrice } from '../store'
 import { ExplorerGrid } from './ExplorerGrid'
 import { SlotLink } from './Links'
@@ -39,13 +38,7 @@ export const BlockOverview = ({ slot }: BlockOverviewProps) => {
   const valueOfSOL = rewardTotalInSOL * solPrice
   const reward = `${rewardTotalInSOL} SOL (\$${valueOfSOL}) SOL price ${solPrice}`
 
-  const localBlockTime = (() => {
-    if (!blockTime) {
-      return ''
-    }
-    const dt = DateTime.fromSeconds(blockTime)
-    return dt.toLocaleString(DateTime.DATETIME_FULL)
-  })()
+  const localBlockTime = toLocaleString(blockTime)
 
   const rows = [
     [

@@ -1,5 +1,6 @@
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
+import { DateTime } from 'luxon'
 
 /*
  * ellipsisify
@@ -98,4 +99,14 @@ export function compact(array?: any[]) {
     }
   }
   return result
+}
+
+export function toLocaleString(time: number | null | undefined) {
+  return time
+    ? DateTime.fromMillis(time * 1000).toLocaleString(DateTime.DATETIME_FULL)
+    : ''
+}
+
+export function toRelative(time: number | null | undefined) {
+  return time ? DateTime.fromMillis(time * 1000).toRelative() : ''
 }

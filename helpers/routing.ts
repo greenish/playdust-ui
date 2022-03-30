@@ -1,9 +1,16 @@
 import bs58 from 'bs58'
 
-export type SearchType = 'account' | 'block' | 'tx' | undefined
+export type SearchType = 'account' | 'block' | 'epoch' | 'tx' | undefined
 
 export function getSearchType(str: string): SearchType {
-  if (!isNaN(Number(str))) {
+  const num = Number(str)
+
+  if (!isNaN(num)) {
+    // This is a temporary hack that will be resolved in a follow-up task
+    if (num < 1000) {
+      return 'epoch'
+    }
+
     return 'block'
   }
 

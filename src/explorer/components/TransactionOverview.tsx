@@ -1,6 +1,5 @@
 import { Box, Chip, Typography } from '@mui/material'
-import { DateTime } from 'luxon'
-import { compact } from '../../../helpers/utils'
+import { compact, toLocaleString } from '../../../helpers/utils'
 import {
   useRawTransaction,
   useSignatureStatus,
@@ -49,11 +48,7 @@ export const TransactionOverviewContent = ({
     <Chip color="success" label="Sucess" />
   )
 
-  const localeTime = blockTime
-    ? DateTime.fromMillis(blockTime * 1000).toLocaleString(
-        DateTime.DATETIME_FULL
-      )
-    : ''
+  const localeTime = toLocaleString(blockTime)
 
   const rows = compact([
     ['Signature', <TxLink to={signatures[0]} allowCopy />],
