@@ -172,4 +172,30 @@ export const getNFTCensorStatus = async (mint: string) => {
   return data
 }
 
+export const setNFTCensorStatus = async (
+  mint: string,
+  wallet: string,
+  type: number
+) => {
+  const { data } = await instance.post(`/censor/mint/${mint}`, {
+    type,
+    wallet,
+  })
+
+  return data
+}
+
+export const setCollectionCensorStatus = async (
+  id: string,
+  wallet: string,
+  type: number
+) => {
+  const { data } = await instance.post(`/censor/collection/${id}`, {
+    type,
+    wallet,
+  })
+
+  return data
+}
+
 export default instance

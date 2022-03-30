@@ -1,7 +1,12 @@
 import styled from '@emotion/styled'
-import { Chip, Tooltip } from '@mui/material'
+import FlagIcon from '@mui/icons-material/Flag'
+import { Chip, IconButton, Tooltip } from '@mui/material'
 import { useMemo } from 'react'
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
+import {
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from 'recoil'
 import * as store from '../store'
 import CollectionCard from './CollectionCard'
 
@@ -22,6 +27,11 @@ const ChipContainer = styled.div`
   gap: 8px;
 `
 
+const ReportButton = styled(IconButton)`
+  position: absolute;
+  right: 16px;
+`
+
 const humanizeSolana = (input?: number) => {
   if (!input) {
     return '0'
@@ -39,6 +49,8 @@ const CollectionOverview = () => {
     store.collectionOverview(collectionId)
   )
   const initCollectionQuery = store.useInitializeCollectionQuery()
+  const setOpen = useSetRecoilState(store.flaggedModal)
+  const setId = useSetRecoilState(store.flaggedId)
 
   const { volume, floorPrice, listedItems, similar, elementCount } =
     useMemo(() => {
@@ -67,6 +79,16 @@ const CollectionOverview = () => {
 
   return (
     <RootContainer>
+      <Tooltip title="Report this collection">
+        <ReportButton
+          onClick={() => {
+            setId(collectionId)
+            setOpen(true)
+          }}
+        >
+          <FlagIcon />
+        </ReportButton>
+      </Tooltip>
       <CardContainer>
         {collection.state === 'hasValue' && (
           <CollectionCard {...collection.contents} cardSize={170} />

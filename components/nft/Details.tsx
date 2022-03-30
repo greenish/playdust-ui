@@ -7,6 +7,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -24,10 +25,16 @@ import { useRecoilValue } from 'recoil'
 import { getNFTCensorStatus } from '../../helpers/auctionHouseApi'
 import { shortenPublicKey } from '../../helpers/utils'
 import { fetchNFTDetails } from '../../store'
+import FlaggedModal from '../utils/FlaggedModal'
 import TradeNFT from './TradeNFT'
 
 const ImageTradeContainer = styled.div`
   display: flex;
+`
+
+const ReportButton = styled(Button)`
+  position: absolute;
+  right: 24px;
 `
 
 const BlurImage = styled.img`
@@ -63,6 +70,7 @@ enum NFTStatus {
 }
 
 const Details = ({ mint }: DetailsProps) => {
+  const [open, setOpen] = useState(false)
   const details = useRecoilValue(fetchNFTDetails(mint))
   const [censored, setCensored] = useState(false)
   const [nsfw, setNSFW] = useState(false)
@@ -90,6 +98,13 @@ const Details = ({ mint }: DetailsProps) => {
 
   return (
     <Box mx={1}>
+      <ReportButton
+        onClick={() => setOpen(true)}
+        color="error"
+        variant="outlined"
+      >
+        Report
+      </ReportButton>
       <ImageTradeContainer>
         <div>
           {censored || nsfw ? (
@@ -211,6 +226,7 @@ const Details = ({ mint }: DetailsProps) => {
           </Card>
         </Grid>
       </Grid>
+      <FlaggedModal open={open} setOpen={setOpen} id={mint} type="NFT" />
     </Box>
   )
 }

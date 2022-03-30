@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
 import { CircularProgress } from '@mui/material'
 import { Suspense, useEffect } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import FlaggedModal from '../../components/utils/FlaggedModal'
 import type WindowProps from '../app/types/WindowProps'
 import CollectionResults from './components/CollectionResults'
 import SearchResults from './components/SearchResults'
@@ -43,6 +44,8 @@ const Search = ({ setState, state }: WindowProps) => {
   const setQuery = store.useSetSearchQuery()
   const setSelectedSort = store.useSetSelectedSort()
   const setOnlyListed = useSetRecoilState(store.searchOnlyListed)
+  const id = useRecoilValue(store.flaggedId)
+  const [open, setOpen] = useRecoilState(store.flaggedModal)
 
   useSyncSerializedSearch(setState)
 
@@ -77,6 +80,7 @@ const Search = ({ setState, state }: WindowProps) => {
           </TokenContainer>
         </ResultsContainer>
       </Suspense>
+      <FlaggedModal open={open} setOpen={setOpen} id={id} type="Collection" />
     </RootContainer>
   )
 }
