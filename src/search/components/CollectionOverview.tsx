@@ -1,8 +1,26 @@
 import styled from '@emotion/styled'
 import FlagIcon from '@mui/icons-material/Flag'
-import { Chip, IconButton, Tooltip } from '@mui/material'
-import { useMemo } from 'react'
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
+import {
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  IconButton,
+  Radio,
+  RadioGroup,
+  Tooltip,
+} from '@mui/material'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { useMemo, useState } from 'react'
+import { useCookies } from 'react-cookie'
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil'
+import { getRecoil } from 'recoil-nexus'
+import { setCollectionCensorStatus } from '../../../helpers/auctionHouseApi'
+import { userProfile } from '../../../store'
+import Status from '../../../types/Status'
 import * as store from '../store'
 import CollectionCard from './CollectionCard'
 
@@ -28,6 +46,11 @@ const ReportButton = styled(IconButton)`
   right: 16px;
 `
 
+const StatusButton = styled(Button)`
+  position: absolute;
+  right: 16px;
+`
+
 const humanizeSolana = (input?: number) => {
   if (!input) {
     return '0'
@@ -39,13 +62,25 @@ const humanizeSolana = (input?: number) => {
 }
 
 const CollectionOverview = () => {
+  const [open, setOpen] = useState(false)
+  const [status, setStatus] = useRecoilState(store.collectionStatus)
+  const [censorState, setCensorState] = useState(Status.None)
+  const [cookies] = useCookies(['authToken'])
   const collectionId = useRecoilValue(store.collectionId)!
   const collection = useRecoilValueLoadable(store.collectionById(collectionId))
   const overview = useRecoilValueLoadable(
     store.collectionOverview(collectionId)
   )
+  const { roles } = getRecoil(userProfile)
+  const { publicKey } = useWallet()
   const initCollectionQuery = store.useInitializeCollectionQuery()
   const openFlaggedModal = store.useOpenFlaggedModal()
+
+  const saveStatus = () => {
+    setCollectionCensorStatus(collectionId, publicKey!.toBase58(), status)
+    setStatus(censorState)
+    setOpen(false)
+  }
 
   const { volume, floorPrice, listedItems, similar, elementCount } =
     useMemo(() => {
@@ -74,13 +109,58 @@ const CollectionOverview = () => {
 
   return (
     <RootContainer>
-      <Tooltip title="Report this collection">
-        <ReportButton
-          onClick={() => openFlaggedModal(collectionId, 'Collection')}
-        >
-          <FlagIcon />
-        </ReportButton>
-      </Tooltip>
+      {cookies.authToken ? (
+        <>
+          {roles.length && roles.includes('admin') ? (
+            <>
+              <StatusButton
+                onClick={() => setOpen(true)}
+                color="primary"
+                variant="outlined"
+              >
+                Change status
+              </StatusButton>
+              <Dialog onClose={() => setOpen(false)} open={open}>
+                <DialogTitle>Change item status</DialogTitle>
+                <DialogContent>
+                  <RadioGroup
+                    value={censorState}
+                    onChange={(e) => setCensorState(Number(e.target.value))}
+                  >
+                    <FormControlLabel
+                      value={Status.None}
+                      control={<Radio />}
+                      label="None"
+                    />
+                    <FormControlLabel
+                      value={Status.Censored}
+                      control={<Radio />}
+                      label="Censor"
+                    />
+                    <FormControlLabel
+                      value={Status.NSFW}
+                      control={<Radio />}
+                      label="NFSW"
+                    />
+                  </RadioGroup>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button onClick={saveStatus}>Save</Button>
+                </DialogActions>
+              </Dialog>
+            </>
+          ) : (
+            <Tooltip title="Report this collection">
+              <ReportButton
+                onClick={() => openFlaggedModal(collectionId, 'Collection')}
+              >
+                <FlagIcon />
+              </ReportButton>
+            </Tooltip>
+          )}
+        </>
+      ) : null}
       <CardContainer>
         {collection.state === 'hasValue' && (
           <CollectionCard {...collection.contents} cardSize={170} />

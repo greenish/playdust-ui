@@ -1,6 +1,7 @@
 export * from './collectionById'
 export * from './collectionId'
 export * from './collectionOverview'
+export * from './collectionStatus'
 export * from './flaggedCollection'
 export * from './isCollectionQuery'
 export * from './isRangeQuery'

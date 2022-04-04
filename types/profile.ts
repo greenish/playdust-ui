@@ -4,4 +4,5 @@ export type Profile = {
   bio: string
   twitter: string
   picture: string
+  roles: Array<String>
 }

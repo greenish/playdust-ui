@@ -14,30 +14,22 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useState } from 'react'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
-import {
-  setCollectionCensorStatus,
-  setNFTCensorStatus,
-} from '../../../helpers/auctionHouseApi'
+import { setFlagCollection, setFlagNFT } from '../../../helpers/auctionHouseApi'
 import * as store from '../store'
 
-enum CensorStatus {
-  Censored,
-  NSFW,
-  Other,
-}
-
 const FlaggedModal = () => {
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState('')
   const [reason, setReason] = useState('')
   const { publicKey } = useWallet()
   const { open, type, id } = useRecoilValue(store.flagged)
   const close = useResetRecoilState(store.flagged)
 
   const handleSave = () => {
+    const reasonSelected = selected !== 'other' ? selected : reason
     if (type === 'NFT') {
-      setNFTCensorStatus(id, publicKey!.toBase58(), selected)
+      setFlagNFT(id, publicKey!.toBase58(), reasonSelected)
     } else {
-      setCollectionCensorStatus(id, publicKey!.toBase58(), selected)
+      setFlagCollection(id, publicKey!.toBase58(), reasonSelected)
     }
     close()
   }
@@ -55,18 +47,18 @@ const FlaggedModal = () => {
             labelId="censor-label"
             value={selected}
             label="Reason"
-            onChange={(e) => setSelected(Number(e.target.value))}
+            onChange={(e) => setSelected(e.target.value)}
           >
-            <MenuItem value={CensorStatus.Censored}>
+            <MenuItem value="Explicit content">
               Item has explicit content
             </MenuItem>
-            <MenuItem value={CensorStatus.NSFW}>
+            <MenuItem value="NSFW">
               Item is not apropied for work (NSFW)
             </MenuItem>
-            <MenuItem value={CensorStatus.Other}>Other</MenuItem>
+            <MenuItem value="other">Other</MenuItem>
           </Select>
         </FormControl>
-        {selected === CensorStatus.Other ? (
+        {selected === 'other' ? (
           <TextField
             label="Other"
             variant="outlined"

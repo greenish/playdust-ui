@@ -2,8 +2,11 @@ import styled from '@emotion/styled'
 import { Card, Skeleton } from '@mui/material'
 import { Box } from '@mui/system'
 import { PropsWithChildren, useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import Link from '../../../components/common/Link'
 import LazyImage from '../../../components/utils/LazyImage'
+import Status from '../../../types/Status'
+import * as store from '../store'
 
 const CardContentContainer = styled.div`
   height: 100%;
@@ -59,6 +62,7 @@ const ImageCard = ({
   onClick,
 }: ImageCardProps) => {
   const [isLoaded, setIsLoaded] = useState(false)
+  const status = useRecoilValue(store.collectionStatus)
 
   return (
     <div>
@@ -74,6 +78,10 @@ const ImageCard = ({
                         objectFit: 'cover',
                         width: imageSize,
                         height: imageSize,
+                        filter:
+                          status === Status.Censored || status === Status.NSFW
+                            ? 'blur(1.5rem)'
+                            : 'none',
                       }
                     : { display: 'none' }
                 }

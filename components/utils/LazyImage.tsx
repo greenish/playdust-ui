@@ -13,7 +13,7 @@ const LazyImage = (props: LazyImageProps) => {
   })
 
   return (
-    <picture ref={ref} data-inview={inView}>
+    <picture ref={ref} data-inview={inView} style={{ overflow: 'hidden' }}>
       {inView ? <img {...props} alt={props.alt || ''} /> : null}
     </picture>
   )

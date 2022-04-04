@@ -161,7 +161,7 @@ export const autoRefresh = (
         })
         .catch(() => Promise.reject()),
     {
-      statusCodes: [401, 403, 400],
+      statusCodes: [401],
     }
   )
 }
@@ -192,6 +192,32 @@ export const setCollectionCensorStatus = async (
 ) => {
   const { data } = await instance.post(`/censor/collection/${id}`, {
     type,
+    wallet,
+  })
+
+  return data
+}
+
+export const setFlagNFT = async (
+  mint: string,
+  wallet: string,
+  reason: string
+) => {
+  const { data } = await instance.post(`/user-flag/mint/${mint}`, {
+    reason,
+    wallet,
+  })
+
+  return data
+}
+
+export const setFlagCollection = async (
+  id: string,
+  wallet: string,
+  reason: string
+) => {
+  const { data } = await instance.post(`/user-flag/collection/${id}`, {
+    reason,
     wallet,
   })
 
