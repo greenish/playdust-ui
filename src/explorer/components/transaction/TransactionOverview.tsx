@@ -1,13 +1,11 @@
-import { Box, Chip, Typography } from '@mui/material'
-import { compact, toLocaleString } from '../../../helpers/utils'
-import {
-  useRawTransaction,
-  useSignatureStatus,
-} from '../store/fetchTransaction'
-import { ExplorerCard } from './ExplorerCard'
-import { ExplorerGrid } from './ExplorerGrid'
-import { SlotLink, TxLink } from './Links'
-import { SolBalance } from './SolBalance'
+import { Chip, Typography } from '@mui/material'
+import { DateTime } from 'luxon'
+import { compact } from '../../../../helpers/utils'
+import { useRawTransaction, useSignatureStatus } from '../../store'
+import { ExplorerCard } from '../ExplorerCard'
+import { ExplorerGrid } from '../ExplorerGrid'
+import { SlotLink, TxLink } from '../Links'
+import { SolBalance } from '../SolBalance'
 
 interface TransactionOverviewProps {
   signature: string
@@ -48,7 +46,11 @@ export const TransactionOverviewContent = ({
     <Chip color="success" label="Sucess" />
   )
 
-  const localeTime = toLocaleString(blockTime)
+  const localeTime = blockTime
+    ? DateTime.fromMillis(blockTime * 1000).toLocaleString(
+        DateTime.DATETIME_FULL
+      )
+    : ''
 
   const rows = compact([
     ['Signature', <TxLink to={signatures[0]} allowCopy />],
@@ -67,17 +69,10 @@ export const TransactionOverviewContent = ({
 export const TransactionOverview = (props: TransactionOverviewProps) => {
   return (
     <ExplorerCard skeleton="table">
-      <Box
-        sx={{
-          bgcolor: 'background.paper',
-        }}
-        p={4}
-      >
-        <Typography variant="h5" component="h2" gutterBottom>
-          Overview
-        </Typography>
-        <TransactionOverviewContent {...props} />
-      </Box>
+      <Typography variant="h5" component="h2" gutterBottom>
+        Overview
+      </Typography>
+      <TransactionOverviewContent {...props} />
     </ExplorerCard>
   )
 }

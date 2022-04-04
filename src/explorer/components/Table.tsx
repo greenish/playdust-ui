@@ -20,9 +20,8 @@ export const DataCell = ({ children, ...props }: MUITableCellProps) => {
     <MUITableCell
       {...props}
       sx={{
-        borderBottom: '1px solid #dddddd',
         whiteSpace: 'nowrap',
-        textAlign: { sm: 'left', md: 'right' },
+        textAlign: 'left',
       }}
     >
       {children}

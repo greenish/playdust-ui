@@ -282,10 +282,11 @@ export const SYSVAR_IDS = {
 
 export function programLabel(
   address: string,
-  cluster: Cluster
+  cluster: WalletAdapterNetwork
 ): string | undefined {
+  const _cluster = clusterMap[cluster]
   const programName = PROGRAM_NAME_BY_ID[address]
-  if (programName && PROGRAM_DEPLOYMENTS[programName].includes(cluster)) {
+  if (programName && PROGRAM_DEPLOYMENTS[programName].includes(_cluster)) {
     return programName
   }
 
@@ -313,7 +314,7 @@ export function addressLabel(
   const _cluster = clusterMap[cluster]
 
   return (
-    programLabel(address, _cluster) ||
+    programLabel(address, cluster) ||
     SYSVAR_IDS[address] ||
     SPECIAL_IDS[address] ||
     tokenLabel(address, tokenRegistry) ||

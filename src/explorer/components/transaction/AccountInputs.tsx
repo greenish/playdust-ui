@@ -1,20 +1,18 @@
+import { Chip, Paper, Typography } from '@mui/material'
+import { ParsedMessageAccount } from '@solana/web3.js'
+import { useParsedConfirmedTransaction } from '../../store/fetchTransaction'
+import { ExplorerCard } from '../ExplorerCard'
+import { AccountLink } from '../Links'
+import { SolBalance } from '../SolBalance'
 import {
-  Box,
-  Chip,
-  Paper,
+  DataCell,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
-} from '@mui/material'
-import { ParsedMessageAccount } from '@solana/web3.js'
-import { useParsedConfirmedTransaction } from '../store/fetchTransaction'
-import { ExplorerCard } from './ExplorerCard'
-import { AccountLink } from './Links'
-import { SolBalance } from './SolBalance'
+} from '../Table'
 
 interface AccountInputsProps {
   signature: string
@@ -67,26 +65,32 @@ export const AccountInputsContent = ({ signature }: AccountInputsProps) => {
                   key={idx}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  <TableCell>
+                  <DataCell>
                     <AccountLink to={pk} allowCopy />
-                  </TableCell>
-                  <TableCell>
+                  </DataCell>
+                  <DataCell>
                     <SolBalance lamports={preBalance} />
-                  </TableCell>
-                  <TableCell>
+                  </DataCell>
+                  <DataCell>
                     <SolBalance lamports={postBalance} />
-                  </TableCell>
-                  <TableCell>
+                  </DataCell>
+                  <DataCell>
                     <SolBalance lamports={preBalance - postBalance} />
-                  </TableCell>
-                  <TableCell>
-                    {idx === 0 && <Chip color="info" label="Fee Payer" />}
-                    {account.writable && <Chip color="info" label="Writable" />}
-                    {account.signer && <Chip color="info" label="Signer" />}
+                  </DataCell>
+                  <DataCell>
+                    {idx === 0 && (
+                      <Chip color="info" label="Fee Payer" size="small" />
+                    )}
+                    {account.writable && (
+                      <Chip color="info" label="Writable" size="small" />
+                    )}
+                    {account.signer && (
+                      <Chip color="info" label="Signer" size="small" />
+                    )}
                     {message.instructions.find((ix) =>
                       ix.programId.equals(pubkey)
-                    ) && <Chip color="info" label="Program" />}
-                  </TableCell>
+                    ) && <Chip color="info" label="Program" size="small" />}
+                  </DataCell>
                 </TableRow>
               )
             }
@@ -100,17 +104,10 @@ export const AccountInputsContent = ({ signature }: AccountInputsProps) => {
 export const AccountInputs = (props: AccountInputsProps) => {
   return (
     <ExplorerCard skeleton="table">
-      <Box
-        sx={{
-          bgcolor: 'background.paper',
-        }}
-        p={4}
-      >
-        <Typography variant="h5" component="h2" gutterBottom>
-          Account Inputs
-        </Typography>
-        <AccountInputsContent {...props} />
-      </Box>
+      <Typography variant="h5" component="h2" gutterBottom>
+        Account Inputs
+      </Typography>
+      <AccountInputsContent {...props} />
     </ExplorerCard>
   )
 }

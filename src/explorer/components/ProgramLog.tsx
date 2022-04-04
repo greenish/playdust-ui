@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import { useRawTransaction } from '../store/fetchTransaction'
 import { ExplorerCard } from './ExplorerCard'
 
@@ -29,17 +29,10 @@ export const ProgramLogContent = ({ signature }: ProgramLogProps) => {
 export const ProgramLog = (props: ProgramLogProps) => {
   return (
     <ExplorerCard skeleton="table">
-      <Box
-        sx={{
-          bgcolor: 'background.paper',
-        }}
-        p={4}
-      >
-        <Typography variant="h5" component="h2" gutterBottom>
-          Program Log
-        </Typography>
-        <ProgramLogContent {...props} />
-      </Box>
+      <Typography variant="h5" component="h2" gutterBottom>
+        Program Log
+      </Typography>
+      <ProgramLogContent {...props} />
     </ExplorerCard>
   )
 }

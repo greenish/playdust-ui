@@ -1,7 +1,8 @@
 import {
   Connection,
+  Message,
   ParsedConfirmedTransaction,
-  SignatureStatus,
+  Transaction,
   TransactionResponse,
 } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
@@ -25,6 +26,44 @@ export const fetchRawTransaction = selectorFamily<
 export const useRawTransaction = (signature: string) =>
   useRecoilValue(fetchRawTransaction(signature))
 
+export interface Details {
+  transaction: Transaction
+  message: Message
+  signatures: string[]
+}
+
+export const fetchRawPopulatedTransaction = selectorFamily<
+  Details | null,
+  string
+>({
+  key: 'rawPopulatedTransaction',
+  get:
+    (signature) =>
+    async ({ get }) => {
+      const { endpoint } = get(solanaCluster)
+      const connection = new Connection(endpoint)
+
+      const response = await connection.getTransaction(signature)
+
+      if (!response) {
+        return null
+      }
+
+      const {
+        transaction: { message, signatures },
+      } = response
+
+      return {
+        message,
+        signatures,
+        transaction: Transaction.populate(message, signatures),
+      }
+    },
+})
+
+export const useRawPopulatedTransaction = (signature: string) =>
+  useRecoilValue(fetchRawPopulatedTransaction(signature))
+
 export const fetchParsedConfirmedTransaction = selectorFamily<
   ParsedConfirmedTransaction | null,
   string
@@ -42,25 +81,3 @@ export const fetchParsedConfirmedTransaction = selectorFamily<
 
 export const useParsedConfirmedTransaction = (signature: string) =>
   useRecoilValue(fetchParsedConfirmedTransaction(signature))
-
-export const fetchSignatureStatus = selectorFamily<
-  SignatureStatus | null,
-  string
->({
-  key: 'signatureStatus',
-  get:
-    (signature) =>
-    async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
-      const connection = new Connection(endpoint)
-
-      const { value } = await connection.getSignatureStatus(signature, {
-        searchTransactionHistory: true,
-      })
-
-      return value
-    },
-})
-
-export const useSignatureStatus = (signature: string) =>
-  useRecoilValue(fetchSignatureStatus(signature))
