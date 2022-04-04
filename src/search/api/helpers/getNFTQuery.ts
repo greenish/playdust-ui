@@ -14,6 +14,7 @@ const sortMappings: {
   name: 'offChainData.name.keyword',
   'list-price': 'lastListPrice',
   'sale-price': 'lastTradePrice',
+  'rarity-score': 'rarityScore',
 }
 
 const getNFTQuery = (

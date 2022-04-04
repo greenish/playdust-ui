@@ -2,7 +2,7 @@ import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import * as store from './'
 
 export interface SearchSortValue {
-  field: 'name' | 'relevance' | 'list-price' | 'sale-price'
+  field: 'name' | 'relevance' | 'list-price' | 'sale-price' | 'rarity-score'
   direction: 'asc' | 'desc'
 }
 
@@ -50,6 +50,7 @@ export const searchSortOptions = atom<SearchSortOption[]>({
     ...makeSortOption('Name', 'name'),
     ...makeSortOption('List Price', 'list-price'),
     ...makeSortOption('Sale Price', 'sale-price'),
+    ...makeSortOption('Rarity', 'rarity-score'),
   ],
 })
 
