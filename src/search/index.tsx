@@ -6,7 +6,7 @@ import CollectionResults from './components/CollectionResults'
 import FlaggedModal from './components/FlaggedModal'
 import SearchResults from './components/SearchResults'
 import SearchSideBar from './components/SearchSideBar'
-import useSyncSerializedSearch from './hooks/useSyncSerializedSearch'
+import useSyncSerializedSearchUrl from './hooks/useSyncSerializedSearchUrl'
 import * as store from './store'
 
 const RootContainer = styled.div`
@@ -32,24 +32,22 @@ const ResultsContainer = styled.div`
   display: flex;
 `
 
-const Search = ({ setState, state }: WindowProps) => {
+const Search = ({ state, removeTab }: WindowProps) => {
   const setQuery = store.useSetSearchQuery()
   const setSelectedSort = store.useSetSelectedSort()
   const setOnlyListed = useSetRecoilState(store.searchOnlyListed)
 
-  useSyncSerializedSearch(setState)
+  useSyncSerializedSearchUrl()
 
   useEffect(() => {
-    if (state !== '') {
-      try {
-        const { query, sort, onlyListed } = JSON.parse(state)
+    try {
+      const { query, sort, onlyListed } = JSON.parse(state)
 
-        setQuery(query)
-        setSelectedSort(sort)
-        setOnlyListed(onlyListed)
-      } catch (e) {
-        setState('')
-      }
+      setQuery(query)
+      setSelectedSort(sort)
+      setOnlyListed(onlyListed)
+    } catch (e) {
+      removeTab()
     }
   }, [])
 

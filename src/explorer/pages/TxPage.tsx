@@ -13,7 +13,7 @@ import {
 export const TxPage = ({ state }: WindowProps) => {
   const signature = state
   const content = (() => {
-    if (getWindowType(signature) !== 'transaction') {
+    if (getWindowType(signature) !== 'tx') {
       return <ErrorCard message={`Signature "${signature}" is not valid`} />
     }
 

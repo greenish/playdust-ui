@@ -1,14 +1,7 @@
 import bs58 from 'bs58'
+import WindowUnion from '../types/WindowUnion'
 
-export type WindowComponentType =
-  | 'account'
-  | 'block'
-  | 'home'
-  | 'search'
-  | 'transaction'
-  | 'epoch'
-
-const getWindowType = (state: string): WindowComponentType => {
+const getWindowType = (state: string): WindowUnion => {
   if (state === '') {
     return 'home'
   }
@@ -32,7 +25,7 @@ const getWindowType = (state: string): WindowComponentType => {
     }
 
     if (decoded.length === 64) {
-      return 'transaction'
+      return 'tx'
     }
   } catch (err) {}
 

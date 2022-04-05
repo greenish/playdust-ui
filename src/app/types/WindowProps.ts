@@ -1,11 +1,12 @@
-import type { WindowComponentType } from '../helpers/getWindowType'
+import { WindowState } from '../store'
+import type WindowUnion from './WindowUnion'
 
 interface WindowProps {
+  key: string
   state: string
-  setState: (update: string) => void
-  addTab: (state: string) => void
+  addTab: (state: WindowState) => void
   removeTab: () => void
-  type: WindowComponentType
+  type: WindowUnion
 }
 
 export default WindowProps

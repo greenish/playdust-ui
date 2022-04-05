@@ -13,6 +13,7 @@ import { PropsWithChildren, ReactNode } from 'react'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
 import Notifications from '../../../components/common/Notifications'
 import WalletButton from '../../../components/common/WalletButton'
+import { encodeWindowSearch } from '../helpers/getWindowUrl'
 import * as store from '../store'
 
 const theme = createTheme({
@@ -87,7 +88,7 @@ const TabButton = ({ children, isActive, onClick }: TabButtonProps) => (
 
 const AppBar = ({ children }: AppBarProps) => {
   const tabs = useRecoilValue(store.tabs)
-  const selectedTab = useRecoilValue(store.selectedTab)
+  const activeTab = useRecoilValue(store.activeTab)
   const setSelectedTab = store.useSetSelectedTab()
   const router = useRouter()
   const resetTabs = useResetRecoilState(store.tabs)
@@ -105,27 +106,34 @@ const AppBar = ({ children }: AppBarProps) => {
           <VerticalAppBarContent>
             <TopContainer>
               <TabButton
-                isActive={!selectedTab}
-                onClick={() => setSelectedTab()}
+                isActive={!activeTab}
+                onClick={() => {
+                  setSelectedTab()
+                  router.push('')
+                }}
               >
                 <Home />
               </TabButton>
               {tabs.map((tab, idx) => (
                 <TabButton
                   key={tab.id}
-                  isActive={inWindowManager && tab.id === selectedTab?.id}
+                  isActive={inWindowManager && tab.id === activeTab?.id}
                   onClick={() => {
-                    if (!inWindowManager) {
-                      router.push('/')
-                    }
+                    const state = tab.state[0]
                     setSelectedTab(tab.id)
+                    router.push(encodeWindowSearch(state))
                   }}
                 >
                   <Typography>{idx + 1}</Typography>
                 </TabButton>
               ))}
               {tabs.length > 0 && (
-                <IconButton onClick={resetTabs}>
+                <IconButton
+                  onClick={() => {
+                    router.push('')
+                    resetTabs()
+                  }}
+                >
                   <DeleteSweep />
                 </IconButton>
               )}

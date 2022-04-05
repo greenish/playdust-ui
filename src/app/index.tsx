@@ -6,8 +6,9 @@ import { RecoilRoot, useRecoilValue } from 'recoil'
 import SearchInput from './components/SearchInput'
 import WindowSwitch from './components/WindowSwitch'
 import getWindowType from './helpers/getWindowType'
+import { decodeWindowSearch } from './helpers/getWindowUrl'
 import * as store from './store'
-import WindowProps from './types/WindowProps'
+import type WindowProps from './types/WindowProps'
 
 const RootContainer = styled.div`
   display: flex;
@@ -34,36 +35,64 @@ const SpinnerContainer = styled.div`
 `
 
 const App = () => {
-  const router = useRouter()
-  const selectedTab = useRecoilValue(store.selectedTab)
+  const tabs = useRecoilValue(store.tabs)
   const setTabState = store.useSetTabState()
   const addTab = store.useAddTab()
   const removeTab = store.useRemoveTab()
+  const activeTab = useRecoilValue(store.activeTab)
+  const setSelectedTab = store.useSetSelectedTab()
+  const router = useRouter()
 
   const props = useMemo<WindowProps>(() => {
-    const currentId = selectedTab?.id || ''
-    const state = selectedTab?.state[0] || ''
+    const currentId = activeTab?.id || ''
+    const state = activeTab?.state[0]?.value || ''
+    const type = activeTab?.state[0]?.type || getWindowType(state)
     const removeCurrentTab = () => removeTab(currentId)
 
     const props: WindowProps = {
+      key: state,
       state,
-      setState: (nextState: string) => {
-        nextState === '' ? removeCurrentTab : setTabState(nextState, currentId)
-      },
       addTab,
       removeTab: removeCurrentTab,
-      type: getWindowType(state),
+      type,
     }
 
     return props
-  }, [selectedTab])
+  }, [activeTab])
 
   useEffect(() => {
-    const handleRouteChange = (nextPath: string) => {
-      if (nextPath.startsWith('/?')) {
-        const nextState = nextPath.slice(nextPath.indexOf('=') + 1)
-        props.setState(nextState)
+    const windowState = decodeWindowSearch()
+
+    if (windowState.type === 'home') {
+      return
+    }
+
+    const found = tabs.find((tab) => {
+      const { value, type } = tab.state[0] || []
+
+      return value === windowState.value && type === windowState.type
+    })
+
+    if (!found) {
+      return addTab(windowState)
+    }
+
+    setSelectedTab(found.id)
+  }, [])
+
+  useEffect(() => {
+    const handleRouteChange = (nextRoute: string) => {
+      const cleaned = nextRoute.slice(1)
+      if (cleaned === '') {
+        return
       }
+      const windowState = decodeWindowSearch(cleaned)
+
+      if (!activeTab) {
+        return addTab(windowState)
+      }
+
+      setTabState(windowState, activeTab.id)
     }
 
     router.events.on('routeChangeStart', handleRouteChange)
@@ -71,14 +100,10 @@ const App = () => {
     return () => {
       router.events.off('routeChangeStart', handleRouteChange)
     }
-  }, [props])
-
-  if (!router.isReady) {
-    return <></>
-  }
+  }, [activeTab, props])
 
   return (
-    <RecoilRoot key={selectedTab?.id || 'home'}>
+    <RecoilRoot key={activeTab?.id || 'home'}>
       <RootContainer>
         <SearchInputContainer>
           <SearchInput {...props} />

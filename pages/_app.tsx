@@ -1,10 +1,17 @@
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import Provider from '../provider'
 import AppBar from '../src/app/components/AppBar'
 import '../styles/globals.css'
 
 const App = ({ Component, pageProps }: AppProps) => {
+  const router = useRouter()
+
+  if (!router.isReady) {
+    return <></>
+  }
+
   return (
     <>
       <Head>

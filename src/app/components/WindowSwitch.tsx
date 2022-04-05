@@ -16,7 +16,7 @@ const WindowSwitch = (props: WindowProps) => {
       return <AccountPage {...props} />
     case 'block':
       return <BlockPage {...props} />
-    case 'transaction':
+    case 'tx':
       return <TxPage {...props} />
     case 'epoch':
       return <EpochPage {...props} />

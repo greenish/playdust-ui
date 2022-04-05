@@ -71,8 +71,13 @@ const SearchInput = ({ addTab, state, type, removeTab }: WindowProps) => {
             return
           }
 
-          if (getWindowType(value) !== 'search') {
-            return addTab(value)
+          const type = getWindowType(value)
+
+          if (type !== 'search') {
+            return addTab({
+              type,
+              value,
+            })
           }
 
           return addText(value, 'and')
