@@ -7,19 +7,21 @@ import WindowProps from '../types/WindowProps'
 import Home from './Home'
 
 const WindowSwitch = (props: WindowProps) => {
+  const key = props.state
+
   switch (props.type) {
     case 'home':
       return <Home {...props} />
     case 'search':
-      return <Search {...props} />
+      return <Search key={key} {...props} />
     case 'account':
-      return <AccountPage {...props} />
+      return <AccountPage key={key} {...props} />
     case 'block':
-      return <BlockPage {...props} />
+      return <BlockPage key={key} {...props} />
     case 'tx':
-      return <TxPage {...props} />
+      return <TxPage key={key} {...props} />
     case 'epoch':
-      return <EpochPage {...props} />
+      return <EpochPage key={key} {...props} />
     default:
       const n: never = props.type
 

@@ -5,9 +5,8 @@ import type { Tab } from './tabs'
 export const activeTab = selector<Tab | undefined>({
   key: 'activeTab',
   get: ({ get }) => {
-    const tabs = get(store.tabs)
-    const result = tabs.find((tab) => tab.selected)
+    const { tabs, selectedTabId } = get(store.window)
 
-    return result
+    return tabs.find((tab) => tab.id === selectedTabId)
   },
 })

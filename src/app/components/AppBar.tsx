@@ -13,7 +13,7 @@ import { PropsWithChildren, ReactNode } from 'react'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
 import Notifications from '../../../components/common/Notifications'
 import WalletButton from '../../../components/common/WalletButton'
-import { encodeWindowSearch } from '../helpers/getWindowUrl'
+import { encodeWindowHash } from '../helpers/getWindowUrl'
 import * as store from '../store'
 
 const theme = createTheme({
@@ -87,11 +87,10 @@ const TabButton = ({ children, isActive, onClick }: TabButtonProps) => (
 )
 
 const AppBar = ({ children }: AppBarProps) => {
-  const tabs = useRecoilValue(store.tabs)
+  const { tabs } = useRecoilValue(store.window)
   const activeTab = useRecoilValue(store.activeTab)
-  const setSelectedTab = store.useSetSelectedTab()
   const router = useRouter()
-  const resetTabs = useResetRecoilState(store.tabs)
+  const resetWindow = useResetRecoilState(store.window)
 
   if (!router.isReady) {
     return <></>
@@ -108,7 +107,6 @@ const AppBar = ({ children }: AppBarProps) => {
               <TabButton
                 isActive={!activeTab}
                 onClick={() => {
-                  setSelectedTab()
                   router.push('')
                 }}
               >
@@ -120,8 +118,7 @@ const AppBar = ({ children }: AppBarProps) => {
                   isActive={inWindowManager && tab.id === activeTab?.id}
                   onClick={() => {
                     const state = tab.state[0]
-                    setSelectedTab(tab.id)
-                    router.push(encodeWindowSearch(state))
+                    router.push(encodeWindowHash(state, tab.id))
                   }}
                 >
                   <Typography>{idx + 1}</Typography>
@@ -131,7 +128,7 @@ const AppBar = ({ children }: AppBarProps) => {
                 <IconButton
                   onClick={() => {
                     router.push('')
-                    resetTabs()
+                    resetWindow()
                   }}
                 >
                   <DeleteSweep />

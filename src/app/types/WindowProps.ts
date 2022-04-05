@@ -2,8 +2,8 @@ import { WindowState } from '../store'
 import type WindowUnion from './WindowUnion'
 
 interface WindowProps {
-  key: string
   state: string
+  setState: (nextValue: string) => void
   addTab: (state: WindowState) => void
   removeTab: () => void
   type: WindowUnion

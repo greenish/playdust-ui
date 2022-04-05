@@ -13,72 +13,78 @@ export interface WindowState {
 export interface Tab {
   id: string
   state: WindowState[]
-  selected: boolean
 }
 
-export const tabs = atom<Tab[]>({
+export interface Window {
+  tabs: Tab[]
+  selectedTabId: string | undefined
+}
+
+export const window = atom<Window>({
   key: 'tabs',
-  default: [],
+  default: {
+    tabs: [],
+    selectedTabId: undefined,
+  },
   effects: [persistAtom],
 })
 
 export const useSetSelectedTab = () => {
-  const setter = useSetRecoilState(tabs)
+  const setter = useSetRecoilState(window)
 
   return (id?: string) => {
-    setter((tabs) =>
-      tabs.map((tab) => ({
-        ...tab,
-        selected: tab.id === id,
-      }))
-    )
+    setter((curr) => ({
+      ...curr,
+      selectedTabId: id,
+    }))
   }
 }
 
 export const useAddTab = () => {
-  const setter = useSetRecoilState(tabs)
+  const setter = useSetRecoilState(window)
 
   return (newState: WindowState) => {
     const newTab = {
       id: nanoid(),
       state: [newState],
-      selected: true,
     }
 
-    setter((tabs) => [
-      ...tabs.map((tab) => ({ ...tab, selected: false })),
-      newTab,
-    ])
+    setter((curr) => ({
+      tabs: [...curr.tabs, newTab],
+      selectedTabId: newTab.id,
+    }))
+
+    return newTab.id
   }
 }
 
 export const useSetTabState = () => {
-  const setter = useSetRecoilState(tabs)
+  const setter = useSetRecoilState(window)
 
   return (nextState: WindowState, id: string) => {
-    setter((tabs) =>
-      tabs.map((tab) => {
+    setter((curr) => ({
+      selectedTabId: id,
+      tabs: curr.tabs.map((tab) => {
         if (tab.id === id) {
           return {
             ...tab,
             state: [nextState],
-            selected: true,
           }
         }
 
-        return {
-          ...tab,
-          selected: false,
-        }
-      })
-    )
+        return tab
+      }),
+    }))
   }
 }
 
 export const useRemoveTab = () => {
-  const setter = useSetRecoilState(tabs)
+  const setter = useSetRecoilState(window)
 
   return (id: string) => {
-    setter((tabs) => tabs.filter((tab) => tab.id !== id))
+    setter((curr) => ({
+      ...curr,
+      tabs: curr.tabs.filter((tab) => tab.id !== id),
+    }))
   }
 }

@@ -1,8 +1,9 @@
 import styled from '@emotion/styled'
 import { Card, CardContent, Container, Typography } from '@mui/material'
-import useSyncSerializedSearchUrl from '../../search/hooks/useSyncSerializedSearchUrl'
+import useOnChangeSerializedSearch from '../../search/hooks/useOnChangeSerializedSearch'
 import * as searchStore from '../../search/store'
 import testCollections from '../../search/testCollections'
+import WindowProps from '../types/WindowProps'
 
 const IndexContainer = styled.div`
   display: flex;
@@ -12,10 +13,15 @@ const IndexContainer = styled.div`
   padding-bottom: 4;
 `
 
-const Home = () => {
+const Home = ({ addTab }: WindowProps) => {
   const initCollection = searchStore.useInitializeCollectionQuery()
 
-  useSyncSerializedSearchUrl()
+  useOnChangeSerializedSearch((nextState: string) =>
+    addTab({
+      type: 'search',
+      value: nextState,
+    })
+  )
 
   return (
     <Container>

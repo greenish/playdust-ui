@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
 import Link from '../../../components/common/Link'
+import { encodeWindowHash } from '../../app/helpers/getWindowUrl'
 import getNFTImageUrl from '../helpers/getNFTImageUrl'
 import { NFTSource } from '../types/OpenSearchIndex'
 import ImageCard from './ImageCard'
@@ -49,7 +50,10 @@ interface TokenCardProps {
 
 const TokenCard = ({ metadata }: TokenCardProps) => {
   const { image, name } = metadata?.offChainData || {}
-  const href = `nfts/${metadata?.mint}`
+  const href = encodeWindowHash({
+    type: 'account',
+    value: metadata?.mint || '',
+  })
   const lastListPrice = metadata?.lastListPrice
 
   return (

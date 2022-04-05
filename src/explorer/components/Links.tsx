@@ -1,4 +1,6 @@
 import { ellipsisify } from '../../../helpers/utils'
+import { encodeWindowHash } from '../../app/helpers/getWindowUrl'
+import WindowUnion from '../../app/types/WindowUnion'
 import { CopyButton } from './CopyButton'
 import { Link } from './Link'
 
@@ -8,22 +10,24 @@ export interface ExplorerLinkProps {
   label?: string
   allowCopy?: boolean
   ellipsis?: any
+  type?: WindowUnion
 }
 
 export function ExplorerLink({
-  url,
   to,
   label,
   allowCopy,
   ellipsis,
+  type,
 }: ExplorerLinkProps) {
   const display =
     label || (ellipsis ? ellipsisify('' + to, ellipsis[0], ellipsis[1]) : to)
 
+  const href = type ? encodeWindowHash({ type, value: String(to) }) : '#'
   return (
     <>
       {allowCopy && <CopyButton value={to} />}
-      <Link href={`${url}=${to}`}>
+      <Link href={href}>
         <pre style={{ display: 'inline' }}>{display}</pre>
       </Link>
     </>
@@ -31,7 +35,7 @@ export function ExplorerLink({
 }
 
 export function AccountLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="?account" {...props} />
+  return <ExplorerLink type="account" {...props} />
 }
 
 export function SlotLink(props: ExplorerLinkProps) {
@@ -43,9 +47,9 @@ export function ProgramLink(props: ExplorerLinkProps) {
 }
 
 export function TxLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="?tx" {...props} />
+  return <ExplorerLink type="tx" {...props} />
 }
 
 export function EpochLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="?epoch" {...props} />
+  return <ExplorerLink type="epoch" {...props} />
 }

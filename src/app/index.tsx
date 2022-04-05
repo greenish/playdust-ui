@@ -2,12 +2,14 @@ import styled from '@emotion/styled'
 import { CircularProgress } from '@mui/material'
 import { useRouter } from 'next/router'
 import { Suspense, useEffect, useMemo } from 'react'
+import { useLocation } from 'react-use'
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import SearchInput from './components/SearchInput'
 import WindowSwitch from './components/WindowSwitch'
 import getWindowType from './helpers/getWindowType'
-import { decodeWindowSearch } from './helpers/getWindowUrl'
+import { decodeWindowHash, encodeWindowHash } from './helpers/getWindowUrl'
 import * as store from './store'
+import { WindowState } from './store'
 import type WindowProps from './types/WindowProps'
 
 const RootContainer = styled.div`
@@ -35,12 +37,13 @@ const SpinnerContainer = styled.div`
 `
 
 const App = () => {
-  const tabs = useRecoilValue(store.tabs)
+  const { tabs } = useRecoilValue(store.window)
   const setTabState = store.useSetTabState()
   const addTab = store.useAddTab()
   const removeTab = store.useRemoveTab()
   const activeTab = useRecoilValue(store.activeTab)
   const setSelectedTab = store.useSetSelectedTab()
+  const location = useLocation()
   const router = useRouter()
 
   const props = useMemo<WindowProps>(() => {
@@ -50,9 +53,19 @@ const App = () => {
     const removeCurrentTab = () => removeTab(currentId)
 
     const props: WindowProps = {
-      key: state,
       state,
-      addTab,
+      setState: (nextValue: string) => {
+        router.push(
+          encodeWindowHash({
+            type,
+            value: nextValue,
+          })
+        )
+      },
+      addTab: (nextState: WindowState) => {
+        const tabId = addTab(nextState)
+        router.push(encodeWindowHash(nextState, tabId))
+      },
       removeTab: removeCurrentTab,
       type,
     }
@@ -61,46 +74,52 @@ const App = () => {
   }, [activeTab])
 
   useEffect(() => {
-    const windowState = decodeWindowSearch()
+    const { windowState, tab } = decodeWindowHash()
 
-    if (windowState.type === 'home') {
-      return
-    }
+    switch (location.trigger) {
+      case 'load': {
+        if (windowState.type === 'home') {
+          return
+        }
 
-    const found = tabs.find((tab) => {
-      const { value, type } = tab.state[0] || []
+        const found = tabs.find((tab) => {
+          const { value, type } = tab.state[0] || []
 
-      return value === windowState.value && type === windowState.type
-    })
+          return value === windowState.value && type === windowState.type
+        })
 
-    if (!found) {
-      return addTab(windowState)
-    }
+        if (!found) {
+          const tabId = addTab(windowState)
+          router.replace(encodeWindowHash(windowState, tabId))
+        } else {
+          setSelectedTab(found.id)
+        }
 
-    setSelectedTab(found.id)
-  }, [])
-
-  useEffect(() => {
-    const handleRouteChange = (nextRoute: string) => {
-      const cleaned = nextRoute.slice(1)
-      if (cleaned === '') {
         return
       }
-      const windowState = decodeWindowSearch(cleaned)
+      // popstate handles back/forward buttons from browser
+      case 'popstate': {
+        if (tab) {
+          setTabState(windowState, tab)
+        }
 
-      if (!activeTab) {
-        return addTab(windowState)
+        return
       }
+      case 'pushstate': {
+        if (windowState.type === 'home') {
+          return setSelectedTab(undefined)
+        }
 
-      setTabState(windowState, activeTab.id)
+        const found = tabs.find((entry) => entry.id === tab)
+
+        if (found) {
+          setTabState(windowState, found.id)
+        }
+
+        return
+      }
     }
-
-    router.events.on('routeChangeStart', handleRouteChange)
-
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange)
-    }
-  }, [activeTab, props])
+  }, [location])
 
   return (
     <RecoilRoot key={activeTab?.id || 'home'}>
