@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           filter: [
             {
               terms: {
-                'heuristicCollectionId.keyword': [collectionId],
+                heuristicCollectionId: [collectionId],
               },
             },
             {
@@ -37,6 +37,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           ],
         },
       },
+      sort: [
+        {
+          rarityScore: 'asc',
+        },
+      ],
       size: 4,
     }
     const result = await postNFTQuery(query)

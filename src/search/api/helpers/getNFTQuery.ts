@@ -11,7 +11,7 @@ const createOrQuery = (entries: QueryType[]) => ({
 const sortMappings: {
   [key: string]: string
 } = {
-  name: 'offChainData.name.keyword',
+  name: 'offChainData.name.sort',
   'list-price': 'lastListPrice',
   'sale-price': 'lastTradePrice',
   'rarity-score': 'rarityScore',

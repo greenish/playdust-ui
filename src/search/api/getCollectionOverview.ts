@@ -58,7 +58,7 @@ const fetchListedResults = async (collectionId: string) => {
           },
           {
             terms: {
-              'heuristicCollectionId.keyword': [collectionId],
+              heuristicCollectionId: [collectionId],
             },
           },
         ],

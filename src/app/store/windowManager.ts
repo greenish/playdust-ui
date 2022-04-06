@@ -21,7 +21,7 @@ export interface Window {
 }
 
 export const window = atom<Window>({
-  key: 'tabs',
+  key: 'windowManager',
   default: {
     tabs: [],
     selectedTabId: undefined,
