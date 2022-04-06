@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import Status from '../../../types/Status'
+import Status from '../../common/types/Status'
 
 export const collectionStatus = atom<Status>({
   key: 'collectionStatus',

@@ -1,6 +1,7 @@
 import { PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
-import { fetchNFTDetails, solanaCluster } from '../../../store'
+import { solanaCluster } from '../../app/store'
+import { fetchNFTDetails } from '../../nft/store'
 
 export * from './coinPrice'
 export * from './fetchAccountDetails'

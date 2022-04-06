@@ -17,6 +17,7 @@ const RootContainer = styled.div`
   padding-left: 16px;
   min-height: ${totalHeight}px;
   overflow-x: auto;
+  overflow-y: hidden;
 `
 
 const OverviewContainer = styled.div`

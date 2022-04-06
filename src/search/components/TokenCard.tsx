@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
-import Link from '../../../components/common/Link'
+import Link from '../../app/components/Link'
 import { encodeWindowHash } from '../../app/helpers/getWindowUrl'
 import getNFTImageUrl from '../helpers/getNFTImageUrl'
 import { NFTSource } from '../types/OpenSearchIndex'

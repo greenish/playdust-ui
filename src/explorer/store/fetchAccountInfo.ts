@@ -6,7 +6,7 @@ import {
 } from '@solana/web3.js'
 import { Buffer } from 'buffer'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaCluster from '../../../store/solanaCluster'
+import { solanaCluster } from '../../app/store'
 import { pageIdx } from './pageIdx'
 
 export const fetchAccountInfo = selectorFamily<

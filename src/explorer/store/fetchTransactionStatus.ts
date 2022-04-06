@@ -6,7 +6,7 @@ import {
   TransactionSignature,
 } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import { solanaCluster } from '../../../store'
+import { solanaCluster } from '../../app/store'
 
 export type Confirmations = number | 'max'
 

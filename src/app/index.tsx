@@ -27,6 +27,8 @@ const SearchInputContainer = styled.div`
 
 const ContentContainer = styled.div`
   overflow: auto;
+  height: 100%;
+  width: 100%;
 `
 
 const SpinnerContainer = styled.div`

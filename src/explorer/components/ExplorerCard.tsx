@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Skeleton, Typography } from '@mui/material'
 import { PropsWithChildren, Suspense } from 'react'
-import { range } from '../../../helpers/utils'
+import { range } from '../../common/helpers/utils'
 
 export const TableSkeleton = ({ rows = 10 }) => {
   const _range = range(0, rows, 1)

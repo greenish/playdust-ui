@@ -1,7 +1,7 @@
 import { Chip, Paper } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
-import { normalizeTokenAmount } from '../../../../../helpers/utils'
+import { normalizeTokenAmount } from '../../../../common/helpers/utils'
 import {
   TokenAccountBalancePairWithOwner,
   useAccountInfo,

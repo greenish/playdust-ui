@@ -1,6 +1,6 @@
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { Connection } from '@solana/web3.js'
-import type SearchMetadata from '../../types/SearchMetadata'
+import type SearchMetadata from '../../src/common/types/SearchMetadata'
 import fetchOffchain from '../fetchOffchain'
 
 const getMetadataByMintAddress = async (

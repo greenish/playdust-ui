@@ -12,7 +12,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import { useRouter } from 'next/router'
 import React, { Suspense } from 'react'
-import TradeNFT from '../../../../../components/nft/TradeNFT'
+import TradeNFT from '../../../../nft/components/TradeNFT'
 import { useNFTDetails } from '../../../store'
 import { ExternalLink } from '../../ExternalLinks'
 

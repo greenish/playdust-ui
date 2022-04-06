@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid'
 import { atom, noWait, selector, useRecoilState, useRecoilValue } from 'recoil'
-import api from '../../../helpers/api'
+import api from '../../common/helpers/frontendApi'
 import ComposedQueryType from '../types/ComposedQueryType'
 import {
   AttributeResponse,

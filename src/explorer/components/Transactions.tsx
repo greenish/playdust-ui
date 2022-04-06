@@ -1,6 +1,6 @@
 import { Chip } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
-import { pubkeyToString, toRelative } from '../../../helpers/utils'
+import { pubkeyToString, toRelative } from '../../common/helpers/utils'
 import { useRawAccountHistory } from '../store'
 import { ExplorerCard } from './ExplorerCard'
 import { AccountLink, SlotLink, TxLink } from './Links'

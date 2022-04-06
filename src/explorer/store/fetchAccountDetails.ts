@@ -1,8 +1,8 @@
 import { MetadataJson, programs } from '@metaplex/js'
 import { Connection, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import { pubkeyToString } from '../../../helpers/utils'
-import solanaCluster from '../../../store/solanaCluster'
+import { solanaCluster } from '../../app/store'
+import { pubkeyToString } from '../../common/helpers/utils'
 import { getEditionInfo } from '../helpers/getEditionInfo'
 import { fetchTokenRegistry } from './fetchTokenRegistry'
 

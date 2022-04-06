@@ -6,7 +6,7 @@ import {
   abbreviatedNumber,
   compact,
   normalizeTokenAmount,
-} from '../../../../../helpers/utils'
+} from '../../../../common/helpers/utils'
 import {
   useAccountDetails,
   useAccountInfo,

@@ -1,7 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
-import { compact } from '../../../../../helpers/utils'
-import { solanaCluster } from '../../../../../store'
+import { solanaCluster } from '../../../../app/store'
+import { compact } from '../../../../common/helpers/utils'
 import { addressLabel } from '../../../helpers/tx'
 import {
   useAccountInfo,

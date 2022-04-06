@@ -1,6 +1,6 @@
 import { BlockResponse, Connection } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaCluster from '../../../store/solanaCluster'
+import { solanaCluster } from '../../app/store'
 
 export const fetchBlock = selectorFamily<BlockResponse | null, number>({
   key: 'block',

@@ -17,29 +17,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 ## Project Layout
 
-### `/pages`
-
-- Hosts all Next.js pages/routes
-
-### `/components`
-
-- Location of common React Components to be used in the `/pages` directory
-
-### `/provider`
-
-- Directory for all providers, app will get wrapped in the index provider component
-
-### `/hooks`
-
-- Location of common hooks that can be used in `/components` & `/pages`
-
-### `/store`
-
-- Hosts all code associated with the Recoil store
-
-### `/solana`
-
-- Hosts query/helper functions to query the Solana blockchain
+TODO: needs to be added once module system is finalized
 
 ## Libraries/Conventions
 

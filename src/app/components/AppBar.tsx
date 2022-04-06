@@ -11,10 +11,10 @@ import {
 import { useRouter } from 'next/router'
 import { PropsWithChildren, ReactNode } from 'react'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
-import Notifications from '../../../components/common/Notifications'
-import WalletButton from '../../../components/common/WalletButton'
 import { encodeWindowHash } from '../helpers/getWindowUrl'
 import * as store from '../store'
+import Notifications from './Notifications'
+import WalletButton from './WalletButton'
 
 const theme = createTheme({
   palette: {

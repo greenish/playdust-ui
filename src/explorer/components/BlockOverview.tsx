@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { lamportsToSol, toLocaleString } from '../../../helpers/utils'
+import { lamportsToSol, toLocaleString } from '../../common/helpers/utils'
 import { useBlock, useSOLPrice } from '../store'
 import { ExplorerGrid } from './ExplorerGrid'
 import { SlotLink } from './Links'

@@ -1,8 +1,8 @@
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import Provider from '../provider'
 import AppBar from '../src/app/components/AppBar'
+import Provider from '../src/app/provider'
 import '../styles/globals.css'
 
 const App = ({ Component, pageProps }: AppProps) => {

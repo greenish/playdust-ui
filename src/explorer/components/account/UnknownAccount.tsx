@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
-import { compact } from '../../../../helpers/utils'
+import { compact } from '../../../common/helpers/utils'
 import { getSpace } from '../../helpers/account'
 import { addressLabel, displayAddress } from '../../helpers/tx'
 import { useAccountInfo, useSolanaCluster, useTokenRegistry } from '../../store'

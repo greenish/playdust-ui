@@ -1,5 +1,5 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { toLocaleString } from '../../../../helpers/utils'
+import { toLocaleString } from '../../../common/helpers/utils'
 import { useAccountInfo } from '../../store'
 import { AccountDetails } from '../AccountDetails'
 import { ExplorerCard } from '../ExplorerCard'

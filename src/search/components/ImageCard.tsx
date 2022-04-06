@@ -3,9 +3,9 @@ import { Card, Skeleton } from '@mui/material'
 import { Box } from '@mui/system'
 import { PropsWithChildren, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import Link from '../../../components/common/Link'
-import LazyImage from '../../../components/utils/LazyImage'
-import Status from '../../../types/Status'
+import Link from '../../app/components/Link'
+import LazyImage from '../../common/components/LazyImage'
+import Status from '../../common/types/Status'
 import * as store from '../store'
 
 const CardContentContainer = styled.div`

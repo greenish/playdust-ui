@@ -1,6 +1,6 @@
-import { ellipsisify } from '../../../helpers/utils'
 import { encodeWindowHash } from '../../app/helpers/getWindowUrl'
 import WindowUnion from '../../app/types/WindowUnion'
+import { ellipsisify } from '../../common/helpers/utils'
 import { CopyButton } from './CopyButton'
 import { Link } from './Link'
 
@@ -39,7 +39,7 @@ export function AccountLink(props: ExplorerLinkProps) {
 }
 
 export function SlotLink(props: ExplorerLinkProps) {
-  return <ExplorerLink url="?slot" {...props} />
+  return <ExplorerLink type="block" {...props} />
 }
 
 export function ProgramLink(props: ExplorerLinkProps) {

@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { Instructions, Transfers } from '.'
-import { compact } from '../../../../../helpers/utils'
+import { compact } from '../../../../common/helpers/utils'
 import { useAccountInfo, useEditionInfo, useNFTDetails } from '../../../store'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { ExplorerTab, ExplorerTabs } from '../../ExplorerTabs'

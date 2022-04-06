@@ -9,7 +9,7 @@ import {
 } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import React from 'react'
-import { pubkeyToString } from '../../../helpers/utils'
+import { pubkeyToString } from '../../common/helpers/utils'
 import { DomainInfo, useUserDomains } from '../store'
 import { ExplorerCard } from './ExplorerCard'
 import { AccountLink } from './Links'
