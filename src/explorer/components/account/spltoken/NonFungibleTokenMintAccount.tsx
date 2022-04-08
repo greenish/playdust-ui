@@ -1,95 +1,67 @@
-import { Stack } from '@mui/material'
-import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { Instructions, Transfers } from '.'
-import { compact } from '../../../../common/helpers/utils'
-import { useAccountInfo, useEditionInfo, useNFTDetails } from '../../../store'
-import { ExplorerGrid } from '../../ExplorerGrid'
-import { ExplorerTab, ExplorerTabs } from '../../ExplorerTabs'
-import { AccountLink } from '../../Links'
-import { Transactions } from '../../Transactions'
-import { Distribution } from './Distribution'
-import { Metadata } from './Metadata'
-import { NonFungibleTokenMintAccountHeader } from './NonFungibleTokenMintAccountHeader'
+import { Grid, Stack, Typography } from '@mui/material'
+import { PublicKey } from '@solana/web3.js'
+import { useEffect, useState } from 'react'
+import { getNFTCensorStatus } from '../../../../common/helpers/playdustApi'
+import { Status } from '../../../../common/types/Status'
+import { useNFTDetails } from '../../../store'
+import {
+  Attributes,
+  Creators,
+  Details,
+  Image,
+  Overview,
+  Tools,
+  Trading,
+} from './nft'
 
 type TokenOverviewProps = {
   pubkey: PublicKey
 }
 
-export const NonFungibleTokenMintAccountOverview = ({
-  pubkey,
-}: TokenOverviewProps) => {
-  const account = useAccountInfo(pubkey)
-  const nftDetails = useNFTDetails(pubkey)
-  const editionInfo = useEditionInfo(pubkey)
-
-  const data = account?.data as ParsedAccountData
-
-  const {
-    parsed: {
-      info: { mintAuthority },
-    },
-  } = data
-
-  const rows = compact([
-    ['Address', <AccountLink to={pubkey.toBase58()} allowCopy />],
-    editionInfo.masterEdition?.maxSupply && [
-      'Max Total Supply',
-      editionInfo.masterEdition.maxSupply.toNumber() === 0
-        ? 1
-        : editionInfo.masterEdition.maxSupply.toNumber(),
-    ],
-    editionInfo.masterEdition?.supply && [
-      'Current Supply',
-      editionInfo.masterEdition.supply.toNumber() === 0
-        ? 1
-        : editionInfo.masterEdition.supply.toNumber(),
-    ],
-    /*
-    nftDetails?.collection?.verified && [
-      'Verified Collection Address'
-      <AccountLink
-        to={nftDetails.collection.key}
-        allowCopy
-      />
-    ],
-    */
-    mintAuthority && [
-      'Mint Authority',
-      <AccountLink to={mintAuthority} allowCopy />,
-    ],
-    nftDetails?.updateAuthority && [
-      'Update Authority',
-      <AccountLink to={nftDetails.updateAuthority} allowCopy />,
-    ],
-    nftDetails?.data && [
-      'Seller Fee',
-      `${nftDetails?.data.sellerFeeBasisPoints / 100}%`,
-    ],
-  ])
-
-  return <ExplorerGrid rows={rows} />
-}
-
-export const NonFungibleTokenMintAccountDetails = ({
-  pubkey,
-}: TokenOverviewProps) => {
-  const tabs: ExplorerTab[] = [
-    ['History', Transactions],
-    ['Transfers', Transfers],
-    ['Instructions', Instructions],
-    ['Distribution', Distribution],
-    ['Metadata', Metadata],
-  ]
-
-  return <ExplorerTabs tabs={tabs} pubkey={pubkey} />
-}
-
 export const NonFungibleTokenMintAccount = (props: TokenOverviewProps) => {
+  const { pubkey } = props
+
+  const [status, setStatus] = useState(Status.None)
+
+  const details = useNFTDetails(pubkey)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const { type } = await getNFTCensorStatus(pubkey.toBase58())
+        setStatus(type)
+      } catch (err) {
+        setStatus(Status.None)
+      }
+    })()
+  }, [pubkey])
+
+  if (!details) {
+    return <Typography>Unable to fetch {pubkey}</Typography>
+  }
+
   return (
-    <Stack spacing={2}>
-      <NonFungibleTokenMintAccountHeader {...props} />
-      <NonFungibleTokenMintAccountOverview {...props} />
-      <NonFungibleTokenMintAccountDetails pubkey={props.pubkey} />
-    </Stack>
+    <Grid container spacing={0}>
+      <Grid item xs={6}>
+        <Image details={details} mint={pubkey.toBase58()} status={status} />
+      </Grid>
+      <Grid item xs={6}>
+        <Typography variant="h4" component="h1">
+          {details.data.name}
+        </Typography>
+        <Tools pubkey={pubkey} />
+        <Stack spacing={2}>
+          <Trading pubkey={pubkey} status={status} />
+          <Creators details={details} />
+          <Attributes details={details} />
+        </Stack>
+      </Grid>
+      <Grid item xs={12}>
+        <Stack spacing={2}>
+          <Overview {...props} />
+          <Details pubkey={pubkey} />
+        </Stack>
+      </Grid>
+    </Grid>
   )
 }

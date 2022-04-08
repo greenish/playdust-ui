@@ -97,6 +97,9 @@ const ProfileInfo = ({ publicKey }: ProfileProps) => {
 
   useEffect(() => {
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    if (!userProfile.email) {
+      return
+    }
     if (!userProfile.email.match(emailRegex)) {
       setErrors({
         ...errors,
@@ -112,6 +115,9 @@ const ProfileInfo = ({ publicKey }: ProfileProps) => {
 
   useEffect(() => {
     const twitterRegex = /^@\w+/
+    if (!userProfile.twitter) {
+      return
+    }
     if (!userProfile.twitter.match(twitterRegex)) {
       setErrors({
         ...errors,

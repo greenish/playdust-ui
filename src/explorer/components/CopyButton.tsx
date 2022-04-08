@@ -8,7 +8,7 @@ interface CopyButtonProps {
 
 export const CopyButton = ({ value }: CopyButtonProps) => {
   return (
-    <IconButton onClick={(evt) => copy('' + value)} size="small">
+    <IconButton onClick={(evt) => copy('' + value)}>
       <ContentCopyIcon />
     </IconButton>
   )

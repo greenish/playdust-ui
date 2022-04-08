@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import createAuthRefreshInterceptor from 'axios-auth-refresh'
 import type Profile from '../../me/types/Profile'
+import { CensorStatus } from '../types/Status'
 
 const instance: AxiosInstance = axios.create({
   baseURL: `/playdust-api`,
@@ -169,7 +170,9 @@ export const autoRefresh = (
   )
 }
 
-export const getNFTCensorStatus = async (mint: string) => {
+export const getNFTCensorStatus = async (
+  mint: string
+): Promise<CensorStatus> => {
   const { data } = await instance.get(`/censor/mint/${mint}`)
 
   return data

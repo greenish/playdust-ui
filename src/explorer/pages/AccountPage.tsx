@@ -1,7 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { FunctionComponent } from 'react'
 import WindowProps from '../../app/types/WindowProps'
-import { ExplorerContainer, ExplorerHeader } from '../components'
+import { ExplorerContainer } from '../components'
 import {
   ConfigAccount,
   NonceAccount,
@@ -47,7 +47,6 @@ export const AccountPage = ({ state }: WindowProps) => {
 
   return (
     <ExplorerContainer filter="account" value={address}>
-      <ExplorerHeader label="Account" />
       {pubkey ? <Account pubkey={pubkey} /> : <div>Invalid address</div>}
     </ExplorerContainer>
   )

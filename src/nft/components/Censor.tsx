@@ -77,18 +77,15 @@ const Censor = ({ details, mint }: CensorProps) => {
   const openFlaggedModal = store.useOpenFlaggedModal()
 
   useEffect(() => {
-    getNFTCensorStatus(mint)
-      .then((data) => {
-        if (data.type === Status.Censored) {
-          setStatus(Status.Censored)
-        } else if (data.type === Status.NSFW) {
-          setStatus(Status.NSFW)
-        }
-      })
-      .catch((e) => {
+    ;(async () => {
+      try {
+        const { type } = await getNFTCensorStatus(mint)
+        setStatus(type)
+      } catch (err) {
         setStatus(Status.None)
-      })
-  }, [details])
+      }
+    })()
+  }, [mint])
 
   const saveStatus = () => {
     setNFTCensorStatus(mint, publicKey!.toBase58(), status)
