@@ -10,12 +10,14 @@ interface RangeInputProps {
   min: number | undefined
   max: number | undefined
   onApply: (newValue: Omit<RangeContent, 'field'>) => any
+  sol?: boolean
 }
 
 interface RangeTextFieldProps {
   value: number | undefined
   label: string
   setter: Dispatch<SetStateAction<number | undefined>>
+  sol?: boolean
 }
 
 const RootContainer = styled.div`
@@ -24,11 +26,11 @@ const RootContainer = styled.div`
   justify-content: center;
 `
 
-const RangeTextField = ({ value, label, setter }: RangeTextFieldProps) => {
+const RangeTextField = ({ value, label, setter, sol }: RangeTextFieldProps) => {
   return (
     <TextField
       label={label}
-      placeholder="SOL"
+      placeholder={sol ? 'SOL' : ''}
       size="small"
       type="number"
       value={value === undefined ? '' : value}
@@ -60,9 +62,9 @@ const RangeInput = (props: RangeInputProps) => {
 
   return (
     <RootContainer>
-      <RangeTextField label="min" value={min} setter={setMin} />
+      <RangeTextField label="min" value={min} setter={setMin} sol={props.sol} />
       <Typography sx={{ mx: 1 }}>to</Typography>
-      <RangeTextField label="max" value={max} setter={setMax} />
+      <RangeTextField label="max" value={max} setter={setMax} sol={props.sol} />
       <IconButton
         sx={{ ml: 1 }}
         disabled={disabled}

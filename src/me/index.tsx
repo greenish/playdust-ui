@@ -22,9 +22,8 @@ const SignInButton = styled(Button)`
 `
 
 const Me = () => {
-  const TOKEN_TTL = 60 * 1000
   const wallet = useWallet()
-  const [cookies, setCookie] = useCookies(['authToken', 'expires_at', 'nonce'])
+  const [cookies, setCookie] = useCookies(['authToken', 'nonce'])
 
   const signIn = () => {
     const { publicKey, signMessage, connected } = wallet
@@ -44,12 +43,8 @@ const Me = () => {
         .then(({ token, nonce }) => {
           nonceToken = nonce
           instance.defaults.headers.common['Authorization'] = `Bearer ${token}`
-          const expires_at = new Date(Date.now() + TOKEN_TTL).getTime()
           setCookie('nonce', nonce, { path: '/' })
           setCookie('authToken', token, { path: '/' })
-          setCookie('expires_at', expires_at, {
-            path: '/',
-          })
         })
         .catch((e) => console.error(e))
     }

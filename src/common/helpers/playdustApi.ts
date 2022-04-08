@@ -122,7 +122,7 @@ export const RefreshToken = async (wallet: string, nonce: string) => {
     nonce,
   })
 
-  return data.token
+  return data
 }
 
 export const GetUserProfile = async (wallet: string, nonce: string) => {
@@ -146,17 +146,20 @@ export const UpdateProfile = async (
 export const autoRefresh = (
   pubKey: string,
   nonce: string,
-  authToken: string
+  authToken: string,
+  setter: Function
 ) => {
   instance.defaults.headers.common.Authorization = `Bearer ${authToken}`
   createAuthRefreshInterceptor(
     instance,
     (failedRequest) =>
       RefreshToken(pubKey, nonce)
-        .then((token) => {
+        .then((data) => {
+          setter('authToken', data.token, { path: '/' })
+          setter('nonce', data.nonce, { path: '/' })
           failedRequest.response.config.headers[
             'Authorization'
-          ] = `Bearer ${token}`
+          ] = `Bearer ${data.token}`
           return Promise.resolve()
         })
         .catch(() => Promise.reject()),

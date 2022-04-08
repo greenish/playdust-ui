@@ -62,7 +62,13 @@ const RangeFilter = ({ label, name }: store.SearchFilter) => {
         />
       </CheckboxContainer>
       {visible && (
-        <RangeInput min={min} max={max} value={name} onApply={onApply} />
+        <RangeInput
+          min={min}
+          max={max}
+          value={name}
+          onApply={onApply}
+          sol={name !== 'rarity-score'}
+        />
       )}
     </ItemContainer>
   )

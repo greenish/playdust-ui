@@ -12,6 +12,8 @@ const getRangeField = (field: SearchFilterFields) => {
       return 'lastListPrice'
     case 'sale-price':
       return 'lastTradePrice'
+    case 'rarity-score':
+      return 'normalizedRarityScore'
     default:
       const n: never = field
 

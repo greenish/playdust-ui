@@ -49,7 +49,9 @@ const getChipLabel = (child: QueryType) => {
     case 'text':
       return child.value
     case 'range':
-      return `${capitalize(child.value)}: ${child.min}-${child.max} SOL`
+      return `${capitalize(child.value)}: ${child.min}-${child.max} ${
+        child.value !== 'rarity-score' ? 'SOL' : ''
+      }`
     default:
       const n: never = child
 

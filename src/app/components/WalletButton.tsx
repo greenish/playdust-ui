@@ -27,11 +27,7 @@ const WalletButton = ({ active }: { active: boolean }) => {
     store.solanaClusters
   )
   const router = useRouter()
-  const [cookies, _setCookie, removeCookie] = useCookies([
-    'authToken',
-    'expires_at',
-    'nonce',
-  ])
+  const [cookies, setCookie, removeCookie] = useCookies(['authToken', 'nonce'])
 
   const buttonProps =
     wallet.connected && wallet.publicKey
@@ -48,7 +44,7 @@ const WalletButton = ({ active }: { active: boolean }) => {
   useEffect(() => {
     if (cookies && wallet.connected) {
       const pubKey = wallet.publicKey?.toBase58()!
-      autoRefresh(pubKey, cookies.nonce, cookies.authToken)
+      autoRefresh(pubKey, cookies.nonce, cookies.authToken, setCookie)
     }
   }, [wallet])
 
@@ -82,7 +78,6 @@ const WalletButton = ({ active }: { active: boolean }) => {
           onClick={() => {
             wallet.disconnect()
             removeCookie('authToken')
-            removeCookie('expires_at')
             setAnchorEl(null)
           }}
         >
