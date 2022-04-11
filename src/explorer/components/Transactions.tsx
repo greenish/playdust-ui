@@ -1,7 +1,14 @@
-import { Chip } from '@mui/material'
-import { PublicKey } from '@solana/web3.js'
+import SuccessIcon from '@mui/icons-material/CheckCircle'
+import ErrorIcon from '@mui/icons-material/Error'
+import { Box, Chip } from '@mui/material'
+import {
+  ParsedInstruction,
+  PartiallyDecodedInstruction,
+  PublicKey,
+} from '@solana/web3.js'
+import { useState } from 'react'
 import { pubkeyToString, toRelative } from '../../common/helpers/utils'
-import { useRawAccountHistory } from '../store'
+import { useAccountHistory } from '../store'
 import { ExplorerCard } from './ExplorerCard'
 import { AccountLink, SlotLink, TxLink } from './Links'
 import { SolBalance } from './SolBalance'
@@ -19,8 +26,56 @@ interface TransactionsProps {
   pubkey: PublicKey
 }
 
+interface FormattedInstructionsProps {
+  instructions: (ParsedInstruction | PartiallyDecodedInstruction)[]
+}
+
+const FormattedInstructions = ({
+  instructions,
+}: FormattedInstructionsProps) => {
+  const [showAll, setShowAll] = useState(false)
+
+  const handleClick = () => {
+    setShowAll((show) => !show)
+  }
+
+  const parsedInstructions = instructions.map((instruction) => {
+    if ('parsed' in instruction) {
+      return instruction.parsed.type
+    }
+    return 'unknown'
+  })
+
+  const total = parsedInstructions.length
+
+  if (total === 0) {
+    return null
+  }
+
+  const [first] = parsedInstructions
+
+  return (
+    <>
+      <Box onClick={handleClick}>
+        {first}{' '}
+        {total - 1 > 0 ? (
+          <Chip label={`+${total - 1}`} variant="outlined" size="small" />
+        ) : null}
+      </Box>
+      <Box sx={{ display: showAll ? 'block' : 'none' }}>
+        {parsedInstructions.map((parsedInstruction, idx) => (
+          <>
+            <Chip key={idx} label={parsedInstruction} size="small" />
+            <br />
+          </>
+        ))}
+      </Box>
+    </>
+  )
+}
+
 export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
-  const { transactions } = useRawAccountHistory(pubkey)
+  const { transactions } = useAccountHistory(pubkey)
 
   const rows = transactions.map((transaction) => {
     if (!transaction) {
@@ -40,14 +95,14 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
 
     const { accountKeys, instructions } = message || {}
 
-    const byPubkey = pubkeyToString(accountKeys?.[0])
+    const byPubkey = pubkeyToString(accountKeys?.[0].pubkey)
 
     const relativeTime = toRelative(blockTime)
 
     const status = err ? (
-      <Chip color="error" label="Error" size="small" />
+      <ErrorIcon color="error" fontSize="small" />
     ) : (
-      <Chip color="success" label="Sucess" size="small" />
+      <SuccessIcon color="success" fontSize="small" />
     )
 
     const signature = <TxLink to={signatures[0]} ellipsis={[30, 0]} allowCopy />
@@ -57,7 +112,7 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
     const time = <>{relativeTime}</>
 
     const formattedInstructions = (
-      <pre style={{ display: 'none' }}>{JSON.stringify(instructions)}</pre>
+      <FormattedInstructions instructions={instructions} />
     )
 
     const by = <AccountLink to={byPubkey} allowCopy ellipsis={[6, 6]} />
