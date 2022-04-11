@@ -39,7 +39,7 @@ const SpinnerContainer = styled.div`
 `
 
 const App = () => {
-  const { tabs } = useRecoilValue(store.window)
+  const { tabs } = useRecoilValue(store.windowManager)
   const setTabState = store.useSetTabState()
   const addTab = store.useAddTab()
   const removeTab = store.useRemoveTab()
@@ -50,17 +50,17 @@ const App = () => {
 
   const props = useMemo<WindowProps>(() => {
     const currentId = activeTab?.id || ''
-    const state = activeTab?.state[0]?.value || ''
-    const type = activeTab?.state[0]?.type || getWindowType(state)
+    const state = activeTab?.windows[0]?.state || ''
+    const type = activeTab?.windows[0]?.type || getWindowType(state)
     const removeCurrentTab = () => removeTab(currentId)
 
     const props: WindowProps = {
       state,
-      setState: (nextValue: string) => {
+      setState: (nextState: string) => {
         router.push(
           encodeWindowHash({
             type,
-            value: nextValue,
+            state: nextState,
           })
         )
       },
@@ -80,14 +80,14 @@ const App = () => {
 
     switch (location.trigger) {
       case 'load': {
-        if (windowState.type === 'home') {
+        if (windowState.type === 'home' || windowState.state === '') {
           return
         }
 
         const found = tabs.find((tab) => {
-          const { value, type } = tab.state[0] || []
+          const { state, type } = tab.windows[0] || []
 
-          return value === windowState.value && type === windowState.type
+          return state === windowState.state && type === windowState.type
         })
 
         if (!found) {

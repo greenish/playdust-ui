@@ -32,20 +32,21 @@ const createSingleNFTQuery = (child: QueryType) => {
           query: {
             bool: {
               must: [
-                {
+                trait !== '' && {
                   match: {
                     'offChainData.attributes.trait_type.keyword': trait,
                   },
                 },
-                child.value && {
-                  bool: {
-                    should: value.map((entry) => ({
-                      match: {
-                        'offChainData.attributes.value.keyword': entry,
-                      },
-                    })),
+                value &&
+                  value.length > 0 && {
+                    bool: {
+                      should: value.map((entry) => ({
+                        match: {
+                          'offChainData.attributes.value.keyword': entry,
+                        },
+                      })),
+                    },
                   },
-                },
               ].filter(Boolean),
             },
           },

@@ -19,7 +19,7 @@ const Home = ({ addTab }: WindowProps) => {
   useOnChangeSerializedSearch((nextState: string) =>
     addTab({
       type: 'search',
-      value: nextState,
+      state: nextState,
     })
   )
 

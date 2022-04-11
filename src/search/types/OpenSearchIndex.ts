@@ -1,5 +1,9 @@
 import { MetadataDataData } from '@metaplex-foundation/mpl-token-metadata'
 
+interface OpenSearchHighlight {
+  [key: string]: string[]
+}
+
 export interface OpenSearchResponse<T> {
   _scroll_id: string
   hits: {
@@ -8,9 +12,15 @@ export interface OpenSearchResponse<T> {
     }
     hits: {
       _source: T
+      highlight?: OpenSearchHighlight
     }[]
   }
   aggregations: any
+}
+
+interface SourceHighlight<T> {
+  source: T
+  highlight: OpenSearchHighlight
 }
 
 export interface NFTSource {
@@ -39,6 +49,8 @@ export interface NFTSource {
   lastListPrice?: number
 }
 
+export type NFTSourceHighlight = SourceHighlight<NFTSource>
+
 export interface CollectionSource {
   id: string
   symbol: string
@@ -47,3 +59,5 @@ export interface CollectionSource {
   family?: string
   elementCount: number
 }
+
+export type CollectionSourceHighlight = SourceHighlight<CollectionSource>

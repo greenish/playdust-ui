@@ -40,7 +40,9 @@ export const postMultiQuery = async (query: string) => {
     'Content-type': 'application/x-ndjson',
   }
 
-  return postAxios(query, '/_msearch', headers)
+  const data = await postAxios(query, '/_msearch', headers)
+
+  return data.responses as OpenSearchResponse<any>[]
 }
 
 function makePostQuery<T>(index: string) {

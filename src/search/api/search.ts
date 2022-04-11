@@ -29,8 +29,7 @@ const fetchMultiSearch = async (query: ComposedQueryType, nftQuery: object) => {
   })
 
   if (!collectionQuery || isCollectionQuery) {
-    const attributeResults = (await postMultiQuery(attributeMultiQuery))
-      .responses
+    const attributeResults = await postMultiQuery(attributeMultiQuery)
 
     return {
       attributes: cleanAttributes(attributeResults),
@@ -43,9 +42,9 @@ const fetchMultiSearch = async (query: ComposedQueryType, nftQuery: object) => {
     'nft-collection'
   )
   const combinedMultiQuery = `${collectionMultiQuery}${attributeMultiQuery}`
-  const [collections, ...attributeResults] = (
-    await postMultiQuery(combinedMultiQuery)
-  ).responses
+  const [collections, ...attributeResults] = await postMultiQuery(
+    combinedMultiQuery
+  )
 
   return {
     attributes: cleanAttributes(attributeResults),

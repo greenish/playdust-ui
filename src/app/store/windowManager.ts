@@ -6,13 +6,13 @@ import type WindowUnion from '../types/WindowUnion'
 const { persistAtom } = recoilPersist()
 
 export interface WindowState {
-  value: string
+  state: string
   type: WindowUnion
 }
 
 export interface Tab {
   id: string
-  state: WindowState[]
+  windows: WindowState[]
 }
 
 export interface Window {
@@ -20,8 +20,8 @@ export interface Window {
   selectedTabId: string | undefined
 }
 
-export const window = atom<Window>({
-  key: 'windowManager',
+export const windowManager = atom<Window>({
+  key: 'windowManagerAtom',
   default: {
     tabs: [],
     selectedTabId: undefined,
@@ -30,7 +30,7 @@ export const window = atom<Window>({
 })
 
 export const useSetSelectedTab = () => {
-  const setter = useSetRecoilState(window)
+  const setter = useSetRecoilState(windowManager)
 
   return (id?: string) => {
     setter((curr) => ({
@@ -41,12 +41,12 @@ export const useSetSelectedTab = () => {
 }
 
 export const useAddTab = () => {
-  const setter = useSetRecoilState(window)
+  const setter = useSetRecoilState(windowManager)
 
   return (newState: WindowState) => {
     const newTab = {
       id: nanoid(),
-      state: [newState],
+      windows: [newState],
     }
 
     setter((curr) => ({
@@ -59,7 +59,7 @@ export const useAddTab = () => {
 }
 
 export const useSetTabState = () => {
-  const setter = useSetRecoilState(window)
+  const setter = useSetRecoilState(windowManager)
 
   return (nextState: WindowState, id: string) => {
     setter((curr) => ({
@@ -68,7 +68,7 @@ export const useSetTabState = () => {
         if (tab.id === id) {
           return {
             ...tab,
-            state: [nextState],
+            windows: [nextState],
           }
         }
 
@@ -79,7 +79,7 @@ export const useSetTabState = () => {
 }
 
 export const useRemoveTab = () => {
-  const setter = useSetRecoilState(window)
+  const setter = useSetRecoilState(windowManager)
 
   return (id: string) => {
     setter((curr) => ({

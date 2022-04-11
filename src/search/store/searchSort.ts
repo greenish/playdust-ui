@@ -19,23 +19,32 @@ export type SearchSortType = {
 
 const makeSortOption = (
   name: string,
-  field: SearchSortValue['field']
-): [SearchSortOption, SearchSortOption] => [
-  {
-    name: `${name}: asc`,
-    value: {
-      field,
-      direction: 'asc',
+  field: SearchSortValue['field'],
+  reverse?: boolean
+) => {
+  const result: SearchSortOption[] = [
+    {
+      name: `${name}: asc`,
+      value: {
+        field,
+        direction: 'asc',
+      },
     },
-  },
-  {
-    name: `${name}: desc`,
-    value: {
-      field,
-      direction: 'desc',
+    {
+      name: `${name}: desc`,
+      value: {
+        field,
+        direction: 'desc',
+      },
     },
-  },
-]
+  ]
+
+  if (reverse) {
+    return result.reverse()
+  }
+
+  return result
+}
 
 export const searchSortOptions = atom<SearchSortOption[]>({
   key: 'searchSortOptions',
@@ -47,10 +56,10 @@ export const searchSortOptions = atom<SearchSortOption[]>({
         direction: 'desc',
       },
     },
+    ...makeSortOption('Rarity', 'rarity-score', true),
     ...makeSortOption('Name', 'name'),
     ...makeSortOption('List Price', 'list-price'),
     ...makeSortOption('Sale Price', 'sale-price'),
-    ...makeSortOption('Rarity', 'rarity-score'),
   ],
 })
 

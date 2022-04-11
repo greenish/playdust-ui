@@ -3,20 +3,13 @@ import { QueryType } from '../types/ComposedQueryType'
 import { searchQuery } from './'
 
 export const queryValidationPredicate = (entry: QueryType) => {
-  if ('trait' in entry && entry.trait === '') {
-    return false
+  if (entry.field === 'attribute') {
+    return entry.value.length > 0 || entry.trait !== ''
   }
 
-  const { value } = entry
-
-  if (value === '') {
+  if (entry.value === '') {
     return false
   }
-
-  if (Array.isArray(value) && value.length === 0) {
-    return false
-  }
-
   return true
 }
 

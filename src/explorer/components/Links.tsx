@@ -23,7 +23,7 @@ export function ExplorerLink({
   const display =
     label || (ellipsis ? ellipsisify('' + to, ellipsis[0], ellipsis[1]) : to)
 
-  const href = type ? encodeWindowHash({ type, value: String(to) }) : '#'
+  const href = type ? encodeWindowHash({ type, state: String(to) }) : '#'
   return (
     <>
       {allowCopy && <CopyButton value={to} />}

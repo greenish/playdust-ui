@@ -1,4 +1,8 @@
-import { CollectionSource, NFTSource } from './OpenSearchIndex'
+import {
+  CollectionSource,
+  CollectionSourceHighlight,
+  NFTSource,
+} from './OpenSearchIndex'
 
 export type AttributeResponse = {
   trait: string
@@ -11,6 +15,14 @@ export interface SearchResponse {
   attributes: AttributeResponse
   cursor: string
   total: number
+}
+
+export interface SearchSuggestionResponse {
+  collections: CollectionSourceHighlight[]
+  attributes: {
+    names: string[]
+    values: string[]
+  }
 }
 
 export type SearchCursorResponse = Pick<SearchResponse, 'nfts' | 'cursor'>

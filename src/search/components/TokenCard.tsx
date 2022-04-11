@@ -52,7 +52,7 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
   const { image, name } = metadata?.offChainData || {}
   const href = encodeWindowHash({
     type: 'account',
-    value: metadata?.mint || '',
+    state: metadata?.mint || '',
   })
   const lastListPrice = metadata?.lastListPrice
 

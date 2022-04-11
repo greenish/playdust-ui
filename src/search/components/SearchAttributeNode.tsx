@@ -16,32 +16,40 @@ const SearchAttributeNode = (props: SearchAttributeProps) => {
   const attributes = store.useNoWaitSearchAttributes()
 
   const options = useMemo(() => {
-    return attributes.find((entry) => entry.trait === data.trait)?.options || []
+    const base =
+      attributes.find((entry) => entry.trait === data.trait)?.options || []
+    const withValue = [...data.value, ...base]
+
+    return [...new Set(withValue)]
   }, [attributes, data.trait])
 
   return (
     <>
       <FormControl fullWidth sx={{ mt: 1 }}>
-        <InputLabel>{traitLabel}</InputLabel>
-        <Select
-          value={data.trait || ''}
-          label={traitLabel}
-          onChange={(evt) =>
-            updateAttribute(props.id, { trait: evt.target.value })
-          }
-        >
-          {attributes.map((attribute) => (
-            <MenuItem key={attribute.trait} value={attribute.trait}>
-              {attribute.trait}
-            </MenuItem>
-          ))}
-        </Select>
+        {data.trait !== '' && (
+          <>
+            <InputLabel>{traitLabel}</InputLabel>
+            <Select
+              value={data.trait || ''}
+              label={traitLabel}
+              onChange={(evt) =>
+                updateAttribute(props.id, { trait: evt.target.value })
+              }
+            >
+              {attributes.map((attribute) => (
+                <MenuItem key={attribute.trait} value={attribute.trait}>
+                  {attribute.trait}
+                </MenuItem>
+              ))}
+            </Select>
+          </>
+        )}
       </FormControl>
       <FormControl fullWidth sx={{ mt: 1 }}>
         <InputLabel>{valueLabel}</InputLabel>
         <Select
           multiple
-          disabled={!options.length}
+          disabled={!options.length || data.value.length === options.length}
           label={valueLabel}
           value={data.value || []}
           onChange={(evt) =>

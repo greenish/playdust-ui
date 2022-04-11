@@ -1,5 +1,3 @@
-import { getRecoil } from 'recoil-nexus'
-import * as store from '../store'
 import { WindowState } from '../store'
 import { isInWindowUnion } from '../types/WindowUnion'
 
@@ -18,7 +16,7 @@ export const decodeWindowHash = (
     return {
       windowState: {
         type: windowType,
-        value: windowValue,
+        state: windowValue,
       },
       tab,
     }
@@ -27,21 +25,28 @@ export const decodeWindowHash = (
   return {
     windowState: {
       type: 'home',
-      value: '',
+      state: '',
     },
     tab,
   }
 }
 
-export const encodeWindowHash = (input: WindowState, tab?: string): string => {
-  const { selectedTabId } = getRecoil(store.window)
-  const normalizedTab = tab || selectedTabId
+export const encodeWindowHash = (
+  input: WindowState,
+  tabOverride?: string
+): string => {
+  const decoded = decodeWindowHash()
+  const tab = tabOverride || decoded.tab
 
-  const base = `#${input.type}=${encodeURIComponent(input.value)}`
+  if (input.state === '') {
+    return ''
+  }
 
-  if (!normalizedTab) {
+  const base = `#${input.type}=${encodeURIComponent(input.state)}`
+
+  if (!tab) {
     return base
   }
 
-  return `${base}&tab=${normalizedTab}`
+  return `${base}&tab=${tab}`
 }

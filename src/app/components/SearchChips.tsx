@@ -43,11 +43,17 @@ const capitalize = (input: string) =>
 const getChipLabel = (child: QueryType) => {
   switch (child.field) {
     case 'attribute':
-      return `${child.trait}: ${child.value.join(', ')}`
+      if (child.value.length === 0) {
+        return `Attribute Category: ${child.trait}`
+      }
+
+      const trait = child.trait === '' ? 'Attribute Value' : child.trait
+
+      return `${trait}: ${child.value.join(', ')}`
     case 'collection':
       return <CollectionChip {...child} />
     case 'text':
-      return child.value
+      return `search: ${child.value}`
     case 'range':
       return `${capitalize(child.value)}: ${child.min}-${child.max} ${
         child.value !== 'rarity-score' ? 'SOL' : ''

@@ -87,10 +87,10 @@ const TabButton = ({ children, isActive, onClick }: TabButtonProps) => (
 )
 
 const AppBar = ({ children }: AppBarProps) => {
-  const { tabs } = useRecoilValue(store.window)
+  const { tabs } = useRecoilValue(store.windowManager)
   const activeTab = useRecoilValue(store.activeTab)
   const router = useRouter()
-  const resetWindow = useResetRecoilState(store.window)
+  const resetWindow = useResetRecoilState(store.windowManager)
 
   if (!router.isReady) {
     return <></>
@@ -117,7 +117,7 @@ const AppBar = ({ children }: AppBarProps) => {
                   key={tab.id}
                   isActive={inWindowManager && tab.id === activeTab?.id}
                   onClick={() => {
-                    const state = tab.state[0]
+                    const state = tab.windows[0]
                     router.push(encodeWindowHash(state, tab.id))
                   }}
                 >
