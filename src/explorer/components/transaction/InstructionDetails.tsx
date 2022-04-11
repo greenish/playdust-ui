@@ -65,8 +65,11 @@ export const InstructionDetailsContent = ({
           ix.programId = new PublicKey(ix.programId)
         }
 
+        const key = `${idx}-${childIndex}`
+
         const card = (
           <InstructionCard
+            key={key}
             index={idx}
             ix={ix}
             result={result}
@@ -80,13 +83,17 @@ export const InstructionDetailsContent = ({
       })
     }
 
+    const key = `${idx}`
+
     return (
       <InstructionCard
+        key={key}
         index={idx}
         ix={instruction}
         result={result}
         signature={signature}
         tx={transaction}
+        innerCards={innerCards}
       />
     )
   })

@@ -14,12 +14,14 @@ const DEVNET = {
   endpoint: 'https://api.devnet.solana.com',
 }
 
-type SolanaClustersType = {
+export type SolanaClusterType = {
+  network: WalletAdapterNetwork
+  endpoint: string
+}
+
+export type SolanaClustersType = {
   selectedIndex: number
-  clusters: {
-    network: WalletAdapterNetwork
-    endpoint: string
-  }[]
+  clusters: SolanaClusterType[]
 }
 
 export const solanaClusters = atom<SolanaClustersType>({

@@ -23,7 +23,7 @@ export function RawDetails({ ix }: { ix: TransactionInstruction }) {
               {isSigner && <Chip label="Signer" size="small" />}
             </DataCell>
             <DataCell className="text-lg-end">
-              <AccountLink to={_pubkey} />
+              <AccountLink to={_pubkey} allowCopy />
             </DataCell>
           </TableRow>
         )

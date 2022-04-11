@@ -1,5 +1,6 @@
 import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
+import bs58 from 'bs58'
 import { DateTime } from 'luxon'
 
 /*
@@ -109,4 +110,17 @@ export function toLocaleString(time: number | null | undefined) {
 
 export function toRelative(time: number | null | undefined) {
   return time ? DateTime.fromMillis(time * 1000).toRelative() : ''
+}
+
+export function isAccount(str: string) {
+  try {
+    const decoded = bs58.decode(str)
+    return decoded.length === 32
+  } catch {
+    return false
+  }
+}
+
+export function isFunction(value: any) {
+  return typeof value === 'function'
 }

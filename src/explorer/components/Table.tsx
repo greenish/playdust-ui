@@ -7,6 +7,7 @@ import {
   TableHead as MUITableHeader,
   TableRow as MUITableRow,
 } from '@mui/material'
+import { ReactNode } from 'react'
 
 export const Table = MUITable
 export const TableBody = MUITableBody
@@ -27,4 +28,21 @@ export const DataCell = ({ children, ...props }: MUITableCellProps) => {
       {children}
     </MUITableCell>
   )
+}
+
+export type DataRowsItem = [ReactNode, ReactNode, React.Key?]
+
+interface DataRowsProps {
+  data?: DataRowsItem[]
+}
+
+export const DataRows = ({ data }: DataRowsProps) => {
+  const rows = (data || []).map(([label, value, key], idx) => (
+    <TableRow key={key || idx}>
+      <DataCell>{label}</DataCell>
+      <DataCell>{value}</DataCell>
+    </TableRow>
+  ))
+
+  return <>{rows}</>
 }

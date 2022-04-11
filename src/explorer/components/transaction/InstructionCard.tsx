@@ -6,16 +6,17 @@ import {
   TransactionInstruction,
   TransactionSignature,
 } from '@solana/web3.js'
+import { FunctionComponent } from 'react'
 import { intoTransactionInstruction } from '../../helpers/tx'
 import { ErrorCard } from '../ErrorCard'
+import { SystemDetailsCard } from './system/SystemDetailsCard'
+import { TokenDetailsCard } from './token/TokenDetailsCard'
 import { UnknownDetailsCard } from './UnknownDetailsCard'
 
 // These are placeholders for individual detail cards to be built.
 // For now, they all default to unknown, which displays hex data
-const TokenDetailsCard = UnknownDetailsCard
 const BpfLoaderDetailsCard = UnknownDetailsCard
 const BpfUpgradeableLoaderDetailsCard = UnknownDetailsCard
-const SystemDetailsCard = UnknownDetailsCard
 const StakeDetailsCard = UnknownDetailsCard
 const MemoDetailsCard = UnknownDetailsCard
 const AssociatedTokenDetailsCard = UnknownDetailsCard
@@ -49,10 +50,42 @@ export interface InstructionCardProps {
   childIndex?: number
 }
 
+interface InstructionDetails {
+  component: FunctionComponent<InstructionCardProps>
+}
+
+export const instructionMap: Record<string, InstructionDetails> = {
+  'spl-token': {
+    component: TokenDetailsCard,
+  },
+  'bpf-loader': {
+    component: BpfLoaderDetailsCard,
+  },
+  'bpf-upgradeable-loader': {
+    component: BpfUpgradeableLoaderDetailsCard,
+  },
+  system: {
+    component: SystemDetailsCard,
+  },
+  stake: {
+    component: StakeDetailsCard,
+  },
+  'spl-memo': {
+    component: MemoDetailsCard,
+  },
+  'spl-associated-token-account': {
+    component: AssociatedTokenDetailsCard,
+  },
+  vote: {
+    component: VoteDetailsCard,
+  },
+  unknown: {
+    component: UnknownDetailsCard,
+  },
+}
+
 export function InstructionCard(props: InstructionCardProps) {
   const { tx, ix, result, index, signature, innerCards, childIndex } = props
-
-  const key = `${index}-${childIndex}`
 
   if ('parsed' in ix) {
     const props = {
@@ -63,29 +96,11 @@ export function InstructionCard(props: InstructionCardProps) {
       signature,
       innerCards,
       childIndex,
-      key,
     }
 
-    switch (ix.program) {
-      case 'spl-token':
-        return <TokenDetailsCard {...props} />
-      case 'bpf-loader':
-        return <BpfLoaderDetailsCard {...props} />
-      case 'bpf-upgradeable-loader':
-        return <BpfUpgradeableLoaderDetailsCard {...props} />
-      case 'system':
-        return <SystemDetailsCard {...props} />
-      case 'stake':
-        return <StakeDetailsCard {...props} />
-      case 'spl-memo':
-        return <MemoDetailsCard {...props} />
-      case 'spl-associated-token-account':
-        return <AssociatedTokenDetailsCard {...props} />
-      case 'vote':
-        return <VoteDetailsCard {...props} />
-      default:
-        return <UnknownDetailsCard {...props} />
-    }
+    const Details = instructionMap[ix.program] || instructionMap['unknown']
+
+    return <Details.component {...props} />
   }
 
   const transactionIx = intoTransactionInstruction(
@@ -95,10 +110,7 @@ export function InstructionCard(props: InstructionCardProps) {
 
   if (!transactionIx) {
     return (
-      <ErrorCard
-        key={key}
-        message="Could not display this instruction, please report"
-      />
+      <ErrorCard message="Could not display this instruction, please report" />
     )
   }
 
@@ -113,22 +125,22 @@ export function InstructionCard(props: InstructionCardProps) {
   }
 
   if (isBonfidaBotInstruction(transactionIx)) {
-    return <BonfidaBotDetailsCard key={key} {...props2} />
+    return <BonfidaBotDetailsCard {...props2} />
   } else if (isInstructionFromAnAnchorProgram(transactionIx)) {
-    return <GenericAnchorDetailsCard key={key} {...props2} />
+    return <GenericAnchorDetailsCard {...props2} />
   } else if (isMangoInstruction(transactionIx)) {
-    return <MangoDetailsCard key={key} {...props2} />
+    return <MangoDetailsCard {...props2} />
   } else if (isSerumInstruction(transactionIx)) {
-    return <SerumDetailsCard key={key} {...props2} />
+    return <SerumDetailsCard {...props2} />
   } else if (isTokenSwapInstruction(transactionIx)) {
-    return <TokenSwapDetailsCard key={key} {...props2} />
+    return <TokenSwapDetailsCard {...props2} />
   } else if (isTokenLendingInstruction(transactionIx)) {
-    return <TokenLendingDetailsCard key={key} {...props2} />
+    return <TokenLendingDetailsCard {...props2} />
   } else if (isWormholeInstruction(transactionIx)) {
-    return <WormholeDetailsCard key={key} {...props2} />
+    return <WormholeDetailsCard {...props2} />
   } else if (isPythInstruction(transactionIx)) {
-    return <PythDetailsCard key={key} {...props2} />
+    return <PythDetailsCard {...props2} />
   } else {
-    return <UnknownDetailsCard key={key} {...props2} />
+    return <UnknownDetailsCard {...props2} />
   }
 }
