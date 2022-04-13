@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   FormControl,
   InputLabel,
@@ -35,12 +34,9 @@ const FlaggedModal = () => {
   }
 
   return (
-    <Dialog open={open} onClose={() => close()}>
+    <Dialog open={open} onClose={() => close()} fullWidth>
       <DialogTitle>Report</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Select the reason that represent better your inconvenience
-        </DialogContentText>
         <FormControl fullWidth sx={{ margin: '16px 0' }}>
           <InputLabel id="censor-label">Reason</InputLabel>
           <Select
@@ -53,7 +49,7 @@ const FlaggedModal = () => {
               Item has explicit content
             </MenuItem>
             <MenuItem value="NSFW">
-              Item is not apropied for work (NSFW)
+              Item is not appropriate for work (NSFW)
             </MenuItem>
             <MenuItem value="other">Other</MenuItem>
           </Select>

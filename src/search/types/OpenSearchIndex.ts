@@ -58,6 +58,8 @@ export interface CollectionSource {
   description: string
   family?: string
   elementCount: number
+  totalVolume: number
+  floorPrice: number
 }
 
 export type CollectionSourceHighlight = SourceHighlight<CollectionSource>

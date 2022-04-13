@@ -23,10 +23,12 @@ const SearchAttributeNode = (props: SearchAttributeProps) => {
     return [...new Set(withValue)]
   }, [attributes, data.trait])
 
+  const isAttributeValueSearch = !(data.trait === '' && data.value.length > 0)
+
   return (
     <>
       <FormControl fullWidth sx={{ mt: 1 }}>
-        {data.trait !== '' && (
+        {isAttributeValueSearch && (
           <>
             <InputLabel>{traitLabel}</InputLabel>
             <Select

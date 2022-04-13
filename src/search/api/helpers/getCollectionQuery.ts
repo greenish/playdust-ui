@@ -38,6 +38,13 @@ const createCollectionQuery = (query: ComposedQueryType) => {
         must: result,
       },
     },
+    sort: [
+      {
+        totalVolume: {
+          order: 'desc',
+        },
+      },
+    ],
   }
 
   return composedQuery

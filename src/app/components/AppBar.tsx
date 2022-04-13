@@ -105,9 +105,9 @@ const AppBar = ({ children }: AppBarProps) => {
           <VerticalAppBarContent>
             <TopContainer>
               <TabButton
-                isActive={!activeTab}
+                isActive={!activeTab && !router.pathname.startsWith('/me')}
                 onClick={() => {
-                  router.push('')
+                  router.push('/')
                 }}
               >
                 <Home />
@@ -127,7 +127,7 @@ const AppBar = ({ children }: AppBarProps) => {
               {tabs.length > 0 && (
                 <IconButton
                   onClick={() => {
-                    router.push('')
+                    router.push('/')
                     resetWindow()
                   }}
                 >

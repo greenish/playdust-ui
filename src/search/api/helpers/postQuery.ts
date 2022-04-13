@@ -35,14 +35,16 @@ export const postNFTScrollQuery = async (scrollId: string) => {
   return result as OpenSearchResponse<NFTSource>
 }
 
-export const postMultiQuery = async (query: string) => {
-  const headers = {
-    'Content-type': 'application/x-ndjson',
+function makePostMultiQuery<T>() {
+  return async (query: string) => {
+    const headers = {
+      'Content-type': 'application/x-ndjson',
+    }
+
+    const data = await postAxios(query, '/_msearch', headers)
+
+    return data.responses as OpenSearchResponse<T>[]
   }
-
-  const data = await postAxios(query, '/_msearch', headers)
-
-  return data.responses as OpenSearchResponse<any>[]
 }
 
 function makePostQuery<T>(index: string) {
@@ -59,3 +61,6 @@ export const postNFTQuery = makePostQuery<NFTSource>('nft-metadata')
 export const postCollectionQuery =
   makePostQuery<CollectionSource>('nft-collection')
 export const postTransactionQuery = makePostQuery<any>('nft-transaction')
+
+export const postMultiQuery = makePostMultiQuery<any>()
+export const postMutliCollectionQuery = makePostMultiQuery<CollectionSource>()

@@ -27,13 +27,7 @@ export interface SearchSuggestionResponse {
 
 export type SearchCursorResponse = Pick<SearchResponse, 'nfts' | 'cursor'>
 
-interface SimilarCollection extends CollectionSource {
-  volume: number
-}
-
 export interface CollectionOverviewResponse extends CollectionSource {
-  volume: number
-  listedItems: number
-  floorPrice: number
-  similar: SimilarCollection[]
+  listed: number
+  similar: CollectionSource[]
 }

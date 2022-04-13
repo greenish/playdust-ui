@@ -1,18 +1,11 @@
 import { Typography } from '@mui/material'
+import humanizeCollection from '../helpers/humanizeCollection'
 import type { CollectionSource } from '../types/OpenSearchIndex'
 import ImageCard from './ImageCard'
 
 interface CollectionCardProps extends CollectionSource {
   cardSize: number
   onClick?: (id: string) => any
-}
-
-const getLabel = (name?: string, symbol?: string) => {
-  if (name && symbol) {
-    return `${name} (${symbol})`
-  }
-
-  return name || symbol
 }
 
 const CollectionCard = ({
@@ -27,7 +20,9 @@ const CollectionCard = ({
       imageSize={cardSize}
       src={`/api/collection-image?id=${id}&s=${cardSize}`}
       content={
-        <Typography sx={{ fontSize: 12 }}>{getLabel(name, symbol)}</Typography>
+        <Typography sx={{ fontSize: 12 }}>
+          {humanizeCollection({ name, symbol })}
+        </Typography>
       }
       onClick={onClick ? () => onClick(id) : undefined}
       contentHeight="40px"

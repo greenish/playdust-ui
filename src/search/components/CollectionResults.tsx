@@ -1,4 +1,6 @@
 import styled from '@emotion/styled'
+import { CircularProgress } from '@mui/material'
+import { Suspense } from 'react'
 import { useRecoilValue } from 'recoil'
 import * as store from '../store'
 import CollectionCard from './CollectionCard'
@@ -40,7 +42,9 @@ const CollectionResults = () => {
     <RootContainer>
       {isCollectionQuery ? (
         <OverviewContainer>
-          <CollectionOverview />
+          <Suspense fallback={<CircularProgress />}>
+            <CollectionOverview />
+          </Suspense>
         </OverviewContainer>
       ) : (
         collections.map((collection) => (

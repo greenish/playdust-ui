@@ -16,13 +16,15 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { getRecoil } from 'recoil-nexus'
 import { setCollectionCensorStatus } from '../../common/helpers/playdustApi'
+import { humanizeSolana } from '../../common/helpers/utils'
 import Status from '../../common/types/Status'
 import { userProfile } from '../../me/store'
 import * as store from '../store'
 import CollectionCard from './CollectionCard'
+import SimilarCollections from './SimilarCollections'
 
 const RootContainer = styled.div`
   display: flex;
@@ -51,60 +53,36 @@ const StatusButton = styled(Button)`
   right: 16px;
 `
 
-const humanizeSolana = (input?: number) => {
-  if (!input) {
-    return '0'
-  }
-
-  const rounded = Math.round((input + Number.EPSILON) * 100) / 100
-
-  return `${rounded.toLocaleString()} SOL`
-}
-
 const CollectionOverview = () => {
-  const [open, setOpen] = useState(false)
+  const [statusOpen, setStatusOpen] = useState(false)
+  const [similarOpen, setSimilarOpen] = useState(false)
   const [status, setStatus] = useRecoilState(store.collectionStatus)
   const [censorState, setCensorState] = useState(Status.None)
   const [cookies] = useCookies(['authToken'])
   const collectionId = useRecoilValue(store.collectionId)!
-  const collection = useRecoilValueLoadable(store.collectionById(collectionId))
-  const overview = useRecoilValueLoadable(
-    store.collectionOverview(collectionId)
-  )
+  const overview = useRecoilValue(store.collectionOverview(collectionId))
   const { roles } = getRecoil(userProfile)
   const { publicKey } = useWallet()
   const initCollectionQuery = store.useInitializeCollectionQuery()
   const openFlaggedModal = store.useOpenFlaggedModal()
 
+  const { totalVolume, floorPrice, listed, similar, elementCount, id } =
+    overview
+
   const saveStatus = () => {
     setCollectionCensorStatus(collectionId, publicKey!.toBase58(), status)
     setStatus(censorState)
-    setOpen(false)
+    setStatusOpen(false)
   }
-
-  const { volume, floorPrice, listedItems, similar, elementCount } =
-    useMemo(() => {
-      if (overview.state === 'hasValue') {
-        return overview.contents
-      }
-
-      return {
-        volume: 0,
-        floorPrice: 0,
-        listedItems: '',
-        similar: [],
-        elementCount: 0,
-      }
-    }, [overview])
 
   const isPossibleDuplicate = useMemo(() => {
     if (!similar.length) {
       return false
     }
 
-    const highestVolume = similar[0]?.volume || 0
+    const highestVolume = similar[0]?.totalVolume || 0
 
-    return highestVolume > volume
+    return highestVolume > totalVolume
   }, [overview])
 
   return (
@@ -114,13 +92,13 @@ const CollectionOverview = () => {
           {roles.length && roles.includes('admin') ? (
             <>
               <StatusButton
-                onClick={() => setOpen(true)}
+                onClick={() => setStatusOpen(true)}
                 color="primary"
                 variant="outlined"
               >
                 Change status
               </StatusButton>
-              <Dialog onClose={() => setOpen(false)} open={open}>
+              <Dialog onClose={() => setStatusOpen(false)} open={statusOpen}>
                 <DialogTitle>Change item status</DialogTitle>
                 <DialogContent>
                   <RadioGroup
@@ -145,7 +123,7 @@ const CollectionOverview = () => {
                   </RadioGroup>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={() => setOpen(false)}>Cancel</Button>
+                  <Button onClick={() => setStatusOpen(false)}>Cancel</Button>
                   <Button onClick={saveStatus}>Save</Button>
                 </DialogActions>
               </Dialog>
@@ -162,13 +140,11 @@ const CollectionOverview = () => {
         </>
       ) : null}
       <CardContainer>
-        {collection.state === 'hasValue' && (
-          <CollectionCard {...collection.contents} cardSize={170} />
-        )}
+        <CollectionCard {...overview} cardSize={170} />
       </CardContainer>
       <ChipContainer>
         <Chip
-          label={`Total Volume: ${humanizeSolana(volume)}`}
+          label={`Total Volume: ${humanizeSolana(totalVolume)}`}
           variant="outlined"
         />
         <Chip
@@ -176,21 +152,31 @@ const CollectionOverview = () => {
           variant="outlined"
         />
         <Chip label={`Total Items: ${elementCount}`} variant="outlined" />
-        <Chip label={`Listed Items: ${listedItems}`} variant="outlined" />
-        {isPossibleDuplicate && (
-          <Tooltip
-            sx={{
-              cursor: 'pointer',
-            }}
-            title="This collection has been detected as a possible duplicate of a larger collection, click to view orginal"
-            onClick={() => initCollectionQuery(similar[0].id)}
-          >
-            <Chip
-              label={`Possible Duplicate`}
-              variant="outlined"
-              color="warning"
+        <Chip label={`Listed Items: ${listed}`} variant="outlined" />
+        {similar.length && (
+          <>
+            <Tooltip
+              sx={{
+                cursor: 'pointer',
+              }}
+              title="Other collections have been found with a similar name, description, or symbol. Click to view"
+              onClick={() => setSimilarOpen(true)}
+            >
+              <Chip
+                label={`${
+                  similar.length === 20 ? '20+' : similar.length
+                } Similar Collections`}
+                variant="outlined"
+                color={isPossibleDuplicate ? 'warning' : 'default'}
+              />
+            </Tooltip>
+            <SimilarCollections
+              collectionId={collectionId}
+              open={similarOpen}
+              onClose={() => setSimilarOpen(false)}
+              onClick={initCollectionQuery}
             />
-          </Tooltip>
+          </>
         )}
       </ChipContainer>
     </RootContainer>

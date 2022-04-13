@@ -42,7 +42,7 @@ export const encodeWindowHash = (
     return ''
   }
 
-  const base = `#${input.type}=${encodeURIComponent(input.state)}`
+  const base = `/#${input.type}=${encodeURIComponent(input.state)}`
 
   if (!tab) {
     return base
