@@ -27,14 +27,14 @@ export enum Cluster {
   Custom,
 }
 
-const clusterMap: Record<any, any> = {
+export const walletAdapterNetworkToClusterMap: Record<any, any> = {
   [WalletAdapterNetwork.Mainnet]: Cluster.MainnetBeta,
   [WalletAdapterNetwork.Testnet]: Cluster.Testnet,
   [WalletAdapterNetwork.Devnet]: Cluster.Devnet,
   // [WalletAdapterNetwork.Custom]: Custom,
 }
 
-const reverseClusterMap: Record<any, any> = {
+export const clusterMapToWalletAdapterNetworkMap: Record<any, any> = {
   [Cluster.MainnetBeta]: WalletAdapterNetwork.Mainnet,
   [Cluster.Testnet]: WalletAdapterNetwork.Testnet,
   [Cluster.Devnet]: WalletAdapterNetwork.Devnet,
@@ -282,11 +282,11 @@ export const SYSVAR_IDS = {
 
 export function programLabel(
   address: string,
-  cluster: WalletAdapterNetwork
+  walletAdapterNetwork: WalletAdapterNetwork
 ): string | undefined {
-  const _cluster = clusterMap[cluster]
+  const cluster = walletAdapterNetworkToClusterMap[walletAdapterNetwork]
   const programName = PROGRAM_NAME_BY_ID[address]
-  if (programName && PROGRAM_DEPLOYMENTS[programName].includes(_cluster)) {
+  if (programName && PROGRAM_DEPLOYMENTS[programName].includes(cluster)) {
     return programName
   }
 
@@ -308,26 +308,25 @@ export function tokenLabel(
 
 export function addressLabel(
   address: string,
-  cluster: WalletAdapterNetwork,
+  walletAdapterNetwork: WalletAdapterNetwork,
   tokenRegistry?: TokenInfoMap
 ): string | undefined {
-  const _cluster = clusterMap[cluster]
-
+  const cluster = walletAdapterNetworkToClusterMap[walletAdapterNetwork]
   return (
-    programLabel(address, cluster) ||
+    programLabel(address, walletAdapterNetwork) ||
     SYSVAR_IDS[address] ||
     SPECIAL_IDS[address] ||
     tokenLabel(address, tokenRegistry) ||
-    SerumMarketRegistry.get(address, _cluster)
+    SerumMarketRegistry.get(address, cluster)
   )
 }
 
 export function displayAddress(
   address: string,
-  cluster: WalletAdapterNetwork,
+  walletAdapterNetwork: WalletAdapterNetwork,
   tokenRegistry: TokenInfoMap
 ): string {
-  return addressLabel(address, cluster, tokenRegistry) || address
+  return addressLabel(address, walletAdapterNetwork, tokenRegistry) || address
 }
 
 export function intoTransactionInstruction(
