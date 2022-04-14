@@ -1,15 +1,15 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import * as store from '../store'
-import { CollectionQuery } from '../types/ComposedQueryType'
+import * as store from '../../store'
+import { CollectionQuery } from '../../types/ComposedQueryType'
 
 const label = 'is:'
 
-interface SearchCollectionNodeProps {
+interface CollectionNodeProps {
   id: string
 }
 
-const SearchCollectionNode = (props: SearchCollectionNodeProps) => {
+const CollectionNode = (props: CollectionNodeProps) => {
   const { value } = useRecoilValue(
     store.searchQueryChild(props.id)
   ) as CollectionQuery
@@ -29,4 +29,4 @@ const SearchCollectionNode = (props: SearchCollectionNodeProps) => {
   )
 }
 
-export default SearchCollectionNode
+export default CollectionNode

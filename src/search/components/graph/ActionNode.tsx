@@ -3,7 +3,7 @@ import { ArrowDownward, ArrowForward } from '@mui/icons-material'
 import { Button, Card, Menu, MenuItem, MenuItemProps } from '@mui/material'
 import { useState } from 'react'
 import { NodeComponentProps } from 'react-flow-renderer'
-import * as store from '../store'
+import { useAddAttributeNode } from '../../hooks/useSearchChange'
 
 const RoootContainer = styled(Card)`
   display: flex;
@@ -12,8 +12,7 @@ const RoootContainer = styled(Card)`
 const ActionNode = ({ data }: NodeComponentProps) => {
   const [operation] = useState<'and' | 'or'>('and')
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>()
-
-  const addAttribute = store.useAddAttribute()
+  const addAttributeNode = useAddAttributeNode('memory')
 
   const open = !!anchorEl
   const onClose = () => {
@@ -34,7 +33,14 @@ const ActionNode = ({ data }: NodeComponentProps) => {
     <RoootContainer sx={{ width: data.width }}>
       <Menu open={open} anchorEl={anchorEl} onClose={onClose}>
         <MenuItemHandler
-          onClick={() => addAttribute([], '', operation, data.idx)}
+          onClick={() =>
+            addAttributeNode({
+              value: [],
+              trait: '',
+              operation,
+              at: data.idx,
+            })
+          }
         >
           Attribute Exact
         </MenuItemHandler>
@@ -45,7 +51,12 @@ const ActionNode = ({ data }: NodeComponentProps) => {
           fullWidth
           endIcon={<ArrowDownward />}
           onClick={() => {
-            addAttribute([], '', 'or', data.idx)
+            addAttributeNode({
+              value: [],
+              trait: '',
+              operation: 'or',
+              at: data.idx,
+            })
           }}
         >
           OR
@@ -56,7 +67,12 @@ const ActionNode = ({ data }: NodeComponentProps) => {
         size="small"
         endIcon={<ArrowForward />}
         onClick={() => {
-          addAttribute([], '', 'and', data.idx)
+          addAttributeNode({
+            value: [],
+            trait: '',
+            operation: 'and',
+            at: data.idx,
+          })
         }}
       >
         AND

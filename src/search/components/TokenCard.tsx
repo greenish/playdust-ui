@@ -54,7 +54,7 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
     type: 'account',
     state: metadata?.mint || '',
   })
-  const lastListPrice = metadata?.lastListPrice
+  const { lastListPrice, listed } = metadata || {}
 
   return (
     <ImageCard
@@ -67,7 +67,7 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
             <CardText>
               <Link href={href}>{name || metadata?.data?.name}</Link>
             </CardText>
-            {lastListPrice && (
+            {listed && lastListPrice && (
               <CardText sx={{ fontSize: '90%' }}>{lastListPrice} SOL</CardText>
             )}
           </CardTextContainer>

@@ -9,7 +9,6 @@ import WindowSwitch from './components/WindowSwitch'
 import getWindowType from './helpers/getWindowType'
 import { decodeWindowHash, encodeWindowHash } from './helpers/getWindowUrl'
 import * as store from './store'
-import { WindowState } from './store'
 import type WindowProps from './types/WindowProps'
 
 const RootContainer = styled.div`
@@ -56,18 +55,6 @@ const App = () => {
 
     const props: WindowProps = {
       state,
-      setState: (nextState: string) => {
-        router.push(
-          encodeWindowHash({
-            type,
-            state: nextState,
-          })
-        )
-      },
-      addTab: (nextState: WindowState) => {
-        const tabId = addTab(nextState)
-        router.push(encodeWindowHash(nextState, tabId))
-      },
       removeTab: removeCurrentTab,
       type,
     }
@@ -81,6 +68,10 @@ const App = () => {
     switch (location.trigger) {
       case 'load': {
         if (windowState.type === 'home' || windowState.state === '') {
+          if (activeTab) {
+            const activeState = activeTab.windows[0]
+            router.replace(encodeWindowHash(activeState, activeTab.id))
+          }
           return
         }
 
@@ -92,6 +83,7 @@ const App = () => {
 
         if (!found) {
           const tabId = addTab(windowState)
+
           router.replace(encodeWindowHash(windowState, tabId))
         } else {
           setSelectedTab(found.id)
@@ -116,6 +108,8 @@ const App = () => {
 
         if (found) {
           setTabState(windowState, found.id)
+        } else {
+          addTab(windowState, tab)
         }
 
         return

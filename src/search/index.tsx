@@ -1,12 +1,14 @@
 import styled from '@emotion/styled'
 import { useEffect } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import type WindowProps from '../app/types/WindowProps'
 import CollectionResults from './components/CollectionResults'
 import FlaggedModal from './components/FlaggedModal'
 import SearchResults from './components/SearchResults'
 import SearchSideBar from './components/SearchSideBar'
-import useOnChangeSerializedSearch from './hooks/useOnChangeSerializedSearch'
+import parseSearch from './helpers/parseSearch'
+import { serializeSearchActual } from './helpers/serializeSearch'
+import useUpdateSearch from './hooks/useUpdateSearch'
 import * as store from './store'
 
 const RootContainer = styled.div`
@@ -32,21 +34,26 @@ const ResultsContainer = styled.div`
   display: flex;
 `
 
-const Search = ({ state, setState, removeTab }: WindowProps) => {
-  const setQuery = store.useSetSearchQuery()
-  const setSort = store.useSetSelectedSortByValue()
-  const setOnlyListed = useSetRecoilState(store.searchOnlyListed)
-
-  useOnChangeSerializedSearch(setState)
+const Search = ({ state, removeTab }: WindowProps) => {
+  const sortOptions = useRecoilValue(store.searchSortOptions)
+  const setSearchKey = useSetRecoilState(store.searchKey)
+  const updateSearch = useUpdateSearch()
 
   useEffect(() => {
     try {
-      const { query, sort, onlyListed } = JSON.parse(state)
+      const parsed = parseSearch(state)
+      updateSearch(parsed)
 
-      setQuery(query)
-      setSort(sort)
-      setOnlyListed(onlyListed)
+      const actual = {
+        ...parsed,
+        sort: parsed.sort || sortOptions[0].value,
+      }
+
+      const serialized = serializeSearchActual(actual)
+
+      setSearchKey(serialized)
     } catch (e) {
+      console.error(e)
       removeTab()
     }
   }, [])

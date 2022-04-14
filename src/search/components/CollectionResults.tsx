@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { CircularProgress } from '@mui/material'
 import { Suspense } from 'react'
 import { useRecoilValue } from 'recoil'
+import { useInitCollectionQuery } from '../hooks/useSearchChange'
 import * as store from '../store'
 import CollectionCard from './CollectionCard'
 import CollectionOverview from './CollectionOverview'
@@ -31,7 +32,7 @@ const OverviewContainer = styled.div`
 
 const CollectionResults = () => {
   const { collections } = useRecoilValue(store.searchResults)
-  const initCollectionQuery = store.useInitializeCollectionQuery()
+  const initCollectionQuery = useInitCollectionQuery()
   const isCollectionQuery = useRecoilValue(store.isCollectionQuery)
 
   if (collections.length === 0 && !isCollectionQuery) {

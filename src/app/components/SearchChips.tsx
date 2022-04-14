@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { Chip, Typography } from '@mui/material'
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
+import { useRemoveNode } from '../../search/hooks/useSearchChange'
 import * as searchStore from '../../search/store'
 import type {
   CollectionQuery,
@@ -72,7 +73,7 @@ interface SearchChipsProps {
 
 const SearchChips = ({ disabled, removeTab }: SearchChipsProps) => {
   const query = useRecoilValue(searchStore.searchQueryValid)
-  const removeChild = searchStore.useRemoveChild()
+  const removeNode = useRemoveNode()
 
   return (
     <ChipContainer>
@@ -87,7 +88,7 @@ const SearchChips = ({ disabled, removeTab }: SearchChipsProps) => {
               label={getChipLabel(child)}
               variant="outlined"
               onDelete={() => {
-                query.flat().length === 1 ? removeTab() : removeChild(child.id)
+                query.flat().length === 1 ? removeTab() : removeNode(child.id)
               }}
             />
           )

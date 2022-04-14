@@ -11,7 +11,7 @@ const WindowSwitch = (props: WindowProps) => {
 
   switch (props.type) {
     case 'home':
-      return <Home {...props} />
+      return <Home />
     case 'search':
       return <Search key={key} {...props} />
     case 'account':

@@ -10,6 +10,11 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import {
+  useAddAttributeNode,
+  usePrependCollectionNode,
+  useUpdateAttributeNode,
+} from '../hooks/useSearchChange'
 import * as store from '../store'
 import { NFTSource } from '../types/OpenSearchIndex'
 
@@ -19,12 +24,12 @@ interface TokenCardFilter {
 
 const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const addAttribute = store.useAddAttribute()
-  const updateAtrribute = store.useUpdateAttribute()
+  const addAttributeNode = useAddAttributeNode()
+  const updateAtrributeNode = useUpdateAttributeNode()
   const exactAttributes = useRecoilValue(store.searchQueryAttributes)
   const isCollectionQuery = useRecoilValue(store.isCollectionQuery)
   const attributes = metadata.offChainData.attributes!
-  const prependCollectionQuery = store.usePrependCollectionQuery()
+  const prependCollectionNode = usePrependCollectionNode()
   const { heuristicCollectionId } = metadata
 
   return (
@@ -41,7 +46,7 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
           <FormGroup>
             {!isCollectionQuery && heuristicCollectionId && (
               <Button
-                onClick={() => prependCollectionQuery(heuristicCollectionId)}
+                onClick={() => prependCollectionNode(heuristicCollectionId)}
               >
                 Search in Collection
               </Button>
@@ -61,21 +66,21 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
                       checked={!!found}
                       onChange={(_evt) => {
                         if (!found) {
-                          addAttribute(
-                            [attribute.value],
-                            attribute.trait_type,
-                            'and'
-                          )
+                          addAttributeNode({
+                            value: [attribute.value],
+                            trait: attribute.trait_type,
+                            operation: 'and',
+                          })
                         } else {
-                          updateAtrribute(
-                            found.id,
-                            {
+                          updateAtrributeNode({
+                            id: found.id,
+                            update: {
                               value: found.value.filter(
                                 (entry) => entry !== attribute.value
                               ),
                             },
-                            true
-                          )
+                            clearOnEmpty: true,
+                          })
                         }
 
                         setAnchorEl(null)

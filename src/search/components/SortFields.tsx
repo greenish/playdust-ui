@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
+import { useSetSortValue } from '../hooks/useSearchChange'
 import * as store from '../store'
 
 const RootContainer = styled.div`
@@ -12,10 +14,22 @@ const RootContainer = styled.div`
 const sortLabel = 'Sort'
 
 const SortFields = () => {
-  const sort = useRecoilValue(store.searchSortActual)
+  const sort = useRecoilValue(store.searchSort)
   const { nfts } = useRecoilValue(store.searchResults)
-  const setSort = store.useSetSelectedSort()
-  const options = useRecoilValue(store.searchSortVisibleOptions)
+  const setSortValue = useSetSortValue()
+  const options = useRecoilValue(store.searchSortOptions)
+
+  const found = useMemo(() => {
+    if (!sort) {
+      return options[0]
+    }
+
+    return options.find(
+      (entry) =>
+        entry.value.direction === sort.direction &&
+        entry.value.field === sort.field
+    )
+  }, [options, sort])
 
   if (!nfts.length) {
     return <></>
@@ -27,10 +41,15 @@ const SortFields = () => {
         <InputLabel>{sortLabel}</InputLabel>
         <Select
           size="small"
-          value={sort.name}
+          value={found?.name}
           label={sortLabel}
           onChange={(evt) => {
-            setSort(evt.target.value)
+            const sortName = evt.target.value
+            const found = options.find((entry) => entry.name === sortName)
+
+            if (found) {
+              setSortValue(found.value)
+            }
           }}
         >
           {options.map(({ name }) => (

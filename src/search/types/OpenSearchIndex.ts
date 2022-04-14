@@ -47,6 +47,7 @@ export interface NFTSource {
   }
   heuristicCollectionId?: string
   lastListPrice?: number
+  listed?: boolean
 }
 
 export type NFTSourceHighlight = SourceHighlight<NFTSource>

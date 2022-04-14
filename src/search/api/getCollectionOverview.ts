@@ -86,13 +86,6 @@ const getListedQuery = (collectionId: string) => ({
       ],
     },
   },
-  aggs: {
-    floor: {
-      min: {
-        field: 'lastListPrice',
-      },
-    },
-  },
   size: 0,
 })
 
@@ -115,7 +108,7 @@ const handler = async (
     const [seedResult, listedResults] = await postMultiQuery(multiQuery)
 
     const seed = seedResult.hits.hits[0]._source
-    const listed = listedResults?.aggregations?.floor?.value || 0
+    const listed = listedResults?.hits?.total?.value || 0
 
     const similarCollectionQuery = getSimilarCollectionQuery(seed)
     const similarResult = await postCollectionQuery(similarCollectionQuery)

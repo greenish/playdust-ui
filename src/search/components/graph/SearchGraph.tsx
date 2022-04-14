@@ -6,7 +6,7 @@ import ReactFlow, {
 } from 'react-flow-renderer'
 import { useInterval } from 'react-use'
 import { useRecoilValue } from 'recoil'
-import * as store from '../store'
+import * as store from '../../store'
 import ActionNode from './ActionNode'
 import HandleNode from './HandleNode'
 import SearchNode from './SearchNode'

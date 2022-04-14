@@ -1,9 +1,11 @@
 import { FormControlLabel, Switch } from '@mui/material'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
+import { useSetOnlyListed } from '../hooks/useSearchChange'
 import * as store from '../store'
 
 const OnlyListedSwitch = () => {
-  const [onlyListed, setOnlyListed] = useRecoilState(store.searchOnlyListed)
+  const onlyListed = useRecoilValue(store.searchOnlyListed)
+  const setOnlyListed = useSetOnlyListed()
 
   return (
     <FormControlLabel

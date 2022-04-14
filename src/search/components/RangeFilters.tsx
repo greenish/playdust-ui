@@ -2,13 +2,18 @@ import styled from '@emotion/styled'
 import { Checkbox, FormControlLabel } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import {
+  useAddRangeNode,
+  useRemoveNode,
+  useUpdateRangeNode,
+} from '../hooks/useSearchChange'
 import * as store from '../store'
 import RangeInput from './RangeInput'
 
 const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 8px 0;
+  padding-top: 8px;
 `
 
 const CheckboxContainer = styled.div`
@@ -16,10 +21,10 @@ const CheckboxContainer = styled.div`
 `
 
 const RangeFilter = ({ label, name }: store.SearchFilter) => {
-  const addRange = store.useAddRange()
-  const removeChild = store.useRemoveChild()
+  const addRangeNode = useAddRangeNode()
+  const removeNode = useRemoveNode()
   const queryValue = useRecoilValue(store.rangeQueryByName(name))
-  const updateRange = store.useUpdateRange()
+  const updateRangeNode = useUpdateRangeNode()
 
   const [local, setLocal] = useState({
     visible: false,
@@ -27,14 +32,13 @@ const RangeFilter = ({ label, name }: store.SearchFilter) => {
     max: 0,
   })
 
-  const { visible, setVisible, min, max, onApply } = useMemo(() => {
+  const { visible, setVisible, min, max } = useMemo(() => {
     if (!!queryValue) {
       return {
         visible: true,
         min: queryValue.min,
         max: queryValue.max,
-        setVisible: () => removeChild(queryValue.id),
-        onApply: updateRange(queryValue.id),
+        setVisible: () => removeNode(queryValue.id),
       }
     }
 
@@ -43,7 +47,6 @@ const RangeFilter = ({ label, name }: store.SearchFilter) => {
       min: undefined,
       max: undefined,
       setVisible: (visible: boolean) => setLocal({ ...local, visible }),
-      onApply: addRange,
     }
   }, [local, queryValue])
 
@@ -66,7 +69,11 @@ const RangeFilter = ({ label, name }: store.SearchFilter) => {
           min={min}
           max={max}
           value={name}
-          onApply={onApply}
+          onApply={(newValue) =>
+            queryValue
+              ? updateRangeNode({ id: queryValue.id, update: newValue })
+              : addRangeNode(newValue)
+          }
           sol={name !== 'rarity-score'}
         />
       )}

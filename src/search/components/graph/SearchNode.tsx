@@ -4,8 +4,9 @@ import { Card, CardContent, IconButton, Typography } from '@mui/material'
 import { CSSProperties } from 'react'
 import { Handle, NodeComponentProps, Position } from 'react-flow-renderer'
 import { useRecoilValue } from 'recoil'
-import * as store from '../store'
-import { QueryType } from '../types/ComposedQueryType'
+import { useRemoveNode } from '../../hooks/useSearchChange'
+import * as store from '../../store'
+import { QueryType } from '../../types/ComposedQueryType'
 import SearchValueNode from './SearchValueNode'
 
 const CloseContainer = styled.div`
@@ -44,7 +45,7 @@ const getTitle = (query: QueryType) => {
 }
 
 const SearchNode = ({ id, data }: NodeComponentProps) => {
-  const removeChild = store.useRemoveChild()
+  const removeNode = useRemoveNode('memory')
   const query = useRecoilValue(store.searchQueryChild(id))
   const handles = data?.handles || {}
 
@@ -58,7 +59,7 @@ const SearchNode = ({ id, data }: NodeComponentProps) => {
         <CardContent sx={{ width: '100%', height: '100%' }}>
           <CloseContainer>
             <Typography>{getTitle(query)}</Typography>
-            <IconButton size="small" onClick={() => removeChild(id)}>
+            <IconButton size="small" onClick={() => removeNode(id)}>
               <Close fontSize="small" />
             </IconButton>
           </CloseContainer>

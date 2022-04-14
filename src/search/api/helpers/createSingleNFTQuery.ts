@@ -82,11 +82,22 @@ const createSingleNFTQuery = (child: QueryType) => {
       const rangeField = getRangeField(child.value)
 
       return {
-        range: {
-          [rangeField]: {
-            gte: child.min,
-            lte: child.max,
-          },
+        bool: {
+          must: [
+            {
+              range: {
+                [rangeField]: {
+                  gte: child.min,
+                  lte: child.max,
+                },
+              },
+            },
+            rangeField === 'lastListPrice' && {
+              term: {
+                listed: true,
+              },
+            },
+          ].filter(Boolean),
         },
       }
     default: {

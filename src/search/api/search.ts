@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { SearchSortValue } from '../store'
 import ComposedQueryType from '../types/ComposedQueryType'
 import { SearchResponse } from '../types/SearchResponse'
+import type SearchSort from '../types/SearchSort'
 import { getAllAttributeQueries } from './helpers/getAllAttributes'
 import getCollectionQuery from './helpers/getCollectionQuery'
 import getNFTQuery from './helpers/getNFTQuery'
@@ -58,7 +58,7 @@ const handler = async (
 ) => {
   try {
     const query = req.body.query as ComposedQueryType
-    const sort = req.body.sort as SearchSortValue
+    const sort = req.body.sort as SearchSort
     const onlyListed = Boolean(req.body.onlyListed)
 
     const nftQuery = getNFTQuery(query, 50, sort, onlyListed)

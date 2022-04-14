@@ -43,9 +43,9 @@ export const useSetSelectedTab = () => {
 export const useAddTab = () => {
   const setter = useSetRecoilState(windowManager)
 
-  return (newState: WindowState) => {
+  return (newState: WindowState, id?: string) => {
     const newTab = {
-      id: nanoid(),
+      id: id || nanoid(),
       windows: [newState],
     }
 

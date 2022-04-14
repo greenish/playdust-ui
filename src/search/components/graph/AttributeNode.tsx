@@ -1,18 +1,19 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
-import * as store from '../store'
+import { useUpdateAttributeNode } from '../../hooks/useSearchChange'
+import * as store from '../../store'
 
 const traitLabel = 'is trait'
 const valueLabel = 'equals'
 
-interface SearchAttributeProps {
+interface AttributeNodeProps {
   id: string
 }
 
-const SearchAttributeNode = (props: SearchAttributeProps) => {
+const AttributeNode = (props: AttributeNodeProps) => {
   const data = useRecoilValue(store.searchQueryAttribute(props.id))
-  const updateAttribute = store.useUpdateAttribute()
+  const updateAttributeNode = useUpdateAttributeNode('memory')
   const attributes = store.useNoWaitSearchAttributes()
 
   const options = useMemo(() => {
@@ -35,7 +36,10 @@ const SearchAttributeNode = (props: SearchAttributeProps) => {
               value={data.trait || ''}
               label={traitLabel}
               onChange={(evt) =>
-                updateAttribute(props.id, { trait: evt.target.value })
+                updateAttributeNode({
+                  id: props.id,
+                  update: { trait: evt.target.value },
+                })
               }
             >
               {attributes.map((attribute) => (
@@ -55,8 +59,11 @@ const SearchAttributeNode = (props: SearchAttributeProps) => {
           label={valueLabel}
           value={data.value || []}
           onChange={(evt) =>
-            updateAttribute(props.id, {
-              value: evt.target.value as string[],
+            updateAttributeNode({
+              id: props.id,
+              update: {
+                value: evt.target.value as string[],
+              },
             })
           }
         >
@@ -71,4 +78,4 @@ const SearchAttributeNode = (props: SearchAttributeProps) => {
   )
 }
 
-export default SearchAttributeNode
+export default AttributeNode

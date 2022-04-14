@@ -1,8 +1,8 @@
 import { useRecoilValue } from 'recoil'
-import * as store from '../store'
+import * as store from '../../store'
+import SearchAttributeNode from './AttributeNode'
+import SearchCollectionNode from './CollectionNode'
 import RangeNode from './RangeNode'
-import SearchAttributeNode from './SearchAttributeNode'
-import SearchCollectionNode from './SearchCollectionNode'
 import SearchTextNode from './SearchTextNode'
 
 interface SearchValueNodeProps {

@@ -11,11 +11,17 @@ import {
   Tooltip,
 } from '@mui/material'
 import { useDebounceCallback } from '@react-hook/debounce'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import SearchGraph from '../../search/components/SearchGraph'
+import SearchGraph from '../../search/components/graph/SearchGraph'
+import {
+  useAddAttributeNode,
+  useAddCollectionNode,
+  useAddTextNode,
+} from '../../search/hooks/useSearchChange'
 import * as searchStore from '../../search/store'
 import getWindowType from '../helpers/getWindowType'
+import { usePushWindowHash } from '../helpers/getWindowUrl'
 import * as store from '../store'
 import WindowProps from '../types/WindowProps'
 import SearchChips from './SearchChips'
@@ -33,17 +39,20 @@ const TextFieldInput = styled(TextField)(() => ({
   },
 }))
 
-const SearchInput = ({ addTab, state, type, removeTab }: WindowProps) => {
+const SearchInput = ({ state, type, removeTab }: WindowProps) => {
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const isQueryValid = useRecoilValue(searchStore.isSearchQueryValid)
-  const setSearchQueryValid = searchStore.useSetSearchQueryValid()
-  const addAttribute = searchStore.useAddAttribute()
-  const addCollection = searchStore.useAddCollection()
-  const addText = searchStore.useAddText()
   const searchQueryValid = useRecoilValue(searchStore.searchQueryValid)
+  const searchSerializedTemp = useRecoilValue(
+    searchStore.searchSerializedSelected
+  )
   const loadable = useRecoilValueLoadable(searchStore.searchResults)
   const isSearchable = type === 'search' || type === 'home'
+  const addTextNode = useAddTextNode()
+  const addAttributeNode = useAddAttributeNode()
+  const addCollectionNode = useAddCollectionNode()
+  const pushWindowHash = usePushWindowHash()
 
   const [suggestionTerm, setSuggestionTerm] = useRecoilState(
     store.searchSuggestionTerm
@@ -53,19 +62,22 @@ const SearchInput = ({ addTab, state, type, removeTab }: WindowProps) => {
     store.searchSuggestions
   )
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', setSearchQueryValid)
-
-    return () => {
-      window.removeEventListener('beforeunload', setSearchQueryValid)
-    }
-  }, [])
-
   const height = useMemo(() => {
     return window.innerHeight * 0.8
   }, [window.innerHeight])
 
-  const handleClose = () => isQueryValid && setOpen(false)
+  const handleClose = () => {
+    if (!isQueryValid) {
+      return
+    }
+
+    pushWindowHash({
+      type: 'search',
+      state: searchSerializedTemp,
+    })
+
+    setOpen(false)
+  }
   const disabled = loadable.state === 'loading' || !isSearchable
 
   return (
@@ -89,29 +101,40 @@ const SearchInput = ({ addTab, state, type, removeTab }: WindowProps) => {
             const type = getWindowType(value)
 
             if (type !== 'search') {
-              return addTab({
+              return pushWindowHash({
                 type,
                 state: value,
               })
             }
 
-            return addText(value, 'and')
+            return addTextNode(value)
           }
 
           switch (value.group) {
             case 'Collections':
-              return addCollection(value.meta!, 'and')
+              return addCollectionNode({
+                collectionId: value.meta!,
+                operation: 'and',
+              })
             case 'Search':
-              return addText(value.type, 'and')
+              return addTextNode(value.type)
             case 'Explorer':
-              return addTab({
+              return pushWindowHash({
                 type: value.type,
                 state: suggestionTerm,
               })
             case 'Attribute Value':
-              return addAttribute([value.meta!], '', 'and')
+              return addAttributeNode({
+                value: [value.meta!],
+                trait: '',
+                operation: 'and',
+              })
             case 'Attribute Category':
-              return addAttribute([], value.meta!, 'and')
+              return addAttributeNode({
+                value: [],
+                trait: value.meta!,
+                operation: 'and',
+              })
             default:
               const n: never = value.group
               return n

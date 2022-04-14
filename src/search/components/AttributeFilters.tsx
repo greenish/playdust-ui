@@ -9,6 +9,10 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import {
+  useAddAttributeNode,
+  useUpdateAttributeNode,
+} from '../hooks/useSearchChange'
 import * as store from '../store'
 import type { AttributeQuery } from '../types/ComposedQueryType'
 
@@ -51,8 +55,8 @@ const normalizeOptions = (
 const AttributeFilters = () => {
   const { attributes } = useRecoilValue(store.searchResults)
   const queries = useRecoilValue(store.searchQueryAttributes)
-  const addAttribute = store.useAddAttribute()
-  const updateAttribute = store.useUpdateAttribute()
+  const addAttributeNode = useAddAttributeNode()
+  const updateAttributeNode = useUpdateAttributeNode()
   const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({})
 
   return (
@@ -88,12 +92,19 @@ const AttributeFilters = () => {
                       checked={checked}
                       onChange={() => {
                         if (!found) {
-                          return addAttribute([option], attribute.trait, 'and')
+                          return addAttributeNode({
+                            value: [option],
+                            trait: attribute.trait,
+                            operation: 'and',
+                          })
                         }
 
                         if (!checked) {
-                          return updateAttribute(found.id, {
-                            value: [...found.value, option],
+                          return updateAttributeNode({
+                            id: found.id,
+                            update: {
+                              value: [...found.value, option],
+                            },
                           })
                         }
 
@@ -101,13 +112,13 @@ const AttributeFilters = () => {
                           (entry) => entry !== option
                         )
 
-                        return updateAttribute(
-                          found.id,
-                          {
+                        return updateAttributeNode({
+                          id: found.id,
+                          update: {
                             value: nextValue,
                           },
-                          true
-                        )
+                          clearOnEmpty: true,
+                        })
                       }}
                       name={option.toString()}
                     />

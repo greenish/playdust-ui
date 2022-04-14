@@ -22,6 +22,7 @@ import { setCollectionCensorStatus } from '../../common/helpers/playdustApi'
 import { humanizeSolana } from '../../common/helpers/utils'
 import Status from '../../common/types/Status'
 import { userProfile } from '../../me/store'
+import { useInitCollectionQuery } from '../hooks/useSearchChange'
 import * as store from '../store'
 import CollectionCard from './CollectionCard'
 import SimilarCollections from './SimilarCollections'
@@ -63,8 +64,8 @@ const CollectionOverview = () => {
   const overview = useRecoilValue(store.collectionOverview(collectionId))
   const { roles } = getRecoil(userProfile)
   const { publicKey } = useWallet()
-  const initCollectionQuery = store.useInitializeCollectionQuery()
   const openFlaggedModal = store.useOpenFlaggedModal()
+  const initCollectionQuery = useInitCollectionQuery()
 
   const { totalVolume, floorPrice, listed, similar, elementCount, id } =
     overview

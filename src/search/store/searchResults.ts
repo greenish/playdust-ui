@@ -1,13 +1,12 @@
 import { nanoid } from 'nanoid'
 import { atom, noWait, selector, useRecoilState, useRecoilValue } from 'recoil'
 import api from '../../common/helpers/frontendApi'
-import ComposedQueryType from '../types/ComposedQueryType'
+import parseSearch from '../helpers/parseSearch'
 import {
   AttributeResponse,
   SearchCursorResponse,
   SearchResponse,
 } from '../types/SearchResponse'
-import * as store from './'
 
 const initialState = {
   attributes: [],
@@ -17,24 +16,32 @@ const initialState = {
   collections: [],
 }
 
+export const searchKey = atom<string>({
+  key: 'searchKey',
+  default: '',
+})
+
 export const searchResults = atom<SearchResponse>({
   key: 'searchResults',
   default: selector<SearchResponse>({
     key: 'searchResults/default',
     get: async ({ get }) => {
-      const serialized = get(store.searchSerializedActual)
+      const key = get(searchKey)
+
+      if (key === '') {
+        return initialState
+      }
 
       try {
-        const parsed = JSON.parse(serialized)
-        const query = parsed.query as ComposedQueryType
+        const parsed = parseSearch(key)
 
-        if (query.length === 0) {
+        if (parsed.query.length === 0) {
           return initialState
         }
 
         const cleaned = {
           ...parsed,
-          query: query.map((parent) =>
+          query: parsed.query.map((parent) =>
             parent.map((child) => ({
               ...child,
               id: nanoid(),
