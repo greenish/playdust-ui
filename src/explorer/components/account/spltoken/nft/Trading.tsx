@@ -3,7 +3,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import React, { Suspense } from 'react'
 import Status from '../../../../../common/types/Status'
-import TradeNFT from '../../../../../nft/components/TradeNFT'
+import TradeNFT from './TradeNFT'
 
 type TokenOverviewProps = {
   pubkey: PublicKey

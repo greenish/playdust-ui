@@ -1,4 +1,5 @@
-import { selectorFamily } from 'recoil'
+import { PublicKey } from '@solana/web3.js'
+import { selectorFamily, useRecoilValue } from 'recoil'
 import * as solana from '../../../solana'
 import { solanaCluster } from '../../app/store'
 import api from '../../common/helpers/frontendApi'
@@ -27,3 +28,6 @@ export const fetchNFTDetails = selectorFamily<
       }
     },
 })
+
+export const useNFTDetails = (pubkey: PublicKey) =>
+  useRecoilValue(fetchNFTDetails(pubkey.toBase58()))

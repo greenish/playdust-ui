@@ -8,9 +8,9 @@ import {
   GetAllOrders,
   makeNFTBid,
   makeNFTListing,
-} from '../../common/helpers/playdustApi'
-import useConfirmTransaction from '../../common/hooks/useConfirmTransaction'
-import { fetchOwnedOnchain } from '../../me/store'
+} from '../../../../../../src/common/helpers/playdustApi'
+import useConfirmTransaction from '../../../../../../src/common/hooks/useConfirmTransaction'
+import { fetchOwnedOnchain } from '../../../../../../src/me/store'
 
 const ItemsContainer = styled.div`
   display: flex;
