@@ -1,11 +1,11 @@
 import { nanoid } from 'nanoid'
 import { useRouter } from 'next/router'
-import { WindowState } from '../store'
+import { Window } from '../types/App'
 import { isInWindowUnion } from '../types/WindowUnion'
 
 export const decodeWindowHash = (
   input?: string
-): { windowState: WindowState; tab: string } => {
+): { windowState: Window; tab: string } => {
   const hash = (input || window.location.hash).slice(1)
   const decoded = decodeURIComponent(hash)
   const pairs = decoded.split('&').map((entry) => entry.split('='))
@@ -34,7 +34,7 @@ export const decodeWindowHash = (
 }
 
 export const encodeWindowHash = (
-  input: WindowState,
+  input: Window,
   tabOverride?: string
 ): string => {
   const decoded = decodeWindowHash()
@@ -56,7 +56,7 @@ export const encodeWindowHash = (
 export const usePushWindowHash = () => {
   const router = useRouter()
 
-  return (input: WindowState, tabOverride?: string) => {
+  return (input: Window, tabOverride?: string) => {
     const encoded = encodeWindowHash(input, tabOverride)
     const actual = `/${window.location.hash}`
     const didUrlChange = encoded !== actual

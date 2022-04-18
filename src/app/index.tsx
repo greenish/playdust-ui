@@ -39,7 +39,7 @@ const SpinnerContainer = styled.div`
 `
 
 const App = () => {
-  const { tabs } = useRecoilValue(store.windowManager)
+  const { tabs } = useRecoilValue(store.appState)
   const setTabState = store.useSetTabState()
   const addTab = store.useAddTab()
   const removeTab = store.useRemoveTab()
