@@ -17,7 +17,6 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { getRecoil } from 'recoil-nexus'
 import { setCollectionCensorStatus } from '../../common/helpers/playdustApi'
 import { humanizeSolana } from '../../common/helpers/utils'
 import Status from '../../common/types/Status'
@@ -62,13 +61,12 @@ const CollectionOverview = () => {
   const [cookies] = useCookies(['authToken'])
   const collectionId = useRecoilValue(store.collectionId)!
   const overview = useRecoilValue(store.collectionOverview(collectionId))
-  const { roles } = getRecoil(userProfile)
+  const { roles } = useRecoilValue(userProfile)
   const { publicKey } = useWallet()
   const openFlaggedModal = store.useOpenFlaggedModal()
   const initCollectionQuery = useInitCollectionQuery()
 
-  const { totalVolume, floorPrice, listed, similar, elementCount, id } =
-    overview
+  const { totalVolume, floorPrice, listed, similar, elementCount } = overview
 
   const saveStatus = () => {
     setCollectionCensorStatus(collectionId, publicKey!.toBase58(), status)

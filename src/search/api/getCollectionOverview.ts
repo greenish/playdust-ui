@@ -67,6 +67,14 @@ const getSimilarCollectionQuery = ({
       ],
     },
   },
+  sort: [
+    '_score',
+    {
+      totalVolume: {
+        order: 'desc',
+      },
+    },
+  ],
 })
 
 const getListedQuery = (collectionId: string) => ({

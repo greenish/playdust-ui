@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { Suspense, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-use'
 import { RecoilRoot, useRecoilValue } from 'recoil'
+import { userProfile } from '../me/store'
 import SearchInput from './components/SearchInput'
 import WindowSwitch from './components/WindowSwitch'
 import getWindowType from './helpers/getWindowType'
@@ -46,6 +47,7 @@ const App = () => {
   const setSelectedTab = store.useSetSelectedTab()
   const location = useLocation()
   const router = useRouter()
+  const profile = useRecoilValue(userProfile)
 
   const props = useMemo<WindowProps>(() => {
     const currentId = activeTab?.id || ''
@@ -118,7 +120,12 @@ const App = () => {
   }, [location])
 
   return (
-    <RecoilRoot key={activeTab?.id || 'home'}>
+    <RecoilRoot
+      key={activeTab?.id || 'home'}
+      initializeState={({ set }) => {
+        set(userProfile, profile)
+      }}
+    >
       <RootContainer>
         <SearchInputContainer>
           <SearchInput {...props} />
