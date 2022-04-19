@@ -1,5 +1,11 @@
 import { nanoid } from 'nanoid'
-import { atom, noWait, selector, useRecoilState, useRecoilValue } from 'recoil'
+import {
+  atom,
+  noWait,
+  selector,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil'
 import api from '../../common/helpers/frontendApi'
 import parseSearch from '../helpers/parseSearch'
 import {
@@ -21,61 +27,73 @@ export const searchKey = atom<string>({
   default: '',
 })
 
-export const searchResults = atom<SearchResponse>({
+export const searchResults = selector<SearchResponse>({
   key: 'searchResults',
-  default: selector<SearchResponse>({
-    key: 'searchResults/default',
-    get: async ({ get }) => {
-      const key = get(searchKey)
+  get: async ({ get }) => {
+    const key = get(searchKey)
 
-      if (key === '') {
+    if (key === '') {
+      return initialState
+    }
+
+    try {
+      const parsed = parseSearch(key)
+
+      if (parsed.query.length === 0) {
         return initialState
       }
 
-      try {
-        const parsed = parseSearch(key)
-
-        if (parsed.query.length === 0) {
-          return initialState
-        }
-
-        const cleaned = {
-          ...parsed,
-          query: parsed.query.map((parent) =>
-            parent.map((child) => ({
-              ...child,
-              id: nanoid(),
-            }))
-          ),
-        }
-
-        const { data } = await api.post<SearchResponse>('/search', cleaned)
-
-        return data
-      } catch (err: any) {
-        if (err.message !== 'canceled') {
-          console.error(err)
-        }
-
-        return initialState
+      const cleaned = {
+        ...parsed,
+        query: parsed.query.map((parent) =>
+          parent.map((child) => ({
+            ...child,
+            id: nanoid(),
+          }))
+        ),
       }
-    },
-  }),
+
+      const { data } = await api.post<SearchResponse>('/search', cleaned)
+
+      return data
+    } catch (err: any) {
+      if (err.message !== 'canceled') {
+        console.error(err)
+      }
+
+      return initialState
+    }
+  },
+})
+
+export const moreSearchResults = atom<SearchResponse['nfts']>({
+  key: 'moreSearchResults',
+  default: [],
+})
+
+export const allSearchResults = selector<SearchResponse>({
+  key: 'allSearchResults',
+  get: ({ get }) => {
+    const results = get(searchResults)
+    const more = get(moreSearchResults)
+
+    return {
+      ...results,
+      nfts: [...results.nfts, ...more],
+    }
+  },
 })
 
 export const useFetchMoreSearchResults = () => {
-  const [current, setter] = useRecoilState(searchResults)
+  const { cursor } = useRecoilValue(searchResults)
+  const setter = useSetRecoilState(moreSearchResults)
 
   return async () => {
     const { data } = await api.post<SearchCursorResponse>('/search-cursor', {
-      cursor: current.cursor,
+      cursor,
     })
 
-    setter({
-      ...current,
-      cursor: data.cursor,
-      nfts: [...current.nfts, ...data.nfts],
-    })
+    setter((curr) => [...curr, ...data.nfts])
   }
 }
 

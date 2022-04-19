@@ -42,7 +42,9 @@ const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
       <div
         style={{
           display: 'flex',
+          height: dimensions.height,
           justifyContent: cardsPerRow > 2 ? 'space-between' : 'space-evenly',
+          alignItems: 'center',
         }}
       >
         {tokenRange.map((tokenIdx) => {

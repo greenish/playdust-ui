@@ -2,8 +2,8 @@ import styled from '@emotion/styled'
 import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import type WindowProps from '../app/types/WindowProps'
-import CollectionResults from './components/CollectionResults'
 import FlaggedModal from './components/FlaggedModal'
+import SearchOverview from './components/SearchOverview'
 import SearchResults from './components/SearchResults'
 import SearchSideBar from './components/SearchSideBar'
 import parseSearch from './helpers/parseSearch'
@@ -13,10 +13,17 @@ import * as store from './store'
 
 const RootContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  overflow: hidden;
   width: 100%;
   height: 100%;
+`
+
+const RightContainer = styled.div`
+  display: flex;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
 `
 
 const TokenContainer = styled.div`
@@ -25,13 +32,6 @@ const TokenContainer = styled.div`
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-`
-
-const ResultsContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
 `
 
 const Search = ({ state, removeTab }: WindowProps) => {
@@ -61,13 +61,13 @@ const Search = ({ state, removeTab }: WindowProps) => {
   return (
     <>
       <RootContainer>
-        <CollectionResults />
-        <ResultsContainer>
-          <SearchSideBar />
+        <SearchSideBar />
+        <RightContainer>
+          <SearchOverview />
           <TokenContainer>
             <SearchResults />
           </TokenContainer>
-        </ResultsContainer>
+        </RightContainer>
       </RootContainer>
       <FlaggedModal />
     </>

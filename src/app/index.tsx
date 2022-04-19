@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { CircularProgress } from '@mui/material'
 import { useRouter } from 'next/router'
-import { Suspense, useEffect, useMemo } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-use'
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import { userProfile } from '../me/store'
@@ -39,6 +39,7 @@ const SpinnerContainer = styled.div`
 `
 
 const App = () => {
+  const [didMount, setDidMount] = useState(false)
   const { tabs } = useRecoilValue(store.appState)
   const setTabState = store.useSetTabState()
   const addTab = store.useAddTab()
@@ -69,6 +70,8 @@ const App = () => {
 
     switch (location.trigger) {
       case 'load': {
+        setDidMount(true)
+
         if (windowState.type === 'home' || windowState.state === '') {
           if (activeTab) {
             const activeState = activeTab.windows[0]
@@ -118,6 +121,10 @@ const App = () => {
       }
     }
   }, [location])
+
+  if (!didMount) {
+    return <></>
+  }
 
   return (
     <RecoilRoot

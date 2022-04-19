@@ -58,6 +58,7 @@ function makePostQuery<T>(index: string) {
 }
 
 export const postNFTQuery = makePostQuery<NFTSource>('nft-metadata')
+export const postMultiNFTQuery = makePostMultiQuery<NFTSource>()
 export const postCollectionQuery =
   makePostQuery<CollectionSource>('nft-collection')
 export const postTransactionQuery = makePostQuery<any>('nft-transaction')

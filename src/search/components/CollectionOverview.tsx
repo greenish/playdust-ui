@@ -23,7 +23,6 @@ import Status from '../../common/types/Status'
 import { userProfile } from '../../me/store'
 import { useInitCollectionQuery } from '../hooks/useSearchChange'
 import * as store from '../store'
-import CollectionCard from './CollectionCard'
 import SimilarCollections from './SimilarCollections'
 
 const RootContainer = styled.div`
@@ -31,26 +30,10 @@ const RootContainer = styled.div`
   flex-direction: column;
 `
 
-const CardContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-`
-
 const ChipContainer = styled.div`
   display: flex;
+  align-items: center;
   gap: 8px;
-`
-
-const ReportButton = styled(IconButton)`
-  position: absolute;
-  right: 16px;
-`
-
-const StatusButton = styled(Button)`
-  position: absolute;
-  right: 16px;
 `
 
 const CollectionOverview = () => {
@@ -66,7 +49,7 @@ const CollectionOverview = () => {
   const openFlaggedModal = store.useOpenFlaggedModal()
   const initCollectionQuery = useInitCollectionQuery()
 
-  const { totalVolume, floorPrice, listed, similar, elementCount } = overview
+  const { totalVolume, similar, elementCount } = overview
 
   const saveStatus = () => {
     setCollectionCensorStatus(collectionId, publicKey!.toBase58(), status)
@@ -86,72 +69,17 @@ const CollectionOverview = () => {
 
   return (
     <RootContainer>
-      {cookies.authToken ? (
-        <>
-          {roles.length && roles.includes('admin') ? (
-            <>
-              <StatusButton
-                onClick={() => setStatusOpen(true)}
-                color="primary"
-                variant="outlined"
-              >
-                Change status
-              </StatusButton>
-              <Dialog onClose={() => setStatusOpen(false)} open={statusOpen}>
-                <DialogTitle>Change item status</DialogTitle>
-                <DialogContent>
-                  <RadioGroup
-                    value={censorState}
-                    onChange={(e) => setCensorState(Number(e.target.value))}
-                  >
-                    <FormControlLabel
-                      value={Status.None}
-                      control={<Radio />}
-                      label="None"
-                    />
-                    <FormControlLabel
-                      value={Status.Censored}
-                      control={<Radio />}
-                      label="Censor"
-                    />
-                    <FormControlLabel
-                      value={Status.NSFW}
-                      control={<Radio />}
-                      label="NFSW"
-                    />
-                  </RadioGroup>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={() => setStatusOpen(false)}>Cancel</Button>
-                  <Button onClick={saveStatus}>Save</Button>
-                </DialogActions>
-              </Dialog>
-            </>
-          ) : (
-            <Tooltip title="Report this collection">
-              <ReportButton
-                onClick={() => openFlaggedModal(collectionId, 'Collection')}
-              >
-                <FlagIcon />
-              </ReportButton>
-            </Tooltip>
-          )}
-        </>
-      ) : null}
-      <CardContainer>
-        <CollectionCard {...overview} cardSize={170} />
-      </CardContainer>
       <ChipContainer>
         <Chip
-          label={`Total Volume: ${humanizeSolana(totalVolume)}`}
+          size="small"
+          label={`Collection Volume: ${humanizeSolana(totalVolume)}`}
           variant="outlined"
         />
         <Chip
-          label={`Floor Price: ${humanizeSolana(floorPrice)}`}
+          size="small"
+          label={`Collection Items: ${elementCount.toLocaleString()}`}
           variant="outlined"
         />
-        <Chip label={`Total Items: ${elementCount}`} variant="outlined" />
-        <Chip label={`Listed Items: ${listed}`} variant="outlined" />
         {similar.length && (
           <>
             <Tooltip
@@ -162,6 +90,7 @@ const CollectionOverview = () => {
               onClick={() => setSimilarOpen(true)}
             >
               <Chip
+                size="small"
                 label={`${
                   similar.length === 20 ? '20+' : similar.length
                 } Similar Collections`}
@@ -177,6 +106,58 @@ const CollectionOverview = () => {
             />
           </>
         )}
+        {cookies.authToken ? (
+          <>
+            {roles.length && roles.includes('admin') ? (
+              <>
+                <Button
+                  onClick={() => setStatusOpen(true)}
+                  color="primary"
+                  variant="outlined"
+                >
+                  Change status
+                </Button>
+                <Dialog onClose={() => setStatusOpen(false)} open={statusOpen}>
+                  <DialogTitle>Change item status</DialogTitle>
+                  <DialogContent>
+                    <RadioGroup
+                      value={censorState}
+                      onChange={(e) => setCensorState(Number(e.target.value))}
+                    >
+                      <FormControlLabel
+                        value={Status.None}
+                        control={<Radio />}
+                        label="None"
+                      />
+                      <FormControlLabel
+                        value={Status.Censored}
+                        control={<Radio />}
+                        label="Censor"
+                      />
+                      <FormControlLabel
+                        value={Status.NSFW}
+                        control={<Radio />}
+                        label="NFSW"
+                      />
+                    </RadioGroup>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setStatusOpen(false)}>Cancel</Button>
+                    <Button onClick={saveStatus}>Save</Button>
+                  </DialogActions>
+                </Dialog>
+              </>
+            ) : (
+              <Tooltip title="Report this collection">
+                <IconButton
+                  onClick={() => openFlaggedModal(collectionId, 'Collection')}
+                >
+                  <FlagIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </>
+        ) : null}
       </ChipContainer>
     </RootContainer>
   )

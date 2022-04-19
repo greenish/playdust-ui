@@ -31,9 +31,9 @@ const SearchSideBar = () => {
       <SortContainer>
         <SortFields />
       </SortContainer>
-      <Divider />
       <OnlyListedSwitch />
       <RangeFilters />
+      <br />
       <Divider />
       <AttributeFilters />
     </RootContainer>

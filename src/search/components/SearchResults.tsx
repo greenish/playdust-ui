@@ -10,7 +10,7 @@ const NoTokensContainer = styled.div`
 `
 
 const SearchResults = () => {
-  const { nfts, total } = useRecoilValue(store.searchResults)
+  const { nfts, total } = useRecoilValue(store.allSearchResults)
   const fetchMoreSearchResults = store.useFetchMoreSearchResults()
 
   if (nfts.length === 0) {
@@ -27,7 +27,7 @@ const SearchResults = () => {
       tokens={nfts}
       total={total}
       next={async () => {
-        return fetchMoreSearchResults()
+        await fetchMoreSearchResults()
       }}
     />
   )

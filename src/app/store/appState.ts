@@ -26,7 +26,7 @@ export const appState = atom<App>({
           return localStorage.removeItem(key)
         }
 
-        return setSelf(JSON.parse(savedValue))
+        setSelf(JSON.parse(savedValue))
       }
 
       onSet((newValue, _, isReset) => {

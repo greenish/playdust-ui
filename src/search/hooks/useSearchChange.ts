@@ -94,6 +94,7 @@ export function makeUseSearchChange<T>(
     const query = useRecoilValue(store.searchQuery)
     const sort = useRecoilValue(store.searchSort)
     const updateSearch = useUpdateSearch()
+    const onlyListed = useRecoilValue(store.searchOnlyListed)
 
     return (input: T) => {
       const nextState = getHandler(query)(input)
@@ -101,7 +102,10 @@ export function makeUseSearchChange<T>(
       const next: SearchState = {
         query: nextState.query || query,
         sort: nextState.sort || sort,
-        onlyListed: nextState.onlyListed,
+        onlyListed:
+          nextState.onlyListed === undefined
+            ? onlyListed
+            : nextState.onlyListed,
       }
 
       if (method === 'router') {

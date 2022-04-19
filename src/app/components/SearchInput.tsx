@@ -117,7 +117,7 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
                 operation: 'and',
               })
             case 'Search':
-              return addTextNode(value.type)
+              return addTextNode(suggestionTerm)
             case 'Explorer':
               return pushWindowHash({
                 type: value.type,
