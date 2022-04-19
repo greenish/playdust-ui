@@ -4,7 +4,7 @@ import Link from '../../app/components/Link'
 import { encodeWindowHash } from '../../app/helpers/getWindowUrl'
 import getNFTImageUrl from '../helpers/getNFTImageUrl'
 import { NFTSource } from '../types/OpenSearchIndex'
-import ImageCard from './ImageCard'
+import ImageCard, { SkeletonImageCard } from './ImageCard'
 import TokenCardFilter from './TokenCardFilter'
 
 const CardContentContainer = styled.div`
@@ -48,6 +48,12 @@ interface TokenCardProps {
   loading: boolean
 }
 
+const contentHeight = '80px'
+
+export const TokenCardSkeleton = () => (
+  <SkeletonImageCard imageSize={imageSize} contentHeight={contentHeight} />
+)
+
 const TokenCard = ({ metadata }: TokenCardProps) => {
   const { image, name } = metadata?.offChainData || {}
   const href = encodeWindowHash({
@@ -78,7 +84,7 @@ const TokenCard = ({ metadata }: TokenCardProps) => {
           </TokenCardFilterContainer>
         </CardContentContainer>
       }
-      contentHeight="80px"
+      contentHeight={contentHeight}
     />
   )
 }

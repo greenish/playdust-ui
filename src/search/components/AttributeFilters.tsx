@@ -6,9 +6,11 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  Skeleton,
+  Typography,
 } from '@mui/material'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import {
   useAddAttributeNode,
   useUpdateAttributeNode,
@@ -52,12 +54,50 @@ const normalizeOptions = (
   return normalized.slice(0, sliceAmount)
 }
 
+const AttributeFiltersSkeleton = () => {
+  const count = 10
+
+  return (
+    <>
+      {[...Array(count).keys()].map((entry) => (
+        <div key={`attribute-skeleton-${entry}`}>
+          <Typography variant="h4">
+            <Skeleton />
+          </Typography>
+          <Typography>
+            <Skeleton />
+          </Typography>
+          <Typography>
+            <Skeleton />
+          </Typography>
+          <Typography>
+            <Skeleton />
+          </Typography>
+          <Typography>
+            <Skeleton />
+          </Typography>
+          <Typography>
+            <Skeleton />
+          </Typography>
+          <br />
+        </div>
+      ))}
+    </>
+  )
+}
+
 const AttributeFilters = () => {
-  const { attributes } = useRecoilValue(store.searchResults)
+  const loadable = useRecoilValueLoadable(store.searchAggregations)
   const queries = useRecoilValue(store.searchQueryAttributes)
   const addAttributeNode = useAddAttributeNode()
   const updateAttributeNode = useUpdateAttributeNode()
   const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({})
+
+  if (loadable.state !== 'hasValue') {
+    return <AttributeFiltersSkeleton />
+  }
+
+  const { attributes } = loadable.contents
 
   return (
     <RootContainer>
@@ -90,6 +130,7 @@ const AttributeFilters = () => {
                     <Checkbox
                       size="small"
                       checked={checked}
+                      sx={{ ml: 1 }}
                       onChange={() => {
                         if (!found) {
                           return addAttributeNode({

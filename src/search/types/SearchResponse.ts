@@ -11,8 +11,6 @@ export type AttributeResponse = {
 
 export interface SearchResponse {
   nfts: NFTSource[]
-  collections: CollectionSource[]
-  attributes: AttributeResponse
   cursor: string
   total: number
 }
@@ -36,4 +34,8 @@ export interface SearchOverviewResponse {
   floor: number
   ceiling: number
   count: number
+}
+
+export interface SearchAggregationResponse {
+  attributes: AttributeResponse
 }

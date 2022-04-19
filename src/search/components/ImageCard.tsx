@@ -53,6 +53,34 @@ interface ImageCardProps {
   onClick?: () => any
 }
 
+export const SkeletonImageCard = ({
+  imageSize,
+  contentHeight,
+}: Partial<ImageCardProps>) => {
+  return (
+    <div>
+      <Card sx={{ mr: 2, width: imageSize }} square>
+        <Skeleton
+          sx={{
+            height: imageSize,
+            width: imageSize,
+          }}
+          animation="wave"
+          variant="rectangular"
+        />
+        <Box
+          sx={{
+            height: contentHeight,
+            width: '100%',
+          }}
+        >
+          <CardContentContainer />
+        </Box>
+      </Card>
+    </div>
+  )
+}
+
 const ImageCard = ({
   src,
   href,

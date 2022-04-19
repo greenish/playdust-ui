@@ -1,7 +1,5 @@
 import styled from '@emotion/styled'
 import { Divider } from '@mui/material'
-import { useRecoilValue } from 'recoil'
-import * as store from '../store'
 import AttributeFilters from './AttributeFilters'
 import OnlyListedSwitch from './OnlyListedSwitch'
 import RangeFilters from './RangeFilters'
@@ -20,12 +18,6 @@ const SortContainer = styled.div`
 `
 
 const SearchSideBar = () => {
-  const { nfts } = useRecoilValue(store.searchResults)
-
-  if (!nfts.length) {
-    return <></>
-  }
-
   return (
     <RootContainer>
       <SortContainer>

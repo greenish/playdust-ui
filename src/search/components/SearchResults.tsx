@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValueLoadable } from 'recoil'
 import * as store from '../store'
 import TokenContainer from './TokenContainer'
 
@@ -7,25 +7,27 @@ const NoTokensContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-top: 64px;
 `
 
 const SearchResults = () => {
-  const { nfts, total } = useRecoilValue(store.allSearchResults)
+  const loadable = useRecoilValueLoadable(store.searchResultsAll)
   const fetchMoreSearchResults = store.useFetchMoreSearchResults()
+  const hasValue = loadable.state === 'hasValue'
 
-  if (nfts.length === 0) {
+  if (hasValue && loadable.contents.total === 0) {
     return (
       <NoTokensContainer>
-        <i>no tokens found...</i>
+        <i>no results found...</i>
       </NoTokensContainer>
     )
   }
 
   return (
     <TokenContainer
-      initialized={true}
-      tokens={nfts}
-      total={total}
+      initialized={hasValue}
+      tokens={hasValue ? loadable.contents.nfts : []}
+      total={hasValue ? loadable.contents.total : 0}
       next={async () => {
         await fetchMoreSearchResults()
       }}

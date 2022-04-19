@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Chip, Skeleton } from '@mui/material'
+import { Chip, Skeleton, Typography } from '@mui/material'
 import { Suspense } from 'react'
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import { humanizeSolana } from '../../common/helpers/utils'
@@ -73,6 +73,7 @@ const SearchOverview = () => {
       ))}
       {collectionId && (
         <Suspense fallback={<></>}>
+          <Typography sx={{ mr: 1 }}>&middot;</Typography>
           <CollectionOverview />
         </Suspense>
       )}

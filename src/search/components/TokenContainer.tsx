@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import { CircularProgress } from '@mui/material'
 import { Dispatch, SetStateAction, useState } from 'react'
 import {
   AutoSizer,
@@ -10,7 +9,11 @@ import {
 } from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import { NFTSource } from '../types/OpenSearchIndex'
-import TokenCard, { dimensions, TokenCardPlaceholder } from './TokenCard'
+import TokenCard, {
+  dimensions,
+  TokenCardPlaceholder,
+  TokenCardSkeleton,
+} from './TokenCard'
 
 const RootContainer = styled.div`
   height: 100%;
@@ -18,22 +21,8 @@ const RootContainer = styled.div`
   display: block;
 `
 
-const LoaderContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-  margin-bottom: 24px;
-  width: 100%;
-`
-
-const Loader = () => (
-  <LoaderContainer>
-    <CircularProgress />
-  </LoaderContainer>
-)
-
 const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
-  const { cardsPerRow, tokens, isLoading, total } = parent.props
+  const { cardsPerRow, tokens, isLoading, total, initialized } = parent.props
   const startingIdx = cardsPerRow * index
   const tokenRange = Array.from(Array(cardsPerRow).keys())
 
@@ -50,6 +39,10 @@ const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
         {tokenRange.map((tokenIdx) => {
           const actualIdx = startingIdx + tokenIdx
           const metadata = tokens[actualIdx]
+
+          if (!initialized) {
+            return <TokenCardSkeleton key={actualIdx} />
+          }
 
           return actualIdx < total ? (
             <TokenCard
@@ -84,15 +77,24 @@ const makeAutoSizedContainer = ({
   next,
   isLoading,
   setIsLoading,
+  initialized,
 }: AutoSizerProps) =>
   function AutoSizedContainer(autoSizerProps: Size) {
     const cardsPerRow = Math.floor(
       autoSizerProps.width / (dimensions.width + dimensions.marginRight)
     )
-    const cardRows = Math.ceil(tokens.length / cardsPerRow) || 0
-    const maxRows = Math.ceil(total / cardsPerRow) || 0
+
+    const cardRows = initialized
+      ? Math.ceil(tokens.length / cardsPerRow) || 0
+      : Math.ceil(autoSizerProps.height / dimensions.height)
+
+    const maxRows = initialized ? Math.ceil(total / cardsPerRow) || 0 : cardRows
+
     const loadingRowOffset = isLoading ? 1 : 0
-    const rowCount = Math.min(cardRows + loadingRowOffset, maxRows)
+
+    const rowCount = initialized
+      ? Math.min(cardRows + loadingRowOffset, maxRows)
+      : cardRows
 
     const hasMore = total > tokens.length
 
@@ -105,7 +107,7 @@ const makeAutoSizedContainer = ({
       >
         <InfiniteLoader
           isRowLoaded={({ index }) => {
-            if (!hasMore) {
+            if (!hasMore || !initialized) {
               return true
             }
 
@@ -134,6 +136,7 @@ const makeAutoSizedContainer = ({
               cardsPerRow={cardsPerRow}
               isLoading={isLoading}
               total={total}
+              initialized={initialized}
             />
           )}
         </InfiniteLoader>
@@ -144,14 +147,14 @@ const makeAutoSizedContainer = ({
 const TokenContainer = (props: TokenContainerProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
-  if (!props.initialized) {
-    return <Loader />
-  }
-
   return (
     <RootContainer>
       <AutoSizer>
-        {makeAutoSizedContainer({ ...props, isLoading, setIsLoading })}
+        {makeAutoSizedContainer({
+          ...props,
+          isLoading,
+          setIsLoading,
+        })}
       </AutoSizer>
     </RootContainer>
   )

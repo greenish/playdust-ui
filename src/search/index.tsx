@@ -24,6 +24,7 @@ const RightContainer = styled.div`
   width: 100%;
   height: 100%;
   flex-direction: column;
+  margin-left: 16px;
 `
 
 const TokenContainer = styled.div`

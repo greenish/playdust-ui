@@ -1,43 +1,29 @@
 import { nanoid } from 'nanoid'
 import {
   atom,
-  noWait,
   selector,
-  useRecoilValue,
+  useRecoilValueLoadable,
   useSetRecoilState,
 } from 'recoil'
 import api from '../../common/helpers/frontendApi'
-import parseSearch from '../helpers/parseSearch'
-import {
-  AttributeResponse,
-  SearchCursorResponse,
-  SearchResponse,
-} from '../types/SearchResponse'
+import { SearchCursorResponse, SearchResponse } from '../types/SearchResponse'
+import * as store from './'
 
 const initialState = {
-  attributes: [],
   total: 0,
   cursor: '',
   nfts: [],
-  collections: [],
 }
-
-export const searchKey = atom<string>({
-  key: 'searchKey',
-  default: '',
-})
 
 export const searchResults = selector<SearchResponse>({
   key: 'searchResults',
   get: async ({ get }) => {
-    const key = get(searchKey)
-
-    if (key === '') {
-      return initialState
-    }
-
     try {
-      const parsed = parseSearch(key)
+      const parsed = get(store.parsedSearchKey)
+
+      if (!parsed || parsed.query.length === 0) {
+        return initialState
+      }
 
       if (parsed.query.length === 0) {
         return initialState
@@ -66,16 +52,16 @@ export const searchResults = selector<SearchResponse>({
   },
 })
 
-export const moreSearchResults = atom<SearchResponse['nfts']>({
-  key: 'moreSearchResults',
+const searchResultsMore = atom<SearchResponse['nfts']>({
+  key: 'searchResultsMore',
   default: [],
 })
 
-export const allSearchResults = selector<SearchResponse>({
-  key: 'allSearchResults',
+export const searchResultsAll = selector<SearchResponse>({
+  key: 'searchResultsAll',
   get: ({ get }) => {
     const results = get(searchResults)
-    const more = get(moreSearchResults)
+    const more = get(searchResultsMore)
 
     return {
       ...results,
@@ -85,25 +71,18 @@ export const allSearchResults = selector<SearchResponse>({
 })
 
 export const useFetchMoreSearchResults = () => {
-  const { cursor } = useRecoilValue(searchResults)
-  const setter = useSetRecoilState(moreSearchResults)
+  const loadable = useRecoilValueLoadable(searchResults)
+  const setter = useSetRecoilState(searchResultsMore)
 
   return async () => {
-    const { data } = await api.post<SearchCursorResponse>('/search-cursor', {
-      cursor,
-    })
+    if (loadable.state === 'hasValue') {
+      const { cursor } = loadable.contents
 
-    setter((curr) => [...curr, ...data.nfts])
+      const { data } = await api.post<SearchCursorResponse>('/search-cursor', {
+        cursor,
+      })
+
+      setter((curr) => [...curr, ...data.nfts])
+    }
   }
-}
-
-let previousValue: AttributeResponse = []
-export const useNoWaitSearchAttributes = () => {
-  const loadable = useRecoilValue(noWait(searchResults))
-
-  if (loadable.state === 'hasValue') {
-    previousValue = loadable.contents.attributes
-  }
-
-  return previousValue
 }

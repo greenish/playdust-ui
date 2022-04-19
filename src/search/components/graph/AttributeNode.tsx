@@ -14,7 +14,7 @@ interface AttributeNodeProps {
 const AttributeNode = (props: AttributeNodeProps) => {
   const data = useRecoilValue(store.searchQueryAttribute(props.id))
   const updateAttributeNode = useUpdateAttributeNode('memory')
-  const attributes = store.useNoWaitSearchAttributes()
+  const { attributes } = useRecoilValue(store.searchAggregations)
 
   const options = useMemo(() => {
     const base =

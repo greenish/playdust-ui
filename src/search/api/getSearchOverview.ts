@@ -11,7 +11,6 @@ const handler = async (
 ) => {
   try {
     const query = req.body.query as ComposedQueryType
-    const collectionId = req.body.collectionId as string
 
     const countQuery = getNFTQuery(query, 0)
     const nftQueryListed = getNFTQuery(query, 0, undefined, true)

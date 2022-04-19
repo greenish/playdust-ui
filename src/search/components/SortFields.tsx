@@ -15,7 +15,6 @@ const sortLabel = 'Sort'
 
 const SortFields = () => {
   const sort = useRecoilValue(store.searchSort)
-  const { nfts } = useRecoilValue(store.searchResults)
   const setSortValue = useSetSortValue()
   const options = useRecoilValue(store.searchSortOptions)
 
@@ -30,10 +29,6 @@ const SortFields = () => {
         entry.value.field === sort.field
     )
   }, [options, sort])
-
-  if (!nfts.length) {
-    return <></>
-  }
 
   return (
     <RootContainer>
