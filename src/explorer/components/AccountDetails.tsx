@@ -3,6 +3,7 @@ import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { FunctionComponent, useState } from 'react'
 import { useAccountInfo } from '../store'
 import { Domains } from './Domains'
+import { Security } from './Security'
 import { a11yProps, TabPanel } from './TabPanel'
 import { Tokens } from './Tokens'
 import { Transactions } from './Transactions'
@@ -44,7 +45,46 @@ export const UnknownAccountDetails = ({ pubkey }: AccountDetailsProps) => {
   )
 }
 
-const UpgradeableLoaderAccountDetails = UnknownAccountDetails
+// This will be re-organized in a future ticket. Tabs will be data-driven, not hard-coded
+export const UpgradeableLoaderAccountDetails = ({
+  pubkey,
+}: AccountDetailsProps) => {
+  const [value, setValue] = useState(0)
+
+  const handleChange = (event: React.SyntheticEvent, newValue: any) => {
+    setValue(parseInt(newValue))
+  }
+
+  return (
+    <>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="History" {...a11yProps(0)} />
+          <Tab label="Tokens" {...a11yProps(1)} />
+          <Tab label="Domains" {...a11yProps(2)} />
+          <Tab label="Security" {...a11yProps(3)} />
+        </Tabs>
+      </Box>
+      <TabPanel value={value} index={0}>
+        <Transactions pubkey={pubkey} />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Tokens pubkey={pubkey} />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <Domains pubkey={pubkey} />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <Security pubkey={pubkey} />
+      </TabPanel>
+    </>
+  )
+}
+
 const StakeAccountDetails = UnknownAccountDetails
 const TokenAccountDetails = UnknownAccountDetails
 const NonceAccountDetails = UnknownAccountDetails

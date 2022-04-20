@@ -1,9 +1,39 @@
-import { Tooltip } from '@mui/material'
+import { Chip, Tooltip } from '@mui/material'
 import { PropsWithChildren } from 'react'
+import { ProgramDataAccountInfo } from '../../../helpers/account'
+import { fromProgramData } from '../../../helpers/securityTxt'
 import { VerifiableBuild } from '../../../store'
 import { ExternalLink } from '../../ExternalLinks'
 
-export const LastVerifiedBuildLabel = () => {
+export function SecurityLabel() {
+  return (
+    <>
+      <Tooltip title="Security.txt helps security researchers to contact developers if they find security bugs.">
+        <span>Security.txt</span>
+      </Tooltip>{' '}
+      <ExternalLink
+        url="https://github.com/neodyme-labs/solana-security-txt"
+        label="?"
+      />
+    </>
+  )
+}
+
+export function SecurityTXTBadge({
+  programData,
+}: {
+  programData: ProgramDataAccountInfo
+}) {
+  const { securityTXT, error } = fromProgramData(programData)
+
+  if (securityTXT) {
+    return <Chip color="success" label="Included" size="small" />
+  }
+
+  return <Chip color="error" label={error} size="small" />
+}
+
+export function LastVerifiedBuildLabel() {
   return (
     <Tooltip title="Indicates whether the program currently deployed on-chain is verified to match the associated published source code, when it is available.">
       <span>Verifiable Build Status</span>
@@ -20,13 +50,23 @@ export function VerifiedBadge({
 }) {
   if (verifiableBuild && verifiableBuild.verified_slot === deploySlot) {
     return (
-      <ExternalLink
-        url={verifiableBuild.url}
-        label={`${verifiableBuild.label}: Verified`}
-      />
+      <>
+        <Chip
+          color="success"
+          label={`${verifiableBuild.label}: Verified`}
+          size="small"
+        />
+        <ExternalLink url={verifiableBuild.url} label="Info" />
+      </>
     )
   }
-  return <span>{verifiableBuild.label}: Unverified</span>
+  return (
+    <Chip
+      color="error"
+      label={`${verifiableBuild.label}: Unverified`}
+      size="small"
+    />
+  )
 }
 
 interface DownloadableProps {

@@ -6,7 +6,7 @@ import {
   PartiallyDecodedInstruction,
   PublicKey,
 } from '@solana/web3.js'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { pubkeyToString, toRelative } from '../../common/helpers/utils'
 import { useAccountHistory } from '../store'
 import { ExplorerCard } from './ExplorerCard'
@@ -64,10 +64,10 @@ const FormattedInstructions = ({
       </Box>
       <Box sx={{ display: showAll ? 'block' : 'none' }}>
         {parsedInstructions.map((parsedInstruction, idx) => (
-          <>
-            <Chip key={idx} label={parsedInstruction} size="small" />
+          <React.Fragment key={idx}>
+            <Chip label={parsedInstruction} size="small" />
             <br />
-          </>
+          </React.Fragment>
         ))}
       </Box>
     </>

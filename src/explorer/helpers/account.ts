@@ -30,3 +30,9 @@ export function getProgram(
     return ''
   }
 }
+
+export interface ProgramDataAccountInfo {
+  authority: string | null
+  data: [string, 'base64']
+  slot: number
+}

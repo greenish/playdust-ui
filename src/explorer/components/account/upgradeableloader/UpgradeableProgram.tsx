@@ -1,10 +1,9 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { useRecoilValue } from 'recoil'
-import { solanaCluster } from '../../../../app/store'
 import { compact } from '../../../../common/helpers/utils'
 import { addressLabel } from '../../../helpers/tx'
 import {
   useAccountInfo,
+  useSolanaCluster,
   useVerifiableBuilds,
   VerifiableBuild,
 } from '../../../store'
@@ -13,7 +12,12 @@ import { ExplorerCard } from '../../ExplorerCard'
 import { ExplorerGrid } from '../../ExplorerGrid'
 import { AccountLink, SlotLink } from '../../Links'
 import { SolBalance } from '../../SolBalance'
-import { LastVerifiedBuildLabel, VerifiedBadge } from './Helpers'
+import {
+  LastVerifiedBuildLabel,
+  SecurityLabel,
+  SecurityTXTBadge,
+  VerifiedBadge,
+} from './Helpers'
 
 interface UpgradeableLoaderAccountProps {
   pubkey: PublicKey
@@ -31,7 +35,7 @@ const UpgradeableProgramContent = ({
     programData ? new PublicKey(programData) : undefined
   )
 
-  const cluster = useRecoilValue(solanaCluster)
+  const cluster = useSolanaCluster()
   const verifiableBuilds = useVerifiableBuilds(pubkey)
 
   if (!account || !programAccount) {
@@ -73,6 +77,12 @@ const UpgradeableProgramContent = ({
       )),
     ],
     [
+      <SecurityLabel />,
+      <SecurityTXTBadge
+        programData={(programAccount.data as ParsedAccountData).parsed.info}
+      />,
+    ],
+    [
       'Last Deployed Slot',
       <SlotLink to={programAccountData.parsed.info.slot} allowCopy />,
     ],
@@ -86,6 +96,7 @@ const UpgradeableProgramContent = ({
 }
 
 // FsJ3A3u2vn5cTVofAjvy6y5kwABJAqYWpe4975bi2epH
+// Security.txt: HPxKXnBN4vJ8RjpdqDCU7gvNQHeeyGnSviYTJ4fBrDt4 cluster=devnet
 export const UpgradeableProgram = (props: UpgradeableLoaderAccountProps) => {
   return (
     <>

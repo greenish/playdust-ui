@@ -3,15 +3,15 @@ import React from 'react'
 
 interface ExternalLinkProps {
   label?: string
-  url: string
+  url?: string
 }
 
 export function ExternalLink({ label, url }: ExternalLinkProps) {
-  return (
+  return url ? (
     <Link href={url} target="_blank" rel="noopener noreferrer">
       {label || url}
     </Link>
-  )
+  ) : null
 }
 
 const defaultMappingFn = (baseUrl: string, filter: string, value: string) =>
