@@ -28,6 +28,14 @@ export const SlotRewardsContent = ({ slot }: SlotRewardsProps) => {
   const rows = top10Rewards.map((reward: any) => {
     const { lamports, postBalance, pubkey, rewardType } = reward
 
+    let percentChange
+    if (reward.postBalance !== null && reward.postBalance !== 0) {
+      percentChange = (
+        (Math.abs(reward.lamports) / (reward.postBalance - reward.lamports)) *
+        100
+      ).toFixed(9)
+    }
+
     const row: any = {}
 
     row.addressType = <AccountLink to={pubkey} />
@@ -38,7 +46,7 @@ export const SlotRewardsContent = ({ slot }: SlotRewardsProps) => {
 
     row.newBalance = <>{postBalance}</>
 
-    row.percentChange = <>??%r</>
+    row.percentChange = <>{percentChange}%</>
 
     return row
   })
