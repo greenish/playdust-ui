@@ -10,14 +10,15 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material'
+import { createFilterOptions } from '@mui/material/Autocomplete'
 import { useDebounceCallback } from '@react-hook/debounce'
 import { useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import SearchGraph from '../../search/components/graph/SearchGraph'
 import {
   useAddAttributeNode,
-  useAddCollectionNode,
   useAddTextNode,
+  usePrependCollectionNode,
 } from '../../search/hooks/useSearchChange'
 import * as searchStore from '../../search/store'
 import getWindowType from '../helpers/getWindowType'
@@ -39,6 +40,10 @@ const TextFieldInput = styled(TextField)(() => ({
   },
 }))
 
+const clientFilter = createFilterOptions({
+  stringify: (option: any) => option.label,
+})
+
 const SearchInput = ({ state, type, removeTab }: WindowProps) => {
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -51,7 +56,7 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
   const isSearchable = type === 'search' || type === 'home'
   const addTextNode = useAddTextNode()
   const addAttributeNode = useAddAttributeNode()
-  const addCollectionNode = useAddCollectionNode()
+  const prependCollectionNode = usePrependCollectionNode()
   const pushWindowHash = usePushWindowHash()
 
   const [suggestionTerm, setSuggestionTerm] = useRecoilState(
@@ -59,8 +64,9 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
   )
   const debouncedSearchSuggestions = useDebounceCallback(setSuggestionTerm, 500)
   const { suggestions, loading: suggestionsLoading } = useRecoilValue(
-    store.searchSuggestions
+    store.searchSuggestions(state)
   )
+  const filterOnServer = state === ''
 
   const height = useMemo(() => {
     return window.innerHeight * 0.8
@@ -85,6 +91,7 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
       <Autocomplete
         size={'small'}
         open={searchOpen}
+        filterOptions={filterOnServer ? (x) => x : clientFilter}
         onOpen={() => setSearchOpen(true)}
         onClose={() => setSearchOpen(false)}
         onChange={(_evt, [_placeholder, value], reason) => {
@@ -112,10 +119,7 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
 
           switch (value.group) {
             case 'Collections':
-              return addCollectionNode({
-                collectionId: value.meta!,
-                operation: 'and',
-              })
+              return prependCollectionNode(value.meta!)
             case 'Search':
               return addTextNode(suggestionTerm)
             case 'Explorer':
@@ -123,13 +127,23 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
                 type: value.type,
                 state: suggestionTerm,
               })
+            case 'Attribute':
+              if (!value.attributeMeta) {
+                return
+              }
+
+              return addAttributeNode({
+                value: [value.attributeMeta.option],
+                trait: value.attributeMeta.trait,
+                operation: 'and',
+              })
             case 'Attribute Value':
               return addAttributeNode({
                 value: [value.meta!],
                 trait: '',
                 operation: 'and',
               })
-            case 'Attribute Category':
+            case 'Attribute Trait':
               return addAttributeNode({
                 value: [],
                 trait: value.meta!,
@@ -144,15 +158,13 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
         multiple
         fullWidth
         value={['1']}
-        options={state === '' ? suggestions : []}
+        options={suggestions}
         groupBy={(option) => option.group}
-        filterOptions={(x) => x}
         renderOption={(props, option) => (
           <SuggestionResult
             key={option.key}
             parentProps={props}
             label={option.label}
-            highlight={option.highlight}
             term={suggestionTerm}
             showLoader={
               suggestions[suggestions.length - 1].key === option.key &&
@@ -178,7 +190,11 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
           <TextFieldInput
             {...params}
             placeholder={isSearchable ? 'Search...' : ''}
-            onChange={(evt) => debouncedSearchSuggestions(evt.target.value)}
+            onChange={(evt) => {
+              filterOnServer
+                ? debouncedSearchSuggestions(evt.target.value)
+                : setSuggestionTerm(evt.target.value)
+            }}
           />
         )}
       />

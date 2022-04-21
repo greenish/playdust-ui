@@ -45,7 +45,7 @@ const getChipLabel = (child: QueryType) => {
   switch (child.field) {
     case 'attribute':
       if (child.value.length === 0) {
-        return `Attribute Category: ${child.trait}`
+        return `Attribute Trait: ${child.trait}`
       }
 
       const trait = child.trait === '' ? 'Attribute Value' : child.trait

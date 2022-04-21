@@ -57,8 +57,8 @@ const createSingleNFTQuery = (child: QueryType) => {
       const { value } = child as CollectionQuery
 
       return {
-        bool: {
-          must: [{ term: { heuristicCollectionId: value } }],
+        term: {
+          heuristicCollectionId: value,
         },
       }
     }

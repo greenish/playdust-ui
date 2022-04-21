@@ -15,12 +15,15 @@ export interface SearchResponse {
   total: number
 }
 
+interface ActualHighlight {
+  highlight: string
+  actual: string
+}
+
 export interface SearchSuggestionResponse {
   collections: CollectionSourceHighlight[]
-  attributes: {
-    names: string[]
-    values: string[]
-  }
+  attributeNames: ActualHighlight[]
+  attributeValues: ActualHighlight[]
 }
 
 export type SearchCursorResponse = Pick<SearchResponse, 'nfts' | 'cursor'>

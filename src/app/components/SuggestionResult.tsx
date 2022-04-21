@@ -13,35 +13,27 @@ interface SuggestionResultProps {
   label: string
   parentProps: HTMLAttributes<HTMLLIElement>
   term: string
-  highlight?: string
   showLoader: boolean
 }
 
 const SuggestionResult = ({
   label,
-  highlight,
   parentProps,
   showLoader,
   term,
 }: SuggestionResultProps) => {
-  const content = useMemo(() => {
-    if (!highlight) {
-      return term
-    }
-
+  const parsedLabel = useMemo(() => {
     const parsed = parse(
-      highlight.replaceAll('<em>', '<b>').replaceAll('</em>', '</b>')
+      label.replaceAll('<em>', '<b>').replaceAll('</em>', '</b>')
     )
 
     return parsed
-  }, [highlight, term])
+  }, [label, term])
 
   return (
     <>
       <li {...parentProps}>
-        <Typography sx={{ fontSize: '80%' }}>
-          {label}: {content}
-        </Typography>
+        <Typography sx={{ fontSize: '80%' }}>{parsedLabel}</Typography>
       </li>
       {showLoader && (
         <LoaderContainer>

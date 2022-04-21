@@ -17,11 +17,9 @@ const sortMappings: {
   'rarity-score': 'normalizedRarityScore',
 }
 
-const getNFTQuery = (
+export const getNFTQueryBase = (
   query: ComposedQueryType,
-  resultSize: number,
-  sort?: SearchSort,
-  onlyListed?: boolean
+  onlyListed: boolean
 ) => {
   const result = query
     .map((parent) => {
@@ -34,19 +32,30 @@ const getNFTQuery = (
     })
     .filter(Boolean)
 
+  return onlyListed
+    ? [
+        ...result,
+        {
+          term: {
+            listed: true,
+          },
+        },
+      ]
+    : result
+}
+
+const getNFTQuery = (
+  query: ComposedQueryType,
+  resultSize: number,
+  sort?: SearchSort,
+  onlyListed?: boolean
+) => {
+  const queryBase = getNFTQueryBase(query, Boolean(onlyListed))
+
   const isRelevanceSort = sort?.field === 'relevance'
   const filterKey = isRelevanceSort ? 'must' : 'filter'
   const baseQuery = {
-    [filterKey]: onlyListed
-      ? [
-          ...result,
-          {
-            term: {
-              listed: true,
-            },
-          },
-        ]
-      : result,
+    [filterKey]: queryBase,
   }
 
   const nftQuery: { [key: string]: any } = {

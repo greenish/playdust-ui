@@ -27,7 +27,10 @@ const RowRenderer = ({ key, style, index, parent }: ListRowProps) => {
   const tokenRange = Array.from(Array(cardsPerRow).keys())
 
   return (
-    <div key={key} style={style}>
+    <div
+      key={key}
+      style={{ ...style, marginLeft: 2, width: 'calc(100% - 2px)' }}
+    >
       <div
         style={{
           display: 'flex',

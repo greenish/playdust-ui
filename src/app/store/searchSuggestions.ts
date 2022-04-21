@@ -1,7 +1,14 @@
-import { atom, noWait, selector } from 'recoil'
+import match from 'autosuggest-highlight/match'
+import parse from 'autosuggest-highlight/parse'
+import { atom, noWait, selector, selectorFamily } from 'recoil'
 import frontendApi from '../../common/helpers/frontendApi'
+import * as searchStore from '../../search/store'
+import { AttributeQuery } from '../../search/types/ComposedQueryType'
 import { CollectionSourceHighlight } from '../../search/types/OpenSearchIndex'
-import { SearchSuggestionResponse } from '../../search/types/SearchResponse'
+import {
+  AttributeResponse,
+  SearchSuggestionResponse,
+} from '../../search/types/SearchResponse'
 import getWindowType from '../helpers/getWindowType'
 import WindowUnion from '../types/WindowUnion'
 
@@ -10,14 +17,24 @@ export const searchSuggestionTerm = atom<string>({
   default: '',
 })
 
-const fetchSearchSuggestions = selector<SearchSuggestionResponse>({
+const fetchSearchSuggestions = selector<SearchSuggestionResponse | undefined>({
   key: 'fetchSearchSuggestions',
   get: async ({ get }) => {
     const term = get(searchSuggestionTerm)
+    const parsed = get(searchStore.parsedSearchKey)
+    const isCollectionQuery = get(searchStore.isCollectionQuery)
+
+    if (isCollectionQuery) {
+      return
+    }
+
     const { data } = await frontendApi.post<SearchSuggestionResponse>(
       '/search-suggestions',
       {
         term,
+        query: parsed?.query,
+        onlyListed: parsed?.onlyListed,
+        isCollectionQuery,
       }
     )
 
@@ -43,11 +60,15 @@ export interface SearchSuggestion {
     | 'Search'
     | 'Explorer'
     | 'Collections'
+    | 'Attribute'
     | 'Attribute Value'
-    | 'Attribute Category'
+    | 'Attribute Trait'
   label: string
-  highlight?: string
   meta?: string
+  attributeMeta?: {
+    trait: string
+    option: string
+  }
 }
 
 interface SearchSuggetionResults {
@@ -60,118 +81,203 @@ const defaultSuggestions = {
   loading: false,
 }
 
-export const searchSuggestions = selector<SearchSuggetionResults>({
-  key: 'searchSuggestions',
-  get: ({ get }) => {
-    const term = get(searchSuggestionTerm)
+const fuzzySuggestion: SearchSuggestion = {
+  key: 'fuzzy-search',
+  group: 'Search',
+  label: 'search for',
+  type: 'search',
+}
 
-    if (term === '') {
-      return defaultSuggestions
-    }
+const getAggregationSuggestions = (
+  attributes: AttributeResponse,
+  selected: AttributeQuery[],
+  term: string
+) => {
+  const result = attributes.flatMap(({ trait, options }) => {
+    const parentFound = selected.find((entry) => entry.trait === trait)
 
-    const { state, contents } = get(noWait(fetchSearchSuggestions))
-    const results = state === 'hasValue' ? contents : []
+    return options
+      .filter((option) => !(parentFound && parentFound.value.includes(option)))
+      .map((option) => {
+        const combined = `${trait}: ${option}`
+        const matched = match(combined, term, {
+          findAllOccurrences: true,
+          insideWords: true,
+        })
+        const parsed = parse(combined, matched)
+        const highlight = parsed
+          .map((portion) => {
+            if (!portion.highlight) {
+              return portion.text
+            }
 
-    if (!results) {
-      return defaultSuggestions
-    }
+            return `<em>${portion.text}</em>`
+          })
+          .join('')
 
-    const windowType = getWindowType(term)
-    const suggestions: SearchSuggestion[] = []
+        const suggestion: SearchSuggestion = {
+          key: `attribute:${trait}:${option}`,
+          group: 'Attribute',
+          label: highlight,
+          attributeMeta: {
+            trait,
+            option,
+          },
+          type: 'search',
+        }
 
-    const addSuggestion = (newSuggestion: SearchSuggestion) =>
-      suggestions.push(newSuggestion)
-
-    if (windowType === 'block' || windowType === 'epoch') {
-      addSuggestion({
-        key: 'block-search',
-        group: 'Explorer',
-        label: 'block',
-        type: 'block',
+        return suggestion
       })
-      addSuggestion({
-        key: 'epoch-search',
-        group: 'Explorer',
-        label: 'epoch',
-        type: 'epoch',
-      })
-    }
+  })
 
-    if (windowType === 'account') {
-      addSuggestion({
-        key: 'account-search',
-        group: 'Explorer',
-        label: 'account',
-        type: 'account',
-      })
+  return result
+}
 
-      return {
-        suggestions,
-        loading: false,
-      }
-    }
+const getServerSuggestions = ({
+  collections,
+  attributeNames,
+  attributeValues,
+}: SearchSuggestionResponse) => {
+  const suggestions: SearchSuggestion[] = []
 
-    if (windowType === 'tx') {
-      addSuggestion({
-        key: 'transaction-search',
-        group: 'Explorer',
-        label: 'transaction',
-        type: 'tx',
-      })
+  collections.map((collection) =>
+    suggestions.push({
+      key: collection.source.id,
+      group: 'Collections',
+      label: `${
+        collection.source.name || collection.source.symbol
+      }: ${getHighlight(collection)}`,
+      type: 'search',
+      meta: collection.source.id,
+    })
+  )
 
-      return {
-        suggestions,
-        loading: false,
-      }
-    }
-
-    addSuggestion({
-      key: 'fuzzy-search',
-      group: 'Search',
-      label: 'search for',
+  attributeNames.map((attributeName) =>
+    suggestions.push({
+      key: `attributeName:${attributeName.actual}`,
+      group: 'Attribute Trait',
+      label: `has: ${attributeName.highlight}`,
+      meta: attributeName.actual,
       type: 'search',
     })
+  )
 
-    if (state === 'hasValue' && contents) {
-      const { collections, attributes } = contents as SearchSuggestionResponse
+  attributeValues.map((attributeValue) =>
+    suggestions.push({
+      key: `attributeValue:${attributeValue.actual}`,
+      group: 'Attribute Value',
+      label: `equals: ${attributeValue.highlight}`,
+      meta: attributeValue.actual,
+      type: 'search',
+    })
+  )
 
-      collections.map((collection) =>
-        addSuggestion({
-          key: collection.source.id,
-          group: 'Collections',
-          label: collection.source.name || collection.source.symbol,
-          highlight: getHighlight(collection),
-          type: 'search',
-          meta: collection.source.id,
-        })
-      )
+  return suggestions
+}
 
-      attributes.names.map((attributeName) =>
-        addSuggestion({
-          key: `attributeValue:${attributeName}`,
-          group: 'Attribute Category',
-          label: 'has',
-          highlight: attributeName,
-          meta: attributeName.replace('<em>', '').replace('</em>', ''),
-          type: 'search',
-        })
-      )
+export const searchSuggestions = selectorFamily<SearchSuggetionResults, string>(
+  {
+    key: 'searchSuggestions',
+    get:
+      (currentState) =>
+      ({ get }) => {
+        const term = get(searchSuggestionTerm)
 
-      attributes.values.map((attributeValue) =>
-        addSuggestion({
-          key: `attributeName:${attributeValue}`,
-          group: 'Attribute Value',
-          label: 'equals',
-          highlight: attributeValue,
-          meta: attributeValue.replace('<em>', '').replace('</em>', ''),
-          type: 'search',
-        })
-      )
-    }
+        if (currentState !== '') {
+          const aggregations = get(noWait(searchStore.searchAggregations))
 
-    return {
-      suggestions,
-      loading: state === 'loading',
-    }
-  },
-})
+          if (aggregations.state === 'hasValue') {
+            const attributeNodes = get(searchStore.searchQueryAttributes)
+            const { attributes } = aggregations.contents
+            const aggSuggestions = getAggregationSuggestions(
+              attributes,
+              attributeNodes,
+              term
+            )
+
+            return {
+              suggestions:
+                term === ''
+                  ? aggSuggestions
+                  : [fuzzySuggestion, ...aggSuggestions],
+              loading: false,
+            }
+          }
+
+          return defaultSuggestions
+        }
+
+        if (term === '') {
+          return defaultSuggestions
+        }
+
+        const { state, contents } = get(noWait(fetchSearchSuggestions))
+        const results = state === 'hasValue' ? contents : []
+
+        if (!results) {
+          return defaultSuggestions
+        }
+
+        const suggestions: SearchSuggestion[] = []
+        const addSuggestion = (newSuggestion: SearchSuggestion) =>
+          suggestions.push(newSuggestion)
+
+        const windowType = getWindowType(term)
+
+        if (windowType === 'block' || windowType === 'epoch') {
+          addSuggestion({
+            key: 'block-search',
+            group: 'Explorer',
+            label: 'block',
+            type: 'block',
+          })
+          addSuggestion({
+            key: 'epoch-search',
+            group: 'Explorer',
+            label: 'epoch',
+            type: 'epoch',
+          })
+        }
+
+        if (windowType === 'account') {
+          addSuggestion({
+            key: 'account-search',
+            group: 'Explorer',
+            label: 'account',
+            type: 'account',
+          })
+
+          return {
+            suggestions,
+            loading: false,
+          }
+        }
+
+        if (windowType === 'tx') {
+          addSuggestion({
+            key: 'transaction-search',
+            group: 'Explorer',
+            label: 'transaction',
+            type: 'tx',
+          })
+
+          return {
+            suggestions,
+            loading: false,
+          }
+        }
+
+        addSuggestion(fuzzySuggestion)
+
+        if (state === 'hasValue' && contents) {
+          const serverSuggestions = getServerSuggestions(contents)
+          serverSuggestions.map(addSuggestion)
+        }
+
+        return {
+          suggestions,
+          loading: state === 'loading',
+        }
+      },
+  }
+)

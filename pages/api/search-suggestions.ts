@@ -1,1 +1,1 @@
-export { default } from '../../src/search/api/searchSuggestions'
+export { default } from '../../src/search/api/getSearchSuggestions'

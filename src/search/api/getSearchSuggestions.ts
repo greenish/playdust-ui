@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { OpenSearchResponse } from '../types/OpenSearchIndex'
 import { SearchSuggestionResponse } from '../types/SearchResponse'
 import { queriesToMultiSearch } from './helpers/openSearch'
 import { postMultiQuery } from './helpers/postQuery'
@@ -57,6 +58,42 @@ const getCollectionQuery = (term: string) => ({
   ],
 })
 
+type AttributeNameValues = Pick<
+  SearchSuggestionResponse,
+  'attributeNames' | 'attributeValues'
+>
+
+const addActual = (highlight: string) => ({
+  highlight,
+  actual: highlight.replaceAll('<em>', '').replaceAll('</em>', ''),
+})
+
+const cleanAttributes = (
+  attributeResult: OpenSearchResponse<any>
+): AttributeNameValues => {
+  const attributes = attributeResult.hits.hits
+    .map((entry) => entry.highlight!)
+    .reduce<{ names: string[]; values: string[] }>(
+      (acc, curr) => {
+        const values = curr['attributes.values.v'] || []
+        const names = curr['attributes.name'] || []
+
+        return {
+          names: [...new Set([...acc.names, ...names])],
+          values: [...new Set([...acc.values, ...values])],
+        }
+      },
+      { names: [], values: [] }
+    )
+
+  const withActual = {
+    attributeNames: attributes.names.map(addActual),
+    attributeValues: attributes.values.map(addActual),
+  }
+
+  return withActual
+}
+
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<SearchSuggestionResponse>
@@ -66,7 +103,6 @@ const handler = async (
 
     const attributeQuery = getAttributeQuery(term)
     const collectionQuery = getCollectionQuery(term)
-
     const multiCollectionQuery = queriesToMultiSearch(
       [collectionQuery, attributeQuery],
       'nft-collection'
@@ -76,29 +112,18 @@ const handler = async (
       multiCollectionQuery
     )
 
-    const attributes = attributeResult.hits.hits
-      .map((entry) => entry.highlight!)
-      .reduce<SearchSuggestionResponse['attributes']>(
-        (acc, curr) => {
-          const values = curr['attributes.values.v'] || []
-          const names = curr['attributes.name'] || []
-
-          return {
-            names: [...new Set([...acc.names, ...names])],
-            values: [...new Set([...acc.values, ...values])],
-          }
-        },
-        { names: [], values: [] }
-      )
-
+    const attributes = cleanAttributes(attributeResult)
     const collections = collectionResult.hits.hits.map((entry) => ({
       source: entry._source,
       highlight: entry.highlight!,
     }))
 
-    res.json({ collections, attributes })
+    res.json({
+      collections,
+      ...attributes,
+    })
   } catch (e) {
-    res.status(500).end()
+    res.status(500).end(e)
   }
 }
 

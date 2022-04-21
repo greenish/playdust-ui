@@ -1,4 +1,4 @@
-const getAttributeAggQuery = (aggSize = 15, aggOptionSize = 50) => ({
+const getAttributeAggQuery = (aggSize = 20, aggOptionSize = 50) => ({
   size: 0,
   aggs: {
     name: {
