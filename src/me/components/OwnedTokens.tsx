@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Container, Typography } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
-import TokenContainer from '../../search/components/TokenContainer'
+import { TokenList } from '../../search/components/TokenGrid'
 import { fetchOwned } from '../store'
 
 const HelperMessageContainer = styled.div`
@@ -26,10 +26,14 @@ const OwnedTokens = ({ publicKey }: OwnedTokensProp) => {
   return (
     <ContentContainer>
       {ownedTokens.length ? (
-        <TokenContainer
+        <TokenList
           initialized
           tokens={ownedTokens}
           total={ownedTokens.length}
+          imageSize={225}
+          contentHeight={70}
+          cardGap={16}
+          rowGap={16}
         />
       ) : (
         <HelperMessageContainer>

@@ -22,7 +22,7 @@ const theme = createTheme({
   },
 })
 
-const appBarWidth = 64
+const appBarWidth = 48
 
 const VerticalAppBar = styled(Paper)`
   position: absolute;

@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
 import humanizeCollection from '../helpers/humanizeCollection'
 import type { CollectionSource } from '../types/OpenSearchIndex'
-import ImageCard from './ImageCard'
+import ImageCard from './TokenGrid/ImageCard'
 
 interface CollectionCardProps extends CollectionSource {
   cardSize: number
@@ -25,7 +25,7 @@ const CollectionCard = ({
         </Typography>
       }
       onClick={onClick ? () => onClick(id) : undefined}
-      contentHeight="40px"
+      contentHeight={40}
     />
   )
 }

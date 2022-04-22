@@ -14,9 +14,9 @@ import {
   useAddAttributeNode,
   usePrependCollectionNode,
   useUpdateAttributeNode,
-} from '../hooks/useSearchChange'
-import * as store from '../store'
-import { NFTSource } from '../types/OpenSearchIndex'
+} from '../../hooks/useSearchChange'
+import * as store from '../../store'
+import { NFTSource } from '../../types/OpenSearchIndex'
 
 interface TokenCardFilter {
   metadata: NFTSource

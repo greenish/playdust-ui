@@ -81,12 +81,12 @@ const defaultSuggestions = {
   loading: false,
 }
 
-const fuzzySuggestion: SearchSuggestion = {
+const getFuzzySuggestion = (term: string): SearchSuggestion => ({
   key: 'fuzzy-search',
   group: 'Search',
-  label: 'search for',
+  label: `search for ${term}`,
   type: 'search',
-}
+})
 
 const getAggregationSuggestions = (
   attributes: AttributeResponse,
@@ -182,6 +182,7 @@ export const searchSuggestions = selectorFamily<SearchSuggetionResults, string>(
       (currentState) =>
       ({ get }) => {
         const term = get(searchSuggestionTerm)
+        const fuzzySuggestion = getFuzzySuggestion(term)
 
         if (currentState !== '') {
           const aggregations = get(noWait(searchStore.searchAggregations))

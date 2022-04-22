@@ -1,12 +1,12 @@
 import styled from '@emotion/styled'
-import { Card, Skeleton } from '@mui/material'
+import { Card, Paper, Skeleton } from '@mui/material'
 import { Box } from '@mui/system'
 import { PropsWithChildren, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import Link from '../../app/components/Link'
-import LazyImage from '../../common/components/LazyImage'
-import Status from '../../common/types/Status'
-import * as store from '../store'
+import Link from '../../../app/components/Link'
+import LazyImage from '../../../common/components/LazyImage'
+import Status from '../../../common/types/Status'
+import * as store from '../../store'
 
 const CardContentContainer = styled.div`
   height: 100%;
@@ -49,7 +49,7 @@ interface ImageCardProps {
   href?: string
   imageSize: number
   content: React.ReactElement
-  contentHeight: string
+  contentHeight: number
   onClick?: () => any
 }
 
@@ -59,7 +59,7 @@ export const SkeletonImageCard = ({
 }: Partial<ImageCardProps>) => {
   return (
     <div>
-      <Card sx={{ mr: 2, width: imageSize }} square>
+      <Card sx={{ width: imageSize }} square>
         <Skeleton
           sx={{
             height: imageSize,
@@ -93,54 +93,56 @@ const ImageCard = ({
   const status = useRecoilValue(store.collectionStatus)
 
   return (
-    <div>
-      <Card sx={{ mr: 2, width: imageSize }} square>
-        <LinkWrapper href={href} onClick={onClick}>
-          {src && (
-            <CardImageContainer>
-              <LazyImage
-                src={src}
-                style={
-                  isLoaded
-                    ? {
-                        objectFit: 'cover',
-                        width: imageSize,
-                        height: imageSize,
-                        filter:
-                          status === Status.Censored || status === Status.NSFW
-                            ? 'blur(1.5rem)'
-                            : 'none',
-                      }
-                    : { display: 'none' }
-                }
-                width={imageSize}
-                height={imageSize}
-                onLoad={() => setIsLoaded(true)}
-                alt=""
-              />
-            </CardImageContainer>
-          )}
-          {!isLoaded && (
-            <Skeleton
-              sx={{
-                height: imageSize,
-                width: imageSize,
-              }}
-              animation="wave"
-              variant="rectangular"
+    <Paper sx={{ width: imageSize }} square>
+      <LinkWrapper href={href} onClick={onClick}>
+        {src && (
+          <CardImageContainer style={{ maxHeight: imageSize }}>
+            <LazyImage
+              src={src}
+              style={
+                isLoaded
+                  ? {
+                      objectFit: 'cover',
+                      width: imageSize,
+                      height: imageSize,
+                      filter:
+                        status === Status.Censored || status === Status.NSFW
+                          ? 'blur(1.5rem)'
+                          : 'none',
+                    }
+                  : { display: 'none' }
+              }
+              width={imageSize}
+              height={imageSize}
+              onLoad={() => setIsLoaded(true)}
+              alt=""
             />
-          )}
-        </LinkWrapper>
+          </CardImageContainer>
+        )}
+        {!isLoaded && (
+          <Skeleton
+            sx={{
+              height: imageSize,
+              width: imageSize,
+            }}
+            animation="wave"
+            variant="rectangular"
+          />
+        )}
+      </LinkWrapper>
+      {contentHeight !== 0 && (
         <Box
           sx={{
+            maxHeight: contentHeight,
             height: contentHeight,
             width: '100%',
+            fontSize: '80%',
           }}
         >
           <CardContentContainer>{content}</CardContentContainer>
         </Box>
-      </Card>
-    </div>
+      )}
+    </Paper>
   )
 }
 

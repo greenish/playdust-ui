@@ -14,7 +14,7 @@ import { createFilterOptions } from '@mui/material/Autocomplete'
 import { useDebounceCallback } from '@react-hook/debounce'
 import { useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import SearchGraph from '../../search/components/graph/SearchGraph'
+import SearchGraph from '../../search/components/SearchGraph'
 import {
   useAddAttributeNode,
   useAddTextNode,
@@ -102,6 +102,8 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
           if (!value) {
             return
           }
+
+          setSuggestionTerm('')
 
           // value is string if enter key is pressed
           if (typeof value === 'string') {

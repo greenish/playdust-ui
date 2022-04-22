@@ -1,6 +1,10 @@
 import { nanoid } from 'nanoid'
 import { useRecoilValue } from 'recoil'
-import { usePushWindowHash } from '../../app/helpers/getWindowUrl'
+import {
+  encodeWindowHash,
+  usePushWindowHash,
+} from '../../app/helpers/getWindowUrl'
+import { Window } from '../../app/types/App'
 import serializeSearch from '../helpers/serializeSearch'
 import * as store from '../store'
 import ComposedQueryType, {
@@ -89,7 +93,9 @@ export function makeUseSearchChange<T>(
     currQuery: ComposedQueryType
   ) => (input: T) => Partial<SearchState>
 ) {
-  return function useSearchChange(method: 'router' | 'memory' = 'router') {
+  return function useSearchChange(
+    method: 'router' | 'memory' | 'href' = 'router'
+  ) {
     const pushWindowHash = usePushWindowHash()
     const query = useRecoilValue(store.searchQuery)
     const sort = useRecoilValue(store.searchSort)
@@ -108,13 +114,18 @@ export function makeUseSearchChange<T>(
             : nextState.onlyListed,
       }
 
-      if (method === 'router') {
-        const serialized = serializeSearch(next)
+      const serialized = serializeSearch(next)
+      const nextUrlState: Window = { type: 'search', state: serialized }
 
-        return pushWindowHash({ type: 'search', state: serialized })
+      if (method === 'router') {
+        pushWindowHash(nextUrlState)
       }
 
-      updateSearch(next)
+      if (method === 'memory') {
+        updateSearch(next)
+      }
+
+      return encodeWindowHash(nextUrlState)
     }
   }
 }

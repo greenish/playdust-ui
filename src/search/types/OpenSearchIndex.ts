@@ -11,6 +11,7 @@ export interface OpenSearchResponse<T> {
       value: number
     }
     hits: {
+      _id: string
       _source: T
       highlight?: OpenSearchHighlight
     }[]

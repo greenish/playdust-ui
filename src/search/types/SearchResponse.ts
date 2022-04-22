@@ -42,3 +42,12 @@ export interface SearchOverviewResponse {
 export interface SearchAggregationResponse {
   attributes: AttributeResponse
 }
+
+export type TopCollectionResponse = {
+  results: {
+    collection: CollectionSource
+    nfts: NFTSource[]
+  }[]
+  cursor: string
+  total: number
+}

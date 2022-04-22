@@ -50,7 +50,12 @@ const WalletButton = ({ active }: { active: boolean }) => {
 
   return (
     <>
-      <Fab {...buttonProps} size="small" color={active ? 'primary' : 'default'}>
+      <Fab
+        {...buttonProps}
+        size="small"
+        color={active ? 'primary' : 'default'}
+        sx={{ width: 36, height: 36 }}
+      >
         <Person />
       </Fab>
       <Menu

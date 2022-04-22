@@ -25,15 +25,20 @@ const postAxios = async (
   return data
 }
 
-export const postNFTScrollQuery = async (scrollId: string) => {
-  const query = {
-    scroll: '1m',
-    scroll_id: scrollId,
-  }
-  const result = await postAxios(query, '/_search/scroll')
+function makePostScrollQuery<T>() {
+  return async (scrollId: string) => {
+    const query = {
+      scroll: '1m',
+      scroll_id: scrollId,
+    }
+    const result = await postAxios(query, '/_search/scroll')
 
-  return result as OpenSearchResponse<NFTSource>
+    return result as OpenSearchResponse<T>
+  }
 }
+
+export const postNFTScrollQuery = makePostScrollQuery<NFTSource>()
+export const postCollectionScrollQuery = makePostScrollQuery<CollectionSource>()
 
 function makePostMultiQuery<T>() {
   return async (query: string) => {

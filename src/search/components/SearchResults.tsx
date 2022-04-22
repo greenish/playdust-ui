@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useRecoilValueLoadable } from 'recoil'
 import * as store from '../store'
-import TokenContainer from './TokenContainer'
+import { TokenList } from './TokenGrid'
 
 const NoTokensContainer = styled.div`
   width: 100%;
@@ -24,8 +24,12 @@ const SearchResults = () => {
   }
 
   return (
-    <TokenContainer
+    <TokenList
       initialized={hasValue}
+      imageSize={225}
+      contentHeight={70}
+      cardGap={16}
+      rowGap={16}
       tokens={hasValue ? loadable.contents.nfts : []}
       total={hasValue ? loadable.contents.total : 0}
       next={async () => {
