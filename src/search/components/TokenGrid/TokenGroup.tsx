@@ -29,6 +29,7 @@ const TokenContainer = styled.div`
   display: flex;
   overflow-y: hidden;
   overflow-x: auto;
+  padding-right: 100px;
 `
 
 const skeletonRange = [...Array(20).keys()]

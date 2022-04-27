@@ -2,7 +2,7 @@ import type WindowUnion from './WindowUnion'
 
 interface WindowProps {
   state: string
-  removeTab: () => void
+  clearState: () => void
   type: WindowUnion
 }
 

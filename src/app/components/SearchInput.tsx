@@ -44,7 +44,7 @@ const clientFilter = createFilterOptions({
   stringify: (option: any) => option.label,
 })
 
-const SearchInput = ({ state, type, removeTab }: WindowProps) => {
+const SearchInput = ({ state, type, clearState }: WindowProps) => {
   const [open, setOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const isQueryValid = useRecoilValue(searchStore.isSearchQueryValid)
@@ -96,7 +96,7 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
         onClose={() => setSearchOpen(false)}
         onChange={(_evt, [_placeholder, value], reason) => {
           if (reason === 'clear') {
-            return removeTab()
+            return clearState()
           }
 
           if (!value) {
@@ -176,13 +176,13 @@ const SearchInput = ({ state, type, removeTab }: WindowProps) => {
         )}
         renderTags={() =>
           isSearchable ? (
-            <SearchChips disabled={disabled} removeTab={removeTab} />
+            <SearchChips disabled={disabled} clearState={clearState} />
           ) : (
             <Chip
               size="small"
               label={`${type}: ${state}`}
               variant="outlined"
-              onDelete={() => removeTab()}
+              onDelete={() => clearState()}
             />
           )
         }

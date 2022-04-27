@@ -68,10 +68,10 @@ const getChipLabel = (child: QueryType) => {
 
 interface SearchChipsProps {
   disabled: boolean
-  removeTab: () => void
+  clearState: () => void
 }
 
-const SearchChips = ({ disabled, removeTab }: SearchChipsProps) => {
+const SearchChips = ({ disabled, clearState }: SearchChipsProps) => {
   const query = useRecoilValue(searchStore.searchQueryValid)
   const removeNode = useRemoveNode()
 
@@ -88,7 +88,8 @@ const SearchChips = ({ disabled, removeTab }: SearchChipsProps) => {
               label={getChipLabel(child)}
               variant="outlined"
               onDelete={() => {
-                query.flat().length === 1 ? removeTab() : removeNode(child.id)
+                // removeNode(child.id)
+                query.flat().length === 1 ? clearState() : removeNode(child.id)
               }}
             />
           )

@@ -12,5 +12,5 @@ export interface Tab {
 
 export interface App {
   tabs: Tab[]
-  selectedTabId: string | undefined
+  selectedTabId: string
 }

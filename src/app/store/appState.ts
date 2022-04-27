@@ -1,14 +1,30 @@
 import { nanoid } from 'nanoid'
-import { atom, useSetRecoilState } from 'recoil'
+import { atom, useRecoilState, useSetRecoilState } from 'recoil'
 import validateAppState from '../helpers/validateAppState'
 import type { App, Window } from '../types/App'
 
+const homeWindow: Window = {
+  type: 'home',
+  state: '',
+}
+
+const getDefaultValue = (idOverride?: string): App => {
+  const id = idOverride || nanoid()
+
+  return {
+    tabs: [
+      {
+        id,
+        windows: [homeWindow],
+      },
+    ],
+    selectedTabId: id,
+  }
+}
+
 export const appState = atom<App>({
   key: 'appState',
-  default: {
-    tabs: [],
-    selectedTabId: undefined,
-  },
+  default: getDefaultValue(),
   effects: [
     ({ setSelf, onSet, trigger, node }) => {
       if (typeof window === 'undefined') {
@@ -47,7 +63,7 @@ export const appState = atom<App>({
 export const useSetSelectedTab = () => {
   const setter = useSetRecoilState(appState)
 
-  return (id?: string) => {
+  return (id: string) => {
     setter((curr) => ({
       ...curr,
       selectedTabId: id,
@@ -69,7 +85,15 @@ export const useAddTab = () => {
       selectedTabId: newTab.id,
     }))
 
-    return newTab.id
+    return newTab
+  }
+}
+
+export const useAddHomeTab = () => {
+  const addTab = useAddTab()
+
+  return () => {
+    return addTab({ type: 'home', state: '' })
   }
 }
 
@@ -94,12 +118,48 @@ export const useSetTabState = () => {
 }
 
 export const useRemoveTab = () => {
-  const setter = useSetRecoilState(appState)
+  const [curr, setter] = useRecoilState(appState)
 
-  return (id: string) => {
-    setter((curr) => ({
-      ...curr,
-      tabs: curr.tabs.filter((tab) => tab.id !== id),
-    }))
+  const getNextValue = () => {
+    const { tabs, selectedTabId, ...rest } = curr
+
+    if (tabs.length === 1) {
+      return getDefaultValue(tabs[0].id)
+    }
+
+    const indexOf = tabs.findIndex((tab) => tab.id === selectedTabId)
+    const filtered = tabs.filter((_tab, idx) => idx !== indexOf)
+
+    const base = {
+      ...rest,
+      tabs: filtered,
+    }
+
+    const tabAtIndex = filtered[indexOf]
+
+    if (tabAtIndex) {
+      return {
+        ...base,
+        selectedTabId: tabAtIndex.id,
+      }
+    }
+
+    const tabBeforeIndex = filtered[indexOf - 1]
+
+    return {
+      ...base,
+      selectedTabId: tabBeforeIndex.id,
+    }
+  }
+
+  return () => {
+    const nextValue: App = getNextValue()
+    const activeTab = nextValue.tabs.find(
+      (tab) => tab.id === nextValue.selectedTabId
+    )
+
+    setter(nextValue)
+
+    return activeTab
   }
 }

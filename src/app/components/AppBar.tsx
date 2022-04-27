@@ -1,19 +1,19 @@
 import styled from '@emotion/styled'
-import { DeleteSweep, Home } from '@mui/icons-material'
+import { Add, Close, DeleteSweep } from '@mui/icons-material'
 import {
-  Button,
   createTheme,
-  IconButton,
+  Fab,
   Paper,
   ThemeProvider,
   Typography,
 } from '@mui/material'
 import { useRouter } from 'next/router'
 import { PropsWithChildren, ReactNode } from 'react'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
-import { encodeWindowHash } from '../helpers/getWindowUrl'
+import { useRecoilValue } from 'recoil'
+import { usePushWindowHash } from '../helpers/getWindowUrl'
 import * as store from '../store'
 import Notifications from './Notifications'
+import Playdust from './Playdust'
 import WalletButton from './WalletButton'
 
 const theme = createTheme({
@@ -22,7 +22,9 @@ const theme = createTheme({
   },
 })
 
-const appBarWidth = 48
+const appBarWidth = 64
+const largeButtonSize = 40
+const smallButtonSize = 24
 
 const VerticalAppBar = styled(Paper)`
   position: absolute;
@@ -38,14 +40,34 @@ const VerticalAppBarContent = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 16px 8px;
+  width: 100%;
+  padding: 16px 0px;
 `
 
 const TopContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
+  width: 100%;
+`
+
+const TabButtonContainer = styled.div`
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+`
+
+const ActiveHighlight = styled.div`
+  width: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
 `
 
 const ChildrenContainer = styled.div`
@@ -67,29 +89,40 @@ interface AppBarProps {
   children: ReactNode
 }
 
-type TabButtonProps = PropsWithChildren<{
-  isActive: boolean
-  onClick: () => any
+type SizedButtonProps = PropsWithChildren<{
+  size?: 24 | 40
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void
+  href?: string
 }>
 
-const TabButton = ({ children, isActive, onClick }: TabButtonProps) => (
-  <Button
-    sx={{
-      width: 36,
-      minWidth: 0,
-    }}
-    variant={isActive ? 'contained' : 'text'}
-    color={isActive ? 'primary' : 'inherit'}
-    onClick={() => onClick()}
-  >
-    {children}
-  </Button>
-)
+export const SizedButton = ({
+  size = largeButtonSize,
+  onClick,
+  children,
+  href,
+}: SizedButtonProps) => {
+  return (
+    <Fab
+      sx={{
+        maxWidth: size,
+        minWidth: size,
+        maxHeight: size,
+        minHeight: size,
+      }}
+      onClick={onClick}
+      href={href}
+    >
+      {children}
+    </Fab>
+  )
+}
 
 const AppBar = ({ children }: AppBarProps) => {
   const { tabs } = useRecoilValue(store.appState)
-  const resetWindow = useResetRecoilState(store.appState)
   const activeTab = useRecoilValue(store.activeTab)
+  const addHomeTab = store.useAddHomeTab()
+  const removeTab = store.useRemoveTab()
+  const pushWindowHash = usePushWindowHash()
   const router = useRouter()
 
   if (!router.isReady) {
@@ -104,36 +137,63 @@ const AppBar = ({ children }: AppBarProps) => {
         <VerticalAppBar square elevation={3}>
           <VerticalAppBarContent>
             <TopContainer>
-              <TabButton
-                isActive={!activeTab && !router.pathname.startsWith('/me')}
-                onClick={() => {
-                  router.push('/')
-                }}
-              >
-                <Home />
-              </TabButton>
-              {tabs.map((tab, idx) => (
-                <TabButton
-                  key={tab.id}
-                  isActive={inWindowManager && tab.id === activeTab?.id}
+              <Playdust width={largeButtonSize} />
+              {tabs.map((tab, idx) => {
+                const isActive = inWindowManager && tab.id === activeTab?.id
+
+                return (
+                  <TabButtonContainer key={tab.id}>
+                    <SizedButton
+                      size={largeButtonSize}
+                      onClick={() => pushWindowHash(tab.windows[0], tab.id)}
+                    >
+                      <Typography>{idx + 1}</Typography>
+                    </SizedButton>
+                    {isActive && (
+                      <SizedButton
+                        size={smallButtonSize}
+                        onClick={() => {
+                          const nextTab = removeTab()
+                          nextTab &&
+                            pushWindowHash(nextTab.windows[0], nextTab.id)
+                        }}
+                      >
+                        <Close fontSize="small" />
+                      </SizedButton>
+                    )}
+                    {isActive && (
+                      <ActiveHighlight
+                        style={{
+                          height: largeButtonSize,
+                          background: theme.palette.primary.main,
+                        }}
+                      />
+                    )}
+                  </TabButtonContainer>
+                )
+              })}
+              <TabButtonContainer>
+                <SizedButton
                   onClick={() => {
-                    const state = tab.windows[0]
-                    router.push(encodeWindowHash(state, tab.id))
+                    const newTab = addHomeTab()
+                    pushWindowHash(newTab.windows[0], newTab.id)
                   }}
                 >
-                  <Typography>{idx + 1}</Typography>
-                </TabButton>
-              ))}
-              {tabs.length > 0 && (
-                <IconButton
-                  onClick={() => {
-                    router.push('/')
-                    resetWindow()
-                  }}
-                >
-                  <DeleteSweep />
-                </IconButton>
-              )}
+                  <Add />
+                </SizedButton>
+                {inWindowManager && tabs.length > 0 && (
+                  <SizedButton
+                    size={24}
+                    onClick={() => {
+                      localStorage.clear()
+                      router.replace('/')
+                      router.reload()
+                    }}
+                  >
+                    <DeleteSweep fontSize="small" />
+                  </SizedButton>
+                )}
+              </TabButtonContainer>
             </TopContainer>
             <WalletButton active={!inWindowManager} />
           </VerticalAppBarContent>

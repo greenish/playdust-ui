@@ -8,7 +8,7 @@ import SearchResults from './components/SearchResults'
 import SearchSideBar from './components/SearchSideBar'
 import parseSearch from './helpers/parseSearch'
 import { serializeSearchActual } from './helpers/serializeSearch'
-import useUpdateSearch from './hooks/useUpdateSearch'
+import useUpdateSearch, { useResetSearch } from './hooks/useUpdateSearch'
 import * as store from './store'
 
 const RootContainer = styled.div`
@@ -35,10 +35,11 @@ const TokenContainer = styled.div`
   overflow-y: auto;
 `
 
-const Search = ({ state, removeTab }: WindowProps) => {
+const Search = ({ state, clearState }: WindowProps) => {
   const sortOptions = useRecoilValue(store.searchSortOptions)
   const setSearchKey = useSetRecoilState(store.searchKey)
   const updateSearch = useUpdateSearch()
+  const resetSearch = useResetSearch()
 
   useEffect(() => {
     try {
@@ -55,8 +56,10 @@ const Search = ({ state, removeTab }: WindowProps) => {
       setSearchKey(serialized)
     } catch (e) {
       console.error(e)
-      removeTab()
+      clearState()
     }
+
+    return () => resetSearch()
   }, [])
 
   return (
