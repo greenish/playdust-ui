@@ -8,8 +8,17 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
+import { ConfirmedTransactionMeta, TransactionSignature } from '@solana/web3.js'
+import React from 'react'
 import { useBlock } from '../../store'
-import { ExplorerCard, TxLink } from '../common'
+import { AccountLink, ExplorerCard, TxLink } from '../common'
+
+type TransactionWithInvocations = {
+  index: number
+  signature?: TransactionSignature
+  meta: ConfirmedTransactionMeta | null
+  invocations: Map<string, number>
+}
 
 interface SlotTransactionsProps {
   slot: number
@@ -22,7 +31,49 @@ export const SlotTransactionsContent = ({ slot }: SlotTransactionsProps) => {
     return <div>Block ${slot} not found</div>
   }
 
-  const { transactions } = block
+  const { transactions, invokedPrograms } = React.useMemo(() => {
+    const invokedPrograms = new Map<string, number>()
+
+    const transactions: TransactionWithInvocations[] = block.transactions.map(
+      (tx, index) => {
+        let signature: TransactionSignature | undefined
+        if (tx.transaction.signatures.length > 0) {
+          signature = tx.transaction.signatures[0]
+        }
+
+        let programIndexes = tx.transaction.message.instructions.map(
+          (ix) => ix.programIdIndex
+        )
+        programIndexes.concat(
+          tx.meta?.innerInstructions?.flatMap((ix) => {
+            return ix.instructions.map((ix) => ix.programIdIndex)
+          }) || []
+        )
+
+        const indexMap = new Map<number, number>()
+        programIndexes.forEach((programIndex) => {
+          const count = indexMap.get(programIndex) || 0
+          indexMap.set(programIndex, count + 1)
+        })
+
+        const invocations = new Map<string, number>()
+        for (const [i, count] of indexMap.entries()) {
+          const programId = tx.transaction.message.accountKeys[i].toBase58()
+          invocations.set(programId, count)
+          const programTransactionCount = invokedPrograms.get(programId) || 0
+          invokedPrograms.set(programId, programTransactionCount + 1)
+        }
+
+        return {
+          index,
+          signature,
+          meta: tx.meta,
+          invocations,
+        }
+      }
+    )
+    return { transactions, invokedPrograms }
+  }, [block])
 
   const top10Transactions = transactions.slice(0, 10)
 
@@ -31,13 +82,9 @@ export const SlotTransactionsContent = ({ slot }: SlotTransactionsProps) => {
       return {}
     }
 
-    const { meta, transaction: innerTransaction } = transaction || {}
+    const { meta, signature: txSignature } = transaction || {}
 
     const { err } = meta || {}
-
-    const { message, signatures } = innerTransaction || {}
-
-    const { instructions } = message || {}
 
     const result = err ? (
       <Chip color="error" label="Error" />
@@ -45,16 +92,29 @@ export const SlotTransactionsContent = ({ slot }: SlotTransactionsProps) => {
       <Chip color="success" label="Sucess" />
     )
 
-    const signature = <TxLink to={signatures[0]} ellipsis={[30, 0]} />
+    const signature = txSignature ? (
+      <TxLink to={txSignature} ellipsis={[30, 0]} />
+    ) : null
 
-    const _instructions = (
-      <pre style={{ display: 'none' }}>{JSON.stringify(instructions)}</pre>
-    )
+    const entries = [...transaction.invocations.entries()]
+    entries.sort()
+
+    const instructions =
+      transaction.invocations.size === 0
+        ? 'NA'
+        : entries.map(([programId, count], i) => {
+            return (
+              <div key={i} className="d-flex align-items-center">
+                <AccountLink to={programId} allowCopy />
+                <span className="ms-2 text-muted">{`(${count})`}</span>
+              </div>
+            )
+          })
 
     const row = {
       result,
       signature,
-      instructions: _instructions,
+      instructions,
     }
 
     return row
