@@ -1,8 +1,6 @@
 import { ParsedInstruction, SystemProgram } from '@solana/web3.js'
 import React from 'react'
-import { Copyable } from '../../common/Copyable'
-import { AccountLink } from '../../Links'
-import { DataRows, DataRowsItem } from '../../Table'
+import { AccountLink, Copyable, DataRows, DataRowsItem } from '../../common'
 import { BasicInstructionCard } from '../BasicInstructionCard'
 import { InstructionCardProps } from '../InstructionCard'
 

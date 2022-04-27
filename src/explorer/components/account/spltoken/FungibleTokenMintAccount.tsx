@@ -13,11 +13,14 @@ import {
   useCoinGecko,
   useTokenRegistry,
 } from '../../../store'
-import { ExplorerGrid } from '../../ExplorerGrid'
-import { ExplorerTab, ExplorerTabs } from '../../ExplorerTabs'
-import { ExternalLink } from '../../ExternalLinks'
-import { AccountLink } from '../../Links'
-import { Transactions } from '../../Transactions'
+import {
+  AccountLink,
+  ExplorerGrid,
+  ExplorerTab,
+  ExplorerTabs,
+  ExternalLink,
+} from '../../common'
+import { Transactions } from '../Transactions'
 import { Distribution } from './Distribution'
 import { Metadata } from './Metadata'
 

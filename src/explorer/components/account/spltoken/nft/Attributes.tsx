@@ -49,8 +49,8 @@ export const Attributes = ({ details }: AttributesProps) => {
       <AccordionDetails>
         <Grid container spacing={2}>
           {(details?.offChainData?.attributes || []).map(
-            (attribute: AttributePair) => (
-              <AttributeBox {...attribute} />
+            (attribute: AttributePair, index: number) => (
+              <AttributeBox key={index} {...attribute} />
             )
           )}
         </Grid>

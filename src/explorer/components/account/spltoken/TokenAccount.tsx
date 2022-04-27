@@ -5,9 +5,7 @@ import { solanaCluster } from '../../../../app/store'
 import { compact } from '../../../../common/helpers/utils'
 import { addressLabel } from '../../../helpers/tx'
 import { useAccountInfo, useTokenRegistry } from '../../../store'
-import { ExplorerCard } from '../../ExplorerCard'
-import { ExplorerGrid } from '../../ExplorerGrid'
-import { AccountLink } from '../../Links'
+import { AccountLink, ExplorerCard, ExplorerGrid } from '../../common'
 
 interface TokenAccountProps {
   pubkey: PublicKey

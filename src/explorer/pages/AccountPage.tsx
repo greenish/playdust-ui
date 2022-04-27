@@ -1,7 +1,6 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { FunctionComponent } from 'react'
 import WindowProps from '../../app/types/WindowProps'
-import { ExplorerContainer } from '../components'
 import {
   ConfigAccount,
   NonceAccount,
@@ -12,6 +11,7 @@ import {
   UpgradeableLoaderAccount,
   VoteAccount,
 } from '../components/account'
+import { ExplorerContainer } from '../components/common'
 import { useAccountInfo } from '../store'
 
 interface AccountOverviewProps {

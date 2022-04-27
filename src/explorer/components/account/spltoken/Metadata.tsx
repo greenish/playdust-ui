@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { useAccountInfo, useEditionInfo, useNFTDetails } from '../../../store'
-import { DynamicReactJson } from '../../DynamicReactJson'
+import { DynamicReactJson } from '../../common'
 
 interface MetadataProps {
   pubkey: PublicKey

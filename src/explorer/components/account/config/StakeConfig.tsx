@@ -1,11 +1,13 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { compact } from '../../../../common/helpers/utils'
 import { useAccountInfo } from '../../../store'
-import { AccountDetails } from '../../AccountDetails'
-import { ExplorerCard } from '../../ExplorerCard'
-import { ExplorerGrid } from '../../ExplorerGrid'
-import { AccountLink } from '../../Links'
-import { SolBalance } from '../../SolBalance'
+import {
+  AccountLink,
+  ExplorerCard,
+  ExplorerGrid,
+  SolBalance,
+} from '../../common'
+import { AccountDetails } from '../AccountDetails'
 
 const MAX_SLASH_PENALTY = Math.pow(2, 8)
 

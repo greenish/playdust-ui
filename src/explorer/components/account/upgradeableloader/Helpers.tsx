@@ -1,9 +1,8 @@
 import { Chip, Tooltip } from '@mui/material'
-import { PropsWithChildren } from 'react'
 import { ProgramDataAccountInfo } from '../../../helpers/account'
 import { fromProgramData } from '../../../helpers/securityTxt'
 import { VerifiableBuild } from '../../../store'
-import { ExternalLink } from '../../ExternalLinks'
+import { ExternalLink } from '../../common'
 
 export function SecurityLabel() {
   return (
@@ -67,15 +66,4 @@ export function VerifiedBadge({
       size="small"
     />
   )
-}
-
-interface DownloadableProps {
-  data: any
-  filename: string
-}
-
-export const Downloadable = ({
-  children,
-}: PropsWithChildren<DownloadableProps>) => {
-  return <>{children}</>
 }

@@ -7,8 +7,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import { useBlock } from '../store'
-import { AccountLink, ExplorerCard } from './'
+import { useBlock } from '../../store'
+import { AccountLink, ExplorerCard } from '../common'
 
 interface SlotProgramsProps {
   slot: number

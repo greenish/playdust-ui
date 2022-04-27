@@ -8,7 +8,7 @@ import {
 } from '@solana/web3.js'
 import { FunctionComponent } from 'react'
 import { intoTransactionInstruction } from '../../helpers/tx'
-import { ErrorCard } from '../ErrorCard'
+import { ErrorCard } from '../common'
 import { SystemDetailsCard } from './system/SystemDetailsCard'
 import { TokenDetailsCard } from './token/TokenDetailsCard'
 import { UnknownDetailsCard } from './UnknownDetailsCard'

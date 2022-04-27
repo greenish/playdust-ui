@@ -1,5 +1,6 @@
 import WindowProps from '../../app/types/WindowProps'
-import { EpochOverview, ExplorerContainer, ExplorerHeader } from '../components'
+import { ExplorerContainer, ExplorerHeader } from '../components/common'
+import { EpochOverview } from '../components/epoch'
 
 export const EpochPage = ({ state }: WindowProps) => {
   const epoch = Number(state)

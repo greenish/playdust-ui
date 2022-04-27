@@ -1,7 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { compact } from '../../../../common/helpers/utils'
-import { ExplorerCard } from '../../ExplorerCard'
-import { ExplorerGrid } from '../../ExplorerGrid'
+import { ExplorerCard, ExplorerGrid } from '../../common'
 import { useStakeAccount } from './utils'
 
 interface StakeAccountProps {

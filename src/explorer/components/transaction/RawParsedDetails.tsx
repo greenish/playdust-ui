@@ -1,5 +1,5 @@
 import { ParsedInstruction } from '@solana/web3.js'
-import { DataCell, TableRow } from '../Table'
+import { DataCell, TableRow } from '../common'
 
 export function RawParsedDetails({
   ix,

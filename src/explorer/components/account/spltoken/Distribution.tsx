@@ -7,8 +7,8 @@ import {
   useAccountInfo,
   useLargestAccounts,
 } from '../../../store'
-import { AccountLink } from '../../Links'
 import {
+  AccountLink,
   DataCell,
   Table,
   TableBody,
@@ -16,7 +16,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from '../../Table'
+} from '../../common'
 
 interface DistributionProps {
   pubkey: PublicKey

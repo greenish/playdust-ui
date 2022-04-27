@@ -2,10 +2,13 @@ import { Chip, Typography } from '@mui/material'
 import { DateTime } from 'luxon'
 import { compact } from '../../../common/helpers/utils'
 import { useRawTransaction, useSignatureStatus } from '../../store'
-import { ExplorerCard } from '../ExplorerCard'
-import { ExplorerGrid } from '../ExplorerGrid'
-import { SlotLink, TxLink } from '../Links'
-import { SolBalance } from '../SolBalance'
+import {
+  ExplorerCard,
+  ExplorerGrid,
+  SlotLink,
+  SolBalance,
+  TxLink,
+} from '../common'
 
 interface TransactionOverviewProps {
   signature: string

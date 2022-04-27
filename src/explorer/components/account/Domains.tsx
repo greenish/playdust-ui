@@ -9,10 +9,9 @@ import {
 } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import React from 'react'
-import { pubkeyToString } from '../../common/helpers/utils'
-import { DomainInfo, useUserDomains } from '../store'
-import { ExplorerCard } from './ExplorerCard'
-import { AccountLink } from './Links'
+import { pubkeyToString } from '../../../common/helpers/utils'
+import { DomainInfo, useUserDomains } from '../../store'
+import { AccountLink, ExplorerCard } from '../common'
 
 interface DomainRow {
   key: string

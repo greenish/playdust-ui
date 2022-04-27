@@ -8,8 +8,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
-import { useBlock } from '../store'
-import { ExplorerCard, TxLink } from './'
+import { useBlock } from '../../store'
+import { ExplorerCard, TxLink } from '../common'
 
 interface SlotTransactionsProps {
   slot: number

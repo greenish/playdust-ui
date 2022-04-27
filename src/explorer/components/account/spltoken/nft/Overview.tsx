@@ -5,8 +5,7 @@ import {
   useEditionInfo,
   useNFTDetails,
 } from '../../../../store'
-import { ExplorerGrid } from '../../../ExplorerGrid'
-import { AccountLink } from '../../../Links'
+import { AccountLink, ExplorerGrid } from '../../../common'
 
 type TokenOverviewProps = {
   pubkey: PublicKey

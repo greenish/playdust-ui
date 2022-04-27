@@ -1,7 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { FunctionComponent } from 'react'
 import { useAccountInfo } from '../../store'
-import { ErrorCard } from '../ErrorCard'
+import { ErrorCard } from '../common'
 import { StakeConfig, ValidatorInfo } from './config'
 
 interface ConfigAccountProps {

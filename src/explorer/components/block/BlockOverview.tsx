@@ -1,8 +1,7 @@
 import { Box, Typography } from '@mui/material'
-import { lamportsToSol, toLocaleString } from '../../common/helpers/utils'
-import { useBlock, useSOLPrice } from '../store'
-import { ExplorerGrid } from './ExplorerGrid'
-import { SlotLink } from './Links'
+import { lamportsToSol, toLocaleString } from '../../../common/helpers/utils'
+import { useBlock, useSOLPrice } from '../../store'
+import { ExplorerGrid, SlotLink } from '../common'
 
 interface BlockOverviewProps {
   slot: number

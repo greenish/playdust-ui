@@ -1,8 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { FunctionComponent } from 'react'
 import { useAccountDetails, useAccountInfo } from '../../store'
-import { ErrorCard } from '../ErrorCard'
-import { ExplorerCard } from '../ExplorerCard'
+import { ErrorCard, ExplorerCard } from '../common'
 import {
   FungibleTokenMintAccount,
   MultisigAccount,

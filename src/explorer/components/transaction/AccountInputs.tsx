@@ -1,18 +1,18 @@
 import { Chip, Paper, Typography } from '@mui/material'
 import { ParsedMessageAccount } from '@solana/web3.js'
 import { useParsedConfirmedTransaction } from '../../store/fetchTransaction'
-import { ExplorerCard } from '../ExplorerCard'
-import { AccountLink } from '../Links'
-import { SolBalance } from '../SolBalance'
 import {
+  AccountLink,
   DataCell,
+  ExplorerCard,
+  SolBalance,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-} from '../Table'
+} from '../common'
 
 interface AccountInputsProps {
   signature: string

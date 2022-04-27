@@ -1,10 +1,13 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { useAccountInfo } from '../../../store'
-import { AccountDetails } from '../../AccountDetails'
-import { ExplorerCard } from '../../ExplorerCard'
-import { ExplorerGrid } from '../../ExplorerGrid'
-import { AccountLink, SlotLink } from '../../Links'
-import { SolBalance } from '../../SolBalance'
+import {
+  AccountLink,
+  ExplorerCard,
+  ExplorerGrid,
+  SlotLink,
+  SolBalance,
+} from '../../common'
+import { AccountDetails } from '../AccountDetails'
 
 interface SysvarAccountProps {
   pubkey: PublicKey
@@ -18,12 +21,6 @@ const SysvarAccountEpochScheduleContent = ({ pubkey }: SysvarAccountProps) => {
   }
 
   const parsed = (account.data as ParsedAccountData).parsed
-
-  /*
-        <Typography variant="h5" component="h2" gutterBottom>
-          Sysvar: Epoch Schedule
-        </Typography>
-   */
 
   const rows = [
     ['Address', <AccountLink to={pubkey.toBase58()} allowCopy />],

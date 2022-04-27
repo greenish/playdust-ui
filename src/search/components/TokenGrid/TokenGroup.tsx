@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { Skeleton, Typography } from '@mui/material'
-import { Link } from '../../../explorer/components/Link'
+import { Link } from '../../../explorer/components/common/Link'
 import type { TokenGroupProps } from './'
 import BlurMore from './BlurMore'
 import TokenCard from './TokenCard'

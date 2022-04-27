@@ -1,6 +1,7 @@
 export * from './AccountInputs'
 export * from './InstructionCard'
 export * from './InstructionDetails'
+export * from './ProgramLog'
 export * from './RawDetails'
 export * from './RawParsedDetails'
 export * from './TransactionOverview'

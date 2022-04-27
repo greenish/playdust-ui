@@ -1,14 +1,16 @@
 import getWindowType from '../../app/helpers/getWindowType'
 import WindowProps from '../../app/types/WindowProps'
 import {
-  AccountInputs,
   ErrorCard,
   ExplorerContainer,
   ExplorerHeader,
+} from '../components/common'
+import {
+  AccountInputs,
   InstructionDetails,
   ProgramLog,
   TransactionOverview,
-} from '../components'
+} from '../components/transaction'
 
 export const TxPage = ({ state }: WindowProps) => {
   const signature = state

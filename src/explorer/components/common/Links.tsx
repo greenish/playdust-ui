@@ -1,8 +1,7 @@
-import { encodeWindowHash } from '../../app/helpers/getWindowUrl'
-import WindowUnion from '../../app/types/WindowUnion'
-import { ellipsisify } from '../../common/helpers/utils'
-import { CopyButton } from './CopyButton'
-import { Link } from './Link'
+import { encodeWindowHash } from '../../../app/helpers/getWindowUrl'
+import WindowUnion from '../../../app/types/WindowUnion'
+import { ellipsisify } from '../../../common/helpers/utils'
+import { CopyButton, Link } from '../common'
 
 export interface ExplorerLinkProps {
   url?: string

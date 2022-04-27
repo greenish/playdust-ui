@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material'
 import SearchMetadata from '../../../../../common/types/SearchMetadata'
-import { AccountLink } from '../../../Links'
+import { AccountLink } from '../../../common'
 
 interface CreatorInfo {
   address: string

@@ -15,10 +15,14 @@ import {
   useParsedTokenAccountsByOwner,
   useRawAccountHistories,
   useTokenRegistry,
-} from '../store'
-import { ExplorerCard } from './ExplorerCard'
-import { Identicon } from './Identicon'
-import { AccountLink, SlotLink, TxLink } from './Links'
+} from '../../store'
+import {
+  AccountLink,
+  ExplorerCard,
+  Identicon,
+  SlotLink,
+  TxLink,
+} from '../common'
 
 interface TokenHoldingsProps {
   pubkey: PublicKey

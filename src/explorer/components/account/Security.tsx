@@ -1,9 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { fromProgramData } from '../helpers/securityTxt'
-import { useAccountInfo } from '../store'
-import { ExplorerCard } from './ExplorerCard'
-import { ExplorerGrid } from './ExplorerGrid'
-import { ExternalLink } from './ExternalLinks'
+import { fromProgramData } from '../../helpers/securityTxt'
+import { useAccountInfo } from '../../store'
+import { ExplorerCard, ExplorerGrid, ExternalLink } from '../common'
 
 interface SecurityProps {
   pubkey: PublicKey

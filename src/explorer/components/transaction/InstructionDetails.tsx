@@ -10,8 +10,7 @@ import {
   useParsedConfirmedTransaction,
   useTransactionStatus,
 } from '../../store'
-import { ErrorCard } from '../ErrorCard'
-import { ExplorerCard } from '../ExplorerCard'
+import { ErrorCard, ExplorerCard } from '../common'
 import { InstructionCard } from './InstructionCard'
 
 interface InstructionDetailsProps {

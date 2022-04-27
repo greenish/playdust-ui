@@ -7,20 +7,22 @@ import {
   PublicKey,
 } from '@solana/web3.js'
 import React, { useState } from 'react'
-import { pubkeyToString, toRelative } from '../../common/helpers/utils'
-import { useAccountHistory } from '../store'
-import { ExplorerCard } from './ExplorerCard'
-import { AccountLink, SlotLink, TxLink } from './Links'
-import { SolBalance } from './SolBalance'
+import { pubkeyToString, toRelative } from '../../../common/helpers/utils'
+import { useAccountHistory } from '../../store'
 import {
+  AccountLink,
   DataCell,
+  ExplorerCard,
+  SlotLink,
+  SolBalance,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-} from './Table'
+  TxLink,
+} from '../common'
 
 interface TransactionsProps {
   pubkey: PublicKey

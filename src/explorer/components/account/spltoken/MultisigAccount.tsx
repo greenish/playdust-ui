@@ -1,8 +1,6 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { useAccountInfo } from '../../../store'
-import { ExplorerCard } from '../../ExplorerCard'
-import { ExplorerGrid } from '../../ExplorerGrid'
-import { AccountLink } from '../../Links'
+import { AccountLink, ExplorerCard, ExplorerGrid } from '../../common'
 
 interface TokenAccountProps {
   pubkey: PublicKey

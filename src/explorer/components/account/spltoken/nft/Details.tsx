@@ -1,7 +1,7 @@
 import { PublicKey } from '@solana/web3.js'
 import { Instructions, Transfers } from '..'
-import { ExplorerTab, ExplorerTabs } from '../../../ExplorerTabs'
-import { Transactions } from '../../../Transactions'
+import { ExplorerTab, ExplorerTabs } from '../../../common'
+import { Transactions } from '../../Transactions'
 import { Distribution } from '../Distribution'
 import { Metadata } from '../Metadata'
 

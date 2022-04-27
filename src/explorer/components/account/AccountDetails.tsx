@@ -1,10 +1,10 @@
 import { Box, Tab, Tabs } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { FunctionComponent, useState } from 'react'
-import { useAccountInfo } from '../store'
+import { useAccountInfo } from '../../store'
+import { a11yProps, TabPanel } from '../common'
 import { Domains } from './Domains'
 import { Security } from './Security'
-import { a11yProps, TabPanel } from './TabPanel'
 import { Tokens } from './Tokens'
 import { Transactions } from './Transactions'
 

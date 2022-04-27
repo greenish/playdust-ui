@@ -1,8 +1,7 @@
 import { Box, Typography } from '@mui/material'
-import { compact, toLocaleString } from '../../common/helpers/utils'
-import { useEpoch } from '../store'
-import { ExplorerGrid } from './ExplorerGrid'
-import { EpochLink, SlotLink } from './Links'
+import { compact, toLocaleString } from '../../../common/helpers/utils'
+import { useEpoch } from '../../store'
+import { EpochLink, ExplorerGrid, SlotLink } from '../common'
 
 interface EpochOverviewProps {
   epoch: number

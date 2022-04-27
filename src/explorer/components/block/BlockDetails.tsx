@@ -1,13 +1,7 @@
 import { Box, Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
-import {
-  a11yProps,
-  SlotAccounts,
-  SlotPrograms,
-  SlotRewards,
-  SlotTransactions,
-  TabPanel,
-} from './'
+import { a11yProps, TabPanel } from '../common'
+import { SlotAccounts, SlotPrograms, SlotRewards, SlotTransactions } from './'
 
 interface BlockDetailsProps {
   slot: number

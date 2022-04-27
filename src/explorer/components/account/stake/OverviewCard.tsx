@@ -1,10 +1,12 @@
 import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 import { compact } from '../../../../common/helpers/utils'
-import { ExplorerCard } from '../../ExplorerCard'
-import { ExplorerGrid } from '../../ExplorerGrid'
-import { AccountLink } from '../../Links'
-import { SolBalance } from '../../SolBalance'
+import {
+  AccountLink,
+  ExplorerCard,
+  ExplorerGrid,
+  SolBalance,
+} from '../../common'
 import { displayStatus, isFullyInactivated, useStakeAccount } from './utils'
 
 interface StakeAccountProps {

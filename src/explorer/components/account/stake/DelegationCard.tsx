@@ -1,10 +1,7 @@
 import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 import { compact } from '../../../../common/helpers/utils'
-import { ExplorerCard } from '../../ExplorerCard'
-import { ExplorerGrid } from '../../ExplorerGrid'
-import { EpochLink } from '../../Links'
-import { SolBalance } from '../../SolBalance'
+import { EpochLink, ExplorerCard, ExplorerGrid, SolBalance } from '../../common'
 import { displayStatus, MAX_EPOCH, useStakeAccount } from './utils'
 
 interface StakeAccountProps {

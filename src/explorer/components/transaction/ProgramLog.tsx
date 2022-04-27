@@ -1,10 +1,9 @@
 import { Chip, Typography } from '@mui/material'
 import { Message, ParsedMessage, PublicKey } from '@solana/web3.js'
-import { InstructionLogs, prettyProgramLogs } from '../helpers/programLog'
-import { programLabel } from '../helpers/tx'
-import { useRawTransaction, useSolanaCluster } from '../store'
-import { ExplorerCard } from './ExplorerCard'
-import { Table, TableBody, TableCell, TableRow } from './Table'
+import { InstructionLogs, prettyProgramLogs } from '../../helpers/programLog'
+import { programLabel } from '../../helpers/tx'
+import { useRawTransaction, useSolanaCluster } from '../../store'
+import { ExplorerCard, Table, TableBody, TableCell, TableRow } from '../common'
 
 interface ProgramLogProps {
   signature: string

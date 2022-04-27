@@ -1,10 +1,6 @@
 import WindowProps from '../../app/types/WindowProps'
-import {
-  BlockDetails,
-  BlockOverview,
-  ExplorerContainer,
-  ExplorerHeader,
-} from '../components'
+import { BlockDetails, BlockOverview } from '../components/block'
+import { ExplorerContainer, ExplorerHeader } from '../components/common'
 
 export const BlockPage = ({ state }: WindowProps) => {
   const slot = Number(state)

@@ -2,15 +2,15 @@ import { Box, Button, Chip } from '@mui/material'
 import { SignatureResult, TransactionInstruction } from '@solana/web3.js'
 import React, { PropsWithChildren, useState } from 'react'
 import { useRawPopulatedTransaction } from '../../store'
-import { AccountLink } from '../Links'
 import {
+  AccountLink,
   DataCell,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
-} from '../Table'
+} from '../common'
 import { InstructionCardProps } from './InstructionCard'
 import { RawDetails } from './RawDetails'
 import { RawParsedDetails } from './RawParsedDetails'

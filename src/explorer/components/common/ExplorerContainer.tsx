@@ -1,6 +1,6 @@
 import { Container, Stack } from '@mui/material'
 import { PropsWithChildren } from 'react'
-import { ExternalLinks } from './ExternalLinks'
+import { ExternalLinks } from '../common/ExternalLinks'
 
 interface ExplorerContainerProps {
   filter: string

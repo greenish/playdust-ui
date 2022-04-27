@@ -3,17 +3,18 @@ import { PublicKey } from '@solana/web3.js'
 import { DateTime } from 'luxon'
 import { normalizeTokenAmount } from '../../../../common/helpers/utils'
 import { useAccountHistory, useTokenRegistry } from '../../../store'
-import { ExplorerCard } from '../../ExplorerCard'
-import { AccountLink, TxLink } from '../../Links'
 import {
+  AccountLink,
   DataCell,
+  ExplorerCard,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-} from '../../Table'
+  TxLink,
+} from '../../common'
 import { getTransfers, MintDetails } from './helpers'
 
 interface TransfersProps {

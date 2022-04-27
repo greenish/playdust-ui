@@ -9,8 +9,7 @@ import {
   normalizeTokenAmount,
 } from '../../../../common/helpers/utils'
 import { useAccountInfo, useTokenRegistry } from '../../../store'
-import { AccountLink } from '../../Links'
-import { DataRows, DataRowsItem } from '../../Table'
+import { AccountLink, DataRows, DataRowsItem } from '../../common'
 import { BasicInstructionCard } from '../BasicInstructionCard'
 import { InstructionCardProps } from '../InstructionCard'
 import { IX_TITLES, TokenAmountUi } from './types'

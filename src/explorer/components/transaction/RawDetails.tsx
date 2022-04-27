@@ -1,8 +1,6 @@
 import { Chip } from '@mui/material'
 import { TransactionInstruction } from '@solana/web3.js'
-import { HexData } from '../common/HexData'
-import { AccountLink } from '../Links'
-import { DataCell, TableRow } from '../Table'
+import { AccountLink, DataCell, HexData, TableRow } from '../common'
 
 export function RawDetails({ ix }: { ix: TransactionInstruction }) {
   return (
