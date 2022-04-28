@@ -109,16 +109,16 @@ The api folder contains all nextJS api endpoints in a folder structure following
 
   ```
   MyComponent/
-  ├─ atoms/
+  ├─ _atoms/
   │  ├─ myAtom.ts
   │  ├─ mySelector.ts
-  ├─ hooks/
+  ├─ _hooks/
   │  ├─ useMyHook.ts
-  ├─ helpers/
+  ├─ _helpers/
   │  ├─ myHelper.ts
-  ├─ types/
+  ├─ _types/
   │  ├─ myType.ts
-  ├─ sharedComponents/
+  ├─ _sharedComponents/
   │  ├─ MySharedComponent/
   │  │  ├─ MySharedComponent.tsx
   │  │  ├─ [...]
@@ -130,6 +130,57 @@ The api folder contains all nextJS api endpoints in a folder structure following
   │  ├─ MyComponentContent.tsx
   │  ├─ [...]
   ```
+
+1. ### Component (Folders)
+   If a component becomes too complicated for a single file, a folder `ComponentName/` is created containing `ComponentName.tsx` and all files related to the component.
+
+   > If reasonable, sub components are named `ComponentName[SubComponent].tsx`. This can be broken or abbrevated in order to prevent component names from getting too long.
+
+1. ### Atoms (and Selectors)
+    > Selectors are an implementation detail of atoms
+
+    Atoms are split out into the closest `_atoms/` in the component tree.
+
+    `_atoms/` should contain a flat list of files.
+
+    > Reused Atoms are moved to the closes shared parent components `_atoms/` folder.
+
+1. ### Hooks
+    All external and/or shared logic between components is using the hooks interface.
+
+    Hooks are split out into the closest `_hooks/` folder within the component tree and files are named after the hook they export `useMyHook.ts`
+
+    `_hooks/` should contain a flat list of files.
+
+    > Reused Hooks are moved to the closest shared parent components `_hooks/` folder.
+
+
+1. ### Types
+    Types should be defined as close to data creation as possible. 
+    
+    **Whenever possible, types should be defined, verified and exported alongside Atoms and Selectors.**
+
+    `_types/` should contain a flat list of files.
+
+    > Reused types are moved to the closest shared parent components `_types/`
+
+1. ### Helpers
+    Code that is reused between `_atoms` and/or `_hooks` goes into the `_helpers/` folder.
+
+    `_helpers_/` should contain a flat list of files.
+
+    > Reused helpers are moved to the closest shared parent components `_helpers/`
+
+1. ### Shared Components
+    Usually all components are defined within their parent components folder.
+
+    `_sharedComponents/` should contain a flat list of Components (files or folders).
+
+    > Reused Components are moved to the closest shared parent components `_sharedComponents/` folder.
+
+
+## Libraries/Conventions/Patterns
+
 1. ### One Single export per file
     To keep the file structure self documenting, each file must only export a single `default` export which it is named after. iE. `MyComponent.tsx` exports `<MyComponent … />`
 
@@ -138,52 +189,22 @@ The api folder contains all nextJS api endpoints in a folder structure following
     > A file can define multiple components/atoms/selectors for internal use, but can only export the one it is named after.
 
 
-1. ### Component Folders (vs. Single File)
-   If a component becomes too complicated for a single file, a folder `ComponentName/` is created containing `ComponentName.tsx` and all files related to the component.
-
-   > If reasonable, sub components are named `ComponentName[SubComponent].tsx`. This can be broken or abbrevated in order to prevent component names from getting too long.
-
-1. ### Atoms (and Selectors)
-    > Selectors are an implementation detail of atoms
-
-    Atoms are split out into the `atoms/` folder within the component folder.
-
-    > Reused Atoms are moved to the closes shared parent components `atoms/` folder.
-
-1. ### Hooks
-    All external and/or shared logic between components is using the hooks interface.
-
-    Hooks are split out into a `hooks/` folder within the component folder and files are named after the hook they export `useMyHook.ts`
-
-    > Reused Hooks are moved to the closest shared parent components `hooks/` folder.
-
-1. ### Shared Components
-    Usually all components are defined within their parent components folder.
-
-    > Reused Components are moved to the closest shared parent components `sharedComponents/` folder.
+1. ### imports
+    When the above folder structure is followed, imports adhere to the following easily visible rules:
+    - No `import *` since all files export only `default`. 
+    - Traversing up (ie `../../../_atoms`) 
+      - should always lead to a `_[folder]`
+      - should never lead to a Component
+    - Traversing down Components (ie `./MyComponent/MyComponentTitle`) 
+      - should always lead to a Component
+      - should never lead to a `_[folder]`
+    - Traversing into `_[folders]` (ie `./_atoms/myAtom.tsx`) should not exceed 2 levels of depth.
+      - Correct: `./_atoms/myAtom.tsx`
+      - Correct: `./_sharedComponents/MyComponent/MyComponent`
+      - Incorrect: `./_sharedComponents/MyComponent/MyComponentTitle`
+        > In this case, `MyComponentTitle` should be moved up to `_sharedComponents/`
 
 
-1. ### Types
-    Types should be defined as close to data creation as possible. 
-    
-    **Whenever possible, types should be defined, verified and exported alongside `atoms`.**
-
-    > Reused types are moved to the closest shared parent components `types/`
-
-1. ### Helpers
-    Code that is reused between `atoms` and/or `hooks` goes into the `helpers/` folder.
-
-    > Reused helpers are moved to the closest shared parent components `helpers/`
-
-
-
-## Libraries/Conventions/Patterns
-
-1. ### Styling Components
-
-    - we are using `emotion` as our CSS implementation
-      - the preferred method is to use the `emotion/styled` API to add styles to components
-    - [VSCode Syntax Highlighting for styled components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components)
 
 1. ### AVOID: `setAtomValue` in component render cycle / `useEffect`
     > Writing to atoms should be triggered by events and not by the render loop.
@@ -194,3 +215,9 @@ The api folder contains all nextJS api endpoints in a folder structure following
 
     > There can be exceptions to this rule very high up in the app to set default environment atoms (if they can't be passed into `RecoilRoot` for some reason). These should be isolated and commented to explain their necessity.
 
+
+1. ### Styling Components
+
+    - we are using `emotion` as our CSS implementation
+      - the preferred method is to use the `emotion/styled` API to add styles to components
+    - [VSCode Syntax Highlighting for styled components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components)
