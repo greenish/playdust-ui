@@ -53,7 +53,7 @@ yarn husky install
 
 - the top level entity
 - playdust-ui utilizes a single next.js page, that utilizes hash routing to move between **tabs**
-- the playdust **app** contains 0 to many **tabs**
+- the playdust **app** contains 1 to many **tabs**
 
 ### Tab
 
