@@ -100,13 +100,13 @@ export interface App {
   src/
   ├─ App/
   ├─ api/
-  ├─ types/
+  ├─ _types/
 ```
 
 ## `/api` 
 The api folder contains all nextJS api endpoints in a folder structure following the data / URL structure.
 
-## `/types`
+## `/_types`
 `types/` contains all shared type definitions between the `api/` and `App/``
 
 ## `/App` (Component Folder Structure)
