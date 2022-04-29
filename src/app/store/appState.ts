@@ -16,6 +16,7 @@ const getDefaultValue = (idOverride?: string): App => {
       {
         id,
         windows: [homeWindow],
+        selectedWindowIdx: 0,
       },
     ],
     selectedTabId: id,
@@ -72,18 +73,29 @@ export const useSetSelectedTab = () => {
 }
 
 export const useAddTab = () => {
-  const setter = useSetRecoilState(appState)
+  const [state, setter] = useRecoilState(appState)
 
-  return (newState: Window, id?: string) => {
+  return (newState: Window, id?: string, addAtCurrIdx?: boolean) => {
     const newTab = {
       id: id || nanoid(),
       windows: [newState],
+      selectedWindowIdx: 0,
     }
 
-    setter((curr) => ({
-      tabs: [...curr.tabs, newTab],
+    const insertAt = addAtCurrIdx
+      ? state.tabs.findIndex((tab) => tab.id === state.selectedTabId)
+      : state.tabs.length
+
+    const tabs = [
+      ...state.tabs.slice(0, insertAt),
+      newTab,
+      ...state.tabs.slice(insertAt),
+    ]
+
+    setter({
+      tabs,
       selectedTabId: newTab.id,
-    }))
+    })
 
     return newTab
   }
@@ -97,18 +109,27 @@ export const useAddHomeTab = () => {
   }
 }
 
-export const useSetTabState = () => {
+export const useSetCurrentWindowState = () => {
   const setter = useSetRecoilState(appState)
 
-  return (nextState: Window, id: string) => {
+  return (windowState: Window, selectedTabId: string) => {
     setter((curr) => ({
-      selectedTabId: id,
+      ...curr,
+      selectedTabId,
       tabs: curr.tabs.map((tab) => {
-        if (tab.id === id) {
-          return {
+        if (tab.id === selectedTabId) {
+          const changed = {
             ...tab,
-            windows: [nextState],
+            windows: tab.windows.map((window, idx) => {
+              if (idx === tab.selectedWindowIdx) {
+                return windowState
+              }
+
+              return window
+            }),
           }
+
+          return changed
         }
 
         return tab

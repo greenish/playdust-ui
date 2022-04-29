@@ -1,6 +1,10 @@
 import styled from '@emotion/styled'
 import { useEffect } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import {
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from 'recoil'
 import type WindowProps from '../app/types/WindowProps'
 import FlaggedModal from './components/FlaggedModal'
 import SearchOverview from './components/SearchOverview'
@@ -35,11 +39,12 @@ const TokenContainer = styled.div`
   overflow-y: auto;
 `
 
-const Search = ({ state, clearState }: WindowProps) => {
+const Search = ({ state, clearState, setWindowImages }: WindowProps) => {
   const sortOptions = useRecoilValue(store.searchSortOptions)
   const setSearchKey = useSetRecoilState(store.searchKey)
   const updateSearch = useUpdateSearch()
   const resetSearch = useResetSearch()
+  const searchResults = useRecoilValueLoadable(store.searchResults)
 
   useEffect(() => {
     try {
@@ -61,6 +66,22 @@ const Search = ({ state, clearState }: WindowProps) => {
 
     return () => resetSearch()
   }, [])
+
+  useEffect(() => {
+    if (
+      searchResults.state === 'hasValue' &&
+      searchResults.contents.total > 0
+    ) {
+      const filtered = searchResults.contents.nfts
+        .filter((nft) => nft.offChainData.image)
+        .slice(0, 4)
+        .map((nft) => nft.offChainData.image)
+
+      if (filtered.length) {
+        setWindowImages(filtered)
+      }
+    }
+  }, [searchResults])
 
   return (
     <>

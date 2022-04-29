@@ -2,6 +2,10 @@ import type { App, Tab, Window } from '../types/App'
 import { isInWindowUnion } from '../types/WindowUnion'
 
 const validateWindows = (windows: Window[]) => {
+  if (windows.length === 0) {
+    throw new Error('windows must have at least one entry')
+  }
+
   windows.map((window) => {
     if (typeof window.state !== 'string') {
       throw new Error('window state is not a string')
@@ -18,7 +22,15 @@ const validateTabs = (tabs: Tab[]) => {
     throw new Error('window tabs is not an array')
   }
 
+  if (tabs.length === 0) {
+    throw new Error('tabs must have at least one entry')
+  }
+
   tabs.map((tab) => {
+    if (!Number.isInteger(tab.selectedWindowIdx)) {
+      throw new Error('invalid window index')
+    }
+
     if (typeof tab.id !== 'string') {
       throw new Error('tab id is not an array')
     }
@@ -27,7 +39,7 @@ const validateTabs = (tabs: Tab[]) => {
   })
 }
 
-const validateSelectedTabId = (input: any) => {
+const validateSelectedTabId = (input: unknown) => {
   if (input === undefined || typeof input === 'string') {
     return
   }

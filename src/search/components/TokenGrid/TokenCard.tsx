@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
 import Link from '../../../app/components/Link'
 import { encodeWindowHash } from '../../../app/helpers/getWindowUrl'
+import getCDNUrl from '../../../common/helpers/getCDNUrl'
 import { NFTSource } from '../../types/OpenSearchIndex'
 import ImageCard, { SkeletonImageCard } from './ImageCard'
 import TokenCardFilter from './TokenCardFilter'
@@ -29,8 +30,6 @@ const CardText = styled(Typography)`
 const TokenCardFilterContainer = styled.div`
   margin-left: 8px;
 `
-
-const cdnImageSize = 250
 
 interface TokenCardProps {
   imageSize: number
@@ -62,7 +61,7 @@ const TokenCard = ({
   return (
     <ImageCard
       imageSize={imageSize}
-      src={image && `/cdn/?url=${image}&d=${cdnImageSize}x${cdnImageSize}`}
+      src={image && getCDNUrl(image)}
       href={href}
       content={
         contentHeight === 0 ? (

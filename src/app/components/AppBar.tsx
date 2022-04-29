@@ -1,17 +1,22 @@
+import { keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Add, Close, DeleteSweep } from '@mui/icons-material'
+import { Add, Close, DeleteSweep, Home, Search } from '@mui/icons-material'
 import {
   createTheme,
   Fab,
   Paper,
+  SxProps,
+  Theme,
   ThemeProvider,
   Typography,
 } from '@mui/material'
 import { useRouter } from 'next/router'
-import { PropsWithChildren, ReactNode } from 'react'
+import { PropsWithChildren, ReactNode, useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
+import getCDNUrl from '../../common/helpers/getCDNUrl'
 import { usePushWindowHash } from '../helpers/getWindowUrl'
 import * as store from '../store'
+import { Window } from '../types/App'
 import Notifications from './Notifications'
 import Playdust from './Playdust'
 import WalletButton from './WalletButton'
@@ -22,9 +27,10 @@ const theme = createTheme({
   },
 })
 
-const appBarWidth = 64
+const appBarWidth = 48
 const largeButtonSize = 40
 const smallButtonSize = 24
+const imageAnimationLength = 2
 
 const VerticalAppBar = styled(Paper)`
   position: absolute;
@@ -56,18 +62,18 @@ const TabButtonContainer = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
   width: 100%;
+  z-index: 2;
 `
 
 const ActiveHighlight = styled.div`
-  width: 5px;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
+  width: 3px;
   position: absolute;
   right: 0;
   top: 0;
+  z-index: 100;
 `
 
 const ChildrenContainer = styled.div`
@@ -90,31 +96,76 @@ interface AppBarProps {
 }
 
 type SizedButtonProps = PropsWithChildren<{
-  size?: 24 | 40
+  size?: number
   onClick?: (event: React.MouseEvent<HTMLElement>) => void
-  href?: string
+  images?: string[]
 }>
 
 export const SizedButton = ({
   size = largeButtonSize,
   onClick,
   children,
-  href,
+  images,
 }: SizedButtonProps) => {
+  const baseStyleProps = {
+    maxWidth: size,
+    minWidth: size,
+    maxHeight: size,
+    minHeight: size,
+    boxShadow: '0px 0px 2px 0px #fefefe',
+    zIndex: 2,
+  }
+
+  const sx = useMemo<SxProps<Theme>>(() => {
+    if (images) {
+      const sliceLength = 100 / images.length
+      const keyframeInput = images
+        .map((image, idx) => {
+          const start = idx === 0 ? '0%,100%' : `${sliceLength * idx}%`
+
+          return `${start} {background-image: url("${getCDNUrl(image)}");}`
+        })
+        .join('')
+
+      const animation = keyframes(keyframeInput)
+      const animationTime = imageAnimationLength * images.length
+
+      return {
+        ...baseStyleProps,
+        backgroundSize: 'cover',
+        animation: `${animation} ${animationTime}s infinite`,
+      }
+    }
+
+    return baseStyleProps
+  }, [size, images])
+
   return (
-    <Fab
-      sx={{
-        maxWidth: size,
-        minWidth: size,
-        maxHeight: size,
-        minHeight: size,
-      }}
-      onClick={onClick}
-      href={href}
-    >
-      {children}
+    <Fab sx={sx} onClick={onClick}>
+      {!images && children}
     </Fab>
   )
+}
+
+const getWindowTab = (window: Window): ReactNode | undefined => {
+  switch (window.type) {
+    case 'home':
+      return <Home />
+    case 'search':
+      return <Search />
+    case 'tx':
+      return <Typography>T</Typography>
+    case 'block':
+      return <Typography>B</Typography>
+    case 'account':
+      return <Typography>A</Typography>
+    case 'epoch':
+      return <Typography>E</Typography>
+    default:
+      const n: never = window.type
+
+      return n
+  }
 }
 
 const AppBar = ({ children }: AppBarProps) => {
@@ -138,36 +189,41 @@ const AppBar = ({ children }: AppBarProps) => {
           <VerticalAppBarContent>
             <TopContainer>
               <Playdust width={largeButtonSize} />
-              {tabs.map((tab, idx) => {
+              {tabs.map((tab) => {
                 const isActive = inWindowManager && tab.id === activeTab?.id
+                const currentWindow = tab.windows[tab.selectedWindowIdx]
 
                 return (
                   <TabButtonContainer key={tab.id}>
-                    <SizedButton
-                      size={largeButtonSize}
-                      onClick={() => pushWindowHash(tab.windows[0], tab.id)}
-                    >
-                      <Typography>{idx + 1}</Typography>
-                    </SizedButton>
+                    <div>
+                      <SizedButton
+                        size={largeButtonSize}
+                        images={currentWindow.images}
+                        onClick={() => pushWindowHash(tab.windows[0], tab.id)}
+                      >
+                        {getWindowTab(currentWindow)}
+                      </SizedButton>
+                      {isActive && (
+                        <ActiveHighlight
+                          style={{
+                            height: largeButtonSize,
+                            background: theme.palette.primary.main,
+                          }}
+                        />
+                      )}
+                    </div>
                     {isActive && (
                       <SizedButton
                         size={smallButtonSize}
                         onClick={() => {
                           const nextTab = removeTab()
+
                           nextTab &&
                             pushWindowHash(nextTab.windows[0], nextTab.id)
                         }}
                       >
                         <Close fontSize="small" />
                       </SizedButton>
-                    )}
-                    {isActive && (
-                      <ActiveHighlight
-                        style={{
-                          height: largeButtonSize,
-                          background: theme.palette.primary.main,
-                        }}
-                      />
                     )}
                   </TabButtonContainer>
                 )

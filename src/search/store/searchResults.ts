@@ -15,8 +15,8 @@ const initialState = {
   nfts: [],
 }
 
-export const searchResults = selector<SearchResponse>({
-  key: 'searchResults',
+const searchResultsBase = selector<SearchResponse>({
+  key: 'searchResultsBase',
   get: async ({ get }) => {
     try {
       const parsed = get(store.parsedSearchKey)
@@ -57,15 +57,15 @@ const searchResultsMore = atom<SearchResponse['nfts']>({
   default: [],
 })
 
-export const searchResultsAll = selector<SearchResponse>({
-  key: 'searchResultsAll',
+export const searchResults = selector<SearchResponse>({
+  key: 'searchResults',
   get: ({ get }) => {
-    const results = get(searchResults)
+    const base = get(searchResultsBase)
     const more = get(searchResultsMore)
 
     return {
-      ...results,
-      nfts: [...results.nfts, ...more],
+      ...base,
+      nfts: [...base.nfts, ...more],
     }
   },
 })

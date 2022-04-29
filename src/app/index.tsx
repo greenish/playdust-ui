@@ -5,7 +5,6 @@ import { RecoilRoot, useRecoilValue } from 'recoil'
 import { userProfile } from '../me/store'
 import SearchInput from './components/SearchInput'
 import WindowSwitch from './components/WindowSwitch'
-import getWindowType from './helpers/getWindowType'
 import { usePushWindowHash } from './helpers/getWindowUrl'
 import useRouteApp from './hooks/useRouteApp'
 import * as store from './store'
@@ -39,24 +38,38 @@ const SpinnerContainer = styled.div`
 
 const App = () => {
   const activeTab = useRecoilValue(store.activeTab)
+  const activeWindow = useRecoilValue(store.activeWindow)
+  const setCurrentWindowState = store.useSetCurrentWindowState()
   const profile = useRecoilValue(userProfile)
   const pushWindowHash = usePushWindowHash()
 
   const props = useMemo<WindowProps>(() => {
-    const currentId = activeTab?.id || ''
-    const state = activeTab?.windows[0]?.state || ''
-    const type = activeTab?.windows[0]?.type || getWindowType(state)
+    const currentId = activeTab.id
 
     const props: WindowProps = {
-      state,
+      ...activeWindow,
       clearState: () => {
         pushWindowHash({ type: 'home', state: '' }, currentId)
       },
-      type,
+      setWindowImages: (images: string[]) => {
+        const activeImages = (activeWindow.images || []).join(',')
+        const nextImages = images.join(',')
+        const shouldUpdate = activeImages !== nextImages
+
+        if (shouldUpdate) {
+          setCurrentWindowState(
+            {
+              ...activeWindow,
+              images,
+            },
+            activeTab.id
+          )
+        }
+      },
     }
 
     return props
-  }, [activeTab])
+  }, [activeTab, activeWindow])
 
   const { didMount } = useRouteApp()
 
@@ -66,7 +79,7 @@ const App = () => {
 
   return (
     <RecoilRoot
-      key={activeTab?.id || 'home'}
+      key={activeTab.id}
       initializeState={({ set }) => {
         set(userProfile, profile)
       }}

@@ -11,7 +11,7 @@ const NoTokensContainer = styled.div`
 `
 
 const SearchResults = () => {
-  const loadable = useRecoilValueLoadable(store.searchResultsAll)
+  const loadable = useRecoilValueLoadable(store.searchResults)
   const fetchMoreSearchResults = store.useFetchMoreSearchResults()
   const hasValue = loadable.state === 'hasValue'
 

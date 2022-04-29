@@ -229,13 +229,13 @@ export const searchSuggestions = selectorFamily<SearchSuggetionResults, string>(
           addSuggestion({
             key: 'block-search',
             group: 'Explorer',
-            label: 'block',
+            label: `block ${term}`,
             type: 'block',
           })
           addSuggestion({
             key: 'epoch-search',
             group: 'Explorer',
-            label: 'epoch',
+            label: `epoch ${term}`,
             type: 'epoch',
           })
         }
@@ -244,7 +244,7 @@ export const searchSuggestions = selectorFamily<SearchSuggetionResults, string>(
           addSuggestion({
             key: 'account-search',
             group: 'Explorer',
-            label: 'account',
+            label: `account ${term}`,
             type: 'account',
           })
 
@@ -258,7 +258,7 @@ export const searchSuggestions = selectorFamily<SearchSuggetionResults, string>(
           addSuggestion({
             key: 'transaction-search',
             group: 'Explorer',
-            label: 'transaction',
+            label: `transaction ${term}`,
             type: 'tx',
           })
 
