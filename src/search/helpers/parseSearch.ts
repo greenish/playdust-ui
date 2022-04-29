@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid'
 import * as store from '../store'
 import ComposedQueryType from '../types/ComposedQueryType'
-import { isSearchSort } from '../types/SearchSort'
+import SearchSort, { isSearchSort } from '../types/SearchSort'
 import SearchState from '../types/SearchState'
 
 const parseQuery = (nextState: any): ComposedQueryType | never => {
@@ -21,7 +21,7 @@ const parseQuery = (nextState: any): ComposedQueryType | never => {
   return cleaned
 }
 
-const parseOnlyListed = (onlyListed: any) => {
+const parseOnlyListed = (onlyListed: unknown) => {
   try {
     if (typeof onlyListed == 'boolean') {
       return onlyListed
@@ -33,7 +33,7 @@ const parseOnlyListed = (onlyListed: any) => {
   }
 }
 
-const parseSort = (sort: any) => {
+const parseSort = (sort: SearchSort) => {
   try {
     return isSearchSort(sort) ? sort : undefined
   } catch {

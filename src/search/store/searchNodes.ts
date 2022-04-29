@@ -1,7 +1,7 @@
 import { Node } from 'react-flow-renderer'
 import { selector } from 'recoil'
 import type { QueryType } from '../types/ComposedQueryType'
-import { searchQuery } from './'
+import { searchStateUncommitted } from './'
 
 const cardHeight = 175
 const yPaddingBottom = 75
@@ -51,7 +51,7 @@ const getY = (
 export const searchNodes = selector<(Node | Node<QueryType>)[]>({
   key: 'searchNodes',
   get: ({ get }) => {
-    const query = get(searchQuery)
+    const { query } = get(searchStateUncommitted)
     const largestColumn = Math.max(...query.map((parent) => parent.length))
     const queryNodes = query.flatMap((parent, idx) => {
       const mainNodes = parent.map((entry, ydx) => {

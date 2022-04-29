@@ -51,6 +51,11 @@ const useRouteApp = () => {
             return setSelectedTab(tab)
           }
 
+          // Going home on the current tab
+          if (isEmptyUrlState && foundURLTab) {
+            return setCurrentWindowState(windowState, tab)
+          }
+
           // Adding back deleted tab
           if (!foundURLTab) {
             return addTab(windowState, tab, true)

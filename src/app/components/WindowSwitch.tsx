@@ -13,15 +13,15 @@ const WindowSwitch = (props: WindowProps) => {
     case 'home':
       return <Home />
     case 'search':
-      return <Search key={key} {...props} />
+      return <Search {...props} />
     case 'account':
-      return <AccountPage key={key} {...props} />
+      return <AccountPage {...props} />
     case 'block':
-      return <BlockPage key={key} {...props} />
+      return <BlockPage {...props} />
     case 'tx':
-      return <TxPage key={key} {...props} />
+      return <TxPage {...props} />
     case 'epoch':
-      return <EpochPage key={key} {...props} />
+      return <EpochPage {...props} />
     default:
       const n: never = props.type
 

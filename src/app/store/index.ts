@@ -1,5 +1,6 @@
 export * from './activeTab'
 export * from './appState'
+export * from './currentState'
 export * from './notifcation'
 export * from './searchSuggestions'
 export * from './solanaCluster'

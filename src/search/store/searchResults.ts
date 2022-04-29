@@ -19,7 +19,7 @@ const searchResultsBase = selector<SearchResponse>({
   key: 'searchResultsBase',
   get: async ({ get }) => {
     try {
-      const parsed = get(store.parsedSearchKey)
+      const parsed = get(store.searchState)
 
       if (!parsed || parsed.query.length === 0) {
         return initialState

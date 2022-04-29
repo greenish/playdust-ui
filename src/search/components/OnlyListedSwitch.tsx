@@ -4,7 +4,7 @@ import { useSetOnlyListed } from '../hooks/useSearchChange'
 import * as store from '../store'
 
 const OnlyListedSwitch = () => {
-  const onlyListed = useRecoilValue(store.searchOnlyListed)
+  const { onlyListed } = useRecoilValue(store.searchState)
   const setOnlyListed = useSetOnlyListed()
 
   return (

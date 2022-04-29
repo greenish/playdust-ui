@@ -21,7 +21,7 @@ const fetchSearchSuggestions = selector<SearchSuggestionResponse | undefined>({
   key: 'fetchSearchSuggestions',
   get: async ({ get }) => {
     const term = get(searchSuggestionTerm)
-    const parsed = get(searchStore.parsedSearchKey)
+    const parsed = get(searchStore.searchState)
     const isCollectionQuery = get(searchStore.isCollectionQuery)
 
     if (isCollectionQuery) {
@@ -179,12 +179,12 @@ export const searchSuggestions = selectorFamily<SearchSuggetionResults, string>(
   {
     key: 'searchSuggestions',
     get:
-      (currentState) =>
+      (current) =>
       ({ get }) => {
         const term = get(searchSuggestionTerm)
         const fuzzySuggestion = getFuzzySuggestion(term)
 
-        if (currentState !== '') {
+        if (current !== '') {
           const aggregations = get(noWait(searchStore.searchAggregations))
 
           if (aggregations.state === 'hasValue') {

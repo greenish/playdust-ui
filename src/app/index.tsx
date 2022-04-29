@@ -8,6 +8,7 @@ import WindowSwitch from './components/WindowSwitch'
 import { usePushWindowHash } from './helpers/getWindowUrl'
 import useRouteApp from './hooks/useRouteApp'
 import * as store from './store'
+import { currentState } from './store'
 import type WindowProps from './types/WindowProps'
 
 const RootContainer = styled.div`
@@ -79,9 +80,10 @@ const App = () => {
 
   return (
     <RecoilRoot
-      key={activeTab.id}
+      key={`${activeTab.id}:${props.state}`}
       initializeState={({ set }) => {
         set(userProfile, profile)
+        set(currentState, activeWindow)
       }}
     >
       <RootContainer>

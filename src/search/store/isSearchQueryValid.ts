@@ -1,6 +1,6 @@
 import { selector } from 'recoil'
 import { QueryType } from '../types/ComposedQueryType'
-import { searchQuery } from './'
+import { searchStateUncommitted } from './'
 
 export const queryValidationPredicate = (entry: QueryType) => {
   if (entry.field === 'attribute') {
@@ -16,7 +16,7 @@ export const queryValidationPredicate = (entry: QueryType) => {
 export const isSearchQueryValid = selector<boolean>({
   key: 'isSearchQueryValid',
   get: ({ get }) => {
-    const flattened = get(searchQuery).flat()
+    const flattened = get(searchStateUncommitted).query.flat()
 
     const result = flattened.every(queryValidationPredicate)
 

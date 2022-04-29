@@ -1,7 +1,7 @@
 import { Edge } from 'react-flow-renderer'
 import { selector } from 'recoil'
+import { searchStateUncommitted } from '.'
 import type { QueryType } from '../types/ComposedQueryType'
-import { searchQuery } from './'
 
 interface CreateEdgeInput {
   sourceId: string
@@ -62,7 +62,7 @@ const getAndTargetEdges = (parent: QueryType[], nextParent: QueryType[]) =>
 export const searchEdges = selector<Edge[]>({
   key: 'searchEdges',
   get: ({ get }) => {
-    const query = get(searchQuery)
+    const { query } = get(searchStateUncommitted)
     let edges: Edge[] = []
 
     query.forEach((parent, idx) => {

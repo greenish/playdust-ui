@@ -1,4 +1,3 @@
-import { atom } from 'recoil'
 import type SearchSort from '../types/SearchSort'
 
 export type SearchSortOption = {
@@ -35,24 +34,18 @@ const makeSortOption = (
   return result
 }
 
-export const searchSort = atom<SearchSort | undefined>({
-  key: 'searchSort',
-  default: undefined,
-})
-
-export const searchSortOptions = atom<SearchSortOption[]>({
-  key: 'searchSortOptions',
-  default: [
-    ...makeSortOption('Rarity', 'rarity-score', true),
-    ...makeSortOption('Name', 'name'),
-    ...makeSortOption('List Price', 'list-price'),
-    ...makeSortOption('Sale Price', 'sale-price'),
-    {
-      name: 'Relevance',
-      value: {
-        field: 'relevance',
-        direction: 'desc',
-      },
+const sortOptions: SearchSortOption[] = [
+  ...makeSortOption('Rarity', 'rarity-score', true),
+  ...makeSortOption('Name', 'name'),
+  ...makeSortOption('List Price', 'list-price'),
+  ...makeSortOption('Sale Price', 'sale-price'),
+  {
+    name: 'Relevance',
+    value: {
+      field: 'relevance',
+      direction: 'desc',
     },
-  ],
-})
+  },
+]
+
+export default sortOptions

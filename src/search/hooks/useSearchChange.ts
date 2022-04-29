@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import {
   encodeWindowHash,
   usePushWindowHash,
@@ -16,7 +16,6 @@ import ComposedQueryType, {
 } from '../types/ComposedQueryType'
 import type SearchSort from '../types/SearchSort'
 import type SearchState from '../types/SearchState'
-import useUpdateSearch from './useUpdateSearch'
 
 interface QueryAddition {
   content: QueryContent
@@ -97,10 +96,9 @@ export function makeUseSearchChange<T>(
     method: 'router' | 'memory' | 'href' = 'router'
   ) {
     const pushWindowHash = usePushWindowHash()
-    const query = useRecoilValue(store.searchQuery)
-    const sort = useRecoilValue(store.searchSort)
-    const updateSearch = useUpdateSearch()
-    const onlyListed = useRecoilValue(store.searchOnlyListed)
+    const [{ query, sort, onlyListed }, setUncommittedState] = useRecoilState(
+      store.searchStateUncommitted
+    )
 
     return (input: T) => {
       const nextState = getHandler(query)(input)
@@ -122,7 +120,7 @@ export function makeUseSearchChange<T>(
       }
 
       if (method === 'memory') {
-        updateSearch(next)
+        setUncommittedState(next)
       }
 
       return encodeWindowHash(nextUrlState)

@@ -15,6 +15,7 @@ import { useDebounceCallback } from '@react-hook/debounce'
 import { useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil'
 import SearchGraph from '../../search/components/SearchGraph'
+import serializeSearch from '../../search/helpers/serializeSearch'
 import {
   useAddAttributeNode,
   useAddTextNode,
@@ -49,9 +50,7 @@ const SearchInput = ({ state, type, clearState }: WindowProps) => {
   const [searchOpen, setSearchOpen] = useState(false)
   const isQueryValid = useRecoilValue(searchStore.isSearchQueryValid)
   const searchQueryValid = useRecoilValue(searchStore.searchQueryValid)
-  const searchSerializedTemp = useRecoilValue(
-    searchStore.searchSerializedSelected
-  )
+  const uncommitted = useRecoilValue(searchStore.searchStateUncommitted)
   const loadable = useRecoilValueLoadable(searchStore.searchResults)
   const isSearchable = type === 'search' || type === 'home'
   const addTextNode = useAddTextNode()
@@ -79,7 +78,7 @@ const SearchInput = ({ state, type, clearState }: WindowProps) => {
 
     pushWindowHash({
       type: 'search',
-      state: searchSerializedTemp,
+      state: serializeSearch(uncommitted),
     })
 
     setOpen(false)

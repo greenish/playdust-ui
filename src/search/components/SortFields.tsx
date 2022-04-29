@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
+import options from '../helpers/sortOptions'
 import { useSetSortValue } from '../hooks/useSearchChange'
 import * as store from '../store'
 
@@ -14,9 +15,8 @@ const RootContainer = styled.div`
 const sortLabel = 'Sort'
 
 const SortFields = () => {
-  const sort = useRecoilValue(store.searchSort)
+  const { sort } = useRecoilValue(store.searchState)
   const setSortValue = useSetSortValue()
-  const options = useRecoilValue(store.searchSortOptions)
 
   const found = useMemo(() => {
     if (!sort) {

@@ -6,7 +6,7 @@ import * as store from './'
 export const searchOverview = selector<SearchOverviewResponse>({
   key: 'searchOverview',
   get: async ({ get }) => {
-    const parsed = get(store.parsedSearchKey)
+    const parsed = get(store.searchState)
 
     if (!parsed) {
       return {
