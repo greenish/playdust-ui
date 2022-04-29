@@ -3,6 +3,7 @@ import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { FunctionComponent, useState } from 'react'
 import { useAccountInfo } from '../../store'
 import { a11yProps, TabPanel } from '../common'
+import { Blockhashes } from './Blockhashes'
 import { Domains } from './Domains'
 import { Security } from './Security'
 import { Tokens } from './Tokens'
@@ -15,16 +16,14 @@ interface AccountDetailsProps {
 export const UnknownAccountDetails = ({ pubkey }: AccountDetailsProps) => {
   const [value, setValue] = useState(0)
 
-  const handleChange = (event: React.SyntheticEvent, newValue: any) => {
-    setValue(parseInt(newValue))
-  }
-
   return (
     <>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
-          onChange={handleChange}
+          onChange={(event, newValue) => {
+            setValue(parseInt(newValue))
+          }}
           aria-label="basic tabs example"
         >
           <Tab label="History" {...a11yProps(0)} />
@@ -46,21 +45,49 @@ export const UnknownAccountDetails = ({ pubkey }: AccountDetailsProps) => {
 }
 
 // This will be re-organized in a future ticket. Tabs will be data-driven, not hard-coded
-export const UpgradeableLoaderAccountDetails = ({
+export const SysvarAccountRecentBlockhashesDetails = ({
   pubkey,
 }: AccountDetailsProps) => {
   const [value, setValue] = useState(0)
-
-  const handleChange = (event: React.SyntheticEvent, newValue: any) => {
-    setValue(parseInt(newValue))
-  }
 
   return (
     <>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           value={value}
-          onChange={handleChange}
+          onChange={(event, newValue) => {
+            setValue(parseInt(newValue))
+          }}
+          aria-label="basic tabs example"
+        >
+          <Tab label="History" {...a11yProps(0)} />
+          <Tab label="Blockhashes" {...a11yProps(1)} />
+        </Tabs>
+      </Box>
+      <TabPanel value={value} index={0}>
+        <Transactions pubkey={pubkey} />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Blockhashes pubkey={pubkey} />
+      </TabPanel>
+    </>
+  )
+}
+
+// This will be re-organized in a future ticket. Tabs will be data-driven, not hard-coded
+export const UpgradeableLoaderAccountDetails = ({
+  pubkey,
+}: AccountDetailsProps) => {
+  const [value, setValue] = useState(0)
+
+  return (
+    <>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(parseInt(newValue))
+          }}
           aria-label="basic tabs example"
         >
           <Tab label="History" {...a11yProps(0)} />

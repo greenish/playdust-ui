@@ -6,7 +6,7 @@ import {
   ExplorerGrid,
   SolBalance,
 } from '../../common'
-import { AccountDetails } from '../AccountDetails'
+import { SysvarAccountRecentBlockhashesDetails } from '../AccountDetails'
 
 interface SysvarAccountProps {
   pubkey: PublicKey
@@ -30,14 +30,13 @@ export const SysvarAccountRecentBlockhashesContent = ({
 }
 
 // SysvarRecentB1ockHashes11111111111111111111
-// History | Blockhashes
 export const SysvarAccountRecentBlockhashes = (props: SysvarAccountProps) => {
   return (
     <>
       <ExplorerCard skeleton="table" title="Sysvar: Recent Blockhashes">
         <SysvarAccountRecentBlockhashesContent {...props} />
       </ExplorerCard>
-      <AccountDetails pubkey={props.pubkey} />
+      <SysvarAccountRecentBlockhashesDetails pubkey={props.pubkey} />
     </>
   )
 }
