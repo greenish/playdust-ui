@@ -64,12 +64,12 @@ yarn husky install
 ### Window
 - Every **window** has one search input / address bar which defines what it renders.
 - **windows** pick the right page to render the content referenced by their search-input/address bar value.
+- 1 to many **pages**, within a parent **tab** can be viewed at once
 
 ### Page
 
 - Each **page** takes a search-input/address as it's source of truth.
 - A single **page** is rendering the results of it's search in isolation.
-- 1 to many **pages**, within a parent **tab** can be viewed at once
 - A **page** is responsible for bootstrapping itself, and composing its needed **modules**
 - Each **page** shares the same interface for props
 - **page** states are stored as strings, and each window is responsible for parsing its state
