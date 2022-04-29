@@ -61,9 +61,13 @@ yarn husky install
 - Allows user to quickly flip between these **windows** and are persisted between sessions
 - A playdust **tab** has 1 to many **windows**
 
+### Window
+- Every **window** has one search input / address bar which defines what it renders.
+- **windows** pick the right page to render the content referenced by their search-input/address bar value.
+
 ### Page
 
-- Each **page** takes a search-input as it's source of truth.
+- Each **page** takes a search-input/address as it's source of truth.
 - A single **page** is rendering the results of it's search in isolation.
 - 1 to many **pages**, within a parent **tab** can be viewed at once
 - A **page** is responsible for bootstrapping itself, and composing its needed **modules**
@@ -73,9 +77,9 @@ yarn husky install
 ### TS Example
 
 ```typescript
-export interface Page {
+export interface Window {
   state: string
-  type: PageUnion
+  type: WindowUnion
 }
 
 export interface Tab {
