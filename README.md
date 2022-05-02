@@ -185,6 +185,11 @@ The api folder contains all nextJS api endpoints in a folder structure following
 
 ## Libraries/Conventions/Patterns
 
+1. ### No Shortcuts on Typescript: No `any` and no (/minimal) type casting.
+    The real value of Typescript comes when there are no shortcuts being taken. ¨
+    Every shortcut introduces a potential for unexpected failures.
+
+
 1. ### One Single export per file
     To keep the file structure self documenting, each file must only export a single `default` export which it is named after. iE. `MyComponent.tsx` exports `<MyComponent … />`
 
