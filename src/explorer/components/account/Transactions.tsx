@@ -7,7 +7,8 @@ import {
   PublicKey,
 } from '@solana/web3.js'
 import React, { useState } from 'react'
-import { pubkeyToString, toRelative } from '../../../common/helpers/utils'
+import pubkeyToString from '../../helpers/pubKeyToString'
+import toRelative from '../../helpers/toRelative'
 import { useAccountHistory } from '../../store'
 import {
   AccountLink,

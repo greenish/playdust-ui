@@ -3,8 +3,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useState } from 'react'
-import SearchMetadata from '../../../../../common/types/SearchMetadata'
-import Status from '../../../../../common/types/Status'
+import Status from '../../../../../App/_helpers/statusEnum'
+import SearchMetadata from '../../../../../App/_types/SearchMetadataType'
 
 const BlurImage = styled.img`
   filter: blur(1.5rem);

@@ -3,14 +3,14 @@ import { Button, InputAdornment, TextField } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import { fetchOwnedOnchain } from '../../../../../../src/me/store'
 import {
   cancelNFTListing,
   GetAllOrders,
   makeNFTBid,
   makeNFTListing,
-} from '../../../../../../src/common/helpers/playdustApi'
-import useConfirmTransaction from '../../../../../../src/common/hooks/useConfirmTransaction'
-import { fetchOwnedOnchain } from '../../../../../../src/me/store'
+} from '../../../../../App/_helpers/playdustApi'
+import useConfirmTransaction from './_hooks/useConfirmTransaction'
 
 const ItemsContainer = styled.div`
   display: flex;

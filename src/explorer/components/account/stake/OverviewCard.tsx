@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
-import { compact } from '../../../../common/helpers/utils'
+import compact from '../../../helpers/compact'
 import {
   AccountLink,
   ExplorerCard,

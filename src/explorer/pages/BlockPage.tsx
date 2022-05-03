@@ -1,4 +1,4 @@
-import WindowProps from '../../app/types/WindowProps'
+import WindowProps from '../../App/_types/WindowPropsType'
 import { BlockDetails, BlockOverview } from '../components/block'
 import { ExplorerContainer, ExplorerHeader } from '../components/common'
 

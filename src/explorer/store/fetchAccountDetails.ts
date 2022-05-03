@@ -1,9 +1,9 @@
 import { MetadataJson, programs } from '@metaplex/js'
 import { Connection, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import { solanaCluster } from '../../app/store'
-import { pubkeyToString } from '../../common/helpers/utils'
+import solanaCluster from '../../App/_atoms/solanaCluster'
 import { getEditionInfo } from '../helpers/getEditionInfo'
+import pubkeyToString from '../helpers/pubKeyToString'
 import { fetchTokenRegistry } from './fetchTokenRegistry'
 
 const Metadata = programs.metadata.Metadata

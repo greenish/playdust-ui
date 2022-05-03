@@ -1,5 +1,5 @@
 import { selector } from 'recoil'
-import frontendApi from '../../common/helpers/frontendApi'
+import frontendApi from '../../App/_helpers/frontendApi'
 import { SearchAggregationResponse } from '../types/SearchResponse'
 import * as store from './'
 

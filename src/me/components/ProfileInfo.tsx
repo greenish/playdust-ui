@@ -17,7 +17,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import instance, {
   GetUserProfile,
   UpdateProfile,
-} from '../../common/helpers/playdustApi'
+} from '../../App/_helpers/playdustApi'
 import * as store from '../store'
 import type Profile from '../types/Profile'
 

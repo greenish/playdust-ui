@@ -1,6 +1,6 @@
 import { Chip, Typography } from '@mui/material'
 import { DateTime } from 'luxon'
-import { compact } from '../../../common/helpers/utils'
+import compact from '../../helpers/compact'
 import { useRawTransaction, useSignatureStatus } from '../../store'
 import {
   ExplorerCard,

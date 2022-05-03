@@ -1,6 +1,6 @@
 import { Connection, EpochInfo } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import { solanaCluster } from '../../app/store'
+import solanaCluster from '../../App/_atoms/solanaCluster'
 
 export interface SlotDetails {
   slot: number

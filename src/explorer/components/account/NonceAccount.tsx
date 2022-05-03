@@ -1,5 +1,5 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { compact } from '../../../common/helpers/utils'
+import compact from '../../helpers/compact'
 import { useAccountInfo } from '../../store'
 import { AccountLink, ExplorerCard, ExplorerGrid, SolBalance } from '../common'
 import { AccountDetails } from './AccountDetails'

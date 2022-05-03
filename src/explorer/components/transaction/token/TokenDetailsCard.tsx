@@ -4,10 +4,8 @@ import {
   PublicKey,
 } from '@solana/web3.js'
 import React from 'react'
-import {
-  isAccount,
-  normalizeTokenAmount,
-} from '../../../../common/helpers/utils'
+import isAccount from '../../../helpers/isAccount'
+import normalizeTokenAmount from '../../../helpers/normalizeTokenAmount'
 import { useAccountInfo, useTokenRegistry } from '../../../store'
 import { AccountLink, DataRows, DataRowsItem } from '../../common'
 import { BasicInstructionCard } from '../BasicInstructionCard'

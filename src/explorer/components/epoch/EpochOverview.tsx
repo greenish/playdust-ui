@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
-import { compact, toLocaleString } from '../../../common/helpers/utils'
+import compact from '../../helpers/compact'
+import toLocaleString from '../../helpers/toLocaleString'
 import { useEpoch } from '../../store'
 import { EpochLink, ExplorerGrid, SlotLink } from '../common'
 

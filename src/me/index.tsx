@@ -4,7 +4,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import base58 from 'bs58'
 import { Suspense } from 'react'
 import { useCookies } from 'react-cookie'
-import instance, { GetAuthToken, GetNonce } from '../common/helpers/playdustApi'
+import instance, { GetAuthToken, GetNonce } from '../App/_helpers/playdustApi'
 import OwnedTokens from './components/OwnedTokens'
 import ProfileInfo from './components/ProfileInfo'
 

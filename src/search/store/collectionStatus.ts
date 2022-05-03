@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import Status from '../../common/types/Status'
+import Status from '../../App/_helpers/statusEnum'
 
 export const collectionStatus = atom<Status>({
   key: 'collectionStatus',

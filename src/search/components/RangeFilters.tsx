@@ -16,10 +16,6 @@ const ItemContainer = styled.div`
   padding-top: 8px;
 `
 
-const CheckboxContainer = styled.div`
-  margin-left: 4px;
-`
-
 const RangeFilter = ({ label, name }: store.SearchFilter) => {
   const addRangeNode = useAddRangeNode()
   const removeNode = useRemoveNode()
@@ -52,18 +48,16 @@ const RangeFilter = ({ label, name }: store.SearchFilter) => {
 
   return (
     <ItemContainer key={name}>
-      <CheckboxContainer>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={visible}
-              size="small"
-              onChange={() => setVisible(!visible)}
-            />
-          }
-          label={label}
-        />
-      </CheckboxContainer>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={visible}
+            size="small"
+            onChange={() => setVisible(!visible)}
+          />
+        }
+        label={label}
+      />
       {visible && (
         <RangeInput
           min={min}

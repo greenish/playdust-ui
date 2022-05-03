@@ -1,6 +1,6 @@
 import { Connection, PublicKey, TokenAccountBalancePair } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import { solanaCluster } from '../../app/store'
+import solanaCluster from '../../App/_atoms/solanaCluster'
 import { pageIdx } from './pageIdx'
 
 export type TokenAccountBalancePairWithOwner = TokenAccountBalancePair & {

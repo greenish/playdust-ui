@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
-import { toLocaleString } from '../../../../common/helpers/utils'
+import toLocaleString from '../../../helpers/toLocaleString'
 import { ExplorerCard } from '../../common'
 import { useStakeAccount } from './utils'
 

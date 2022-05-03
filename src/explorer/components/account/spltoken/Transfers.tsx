@@ -1,7 +1,7 @@
 import { Chip } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { DateTime } from 'luxon'
-import { normalizeTokenAmount } from '../../../../common/helpers/utils'
+import normalizeTokenAmount from '../../../helpers/normalizeTokenAmount'
 import { useAccountHistory, useTokenRegistry } from '../../../store'
 import {
   AccountLink,

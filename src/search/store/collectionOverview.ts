@@ -1,5 +1,5 @@
 import { selectorFamily } from 'recoil'
-import api from '../../common/helpers/frontendApi'
+import api from '../../App/_helpers/frontendApi'
 import { CollectionOverviewResponse } from '../types/SearchResponse'
 
 export const collectionOverview = selectorFamily<

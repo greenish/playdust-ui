@@ -1,9 +1,9 @@
 import { PublicKey } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
 import * as solana from '../../../solana'
-import { solanaCluster } from '../../app/store'
-import api from '../../common/helpers/frontendApi'
-import type SearchMetadata from '../../common/types/SearchMetadata'
+import solanaCluster from '../../App/_atoms/solanaCluster'
+import api from '../../App/_helpers/frontendApi'
+import type SearchMetadata from '../../App/_types/SearchMetadataType'
 
 export const fetchNFTDetails = selectorFamily<
   SearchMetadata | undefined,

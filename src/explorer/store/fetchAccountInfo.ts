@@ -6,10 +6,9 @@ import {
 } from '@solana/web3.js'
 import { Buffer } from 'buffer'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import {
-  solanaCluster as solanaClusterAtom,
+import solanaClusterAtom, {
   SolanaClusterType,
-} from '../../app/store'
+} from '../../App/_atoms/solanaCluster'
 import { pageIdx } from './pageIdx'
 
 export const fetchAccountInfo = async (

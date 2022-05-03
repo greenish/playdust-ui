@@ -1,8 +1,8 @@
 import { Grid, Stack, Typography } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect, useState } from 'react'
-import { getNFTCensorStatus } from '../../../../common/helpers/playdustApi'
-import { Status } from '../../../../common/types/Status'
+import { getNFTCensorStatus } from '../../../../App/_helpers/playdustApi'
+import statusEnum from '../../../../App/_helpers/statusEnum'
 import { useNFTDetails } from '../../../store'
 import {
   Attributes,
@@ -21,7 +21,7 @@ type TokenOverviewProps = {
 export const NonFungibleTokenMintAccount = (props: TokenOverviewProps) => {
   const { pubkey } = props
 
-  const [status, setStatus] = useState(Status.None)
+  const [status, setStatus] = useState(statusEnum.None)
 
   const details = useNFTDetails(pubkey)
 
@@ -31,7 +31,7 @@ export const NonFungibleTokenMintAccount = (props: TokenOverviewProps) => {
         const { type } = await getNFTCensorStatus(pubkey.toBase58())
         setStatus(type)
       } catch (err) {
-        setStatus(Status.None)
+        setStatus(statusEnum.None)
       }
     })()
   }, [pubkey])

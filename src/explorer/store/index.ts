@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil'
-import { solanaCluster } from '../../app/store'
+import solanaCluster from '../../App/_atoms/solanaCluster'
 import { userProfile } from '../../me/store'
 
 export * from './coinPrice'

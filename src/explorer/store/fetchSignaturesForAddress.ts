@@ -1,6 +1,6 @@
 import { ConfirmedSignatureInfo, Connection } from '@solana/web3.js'
 import { selectorFamily } from 'recoil'
-import { solanaCluster } from '../../app/store'
+import solanaCluster from '../../App/_atoms/solanaCluster'
 import { pageIdx } from './pageIdx'
 
 export const fetchSignaturesForAddress = selectorFamily<

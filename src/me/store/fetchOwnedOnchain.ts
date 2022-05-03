@@ -1,8 +1,8 @@
 import { Connection } from '@solana/web3.js'
 import { selectorFamily } from 'recoil'
 import * as solana from '../../../solana'
-import { solanaCluster } from '../../app/store'
-import type { SearchMetadataOnChain } from '../../common/types/SearchMetadata'
+import solanaCluster from '../../App/_atoms/solanaCluster'
+import type { SearchMetadataOnChain } from '../../App/_types/SearchMetadataType'
 
 export const fetchOwnedOnchain = selectorFamily<SearchMetadataOnChain[], any>({
   key: 'fetchOwnedOnchain',

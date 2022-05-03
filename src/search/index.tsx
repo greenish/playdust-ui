@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useEffect } from 'react'
 import { useRecoilValueLoadable } from 'recoil'
-import type WindowProps from '../app/types/WindowProps'
+import type WindowProps from '../App/_types/WindowPropsType'
 import FlaggedModal from './components/FlaggedModal'
 import SearchOverview from './components/SearchOverview'
 import SearchResults from './components/SearchResults'

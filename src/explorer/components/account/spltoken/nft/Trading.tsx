@@ -2,7 +2,7 @@ import { CircularProgress, Typography } from '@mui/material'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import React, { Suspense } from 'react'
-import Status from '../../../../../common/types/Status'
+import Status from '../../../../../App/_helpers/statusEnum'
 import TradeNFT from './TradeNFT'
 
 type TokenOverviewProps = {

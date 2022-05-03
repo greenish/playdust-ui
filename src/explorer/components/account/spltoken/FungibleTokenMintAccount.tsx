@@ -2,11 +2,9 @@ import { Box, Chip, Grid, Stack, Typography } from '@mui/material'
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { ReactNode } from 'react'
 import { Instructions, Transfers } from '.'
-import {
-  abbreviatedNumber,
-  compact,
-  normalizeTokenAmount,
-} from '../../../../common/helpers/utils'
+import abbreviatedNumber from '../../../helpers/abbreviatedNumber'
+import compact from '../../../helpers/compact'
+import normalizeTokenAmount from '../../../helpers/normalizeTokenAmount'
 import {
   useAccountDetails,
   useAccountInfo,

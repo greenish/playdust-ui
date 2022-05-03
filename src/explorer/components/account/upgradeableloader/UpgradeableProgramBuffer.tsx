@@ -1,6 +1,6 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
-import { compact } from '../../../../common/helpers/utils'
 import { getSpace } from '../../../helpers/account'
+import compact from '../../../helpers/compact'
 import { useAccountInfo } from '../../../store'
 import {
   AccountLink,

@@ -1,5 +1,5 @@
 import { selector } from 'recoil'
-import * as appStore from '../../app/store'
+import currentState from '../../App/_atoms/currentState'
 import parseSearch from '../helpers/parseSearch'
 import sortOptions from '../helpers/sortOptions'
 import SearchState from '../types/SearchState'
@@ -7,7 +7,7 @@ import SearchState from '../types/SearchState'
 export const searchState = selector<SearchState>({
   key: 'searchState',
   get: ({ get }) => {
-    const current = get(appStore.currentState)
+    const current = get(currentState)
 
     if (!current || current.type !== 'search' || current.state === '') {
       return {

@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil'
-import { ListPaymentTokens } from '../../common/helpers/playdustApi'
+import { ListPaymentTokens } from '../../App/_helpers/playdustApi'
 
 export type CurrencyToken = {
   auctionHouseKey: string

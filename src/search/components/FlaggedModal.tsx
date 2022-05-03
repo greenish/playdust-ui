@@ -13,7 +13,7 @@ import {
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useState } from 'react'
 import { useRecoilValue, useResetRecoilState } from 'recoil'
-import { setFlagCollection, setFlagNFT } from '../../common/helpers/playdustApi'
+import { setFlagCollection, setFlagNFT } from '../../App/_helpers/playdustApi'
 import * as store from '../store'
 
 const FlaggedModal = () => {

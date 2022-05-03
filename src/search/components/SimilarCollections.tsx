@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
-import { humanizeSolana } from '../../common/helpers/utils'
+import humanizeSolana from '../../App/_helpers/humanizeSolana'
 import humanizeCollection from '../helpers/humanizeCollection'
 import * as store from '../store'
 

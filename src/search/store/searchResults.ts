@@ -5,7 +5,7 @@ import {
   useRecoilValueLoadable,
   useSetRecoilState,
 } from 'recoil'
-import api from '../../common/helpers/frontendApi'
+import api from '../../App/_helpers/frontendApi'
 import { SearchCursorResponse, SearchResponse } from '../types/SearchResponse'
 import * as store from './'
 

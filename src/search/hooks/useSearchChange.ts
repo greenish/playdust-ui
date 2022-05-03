@@ -1,10 +1,8 @@
 import { nanoid } from 'nanoid'
 import { useRecoilState } from 'recoil'
-import {
-  encodeWindowHash,
-  usePushWindowHash,
-} from '../../app/helpers/getWindowUrl'
-import { Window } from '../../app/types/App'
+import { WindowType } from '../../App/_atoms/appState'
+import encodeWindowHash from '../../App/_helpers/encodeWindowHash'
+import usePushWindowHash from '../../App/_hooks/usePushWindowHash'
 import serializeSearch from '../helpers/serializeSearch'
 import * as store from '../store'
 import ComposedQueryType, {
@@ -113,7 +111,7 @@ export function makeUseSearchChange<T>(
       }
 
       const serialized = serializeSearch(next)
-      const nextUrlState: Window = { type: 'search', state: serialized }
+      const nextUrlState: WindowType = { type: 'search', state: serialized }
 
       if (method === 'router') {
         pushWindowHash(nextUrlState)

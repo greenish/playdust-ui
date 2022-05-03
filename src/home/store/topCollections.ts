@@ -4,7 +4,7 @@ import {
   useRecoilValueLoadable,
   useSetRecoilState,
 } from 'recoil'
-import frontendApi from '../../common/helpers/frontendApi'
+import frontendApi from '../../App/_helpers/frontendApi'
 import { TopCollectionResponse } from '../../search/types/SearchResponse'
 
 export const topCollections = selector<TopCollectionResponse>({

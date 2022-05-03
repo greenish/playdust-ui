@@ -8,7 +8,7 @@ import {
 import { Connection, PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import { solanaCluster } from '../../app/store'
+import solanaCluster from '../../App/_atoms/solanaCluster'
 
 // Name auctionning Program ID
 export const PROGRAM_ID = new PublicKey(

@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
-import { compact } from '../../../../common/helpers/utils'
+import compact from '../../../helpers/compact'
 import { ExplorerCard, ExplorerGrid } from '../../common'
 import { useStakeAccount } from './utils'
 

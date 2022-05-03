@@ -21,9 +21,11 @@ import type { AttributeQuery } from '../types/ComposedQueryType'
 const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: calc(100% + 16px);
   height: 100%;
   overflow: auto;
+  margin-left: -16px;
+  padding-left: 16px;
 `
 
 const normalizeOptions = (
@@ -108,7 +110,7 @@ const AttributeFilters = () => {
 
         return (
           <FormControl
-            sx={{ m: 1, mb: 2 }}
+            sx={{ mb: 2 }}
             component="fieldset"
             variant="standard"
             key={attribute.trait}
@@ -130,7 +132,6 @@ const AttributeFilters = () => {
                     <Checkbox
                       size="small"
                       checked={checked}
-                      sx={{ ml: 1 }}
                       onChange={() => {
                         if (!found) {
                           return addAttributeNode({

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { Typography } from '@mui/material'
-import { Link } from '../../../explorer/components/common/Link'
+import Link from 'next/link'
 
 const RootContainer = styled.div`
   position: absolute;

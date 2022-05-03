@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
-import { compact } from '../../../common/helpers/utils'
 import { getSpace } from '../../helpers/account'
+import compact from '../../helpers/compact'
 import { addressLabel, displayAddress } from '../../helpers/tx'
 import { useAccountInfo, useSolanaCluster, useTokenRegistry } from '../../store'
 import { AccountLink, ExplorerCard, ExplorerGrid, SolBalance } from '../common'

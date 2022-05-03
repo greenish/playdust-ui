@@ -3,10 +3,10 @@ import { Card, Paper, Skeleton } from '@mui/material'
 import { Box } from '@mui/system'
 import { PropsWithChildren, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import Link from '../../../app/components/Link'
-import LazyImage from '../../../common/components/LazyImage'
-import Status from '../../../common/types/Status'
+import Link from '../../../App/Link'
+import Status from '../../../App/_helpers/statusEnum'
 import * as store from '../../store'
+import LazyImage from './LazyImage'
 
 const CardContentContainer = styled.div`
   height: 100%;

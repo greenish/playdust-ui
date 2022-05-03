@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useMemo } from 'react'
 import { useRecoilValueLoadable } from 'recoil'
-import { humanizeSolana } from '../common/helpers/utils'
+import humanizeSolana from '../App/_helpers/humanizeSolana'
 import { TokenGroup } from '../search/components/TokenGrid'
 import humanizeCollection from '../search/helpers/humanizeCollection'
 import { useInitCollectionQuery } from '../search/hooks/useSearchChange'

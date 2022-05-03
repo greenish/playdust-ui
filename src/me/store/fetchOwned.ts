@@ -1,5 +1,5 @@
 import { selectorFamily, waitForNone } from 'recoil'
-import type SearchMetadata from '../../common/types/SearchMetadata'
+import type SearchMetadata from '../../App/_types/SearchMetadataType'
 import * as store from './'
 
 export const fetchOwned = selectorFamily<SearchMetadata[], any>({

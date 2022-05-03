@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { lamportsToSolString } from '../../../common/helpers/utils'
+import lamportsToSolString from '../../helpers/lamportsToSolString'
 
 interface SolBalanceProps {
   lamports?: number | BN
