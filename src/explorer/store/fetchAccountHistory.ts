@@ -5,10 +5,10 @@ import {
   TransactionResponse,
 } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue, waitForAll } from 'recoil'
-import { fetchSignaturesForAddress } from './fetchSignaturesForAddress'
+import { fetchSignaturesForAddressSelector } from './fetchSignaturesForAddress'
 import {
-  fetchParsedConfirmedTransaction,
-  fetchRawTransaction,
+  fetchParsedConfirmedTransactionSelector,
+  fetchRawTransactionSelector,
 } from './fetchTransaction'
 
 export interface SignaturesAndTransactions {
@@ -21,7 +21,7 @@ export interface SignaturesAndParsedTransactions {
   transactions: (ParsedConfirmedTransaction | null)[]
 }
 
-export const fetchRawAccountHistory = selectorFamily<
+export const fetchRawAccountHistorySelector = selectorFamily<
   SignaturesAndTransactions,
   any
 >({
@@ -29,12 +29,12 @@ export const fetchRawAccountHistory = selectorFamily<
   get:
     (pubkey) =>
     async ({ get }) => {
-      const signatures = get(fetchSignaturesForAddress(pubkey))
+      const signatures = get(fetchSignaturesForAddressSelector(pubkey))
 
       const transactions = get(
         waitForAll(
           signatures.map((signature) => {
-            return fetchRawTransaction(signature.signature)
+            return fetchRawTransactionSelector(signature.signature)
           })
         )
       )
@@ -47,9 +47,9 @@ export const fetchRawAccountHistory = selectorFamily<
 })
 
 export const useRawAccountHistory = (pubkey: PublicKey) =>
-  useRecoilValue(fetchRawAccountHistory(pubkey))
+  useRecoilValue(fetchRawAccountHistorySelector(pubkey))
 
-export const fetchAccountHistory = selectorFamily<
+export const fetchAccountHistorySelector = selectorFamily<
   SignaturesAndParsedTransactions,
   any
 >({
@@ -57,12 +57,12 @@ export const fetchAccountHistory = selectorFamily<
   get:
     (pubkey) =>
     async ({ get }) => {
-      const signatures = get(fetchSignaturesForAddress(pubkey))
+      const signatures = get(fetchSignaturesForAddressSelector(pubkey))
 
       const transactions = get(
         waitForAll(
           signatures.map((signature) => {
-            return fetchParsedConfirmedTransaction(signature.signature)
+            return fetchParsedConfirmedTransactionSelector(signature.signature)
           })
         )
       )
@@ -75,9 +75,9 @@ export const fetchAccountHistory = selectorFamily<
 })
 
 export const useAccountHistory = (pubkey: PublicKey) =>
-  useRecoilValue(fetchAccountHistory(pubkey))
+  useRecoilValue(fetchAccountHistorySelector(pubkey))
 
-export const fetchRawAccountHistories = selectorFamily<
+export const fetchRawAccountHistoriesSelector = selectorFamily<
   SignaturesAndTransactions[],
   any[]
 >({
@@ -88,7 +88,7 @@ export const fetchRawAccountHistories = selectorFamily<
       const allSignaturesAndTransactions = get(
         waitForAll(
           pubkeys.map((pubkey: PublicKey) => {
-            return fetchRawAccountHistory(pubkey)
+            return fetchRawAccountHistorySelector(pubkey)
           })
         )
       )
@@ -98,9 +98,9 @@ export const fetchRawAccountHistories = selectorFamily<
 })
 
 export const useRawAccountHistories = (pubkeys: PublicKey[]) =>
-  useRecoilValue(fetchRawAccountHistories(pubkeys))
+  useRecoilValue(fetchRawAccountHistoriesSelector(pubkeys))
 
-export const fetchAccountHistories = selectorFamily<
+export const fetchAccountHistoriesSelector = selectorFamily<
   SignaturesAndParsedTransactions[],
   any[]
 >({
@@ -111,7 +111,7 @@ export const fetchAccountHistories = selectorFamily<
       const allSignaturesAndTransactions = get(
         waitForAll(
           pubkeys.map((pubkey: PublicKey) => {
-            return fetchAccountHistory(pubkey)
+            return fetchAccountHistorySelector(pubkey)
           })
         )
       )
@@ -121,4 +121,4 @@ export const fetchAccountHistories = selectorFamily<
 })
 
 export const useAccountHistories = (pubkeys: PublicKey[]) =>
-  useRecoilValue(fetchAccountHistories(pubkeys))
+  useRecoilValue(fetchAccountHistoriesSelector(pubkeys))

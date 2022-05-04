@@ -1,9 +1,32 @@
-import { ConfirmedSignatureInfo, Connection } from '@solana/web3.js'
+import {
+  ConfirmedSignatureInfo,
+  Connection,
+  PublicKey,
+  TransactionSignature,
+} from '@solana/web3.js'
 import { selectorFamily } from 'recoil'
 import solanaCluster from '../../App/_atoms/solanaCluster'
 import { pageIdx } from './pageIdx'
 
-export const fetchSignaturesForAddress = selectorFamily<
+export const fetchSignaturesForAddress = async (
+  endpoint: string,
+  pubkey: PublicKey,
+  before?: TransactionSignature
+) => {
+  const connection = new Connection(endpoint)
+
+  const signatures = await connection.getConfirmedSignaturesForAddress2(
+    pubkey,
+    {
+      before,
+      limit: 10,
+    }
+  )
+
+  return signatures
+}
+
+export const fetchSignaturesForAddressSelector = selectorFamily<
   ConfirmedSignatureInfo[],
   any
 >({
@@ -14,15 +37,7 @@ export const fetchSignaturesForAddress = selectorFamily<
       get(pageIdx) // bust this cache every page
 
       const { endpoint } = get(solanaCluster)
-      const connection = new Connection(endpoint)
 
-      const signatures = await connection.getConfirmedSignaturesForAddress2(
-        pubkey,
-        {
-          limit: 10,
-        }
-      )
-
-      return signatures
+      return fetchSignaturesForAddress(endpoint, pubkey)
     },
 })

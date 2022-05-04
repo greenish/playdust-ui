@@ -8,7 +8,16 @@ import {
 import { selectorFamily, useRecoilValue } from 'recoil'
 import solanaCluster from '../../App/_atoms/solanaCluster'
 
-export const fetchRawTransaction = selectorFamily<
+export const fetchParsedConfirmedTransaction = async (
+  endpoint: string,
+  signature: string
+) => {
+  const connection = new Connection(endpoint)
+
+  return await connection.getParsedConfirmedTransaction(signature)
+}
+
+export const fetchRawTransactionSelector = selectorFamily<
   TransactionResponse | null,
   string
 >({
@@ -24,7 +33,7 @@ export const fetchRawTransaction = selectorFamily<
 })
 
 export const useRawTransaction = (signature: string) =>
-  useRecoilValue(fetchRawTransaction(signature))
+  useRecoilValue(fetchRawTransactionSelector(signature))
 
 export interface Details {
   transaction: Transaction
@@ -32,7 +41,7 @@ export interface Details {
   signatures: string[]
 }
 
-export const fetchRawPopulatedTransaction = selectorFamily<
+export const fetchRawPopulatedTransactionSelector = selectorFamily<
   Details | null,
   string
 >({
@@ -62,9 +71,9 @@ export const fetchRawPopulatedTransaction = selectorFamily<
 })
 
 export const useRawPopulatedTransaction = (signature: string) =>
-  useRecoilValue(fetchRawPopulatedTransaction(signature))
+  useRecoilValue(fetchRawPopulatedTransactionSelector(signature))
 
-export const fetchParsedConfirmedTransaction = selectorFamily<
+export const fetchParsedConfirmedTransactionSelector = selectorFamily<
   ParsedConfirmedTransaction | null,
   string
 >({
@@ -73,11 +82,9 @@ export const fetchParsedConfirmedTransaction = selectorFamily<
     (signature) =>
     async ({ get }) => {
       const { endpoint } = get(solanaCluster)
-      const connection = new Connection(endpoint)
-
-      return await connection.getParsedConfirmedTransaction(signature)
+      return await fetchParsedConfirmedTransaction(endpoint, signature)
     },
 })
 
 export const useParsedConfirmedTransaction = (signature: string) =>
-  useRecoilValue(fetchParsedConfirmedTransaction(signature))
+  useRecoilValue(fetchParsedConfirmedTransactionSelector(signature))

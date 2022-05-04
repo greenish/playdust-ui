@@ -1,7 +1,8 @@
 import SuccessIcon from '@mui/icons-material/CheckCircle'
 import ErrorIcon from '@mui/icons-material/Error'
-import { Box, Chip } from '@mui/material'
+import { Box, Button, Chip } from '@mui/material'
 import {
+  ParsedConfirmedTransaction,
   ParsedInstruction,
   PartiallyDecodedInstruction,
   PublicKey,
@@ -9,7 +10,7 @@ import {
 import React, { useState } from 'react'
 import pubkeyToString from '../../helpers/pubKeyToString'
 import toRelative from '../../helpers/toRelative'
-import { useAccountHistory } from '../../store'
+import { useFetchMoreTransactions, useTransactionsResults } from '../../store'
 import {
   AccountLink,
   DataCell,
@@ -78,9 +79,16 @@ const FormattedInstructions = ({
 }
 
 export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
-  const { transactions } = useAccountHistory(pubkey)
+  const { transactions } = useTransactionsResults()
+  const fetchMoreTransactions = useFetchMoreTransactions()
 
-  const rows = transactions.map((transaction) => {
+  const handleClickLoadMore = () => {
+    fetchMoreTransactions()
+  }
+
+  const rows = (transactions ?? []).map(function (
+    transaction: ParsedConfirmedTransaction | null
+  ) {
     if (!transaction) {
       return {}
     }
@@ -162,22 +170,26 @@ export const TransactionsContent = ({ pubkey }: TransactionsProps) => {
     )
 
   return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Status</TableCell>
-            <TableCell>Signature</TableCell>
-            <TableCell>Block</TableCell>
-            <TableCell>Time</TableCell>
-            <TableCell>Instructions</TableCell>
-            <TableCell>By</TableCell>
-            <TableCell>Fee (SOL)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>{tableRows}</TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Status</TableCell>
+              <TableCell>Signature</TableCell>
+              <TableCell>Block</TableCell>
+              <TableCell>Time</TableCell>
+              <TableCell>Instructions</TableCell>
+              <TableCell>By</TableCell>
+              <TableCell>Fee (SOL)</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>{tableRows}</TableBody>
+        </Table>
+      </TableContainer>
+
+      <Button onClick={() => handleClickLoadMore()}>Load More</Button>
+    </>
   )
 }
 
