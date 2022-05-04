@@ -1,0 +1,59 @@
+import styled from '@emotion/styled'
+import { useMemo } from 'react'
+import { useRecoilValueLoadable } from 'recoil'
+import humanizeSolana from '../../../_helpers/humanizeSolana'
+import useInitCollectionQuery from '../../_hooks/useInitCollectionQuery'
+import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid'
+import humanizeCollection from '../_helpers/humanizeCollection'
+import topCollectionsAtom from './_atoms/topCollections'
+import useFetchMoreTopCollections from './_hooks/useFetchMoreTopCollections'
+
+const RootContainer = styled.div`
+  padding-left: 16px;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+`
+
+const Home = () => {
+  const topCollectionsLoadable = useRecoilValueLoadable(topCollectionsAtom)
+  const fetchMore = useFetchMoreTopCollections()
+  const initCollectionQuery = useInitCollectionQuery('href')
+  const hasValue = topCollectionsLoadable.state === 'hasValue'
+
+  const grouped = useMemo(() => {
+    if (hasValue) {
+      const { results } = topCollectionsLoadable.contents
+
+      return results.map(({ collection, nfts }) => ({
+        key: collection.id,
+        groupLabel: humanizeCollection(collection)!,
+        groupSecondary: humanizeSolana(collection.totalVolume),
+        groupHref: initCollectionQuery(collection.id),
+        groupTotal: collection.elementCount,
+        nfts,
+      }))
+    }
+
+    return []
+  }, [topCollectionsLoadable])
+
+  return (
+    <RootContainer>
+      <TokenGrid
+        initialized={hasValue}
+        grouped={grouped}
+        totalRows={hasValue ? topCollectionsLoadable.contents.total : 0}
+        imageSize={150}
+        cardGap={16}
+        rowGap={24}
+        contentHeight={0}
+        next={async () => {
+          await fetchMore()
+        }}
+      />
+    </RootContainer>
+  )
+}
+
+export default Home

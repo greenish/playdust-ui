@@ -1,1 +1,1 @@
-export { default } from '../../src/search/api/getSearchAggregations'
+export { default } from '../../src/api/getSearchAggregations'

@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Container, Typography } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
-import { TokenList } from '../../search/components/TokenGrid'
+import TokenGrid from '../../App/Window/_sharedComponents/TokenGrid/TokenGrid'
 import { fetchOwned } from '../store'
 
 const HelperMessageContainer = styled.div`
@@ -26,7 +26,7 @@ const OwnedTokens = ({ publicKey }: OwnedTokensProp) => {
   return (
     <ContentContainer>
       {ownedTokens.length ? (
-        <TokenList
+        <TokenGrid
           initialized
           tokens={ownedTokens}
           total={ownedTokens.length}

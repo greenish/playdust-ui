@@ -1,4 +1,4 @@
-import WindowProps from '../../App/_types/WindowPropsType'
+import WindowProps from '../../App/Window/_types/WindowPropsType'
 import { ExplorerContainer, ExplorerHeader } from '../components/common'
 import { EpochOverview } from '../components/epoch'
 

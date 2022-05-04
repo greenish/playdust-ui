@@ -1,7 +1,7 @@
-import { NFTSource } from '../../search/types/OpenSearchIndex'
+import OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType'
 
 export type SearchMetadataOnChain = Pick<SearchMetadata, 'data' | 'mint'>
 
-type SearchMetadata = NFTSource
+type SearchMetadata = OpenSearchNFTSourceType
 
 export default SearchMetadata

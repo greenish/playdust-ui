@@ -1,4 +1,4 @@
-export * from '../../../App/Link'
+export * from '../../../App/Window/_sharedComponents/Link'
 export * from './Copyable'
 export * from './CopyButton'
 export * from './Downloadable'

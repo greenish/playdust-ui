@@ -1,6 +1,6 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { FunctionComponent } from 'react'
-import WindowProps from '../../App/_types/WindowPropsType'
+import WindowProps from '../../App/Window/_types/WindowPropsType'
 import {
   ConfigAccount,
   NonceAccount,

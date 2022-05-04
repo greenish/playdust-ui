@@ -1,1 +1,1 @@
-export { default } from '../../src/search/api/getCollectionOverview'
+export { default } from '../../src/api/getCollectionOverview'

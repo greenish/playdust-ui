@@ -1,4 +1,4 @@
-import makeUseNavigateWindowHash from './makeUseNavigateWindowHash'
+import makeUseNavigateWindowHash from '../_helpers/makeUseNavigateWindowHash'
 
 const useReplaceWindowHah = makeUseNavigateWindowHash('replace')
 

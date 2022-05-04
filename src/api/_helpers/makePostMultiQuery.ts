@@ -1,0 +1,16 @@
+import type OpenSearchResponseType from '../../_types/OpenSearchResponseType'
+import postAxios from './postAxios'
+
+function makePostMultiQuery<T>() {
+  return async (query: string) => {
+    const headers = {
+      'Content-type': 'application/x-ndjson',
+    }
+
+    const data = await postAxios(query, '/_msearch', headers)
+
+    return data.responses as OpenSearchResponseType<T>[]
+  }
+}
+
+export default makePostMultiQuery

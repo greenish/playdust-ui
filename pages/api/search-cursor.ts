@@ -1,1 +1,1 @@
-export { default } from '../../src/search/api/searchCursor'
+export { default } from '../../src/api/getSearchCursor'

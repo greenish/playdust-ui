@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { createTheme, Paper, ThemeProvider } from '@mui/material'
 import { useRouter } from 'next/router'
-import AppBar, { appBarWidth } from './AppBar'
+import AppBar, { appBarWidth } from './AppBar/AppBar'
 import Notifications from './Notifications'
 import Provider from './Provider/Provider'
 import Window from './Window/Window'

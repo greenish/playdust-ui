@@ -3,8 +3,8 @@ import FlagIcon from '@mui/icons-material/Flag'
 import { Button } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useCookies } from 'react-cookie'
-import FlaggedModal from '../../../../../../src/search/components/FlaggedModal'
-import { useOpenFlaggedModal } from '../../../../../../src/search/store'
+import FlaggedModal from '../../../../../App/Window/WindowSwitch/Search/FlaggedModal'
+import useOpenFlaggedModal from '../../../../../App/Window/WindowSwitch/Search/_hooks/useOpenFlaggedModal'
 import { useUserProfile } from '../../../../store'
 
 const ReportButton = styled(Button)``

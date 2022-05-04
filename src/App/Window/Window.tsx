@@ -3,15 +3,15 @@ import { CircularProgress } from '@mui/material'
 import { Suspense, useMemo } from 'react'
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import { userProfile } from '../../me/store'
-import SearchInput from '../SearchInput/SearchInput'
 import activeTabAtom from '../_atoms/activeTab'
 import activeWindowAtom from '../_atoms/activeWindow'
 import currentState from '../_atoms/currentState'
 import usePushWindowHash from '../_hooks/usePushWindowHash'
 import useRouteApp from '../_hooks/useRouteApp'
 import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState'
-import type WindowProps from '../_types/WindowPropsType'
-import WindowSwitch from './WindowSwitch'
+import WindowInput from './WindowInput/WindowInput'
+import WindowSwitch from './WindowSwitch/WindowSwitch'
+import type WindowProps from './_types/WindowPropsType'
 
 const RootContainer = styled.div`
   display: flex;
@@ -39,7 +39,7 @@ const SpinnerContainer = styled.div`
   margin-top: 24px;
 `
 
-const App = () => {
+const Window = () => {
   const activeTab = useRecoilValue(activeTabAtom)
   const activeWindow = useRecoilValue(activeWindowAtom)
   const setCurrentWindowState = useSetCurrentWindowState()
@@ -90,7 +90,7 @@ const App = () => {
     >
       <RootContainer>
         <SearchInputContainer>
-          <SearchInput {...props} />
+          <WindowInput {...props} />
         </SearchInputContainer>
         <ContentContainer>
           <Suspense
@@ -108,4 +108,4 @@ const App = () => {
   )
 }
 
-export default App
+export default Window

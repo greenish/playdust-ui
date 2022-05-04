@@ -1,5 +1,5 @@
+import WindowProps from '../../App/Window/_types/WindowPropsType'
 import getWindowType from '../../App/_helpers/getWindowType'
-import WindowProps from '../../App/_types/WindowPropsType'
 import {
   ErrorCard,
   ExplorerContainer,

@@ -8,7 +8,8 @@
     "lint": "next lint",
     "prettier:check": "yarn prettier --check '**/*.(ts|tsx|js)'",
     "prettier:write": "yarn prettier --write '**/*.(ts|tsx|js)'",
-    "tsc:check": "tsc --noEmit"
+    "tsc:check": "tsc --noEmit",
+    "check:paths": "ts-node scripts/checkPaths.ts"
   },
   "dependencies": {
     "@bonfida/spl-name-service": "0.1.22",
@@ -65,6 +66,7 @@
     "eslint": "8.6.0",
     "eslint-config-next": "12.0.8",
     "eslint-config-prettier": "^8.3.0",
+    "fast-glob": "^3.2.11",
     "fastq": "^1.13.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.1",
