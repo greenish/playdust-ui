@@ -137,8 +137,13 @@ The api folder contains all nextJS api endpoints in a folder structure following
 
 1. ### Component (Folders)
    If a component becomes too complicated for a single file, a folder `ComponentName/` is created containing `ComponentName.tsx` and all files related to the component.
+    
+   > Every component (file) in the folder, must either be the actual parent component or a direct child of the parent.
 
    > If reasonable, sub components are named `ComponentName[SubComponent].tsx`. This can be broken or abbrevated in order to prevent component names from getting too long.
+
+
+   > All 
 
 1. ### Atoms (and Selectors)
     > Selectors are an implementation detail of atoms
@@ -184,6 +189,17 @@ The api folder contains all nextJS api endpoints in a folder structure following
 
 
 ## Libraries/Conventions/Patterns
+
+1. ### Atom & Hook Factories
+    Functions that create `hooks` or `atoms` are prefixed with `make` (ie `makeUseMyHook.tsx` or `makeMyAtom.ts`) and live in `_hooks` or `_atoms` respectively.
+
+1. ### One Single export per file
+    To keep the file structure self documenting, each file must only export a single `default` export which it is named after. iE. `MyComponent.tsx` exports `<MyComponent … />`
+
+    > Typescript types can be exported in addition the single javascript export.
+    
+    > A file can define multiple components/atoms/selectors for internal use, but can only export the one it is named after.
+
 
 1. ### No Shortcuts on Typescript: No `any` and no (/minimal) type casting.
     The real value of Typescript comes when there are no shortcuts being taken. ¨
