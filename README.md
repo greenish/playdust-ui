@@ -48,7 +48,7 @@ Husky and lint-staged are used for optimal linting, to use it run the following 
 yarn husky install
 ```
 
-# Terminology 
+# Terminology
 ### App
 
 - the top level entity
@@ -103,7 +103,7 @@ export interface App {
   ├─ _types/
 ```
 
-## `/api` 
+## `/api`
 The api folder contains all nextJS api endpoints in a folder structure following the data / URL structure.
 
 ## `/_types`
@@ -137,13 +137,13 @@ The api folder contains all nextJS api endpoints in a folder structure following
 
 1. ### Component (Folders)
    If a component becomes too complicated for a single file, a folder `ComponentName/` is created containing `ComponentName.tsx` and all files related to the component.
-    
+
    > Every component (file) in the folder, must either be the actual parent component or a direct child of the parent.
 
    > If reasonable, sub components are named `ComponentName[SubComponent].tsx`. This can be broken or abbrevated in order to prevent component names from getting too long.
 
 
-   > All 
+   > All
 
 1. ### Atoms (and Selectors)
     > Selectors are an implementation detail of atoms
@@ -165,8 +165,8 @@ The api folder contains all nextJS api endpoints in a folder structure following
 
 
 1. ### Types
-    Types should be defined as close to data creation as possible. 
-    
+    Types should be defined as close to data creation as possible.
+
     **Whenever possible, types should be defined, verified and exported alongside Atoms and Selectors.**
 
     `_types/` should contain a flat list of files.
@@ -197,7 +197,7 @@ The api folder contains all nextJS api endpoints in a folder structure following
     To keep the file structure self documenting, each file must only export a single `default` export which it is named after. iE. `MyComponent.tsx` exports `<MyComponent … />`
 
     > Typescript types can be exported in addition the single javascript export.
-    
+
     > A file can define multiple components/atoms/selectors for internal use, but can only export the one it is named after.
 
 
@@ -210,17 +210,17 @@ The api folder contains all nextJS api endpoints in a folder structure following
     To keep the file structure self documenting, each file must only export a single `default` export which it is named after. iE. `MyComponent.tsx` exports `<MyComponent … />`
 
     > Typescript types can be exported in addition the single javascript export.
-    
+
     > A file can define multiple components/atoms/selectors for internal use, but can only export the one it is named after.
 
 
 1. ### imports
     When the above folder structure is followed, imports adhere to the following easily visible rules:
-    - No `import *` since all files export only `default`. 
-    - Traversing up (ie `../../../_atoms`) 
+    - No `import *` since all files export only `default`.
+    - Traversing up (ie `../../../_atoms`)
       - should always lead to a `_[folder]`
       - should never lead to a Component
-    - Traversing down Components (ie `./MyComponent/MyComponentTitle`) 
+    - Traversing down Components (ie `./MyComponent/MyComponentTitle`)
       - should always lead to a Component
       - should never lead to a `_[folder]`
     - Traversing into `_[folders]` (ie `./_atoms/myAtom.tsx`) should not exceed 2 levels of depth.

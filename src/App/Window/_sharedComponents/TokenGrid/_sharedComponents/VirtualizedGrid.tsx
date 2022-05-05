@@ -1,114 +1,135 @@
-import styled from '@emotion/styled'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { AutoSizer, InfiniteLoader, List, Size } from 'react-virtualized'
-import 'react-virtualized/styles.css'
+import styled from '@emotion/styled';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
+import { AutoSizer, InfiniteLoader, List } from 'react-virtualized';
+import 'react-virtualized/styles.css';
 
 const RootContainer = styled.div`
   height: 100%;
   width: 100%;
   display: block;
-`
+`;
 
 interface RowMeta {
-  rowHeight: number
-  rowCount: number
-  hasMore: boolean
-  cardsPerRow?: number
+  rowHeight: number;
+  rowCount: number;
+  hasMore: boolean;
+  cardsPerRow: number;
 }
 
 export interface VirtualizedGridChildProps extends RowMeta {
-  index: number
-  isLoading: boolean
+  index: number;
+  isLoading: boolean;
 }
 
 interface VirtualizedGridProps {
-  getRowMeta: (width: number, height: number, isLoading: boolean) => RowMeta
-  rowRenderer: (childProps: VirtualizedGridChildProps) => React.ReactElement
-  initialized: boolean
-  next?: () => any
+  getRowMeta: (width: number, height: number, isLoading: boolean) => RowMeta;
+  rowRenderer: (childProps: VirtualizedGridChildProps) => React.ReactElement;
+  initialized: boolean;
+  next?: () => void;
 }
 
-interface AutoSizerProps extends VirtualizedGridProps {
-  isLoading: boolean
-  setIsLoading: Dispatch<SetStateAction<boolean>>
+interface AutoSizedContainerProps extends VirtualizedGridProps {
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  width: number;
+  height: number;
 }
 
-const makeAutoSizedContainer = (props: AutoSizerProps) =>
-  function AutoSizedContainer({ width, height }: Size) {
-    const {
-      rowRenderer,
-      isLoading,
-      setIsLoading,
-      next,
-      initialized,
-      getRowMeta,
-    } = props
+function AutoSizedContainer(props: AutoSizedContainerProps) {
+  const {
+    rowRenderer,
+    isLoading,
+    setIsLoading,
+    next,
+    initialized,
+    getRowMeta,
+    width,
+    height,
+  } = props;
 
-    const meta = getRowMeta(width, height, isLoading)
-    const { rowHeight, rowCount, hasMore } = meta
+  const meta = useMemo(
+    () => getRowMeta(width, height, isLoading),
+    [getRowMeta, width, height, isLoading]
+  );
+  const { rowHeight, rowCount, hasMore } = meta;
 
-    return (
+  const rowWrapper = useCallback(
+    ({ key, style, index }) => (
       <div
-        style={{
-          height,
-          width,
-        }}
+        key={key}
+        style={{ ...style, marginLeft: 1, width: 'calc(100% - 1px)' }}
       >
-        <InfiniteLoader
-          isRowLoaded={({ index }) => {
-            if (!hasMore || !initialized) {
-              return true
-            }
-            return index + 1 < rowCount
-          }}
-          loadMoreRows={async () => {
-            if (next && !isLoading) {
-              setIsLoading(true)
-              await next()
-              setIsLoading(false)
-            }
-          }}
-          rowCount={rowCount}
-          threshold={2}
-        >
-          {(infiniteLoaderProps) => (
-            <List
-              ref={infiniteLoaderProps.registerChild}
-              onRowsRendered={infiniteLoaderProps.onRowsRendered}
-              height={height}
-              width={width}
-              rowCount={rowCount}
-              rowHeight={rowHeight}
-              rowRenderer={({ key, style, index }) => (
-                <div
-                  key={key}
-                  style={{ ...style, marginLeft: 1, width: 'calc(100% - 1px)' }}
-                >
-                  {rowRenderer({ index, isLoading, ...meta })}
-                </div>
-              )}
-              props={props}
-            />
-          )}
-        </InfiniteLoader>
+        {rowRenderer({ index, isLoading, ...meta })}
       </div>
-    )
-  }
+    ),
+    [rowRenderer, isLoading, meta]
+  );
 
-const VirtualizedGrid = (props: VirtualizedGridProps) => {
-  const [isLoading, setIsLoading] = useState(false)
+  return (
+    <div
+      style={{
+        height,
+        width,
+      }}
+    >
+      <InfiniteLoader
+        isRowLoaded={({ index }) => {
+          if (!hasMore || !initialized) {
+            return true;
+          }
+          return index + 1 < rowCount;
+        }}
+        loadMoreRows={async () => {
+          if (next && !isLoading) {
+            setIsLoading(true);
+            await next();
+            setIsLoading(false);
+          }
+        }}
+        rowCount={rowCount}
+        threshold={2}
+      >
+        {(infiniteLoaderProps) => (
+          <List
+            ref={infiniteLoaderProps.registerChild}
+            onRowsRendered={infiniteLoaderProps.onRowsRendered}
+            height={height}
+            width={width}
+            rowCount={rowCount}
+            rowHeight={rowHeight}
+            rowRenderer={rowWrapper}
+            props={props}
+          />
+        )}
+      </InfiniteLoader>
+    </div>
+  );
+}
+
+function VirtualizedGrid(props: VirtualizedGridProps) {
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <RootContainer>
       <AutoSizer>
-        {makeAutoSizedContainer({
-          ...props,
-          isLoading,
-          setIsLoading,
-        })}
+        {(autoSizerProps) => (
+          <AutoSizedContainer
+            {...props}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            width={autoSizerProps.width}
+            height={autoSizerProps.height}
+          />
+        )}
       </AutoSizer>
     </RootContainer>
-  )
+  );
 }
 
-export default VirtualizedGrid
+export default VirtualizedGrid;

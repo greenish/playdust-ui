@@ -1,7 +1,7 @@
-import type RangeQueryContentType from '../../../_types/RangeQueryContentType'
-import addQueryNode from '../_helpers/addQueryNode'
-import makeUseQueryChange from '../_helpers/makeUseQueryChange'
-import type QueryNodeAdditionType from '../_types/QueryNodeAdditionType'
+import type RangeQueryContentType from '../../../_types/RangeQueryContentType';
+import addQueryNode from '../_helpers/addQueryNode';
+import makeUseQueryChange from '../_helpers/makeUseQueryChange';
+import type QueryNodeAdditionType from '../_types/QueryNodeAdditionType';
 
 const useAddRangeQueryNode = makeUseQueryChange<
   Omit<RangeQueryContentType, 'field'>
@@ -13,11 +13,11 @@ const useAddRangeQueryNode = makeUseQueryChange<
     },
     operation: 'and',
     at: -1,
-  }
+  };
 
-  const next = addQueryNode(query, queryAddition)
+  const next = addQueryNode(query, queryAddition);
 
-  return { query: next }
-})
+  return { query: next };
+});
 
-export default useAddRangeQueryNode
+export default useAddRangeQueryNode;

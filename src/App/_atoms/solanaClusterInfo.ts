@@ -1,15 +1,15 @@
-import { Connection } from '@solana/web3.js'
-import { selector } from 'recoil'
-import solanaCluster from './solanaCluster'
+import { Connection } from '@solana/web3.js';
+import { selector } from 'recoil';
+import solanaCluster from './solanaCluster';
 
 const solanaClusterInfo = selector({
   key: 'solanaClusterInfo',
   get: async ({ get }) => {
-    const cluster = get(solanaCluster)
+    const cluster = get(solanaCluster);
 
-    const { endpoint } = cluster
+    const { endpoint } = cluster;
 
-    const connection = new Connection(endpoint)
+    const connection = new Connection(endpoint);
 
     const [firstAvailableBlock, epochSchedule, epochInfo, genesisHash] =
       await Promise.all([
@@ -17,7 +17,7 @@ const solanaClusterInfo = selector({
         connection.getEpochSchedule(),
         connection.getEpochInfo(),
         connection.getGenesisHash(),
-      ])
+      ]);
 
     const data = {
       ...cluster,
@@ -25,10 +25,10 @@ const solanaClusterInfo = selector({
       epochSchedule,
       epochInfo,
       genesisHash,
-    }
+    };
 
-    return data
+    return data;
   },
-})
+});
 
-export default solanaClusterInfo
+export default solanaClusterInfo;

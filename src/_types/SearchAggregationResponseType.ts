@@ -1,7 +1,7 @@
-import AttributeResponseType from './AttributeResponseType'
+import AttributeResponseType from './AttributeResponseType';
 
 interface SearchAggregationResponseType {
-  attributes: AttributeResponseType
+  attributes: AttributeResponseType;
 }
 
-export default SearchAggregationResponseType
+export default SearchAggregationResponseType;

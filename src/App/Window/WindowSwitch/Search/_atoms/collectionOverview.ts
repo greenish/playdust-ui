@@ -1,6 +1,6 @@
-import { selectorFamily } from 'recoil'
-import type CollectionOverviewResponseType from '../../../../../_types/CollectionOverviewResponseType'
-import api from '../../../../_helpers/frontendApi'
+import { selectorFamily } from 'recoil';
+import type CollectionOverviewResponseType from '../../../../../_types/CollectionOverviewResponseType';
+import api from '../../../../_helpers/frontendApi';
 
 const collectionOverview = selectorFamily<
   CollectionOverviewResponseType,
@@ -10,10 +10,10 @@ const collectionOverview = selectorFamily<
   get: (id: string) => async () => {
     const { data } = await api.get<CollectionOverviewResponseType>(
       `/collection-overview?id=${id}`
-    )
+    );
 
-    return data
+    return data;
   },
-})
+});
 
-export default collectionOverview
+export default collectionOverview;

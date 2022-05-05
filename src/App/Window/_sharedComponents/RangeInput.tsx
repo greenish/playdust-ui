@@ -1,32 +1,32 @@
-import styled from '@emotion/styled'
-import { Check } from '@mui/icons-material'
-import { IconButton, TextField, Typography } from '@mui/material'
-import { Dispatch, SetStateAction, useMemo, useState } from 'react'
-import RangeQueryContentType from '../../../_types/RangeQueryContentType'
-import type SearchFilterUnionType from '../../../_types/SearchFilterUnionType'
+import styled from '@emotion/styled';
+import { Check } from '@mui/icons-material';
+import { IconButton, TextField, Typography } from '@mui/material';
+import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import RangeQueryContentType from '../../../_types/RangeQueryContentType';
+import type SearchFilterUnionType from '../../../_types/SearchFilterUnionType';
 
 interface RangeInputProps {
-  value: SearchFilterUnionType
-  min: number | undefined
-  max: number | undefined
-  onApply: (newValue: Omit<RangeQueryContentType, 'field'>) => any
-  sol?: boolean
+  value: SearchFilterUnionType;
+  min: number | undefined;
+  max: number | undefined;
+  onApply: (newValue: Omit<RangeQueryContentType, 'field'>) => void;
+  sol?: boolean;
 }
 
 interface RangeTextFieldProps {
-  value: number | undefined
-  label: string
-  setter: Dispatch<SetStateAction<number | undefined>>
-  sol?: boolean
+  value: number | undefined;
+  label: string;
+  setter: Dispatch<SetStateAction<number | undefined>>;
+  sol?: boolean;
 }
 
 const RootContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
-const RangeTextField = ({ value, label, setter, sol }: RangeTextFieldProps) => {
+function RangeTextField({ value, label, setter, sol }: RangeTextFieldProps) {
   return (
     <TextField
       label={label}
@@ -35,30 +35,30 @@ const RangeTextField = ({ value, label, setter, sol }: RangeTextFieldProps) => {
       type="number"
       value={value === undefined ? '' : value}
       onChange={(evt) => {
-        const parsed = parseFloat(evt.target.value)
+        const parsed = parseFloat(evt.target.value);
 
-        if (isNaN(parsed)) {
-          return setter(undefined)
+        if (Number.isNaN(parsed)) {
+          return setter(undefined);
         }
 
-        setter(parseFloat(evt.target.value))
+        return setter(parseFloat(evt.target.value));
       }}
     />
-  )
+  );
 }
 
-const RangeInput = (props: RangeInputProps) => {
-  const { value, onApply } = props
-  const [min, setMin] = useState(props.min)
-  const [max, setMax] = useState(props.max)
+function RangeInput(props: RangeInputProps) {
+  const { value, onApply } = props;
+  const [min, setMin] = useState(props.min);
+  const [max, setMax] = useState(props.max);
 
   const disabled = useMemo(() => {
     if (min === undefined || max === undefined) {
-      return true
+      return true;
     }
 
-    return !(min >= 0 && max > 0 && min < max)
-  }, [min, max])
+    return !(min >= 0 && max > 0 && min < max);
+  }, [min, max]);
 
   return (
     <RootContainer>
@@ -68,12 +68,16 @@ const RangeInput = (props: RangeInputProps) => {
       <IconButton
         sx={{ ml: 1 }}
         disabled={disabled}
-        onClick={() => onApply({ min: min!, max: max!, value })}
+        onClick={() => {
+          if (min && max) {
+            onApply({ min, max, value });
+          }
+        }}
       >
         <Check />
       </IconButton>
     </RootContainer>
-  )
+  );
 }
 
-export default RangeInput
+export default RangeInput;

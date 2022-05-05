@@ -3,9 +3,10 @@ const queriesToMultiSearch = (
   index: 'nft-collection' | 'nft-metadata'
 ) =>
   queries
-    .flatMap((entry) => {
-      return [`{ "index": "${index}"}\n`, `${JSON.stringify(entry)}\n`]
-    })
-    .join('')
+    .flatMap((entry) => [
+      `{ "index": "${index}"}\n`,
+      `${JSON.stringify(entry)}\n`,
+    ])
+    .join('');
 
-export default queriesToMultiSearch
+export default queriesToMultiSearch;

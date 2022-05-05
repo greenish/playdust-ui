@@ -1,6 +1,6 @@
 interface TextQueryContentType {
-  field: 'text'
-  value: string
+  field: 'text';
+  value: string;
 }
 
-export default TextQueryContentType
+export default TextQueryContentType;

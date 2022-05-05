@@ -9,35 +9,41 @@ import {
   MenuItem,
   Select,
   TextField,
-} from '@mui/material'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { useState } from 'react'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
-import { setFlagCollection, setFlagNFT } from '../../../_helpers/playdustApi'
-import flaggedCollection from './_atoms/flaggedCollection'
+} from '@mui/material';
+import { useWallet } from '@solana/wallet-adapter-react';
+import React, { useState } from 'react';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { setFlagCollection, setFlagNFT } from '../../../_helpers/playdustApi';
+import flaggedCollection from './_atoms/flaggedCollection';
 
-const FlaggedModal = () => {
-  const [selected, setSelected] = useState('')
-  const [reason, setReason] = useState('')
-  const { publicKey } = useWallet()
-  const { open, type, id } = useRecoilValue(flaggedCollection)
-  const close = useResetRecoilState(flaggedCollection)
+function FlaggedModal() {
+  const [selected, setSelected] = useState('');
+  const [reason, setReason] = useState('');
+  const { publicKey } = useWallet();
+  const { open, type, id } = useRecoilValue(flaggedCollection);
+  const close = useResetRecoilState(flaggedCollection);
 
   const handleSave = () => {
-    const reasonSelected = selected !== 'other' ? selected : reason
-    if (type === 'NFT') {
-      setFlagNFT(id, publicKey!.toBase58(), reasonSelected)
-    } else {
-      setFlagCollection(id, publicKey!.toBase58(), reasonSelected)
+    const reasonSelected = selected !== 'other' ? selected : reason;
+    const publicKeyString = publicKey?.toBase58();
+
+    if (!publicKeyString) {
+      return undefined;
     }
-    close()
-  }
+
+    if (type === 'NFT') {
+      setFlagNFT(id, publicKeyString, reasonSelected);
+    } else {
+      setFlagCollection(id, publicKeyString, reasonSelected);
+    }
+    close();
+  };
 
   return (
-    <Dialog open={open} onClose={() => close()} fullWidth>
+    <Dialog open={open} onClose={() => close()} fullWidth={true}>
       <DialogTitle>Report</DialogTitle>
       <DialogContent>
-        <FormControl fullWidth sx={{ margin: '16px 0' }}>
+        <FormControl fullWidth={true} sx={{ margin: '16px 0' }}>
           <InputLabel id="censor-label">Reason</InputLabel>
           <Select
             labelId="censor-label"
@@ -69,7 +75,7 @@ const FlaggedModal = () => {
         <Button onClick={handleSave}>Save</Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 }
 
-export default FlaggedModal
+export default FlaggedModal;

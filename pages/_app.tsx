@@ -1,13 +1,14 @@
-import type { AppProps } from 'next/app'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import '../styles/globals.css'
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import React from 'react';
+import '../styles/globals.css';
 
-const App = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter()
+function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
 
   if (!router.isReady) {
-    return <></>
+    return null;
   }
 
   return (
@@ -18,7 +19,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
       <Component {...pageProps} />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

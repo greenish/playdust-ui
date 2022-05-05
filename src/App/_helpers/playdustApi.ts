@@ -1,15 +1,16 @@
-import axios, { AxiosInstance } from 'axios'
-import createAuthRefreshInterceptor from 'axios-auth-refresh'
-import type Profile from '../../me/types/Profile'
-import StatusType from './statusEnum'
+/* eslint-disable */
+import axios, { AxiosInstance } from 'axios';
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import type Profile from '../../me/types/Profile';
+import StatusType from '../_types/StatusEnumType';
 
 const instance: AxiosInstance = axios.create({
   baseURL: `/playdust-api`,
-})
+});
 
-const TREASURY_MINT = 'So11111111111111111111111111111111111111112'
+const TREASURY_MINT = 'So11111111111111111111111111111111111111112';
 
-const prefix = `/auction-house/${TREASURY_MINT}`
+const prefix = `/auction-house/${TREASURY_MINT}`;
 
 export const makeNFTBid = async (
   wallet: string,
@@ -21,10 +22,10 @@ export const makeNFTBid = async (
     mint,
     buyPrice,
     tokenSize: 1,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const cancelNFTBid = async (
   wallet: string,
@@ -36,10 +37,10 @@ export const cancelNFTBid = async (
     mint,
     buyPrice,
     tokenSize: 1,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const makeNFTListing = async (
   wallet: string,
@@ -51,10 +52,10 @@ export const makeNFTListing = async (
     mint,
     buyPrice,
     tokenSize: 1,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const cancelNFTListing = async (
   wallet: string,
@@ -66,10 +67,10 @@ export const cancelNFTListing = async (
     mint,
     buyPrice,
     tokenSize: 1,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const executeNFTSale = async (
   requestData: any,
@@ -78,30 +79,30 @@ export const executeNFTSale = async (
   const { data } = await instance.post(`${prefix}/execute`, {
     ...requestData,
     txBuff,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const ListPaymentTokens = async () => {
-  const { data } = await instance.get(`/trading/markets`)
+  const { data } = await instance.get(`/trading/markets`);
 
-  return data
-}
+  return data;
+};
 
 export const GetAllOrders = async (mint: string) => {
-  const { data } = await instance.get(`/trading/${mint}/orders`)
+  const { data } = await instance.get(`/trading/${mint}/orders`);
 
-  return data
-}
+  return data;
+};
 
 export const GetNonce = async (wallet: string): Promise<string> => {
   const { data } = await instance.post('/authentication/nonce', {
     wallet,
-  })
+  });
 
-  return data.nonce
-}
+  return data.nonce;
+};
 
 export const GetAuthToken = async (
   wallet: string,
@@ -112,25 +113,25 @@ export const GetAuthToken = async (
     wallet,
     signature,
     nonce,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const RefreshToken = async (wallet: string, nonce: string) => {
   const { data } = await instance.post('/authentication/refresh-token', {
     wallet,
     nonce,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const GetUserProfile = async (wallet: string, nonce: string) => {
-  const { data } = await instance.get(`/user-profile/${wallet}?nonce=${nonce}`)
+  const { data } = await instance.get(`/user-profile/${wallet}?nonce=${nonce}`);
 
-  return data
-}
+  return data;
+};
 
 export const UpdateProfile = async (
   profile: Profile,
@@ -138,11 +139,11 @@ export const UpdateProfile = async (
   nonce: string
 ) => {
   try {
-    await instance.post(`/user-profile/${wallet}`, { ...profile, nonce })
+    await instance.post(`/user-profile/${wallet}`, { ...profile, nonce });
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
-}
+};
 
 export const autoRefresh = (
   pubKey: string,
@@ -150,33 +151,32 @@ export const autoRefresh = (
   authToken: string,
   setter: Function
 ) => {
-  instance.defaults.headers.common.Authorization = `Bearer ${authToken}`
+  instance.defaults.headers.common.Authorization = `Bearer ${authToken}`;
   createAuthRefreshInterceptor(
     instance,
     (failedRequest) =>
       RefreshToken(pubKey, nonce)
         .then((data) => {
-          setter('authToken', data.token, { path: '/' })
-          setter('nonce', data.nonce, { path: '/' })
-          failedRequest.response.config.headers[
-            'Authorization'
-          ] = `Bearer ${data.token}`
-          return Promise.resolve()
+          setter('authToken', data.token, { path: '/' });
+          setter('nonce', data.nonce, { path: '/' });
+          // eslint-disable-next-line
+          failedRequest.response.config.headers.Authorization = `Bearer ${data.token}`;
+          return Promise.resolve();
         })
         .catch(() => Promise.reject()),
     {
       statusCodes: [401],
     }
-  )
-}
+  );
+};
 
 export const getNFTCensorStatus = async (mint: string) => {
   const { data } = await instance.get<{ type: StatusType }>(
     `/censor/mint/${mint}`
-  )
+  );
 
-  return data
-}
+  return data;
+};
 
 export const setNFTCensorStatus = async (
   mint: string,
@@ -186,10 +186,10 @@ export const setNFTCensorStatus = async (
   const { data } = await instance.post(`/censor/mint/${mint}`, {
     type,
     wallet,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const setCollectionCensorStatus = async (
   id: string,
@@ -199,10 +199,10 @@ export const setCollectionCensorStatus = async (
   const { data } = await instance.post(`/censor/collection/${id}`, {
     type,
     wallet,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const setFlagNFT = async (
   mint: string,
@@ -212,10 +212,10 @@ export const setFlagNFT = async (
   const { data } = await instance.post(`/user-flag/mint/${mint}`, {
     reason,
     wallet,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
 export const setFlagCollection = async (
   id: string,
@@ -225,9 +225,9 @@ export const setFlagCollection = async (
   const { data } = await instance.post(`/user-flag/collection/${id}`, {
     reason,
     wallet,
-  })
+  });
 
-  return data
-}
+  return data;
+};
 
-export default instance
+export default instance;

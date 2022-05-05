@@ -23,6 +23,6 @@ const getAttributeAggQuery = (aggSize = 20, aggOptionSize = 50) => ({
       },
     },
   },
-})
+});
 
-export default getAttributeAggQuery
+export default getAttributeAggQuery;

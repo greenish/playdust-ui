@@ -1,9 +1,9 @@
 const getWindowHash = () => {
   if (typeof window === undefined) {
-    return ''
+    return '';
   }
 
-  return window.location.hash
-}
+  return window.location.hash;
+};
 
-export default getWindowHash
+export default getWindowHash;

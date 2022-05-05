@@ -1,27 +1,28 @@
-import styled from '@emotion/styled'
-import { useRecoilValueLoadable } from 'recoil'
-import searchResultsAtom from '../../_atoms/searchResults'
-import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid'
-import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults'
+import styled from '@emotion/styled';
+import React from 'react';
+import { useRecoilValueLoadable } from 'recoil';
+import searchResultsAtom from '../../_atoms/searchResults';
+import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
+import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoTokensContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
   margin-top: 64px;
-`
+`;
 
-const SearchResults = () => {
-  const loadable = useRecoilValueLoadable(searchResultsAtom)
-  const fetchMoreSearchResults = useFetchMoreSearchResults()
-  const hasValue = loadable.state === 'hasValue'
+function SearchResults() {
+  const loadable = useRecoilValueLoadable(searchResultsAtom);
+  const fetchMoreSearchResults = useFetchMoreSearchResults();
+  const hasValue = loadable.state === 'hasValue';
 
   if (hasValue && loadable.contents.total === 0) {
     return (
       <NoTokensContainer>
         <i>no results found...</i>
       </NoTokensContainer>
-    )
+    );
   }
 
   return (
@@ -34,10 +35,10 @@ const SearchResults = () => {
       tokens={hasValue ? loadable.contents.nfts : []}
       total={hasValue ? loadable.contents.total : 0}
       next={async () => {
-        await fetchMoreSearchResults()
+        await fetchMoreSearchResults();
       }}
     />
-  )
+  );
 }
 
-export default SearchResults
+export default SearchResults;

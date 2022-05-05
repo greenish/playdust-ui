@@ -1,23 +1,23 @@
-import { atom } from 'recoil'
-import getDefaultAppState from '../_helpers/getDefaultAppState'
-import validateAppState from '../_helpers/validateAppState'
-import WindowUnion from '../_types/WindowUnionType'
+import { atom } from 'recoil';
+import getDefaultAppState from '../_helpers/getDefaultAppState';
+import validateAppState from '../_helpers/validateAppState';
+import WindowUnion from '../_types/WindowUnionType';
 
 export interface WindowType {
-  state: string
-  type: WindowUnion
-  images?: string[]
+  state: string;
+  type: WindowUnion;
+  images?: string[];
 }
 
 export interface TabType {
-  id: string
-  windows: WindowType[]
-  selectedWindowIdx: number
+  id: string;
+  windows: WindowType[];
+  selectedWindowIdx: number;
 }
 
 export interface AppStateType {
-  tabs: TabType[]
-  selectedTabId: string
+  tabs: TabType[];
+  selectedTabId: string;
 }
 
 const appState = atom<AppStateType>({
@@ -26,36 +26,36 @@ const appState = atom<AppStateType>({
   effects: [
     ({ setSelf, onSet, trigger, node }) => {
       if (typeof window === 'undefined') {
-        return
+        return;
       }
 
-      const { key } = node
+      const { key } = node;
 
-      const savedValue = localStorage.getItem(key)
+      const savedValue = localStorage.getItem(key);
 
       if (trigger === 'get' && savedValue) {
-        const isValid = validateAppState(savedValue)
+        const isValid = validateAppState(savedValue);
 
         if (!isValid) {
-          return localStorage.removeItem(key)
+          return localStorage.removeItem(key);
         }
 
-        setSelf(JSON.parse(savedValue))
+        setSelf(JSON.parse(savedValue));
       }
 
       onSet((newValue, _, isReset) => {
         if (isReset) {
-          return localStorage.removeItem(key)
+          return localStorage.removeItem(key);
         }
 
-        const nextValue = JSON.stringify(newValue)
+        const nextValue = JSON.stringify(newValue);
 
         if (validateAppState(nextValue)) {
-          localStorage.setItem(key, JSON.stringify(newValue))
+          localStorage.setItem(key, JSON.stringify(newValue));
         }
-      })
+      });
     },
   ],
-})
+});
 
-export default appState
+export default appState;

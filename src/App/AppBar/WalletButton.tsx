@@ -1,4 +1,4 @@
-import { Person } from '@mui/icons-material'
+import { Person } from '@mui/icons-material';
 import {
   Fab,
   FormControl,
@@ -7,25 +7,26 @@ import {
   MenuItem,
   Select,
   Typography,
-} from '@mui/material'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { useWalletModal } from '@solana/wallet-adapter-react-ui'
-import { useEffect, useState } from 'react'
-import { useCookies } from 'react-cookie'
-import { useRecoilState } from 'recoil'
-import solanaClustersAtom from '../_atoms/solanaClusters'
-import { autoRefresh } from '../_helpers/playdustApi'
-import shortenPublicKey from '../_helpers/shortenPublicKey'
-import useGoToProfile from '../_hooks/useGoToProfile'
+} from '@mui/material';
+import { useWallet } from '@solana/wallet-adapter-react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useRecoilState } from 'recoil';
+import solanaClustersAtom from '../_atoms/solanaClusters';
+import { autoRefresh } from '../_helpers/playdustApi';
+import shortenPublicKey from '../_helpers/shortenPublicKey';
+import useGoToProfile from '../_hooks/useGoToProfile';
 
-const WalletButton = ({ active }: { active: boolean }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const walletModal = useWalletModal()
-  const wallet = useWallet()
-  const open = !!anchorEl
-  const [solanaClusters, setSolanaClusters] = useRecoilState(solanaClustersAtom)
-  const [cookies, setCookie, removeCookie] = useCookies(['authToken', 'nonce'])
-  const goToProfile = useGoToProfile()
+function WalletButton({ active }: { active: boolean }) {
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const walletModal = useWalletModal();
+  const wallet = useWallet();
+  const open = !!anchorEl;
+  const [solanaClusters, setSolanaClusters] =
+    useRecoilState(solanaClustersAtom);
+  const [cookies, setCookie, removeCookie] = useCookies(['authToken', 'nonce']);
+  const goToProfile = useGoToProfile();
 
   const buttonProps =
     wallet.connected && wallet.publicKey
@@ -37,14 +38,17 @@ const WalletButton = ({ active }: { active: boolean }) => {
       : {
           children: 'Connect Wallet',
           onClick: () => walletModal.setVisible(true),
-        }
+        };
 
   useEffect(() => {
     if (cookies && wallet.connected) {
-      const pubKey = wallet.publicKey?.toBase58()!
-      autoRefresh(pubKey, cookies.nonce, cookies.authToken, setCookie)
+      const pubKey = wallet.publicKey?.toBase58();
+
+      if (pubKey) {
+        autoRefresh(pubKey, cookies.nonce, cookies.authToken, setCookie);
+      }
     }
-  }, [wallet])
+  }, [cookies, setCookie, wallet]);
 
   return (
     <>
@@ -79,26 +83,26 @@ const WalletButton = ({ active }: { active: boolean }) => {
         <MenuItem
           sx={{ p: 2 }}
           onClick={() => {
-            wallet.disconnect()
-            removeCookie('authToken')
-            setAnchorEl(null)
+            wallet.disconnect();
+            removeCookie('authToken');
+            setAnchorEl(null);
           }}
         >
           Disconnect
         </MenuItem>
         <MenuItem sx={{ p: 2 }}>
-          <FormControl fullWidth>
+          <FormControl fullWidth={true}>
             <InputLabel>Network</InputLabel>
             <Select
               value={solanaClusters.selectedIndex}
               label="Network"
               onChange={(evt) => {
-                const nextIndex = evt.target.value
+                const nextIndex = evt.target.value;
                 if (typeof nextIndex === 'number') {
                   setSolanaClusters((curr) => ({
                     ...curr,
                     selectedIndex: nextIndex,
-                  }))
+                  }));
                 }
               }}
             >
@@ -112,7 +116,7 @@ const WalletButton = ({ active }: { active: boolean }) => {
         </MenuItem>
       </Menu>
     </>
-  )
+  );
 }
 
-export default WalletButton
+export default WalletButton;

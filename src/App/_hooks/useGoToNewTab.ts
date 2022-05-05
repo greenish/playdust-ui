@@ -1,11 +1,11 @@
-import usePushWindowHash from './usePushWindowHash'
+import usePushWindowHash from './usePushWindowHash';
 
 const useGoToNewTab = () => {
-  const pushWindowHash = usePushWindowHash()
+  const pushWindowHash = usePushWindowHash();
 
   return () => {
-    pushWindowHash({ type: 'home', state: '' }, { newTab: true })
-  }
-}
+    pushWindowHash({ type: 'home', state: '' }, { newTab: true });
+  };
+};
 
-export default useGoToNewTab
+export default useGoToNewTab;

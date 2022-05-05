@@ -1,3 +1,3 @@
-type QueryOperationUnionType = 'and' | 'or'
+type QueryOperationUnionType = 'and' | 'or';
 
-export default QueryOperationUnionType
+export default QueryOperationUnionType;

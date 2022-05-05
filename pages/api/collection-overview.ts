@@ -1,1 +1,3 @@
-export { default } from '../../src/api/getCollectionOverview'
+import getCollectionOverviw from '../../src/api/getCollectionOverview';
+
+export default getCollectionOverviw;

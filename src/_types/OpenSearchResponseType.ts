@@ -1,18 +1,18 @@
-import OpenSearchHighlightType from './OpenSearchHighlightType'
+import OpenSearchHighlightType from './OpenSearchHighlightType';
 
-interface OpenSearchResponseType<T> {
-  _scroll_id: string
+interface OpenSearchResponseType<T = unknown, A = unknown> {
+  _scroll_id: string;
   hits: {
     total: {
-      value: number
-    }
+      value: number;
+    };
     hits: {
-      _id: string
-      _source: T
-      highlight?: OpenSearchHighlightType
-    }[]
-  }
-  aggregations: any
+      _id: string;
+      _source: T;
+      highlight: OpenSearchHighlightType;
+    }[];
+  };
+  aggregations: A;
 }
 
-export default OpenSearchResponseType
+export default OpenSearchResponseType;

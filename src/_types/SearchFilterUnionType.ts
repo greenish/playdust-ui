@@ -1,3 +1,3 @@
-type SearchFilterUnionType = 'list-price' | 'sale-price' | 'rarity-score'
+type SearchFilterUnionType = 'list-price' | 'sale-price' | 'rarity-score';
 
-export default SearchFilterUnionType
+export default SearchFilterUnionType;

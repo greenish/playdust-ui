@@ -1,6 +1,6 @@
-import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType'
-import makePostScrollQuery from './makePostScrollQuery'
+import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
+import makePostScrollQuery from './makePostScrollQuery';
 
-const postNFTScrollQuery = makePostScrollQuery<OpenSearchNFTSourceType>()
+const postNFTScrollQuery = makePostScrollQuery<OpenSearchNFTSourceType>();
 
-export default postNFTScrollQuery
+export default postNFTScrollQuery;

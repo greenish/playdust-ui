@@ -1,7 +1,7 @@
-import OpenSearchCollectionSourceType from './OpenSearchCollectionSourceType'
-import type OpenSearchSourceHighlightType from './OpenSearchSourceHighlightType'
+import OpenSearchCollectionSourceType from './OpenSearchCollectionSourceType';
+import type OpenSearchSourceHighlightType from './OpenSearchSourceHighlightType';
 
 type OpenSearchCollectionSourceHighlightType =
-  OpenSearchSourceHighlightType<OpenSearchCollectionSourceType>
+  OpenSearchSourceHighlightType<OpenSearchCollectionSourceType>;
 
-export default OpenSearchCollectionSourceHighlightType
+export default OpenSearchCollectionSourceHighlightType;

@@ -1,11 +1,11 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import type TopCollectionsResponseType from '../_types/TopCollectionsResponseType'
-import postCollectionQuery from './_helpers/postCollectionQuery'
-import postCollectionScrollQuery from './_helpers/postCollectionScrollQuery'
-import postMultiNFTQuery from './_helpers/postMultiNFTQuery'
-import queriesToMultiSearch from './_helpers/queriesToMultiSearch'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type TopCollectionsResponseType from '../_types/TopCollectionsResponseType';
+import postCollectionQuery from './_helpers/postCollectionQuery';
+import postCollectionScrollQuery from './_helpers/postCollectionScrollQuery';
+import postMultiNFTQuery from './_helpers/postMultiNFTQuery';
+import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
 
-const topCollectionLimit = 100
+const topCollectionLimit = 100;
 
 const topCollectionQuery = {
   _source: {
@@ -20,7 +20,7 @@ const topCollectionQuery = {
       },
     },
   ],
-}
+};
 
 const getNFTQuery = (collectionId: string) => ({
   size: 20,
@@ -51,54 +51,54 @@ const getNFTQuery = (collectionId: string) => ({
       rarityScore: 'asc',
     },
   ],
-})
+});
 
 const fetchTopCollections = async (cursor?: string) => {
   if (cursor) {
-    const result = await postCollectionScrollQuery(cursor)
+    const result = await postCollectionScrollQuery(cursor);
 
-    return result
+    return result;
   }
 
   const topCollectionResult = await postCollectionQuery(
     topCollectionQuery,
     true
-  )
+  );
 
-  return topCollectionResult
-}
+  return topCollectionResult;
+};
 
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<TopCollectionsResponseType>
 ) => {
   try {
-    const cursor = req.body.cursor as string | undefined
+    const cursor = req.body.cursor as string | undefined;
 
-    const topCollectionResult = await fetchTopCollections(cursor)
+    const topCollectionResult = await fetchTopCollections(cursor);
 
     const topNFTQueries = topCollectionResult.hits.hits.map((entry) =>
       getNFTQuery(entry._id)
-    )
-    const multiNftQuery = queriesToMultiSearch(topNFTQueries, 'nft-metadata')
-    const nftResults = await postMultiNFTQuery(multiNftQuery)
+    );
+    const multiNftQuery = queriesToMultiSearch(topNFTQueries, 'nft-metadata');
+    const nftResults = await postMultiNFTQuery(multiNftQuery);
     const nftSources = nftResults.map((entry) =>
       entry.hits.hits.map((child) => child._source)
-    )
+    );
 
     const results = topCollectionResult.hits.hits.map((collection, idx) => ({
       collection: collection._source,
       nfts: nftSources[idx],
-    }))
+    }));
 
     res.json({
       results,
       cursor: topCollectionResult._scroll_id,
       total: topCollectionLimit,
-    })
+    });
   } catch (e) {
-    res.status(500).end(e)
+    res.status(500).end(e);
   }
-}
+};
 
-export default handler
+export default handler;

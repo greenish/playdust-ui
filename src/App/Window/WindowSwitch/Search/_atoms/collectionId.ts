@@ -1,19 +1,19 @@
-import { selector } from 'recoil'
-import isCollectionQueryAtom from '../../../_atoms/isCollectionQuery'
-import searchQueryNoRanges from '../../../_atoms/searchQueryNoRanges'
+import { selector } from 'recoil';
+import isCollectionQueryAtom from '../../../_atoms/isCollectionQuery';
+import searchQueryNoRanges from '../../../_atoms/searchQueryNoRanges';
 
-const collectionId = selector({
+const collectionId = selector<string>({
   key: 'collectionId',
   get: ({ get }) => {
-    const isCollectionQuery = get(isCollectionQueryAtom)
+    const isCollectionQuery = get(isCollectionQueryAtom);
 
     if (!isCollectionQuery) {
-      return undefined
+      return '';
     }
-    const query = get(searchQueryNoRanges)
+    const query = get(searchQueryNoRanges);
 
-    return query[0][0].value as string
+    return (query[0][0].value as string) || '';
   },
-})
+});
 
-export default collectionId
+export default collectionId;

@@ -1,4 +1,4 @@
-import ComposedQueryType from '../../../_types/ComposedQueryType'
+import ComposedQueryType from '../../../_types/ComposedQueryType';
 
 const removeQueryNode = (
   state: ComposedQueryType,
@@ -6,9 +6,9 @@ const removeQueryNode = (
 ): ComposedQueryType => {
   const nextQuery = state
     .map((parent) => parent.filter((child) => child.id !== id))
-    .filter((parent) => parent.length > 0)
+    .filter((parent) => parent.length > 0);
 
-  return nextQuery
-}
+  return nextQuery;
+};
 
-export default removeQueryNode
+export default removeQueryNode;

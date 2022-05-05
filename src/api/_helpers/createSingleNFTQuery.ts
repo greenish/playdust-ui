@@ -1,28 +1,29 @@
-import type AttributeQueryNodeType from '../../_types/AttributeQueryNodeType'
-import type CollectionQueryNodeTYpe from '../../_types/CollectionQueryNodeType'
-import type QueryNodeType from '../../_types/QueryNodeType'
-import type SearchFilterUnionType from '../../_types/SearchFilterUnionType'
-import type TextQueryNodeType from '../../_types/TextQueryNodeType'
+import type AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
+import type CollectionQueryNodeTYpe from '../../_types/CollectionQueryNodeType';
+import type QueryNodeType from '../../_types/QueryNodeType';
+import type SearchFilterUnionType from '../../_types/SearchFilterUnionType';
+import type TextQueryNodeType from '../../_types/TextQueryNodeType';
 
 const getRangeField = (field: SearchFilterUnionType) => {
   switch (field) {
     case 'list-price':
-      return 'lastListPrice'
+      return 'lastListPrice';
     case 'sale-price':
-      return 'lastTradePrice'
+      return 'lastTradePrice';
     case 'rarity-score':
-      return 'normalizedRarityScore'
-    default:
-      const n: never = field
+      return 'normalizedRarityScore';
+    default: {
+      const n: never = field;
 
-      return n
+      return n;
+    }
   }
-}
+};
 
 const createSingleNFTQuery = (child: QueryNodeType) => {
   switch (child.field) {
     case 'attribute': {
-      const { trait, value } = child as AttributeQueryNodeType
+      const { trait, value } = child as AttributeQueryNodeType;
 
       return {
         nested: {
@@ -49,19 +50,19 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
             },
           },
         },
-      }
+      };
     }
     case 'collection': {
-      const { value } = child as CollectionQueryNodeTYpe
+      const { value } = child as CollectionQueryNodeTYpe;
 
       return {
         term: {
           heuristicCollectionId: value,
         },
-      }
+      };
     }
     case 'text': {
-      const { value } = child as TextQueryNodeType
+      const { value } = child as TextQueryNodeType;
 
       return {
         nested: {
@@ -74,10 +75,10 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
             },
           },
         },
-      }
+      };
     }
-    case 'range':
-      const rangeField = getRangeField(child.value)
+    case 'range': {
+      const rangeField = getRangeField(child.value);
 
       return {
         bool: {
@@ -97,11 +98,12 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
             },
           ].filter(Boolean),
         },
-      }
+      };
+    }
     default: {
-      return false
+      return false;
     }
   }
-}
+};
 
-export default createSingleNFTQuery
+export default createSingleNFTQuery;

@@ -1,5 +1,5 @@
-import makeUseNavigateWindowHash from '../_helpers/makeUseNavigateWindowHash'
+import makeUseNavigateWindowHash from '../_helpers/makeUseNavigateWindowHash';
 
-const usePushWindowHash = makeUseNavigateWindowHash('push')
+const usePushWindowHash = makeUseNavigateWindowHash('push');
 
-export default usePushWindowHash
+export default usePushWindowHash;

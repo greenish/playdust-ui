@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType'
-import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType'
-import postCollectionQuery from './_helpers/postCollectionQuery'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
+import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
+import postCollectionQuery from './_helpers/postCollectionQuery';
 
 const getSeedQuery = (collectionId: string) => ({
   size: 1,
@@ -13,7 +13,7 @@ const getSeedQuery = (collectionId: string) => ({
       values: [collectionId],
     },
   },
-})
+});
 
 const getSimilarCollectionQuery = ({
   id,
@@ -74,39 +74,39 @@ const getSimilarCollectionQuery = ({
       },
     },
   ],
-})
+});
 
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<CollectionOverviewResponseType>
 ) => {
   try {
-    const collectionId = req.query.id as string
+    const collectionId = req.query.id as string;
 
-    const seedQuery = getSeedQuery(collectionId)
-    const seedResult = await postCollectionQuery(seedQuery)
+    const seedQuery = getSeedQuery(collectionId);
+    const seedResult = await postCollectionQuery(seedQuery);
 
-    const seed = seedResult.hits.hits[0]._source
+    const seed = seedResult.hits.hits[0]._source;
 
-    const similarCollectionQuery = getSimilarCollectionQuery(seed)
-    const similarResult = await postCollectionQuery(similarCollectionQuery)
+    const similarCollectionQuery = getSimilarCollectionQuery(seed);
+    const similarResult = await postCollectionQuery(similarCollectionQuery);
     const similar: OpenSearchCollectionSourceType[] = similarResult.hits.hits
       .map(({ _source }) => ({
         ..._source,
         totalVolume: _source.totalVolume || 0,
       }))
-      .sort((a, b) => b.totalVolume - a.totalVolume)
+      .sort((a, b) => b.totalVolume - a.totalVolume);
 
     res.json({
       ...seed,
       totalVolume: seed.totalVolume || 0,
       elementCount: seed.elementCount || 0,
       similar,
-    })
+    });
   } catch (e) {
-    console.error('e', e)
-    res.status(500).end()
+    console.error('e', e);
+    res.status(500).end();
   }
-}
+};
 
-export default handler
+export default handler;

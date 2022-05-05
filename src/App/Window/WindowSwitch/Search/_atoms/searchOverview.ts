@@ -1,12 +1,12 @@
-import { selector } from 'recoil'
-import type SearchOverviewResponseType from '../../../../../_types/SearchOverviewResponseType'
-import frontendApi from '../../../../_helpers/frontendApi'
-import searchState from '../../../_atoms/searchState'
+import { selector } from 'recoil';
+import type SearchOverviewResponseType from '../../../../../_types/SearchOverviewResponseType';
+import frontendApi from '../../../../_helpers/frontendApi';
+import searchState from '../../../_atoms/searchState';
 
 const searchOverview = selector<SearchOverviewResponseType>({
   key: 'searchOverview',
   get: async ({ get }) => {
-    const parsed = get(searchState)
+    const parsed = get(searchState);
 
     if (!parsed) {
       return {
@@ -14,7 +14,7 @@ const searchOverview = selector<SearchOverviewResponseType>({
         floor: 0,
         ceiling: 0,
         count: 0,
-      }
+      };
     }
 
     const { data } = await frontendApi.post<SearchOverviewResponseType>(
@@ -22,10 +22,10 @@ const searchOverview = selector<SearchOverviewResponseType>({
       {
         query: parsed.query,
       }
-    )
+    );
 
-    return data
+    return data;
   },
-})
+});
 
-export default searchOverview
+export default searchOverview;

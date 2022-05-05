@@ -1,13 +1,13 @@
-import { nanoid } from 'nanoid'
-import type { AppStateType, WindowType } from '../_atoms/appState'
+import { nanoid } from 'nanoid';
+import type { AppStateType, WindowType } from '../_atoms/appState';
 
 const homeWindow: WindowType = {
   type: 'home',
   state: '',
-}
+};
 
 const getDefaultAppState = (idOverride?: string): AppStateType => {
-  const id = idOverride || nanoid()
+  const id = idOverride || nanoid();
 
   return {
     tabs: [
@@ -18,7 +18,7 @@ const getDefaultAppState = (idOverride?: string): AppStateType => {
       },
     ],
     selectedTabId: id,
-  }
-}
+  };
+};
 
-export default getDefaultAppState
+export default getDefaultAppState;

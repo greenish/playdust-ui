@@ -1,7 +1,7 @@
-import makeUseQueryChange from '../_helpers/makeUseQueryChange'
+import makeUseQueryChange from '../_helpers/makeUseQueryChange';
 
-const useSetOnlyListed = makeUseQueryChange<boolean>(() => (nextOnlyListed) => {
-  return { onlyListed: nextOnlyListed }
-})
+const useSetOnlyListed = makeUseQueryChange<boolean>(
+  () => (nextOnlyListed) => ({ onlyListed: nextOnlyListed })
+);
 
-export default useSetOnlyListed
+export default useSetOnlyListed;

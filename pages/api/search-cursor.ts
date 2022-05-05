@@ -1,1 +1,3 @@
-export { default } from '../../src/api/getSearchCursor'
+import getSearchCursor from '../../src/api/getSearchCursor';
+
+export default getSearchCursor;

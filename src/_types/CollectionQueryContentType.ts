@@ -1,6 +1,6 @@
 interface CollectionQueryContentType {
-  field: 'collection'
-  value: string
+  field: 'collection';
+  value: string;
 }
 
-export default CollectionQueryContentType
+export default CollectionQueryContentType;

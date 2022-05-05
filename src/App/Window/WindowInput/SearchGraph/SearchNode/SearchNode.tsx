@@ -1,38 +1,38 @@
-import styled from '@emotion/styled'
-import { Close } from '@mui/icons-material'
-import { Card, CardContent, IconButton, Typography } from '@mui/material'
-import { CSSProperties } from 'react'
-import { Handle, NodeComponentProps, Position } from 'react-flow-renderer'
-import { useRecoilValue } from 'recoil'
-import type QueryNodeType from '../../../../../_types/QueryNodeType'
-import searchQueryChildAtom from '../../../_atoms/searchQueryChild'
-import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode'
-import SearchValueNode from './SearchValueNode/SearchValueNode'
+import styled from '@emotion/styled';
+import { Close } from '@mui/icons-material';
+import { Card, CardContent, IconButton, Typography } from '@mui/material';
+import React, { CSSProperties } from 'react';
+import { Handle, NodeComponentProps, Position } from 'react-flow-renderer';
+import { useRecoilValue } from 'recoil';
+import type QueryNodeType from '../../../../../_types/QueryNodeType';
+import searchQueryChildAtom from '../../../_atoms/searchQueryChild';
+import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode';
+import SearchValueNode from './SearchValueNode/SearchValueNode';
 
 const CloseContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: -8px;
-`
+`;
 
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
-`
+`;
 
 const getStyle = (show: boolean): Partial<CSSProperties> => ({
   visibility: show ? 'visible' : 'hidden',
-})
+});
 
 const getTitle = (query: QueryNodeType) => {
   switch (query.field) {
     case 'text':
-      return 'Search by:'
+      return 'Search by:';
     case 'range':
-      return `Filter by ${query.value} (SOL):`
+      return `Filter by ${query.value} (SOL):`;
     default:
       return query.field
         .match(/[A-Za-z][a-z]*/g)
@@ -40,17 +40,17 @@ const getTitle = (query: QueryNodeType) => {
           ([firstLetter, ...rest]) =>
             `${firstLetter.toUpperCase()}${rest.join('')}`
         )
-        .join(' ')
+        .join(' ');
   }
-}
+};
 
-const SearchNode = ({ id, data }: NodeComponentProps) => {
-  const removeQueryNode = useRemoveQueryNode('memory')
-  const query = useRecoilValue(searchQueryChildAtom(id))
-  const handles = data?.handles || {}
+function SearchNode({ id, data }: NodeComponentProps) {
+  const removeQueryNode = useRemoveQueryNode('memory');
+  const query = useRecoilValue(searchQueryChildAtom(id));
+  const handles = data?.handles || {};
 
   if (!query) {
-    return <></>
+    return null;
   }
 
   return (
@@ -93,7 +93,7 @@ const SearchNode = ({ id, data }: NodeComponentProps) => {
         style={getStyle(handles.left)}
       />
     </>
-  )
+  );
 }
 
-export default SearchNode
+export default SearchNode;

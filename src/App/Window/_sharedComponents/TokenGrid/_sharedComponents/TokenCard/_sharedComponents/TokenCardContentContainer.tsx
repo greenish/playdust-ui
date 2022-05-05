@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
 const TokenCardContentContainer = styled.div`
   height: 100%;
@@ -8,6 +8,6 @@ const TokenCardContentContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
+`;
 
-export default TokenCardContentContainer
+export default TokenCardContentContainer;

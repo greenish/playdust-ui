@@ -17,6 +17,7 @@ const nextConfig = {
       destination: `${PLAYDUST_API_HOST}/:path*`,
     },
   ],
+  ignoreDuringBuilds: true,
 }
 
 module.exports = nextConfig

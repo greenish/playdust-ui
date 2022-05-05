@@ -1,49 +1,50 @@
-import styled from '@emotion/styled'
-import { Checkbox, FormControlLabel } from '@mui/material'
-import { useMemo, useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import useAddRangeQueryNode from '../../../_hooks/useAddRangeQueryNode'
-import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode'
-import useUpdateRangeQueryNode from '../../../_hooks/useUpdateRangeQueryNode'
-import RangeInput from '../../../_sharedComponents/RangeInput'
-import rangeQueryByNameAtom from '../_atoms/rangeQueryByName'
-import searchFiltersAtom, { SearchFilterType } from '../_atoms/searchFilters'
+import styled from '@emotion/styled';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import useAddRangeQueryNode from '../../../_hooks/useAddRangeQueryNode';
+import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode';
+import useUpdateRangeQueryNode from '../../../_hooks/useUpdateRangeQueryNode';
+import RangeInput from '../../../_sharedComponents/RangeInput';
+import rangeQueryByNameAtom from '../_atoms/rangeQueryByName';
+import searchFiltersAtom, { SearchFilterType } from '../_atoms/searchFilters';
 
 const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 8px;
-`
+`;
 
-const RangeFilter = ({ label, name }: SearchFilterType) => {
-  const addRangeQueryNode = useAddRangeQueryNode()
-  const removeQueryNode = useRemoveQueryNode()
-  const queryValue = useRecoilValue(rangeQueryByNameAtom(name))
-  const updateRangeQueryNode = useUpdateRangeQueryNode()
+function RangeFilter({ label, name }: SearchFilterType) {
+  const addRangeQueryNode = useAddRangeQueryNode();
+  const removeQueryNode = useRemoveQueryNode();
+  const queryValue = useRecoilValue(rangeQueryByNameAtom(name));
+  const updateRangeQueryNode = useUpdateRangeQueryNode();
 
   const [local, setLocal] = useState({
     visible: false,
     min: 0,
     max: 0,
-  })
+  });
 
   const { visible, setVisible, min, max } = useMemo(() => {
-    if (!!queryValue) {
+    if (queryValue) {
       return {
         visible: true,
         min: queryValue.min,
         max: queryValue.max,
         setVisible: () => removeQueryNode(queryValue.id),
-      }
+      };
     }
 
     return {
       visible: local.visible,
       min: undefined,
       max: undefined,
-      setVisible: (visible: boolean) => setLocal({ ...local, visible }),
-    }
-  }, [local, queryValue])
+      setVisible: (newValue: boolean) =>
+        setLocal({ ...local, visible: newValue }),
+    };
+  }, [local, queryValue, removeQueryNode]);
 
   return (
     <ItemContainer key={name}>
@@ -71,11 +72,11 @@ const RangeFilter = ({ label, name }: SearchFilterType) => {
         />
       )}
     </ItemContainer>
-  )
+  );
 }
 
-const RangeFilters = () => {
-  const filters = useRecoilValue(searchFiltersAtom)
+function RangeFilters() {
+  const filters = useRecoilValue(searchFiltersAtom);
 
   return (
     <>
@@ -83,7 +84,7 @@ const RangeFilters = () => {
         <RangeFilter key={filter.name} {...filter} />
       ))}
     </>
-  )
+  );
 }
 
-export default RangeFilters
+export default RangeFilters;

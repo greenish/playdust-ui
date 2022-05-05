@@ -2,7 +2,7 @@ import { Grid, Stack, Typography } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect, useState } from 'react'
 import { getNFTCensorStatus } from '../../../../App/_helpers/playdustApi'
-import statusEnum from '../../../../App/_helpers/statusEnum'
+import statusEnum from '../../../../App/_types/StatusEnumType'
 import { useNFTDetails } from '../../../store'
 import {
   Attributes,

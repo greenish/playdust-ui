@@ -1,56 +1,51 @@
-import styled from '@emotion/styled'
-import { Chip, Skeleton, Typography } from '@mui/material'
-import { Suspense } from 'react'
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import type SearchOverviewResponseType from '../../../../../_types/SearchOverviewResponseType'
-import humanizeSolana from '../../../../_helpers/humanizeSolana'
-import collectionIdAtom from '../_atoms/collectionId'
-import searchOverviewAtom from '../_atoms/searchOverview'
-import CollectionOverview from './CollectionOverview/CollectionOverview'
+import styled from '@emotion/styled';
+import { Chip, Skeleton, Typography } from '@mui/material';
+import React, { Suspense } from 'react';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import type SearchOverviewResponseType from '../../../../../_types/SearchOverviewResponseType';
+import humanizeSolana from '../../../../_helpers/humanizeSolana';
+import collectionIdAtom from '../_atoms/collectionId';
+import searchOverviewAtom from '../_atoms/searchOverview';
+import CollectionOverview from './CollectionOverview/CollectionOverview';
 
 const RootContainer = styled.div`
   height: 48px;
   display: flex;
   align-items: center;
   overflow-x: scroll;
-`
+`;
 
 const ChipContentContainer = styled.div`
   display: flex;
-`
+`;
 
-const max = 10000
+const max = 10000;
 
 const chips = [
   {
     label: 'Total Items',
-    getValue: ({ count }: SearchOverviewResponseType) => {
-      return `${count.toLocaleString()}${count >= max ? '+' : ''}`
-    },
+    getValue: ({ count }: SearchOverviewResponseType) =>
+      `${count.toLocaleString()}${count >= max ? '+' : ''}`,
   },
   {
     label: 'Listed Items',
-    getValue: ({ listed }: SearchOverviewResponseType) => {
-      return listed.toLocaleString()
-    },
+    getValue: ({ listed }: SearchOverviewResponseType) =>
+      listed.toLocaleString(),
   },
   {
     label: 'Floor Price',
-    getValue: ({ floor }: SearchOverviewResponseType) => {
-      return humanizeSolana(floor)
-    },
+    getValue: ({ floor }: SearchOverviewResponseType) => humanizeSolana(floor),
   },
   {
     label: 'Ceiling Price',
-    getValue: ({ ceiling }: SearchOverviewResponseType) => {
-      return humanizeSolana(ceiling)
-    },
+    getValue: ({ ceiling }: SearchOverviewResponseType) =>
+      humanizeSolana(ceiling),
   },
-]
+];
 
-const SearchOverview = () => {
-  const { state, contents } = useRecoilValueLoadable(searchOverviewAtom)
-  const collectionId = useRecoilValue(collectionIdAtom)
+function SearchOverview() {
+  const { state, contents } = useRecoilValueLoadable(searchOverviewAtom);
+  const collectionId = useRecoilValue(collectionIdAtom);
 
   return (
     <RootContainer>
@@ -73,13 +68,13 @@ const SearchOverview = () => {
         />
       ))}
       {collectionId && (
-        <Suspense fallback={<></>}>
+        <Suspense fallback={null}>
           <Typography sx={{ mr: 1 }}>&middot;</Typography>
           <CollectionOverview />
         </Suspense>
       )}
     </RootContainer>
-  )
+  );
 }
 
-export default SearchOverview
+export default SearchOverview;

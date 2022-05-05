@@ -1,34 +1,34 @@
-import type ComposedQueryType from '../../_types/ComposedQueryType'
-import type QueryNodeType from '../../_types/QueryNodeType'
-import type SearchSortType from '../../_types/SearchSortType'
-import createSingleNFTQuery from './createSingleNFTQuery'
+import type ComposedQueryType from '../../_types/ComposedQueryType';
+import type QueryNodeType from '../../_types/QueryNodeType';
+import type SearchSortType from '../../_types/SearchSortType';
+import createSingleNFTQuery from './createSingleNFTQuery';
 
 const createOrQuery = (entries: QueryNodeType[]) => ({
   bool: {
     should: entries.map((entry) => createSingleNFTQuery(entry)),
   },
-})
+});
 
 const sortMappings: {
-  [key: string]: string
+  [key: string]: string;
 } = {
   name: 'offChainData.name.sort',
   'list-price': 'lastListPrice',
   'sale-price': 'lastTradePrice',
   'rarity-score': 'normalizedRarityScore',
-}
+};
 
 const getNFTQueryBase = (query: ComposedQueryType, onlyListed: boolean) => {
   const result = query
     .map((parent) => {
       if (parent.length === 1) {
-        const firstChild = parent[0]
-        return createSingleNFTQuery(firstChild)
+        const firstChild = parent[0];
+        return createSingleNFTQuery(firstChild);
       }
 
-      return createOrQuery(parent)
+      return createOrQuery(parent);
     })
-    .filter(Boolean)
+    .filter(Boolean);
 
   return onlyListed
     ? [
@@ -39,8 +39,8 @@ const getNFTQueryBase = (query: ComposedQueryType, onlyListed: boolean) => {
           },
         },
       ]
-    : result
-}
+    : result;
+};
 
 const getNFTQuery = (
   query: ComposedQueryType,
@@ -48,15 +48,15 @@ const getNFTQuery = (
   sort?: SearchSortType,
   onlyListed?: boolean
 ) => {
-  const queryBase = getNFTQueryBase(query, Boolean(onlyListed))
+  const queryBase = getNFTQueryBase(query, Boolean(onlyListed));
 
-  const isRelevanceSort = sort?.field === 'relevance'
-  const filterKey = isRelevanceSort ? 'must' : 'filter'
+  const isRelevanceSort = sort?.field === 'relevance';
+  const filterKey = isRelevanceSort ? 'must' : 'filter';
   const baseQuery = {
     [filterKey]: queryBase,
-  }
+  };
 
-  const nftQuery: { [key: string]: any } = {
+  const nftQuery: { [key: string]: object | number } = {
     size: resultSize === undefined ? 25 : resultSize,
     query: {
       bool:
@@ -99,15 +99,15 @@ const getNFTQuery = (
             }
           : baseQuery,
     },
-  }
+  };
 
-  const sortMapping = sort && sortMappings[sort.field]
+  const sortMapping = sort && sortMappings[sort.field];
   if (sortMapping) {
     nftQuery.sort = [
       {
         [sortMapping]: sort.direction,
       },
-    ]
+    ];
   }
 
   if (isRelevanceSort) {
@@ -116,10 +116,10 @@ const getNFTQuery = (
       {
         [sortMappings.name]: 'asc',
       },
-    ]
+    ];
   }
 
-  return nftQuery
-}
+  return nftQuery;
+};
 
-export default getNFTQuery
+export default getNFTQuery;

@@ -1,11 +1,12 @@
-import { FormControlLabel, Switch } from '@mui/material'
-import { useRecoilValue } from 'recoil'
-import searchStateAtom from '../../../_atoms/searchState'
-import useSetOnlyListed from '../../../_hooks/useSetOnlyListed'
+import { FormControlLabel, Switch } from '@mui/material';
+import React from 'react';
+import { useRecoilValue } from 'recoil';
+import searchStateAtom from '../../../_atoms/searchState';
+import useSetOnlyListed from '../../../_hooks/useSetOnlyListed';
 
-const OnlyListedSwitch = () => {
-  const { onlyListed } = useRecoilValue(searchStateAtom)
-  const setOnlyListed = useSetOnlyListed()
+function OnlyListedSwitch() {
+  const { onlyListed } = useRecoilValue(searchStateAtom);
+  const setOnlyListed = useSetOnlyListed();
 
   return (
     <FormControlLabel
@@ -17,7 +18,7 @@ const OnlyListedSwitch = () => {
       }
       label="Only Listed Items"
     />
-  )
+  );
 }
 
-export default OnlyListedSwitch
+export default OnlyListedSwitch;

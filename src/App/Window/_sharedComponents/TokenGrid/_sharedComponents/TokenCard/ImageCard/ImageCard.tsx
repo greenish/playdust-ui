@@ -1,63 +1,39 @@
-import styled from '@emotion/styled'
-import { Paper, Skeleton } from '@mui/material'
-import { Box } from '@mui/system'
-import { PropsWithChildren, useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import Status from '../../../../../../_helpers/statusEnum'
-import collectionStatusAtom from '../../../../../_atoms/collectionStatus'
-import Link from '../../../../Link'
-import TokenCardContentContainer from '../_sharedComponents/TokenCardContentContainer'
-import LazyImage from './LazyImage'
+import styled from '@emotion/styled';
+import { Box, Paper, Skeleton } from '@mui/material';
+import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import StatusEnum from '../../../../../../_types/StatusEnumType';
+import collectionStatusAtom from '../../../../../_atoms/collectionStatus';
+import Link from '../../../../Link';
+import TokenCardContentContainer from '../_sharedComponents/TokenCardContentContainer';
+import LazyImage from './LazyImage';
 
 const CardImageContainer = styled.div`
   display: flex;
   justify-content: center;
-`
-
-type LinkWrapperProps = PropsWithChildren<{
-  href: string | undefined
-  onClick?: () => any
-}>
-
-const LinkWrapper = ({ href, children, onClick }: LinkWrapperProps) => {
-  if (href) {
-    return <Link href={href}>{children}</Link>
-  }
-
-  if (onClick) {
-    return (
-      <div style={{ cursor: 'pointer' }} onClick={onClick}>
-        {children}
-      </div>
-    )
-  }
-
-  return <>{children}</>
-}
+`;
 
 export interface ImageCardProps {
-  src?: string
-  href?: string
-  imageSize: number
-  content: React.ReactElement
-  contentHeight: number
-  onClick?: () => any
+  src?: string;
+  href: string;
+  imageSize: number;
+  content: JSX.Element | null;
+  contentHeight: number;
 }
 
-const ImageCard = ({
+function ImageCard({
   src,
   href,
   imageSize,
   content,
   contentHeight,
-  onClick,
-}: ImageCardProps) => {
-  const [isLoaded, setIsLoaded] = useState(false)
-  const status = useRecoilValue(collectionStatusAtom)
+}: ImageCardProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const status = useRecoilValue(collectionStatusAtom);
 
   return (
-    <Paper sx={{ width: imageSize }} square>
-      <LinkWrapper href={href} onClick={onClick}>
+    <Paper sx={{ width: imageSize }} square={true}>
+      <Link href={href}>
         {src && (
           <CardImageContainer style={{ maxHeight: imageSize }}>
             <LazyImage
@@ -69,7 +45,8 @@ const ImageCard = ({
                       width: imageSize,
                       height: imageSize,
                       filter:
-                        status === Status.Censored || status === Status.NSFW
+                        status === StatusEnum.Censored ||
+                        status === StatusEnum.NSFW
                           ? 'blur(1.5rem)'
                           : 'none',
                     }
@@ -92,8 +69,8 @@ const ImageCard = ({
             variant="rectangular"
           />
         )}
-      </LinkWrapper>
-      {contentHeight !== 0 && (
+      </Link>
+      {content && (
         <Box
           sx={{
             maxHeight: contentHeight,
@@ -106,7 +83,7 @@ const ImageCard = ({
         </Box>
       )}
     </Paper>
-  )
+  );
 }
 
-export default ImageCard
+export default ImageCard;

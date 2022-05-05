@@ -1,4 +1,4 @@
-import { FilterAlt } from '@mui/icons-material'
+import { FilterAlt } from '@mui/icons-material';
 import {
   Button,
   Checkbox,
@@ -7,29 +7,29 @@ import {
   FormGroup,
   IconButton,
   Popover,
-} from '@mui/material'
-import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType'
-import isCollectionQueryAtom from '../../../../_atoms/isCollectionQuery'
-import searchQueryAttributesAtom from '../../../../_atoms/searchQueryAttributes'
-import useAddAttributeQueryNode from '../../../../_hooks/useAddAttributeQueryNode'
-import usePrependCollectionQueryNode from '../../../../_hooks/usePrependCollectionQueryNode'
-import useUpdateAttributeQueryNode from '../../../../_hooks/useUpdateAttributeQueryNode'
+} from '@mui/material';
+import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType';
+import isCollectionQueryAtom from '../../../../_atoms/isCollectionQuery';
+import searchQueryAttributesAtom from '../../../../_atoms/searchQueryAttributes';
+import useAddAttributeQueryNode from '../../../../_hooks/useAddAttributeQueryNode';
+import usePrependCollectionQueryNode from '../../../../_hooks/usePrependCollectionQueryNode';
+import useUpdateAttributeQueryNode from '../../../../_hooks/useUpdateAttributeQueryNode';
 
-interface TokenCardFilter {
-  metadata: OpenSearchNFTSourceType
+interface TokenCardFilterProps {
+  metadata: OpenSearchNFTSourceType;
 }
 
-const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const addAttributeQueryNode = useAddAttributeQueryNode()
-  const updateAtrributeQueryNode = useUpdateAttributeQueryNode()
-  const exactAttributes = useRecoilValue(searchQueryAttributesAtom)
-  const isCollectionQuery = useRecoilValue(isCollectionQueryAtom)
-  const attributes = metadata.offChainData.attributes!
-  const prependCollectionQueryNode = usePrependCollectionQueryNode()
-  const { heuristicCollectionId } = metadata
+function TokenCardFilter({ metadata }: TokenCardFilterProps) {
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const addAttributeQueryNode = useAddAttributeQueryNode();
+  const updateAtrributeQueryNode = useUpdateAttributeQueryNode();
+  const exactAttributes = useRecoilValue(searchQueryAttributesAtom);
+  const isCollectionQuery = useRecoilValue(isCollectionQueryAtom);
+  const attributes = metadata.offChainData.attributes || [];
+  const prependCollectionQueryNode = usePrependCollectionQueryNode();
+  const { heuristicCollectionId } = metadata;
 
   return (
     <>
@@ -57,7 +57,7 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
                 (entry) =>
                   entry.trait === attribute.trait_type &&
                   entry.value?.includes(attribute.value)
-              )
+              );
 
               return (
                 <FormControlLabel
@@ -65,13 +65,13 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
                   control={
                     <Checkbox
                       checked={!!found}
-                      onChange={(_evt) => {
+                      onChange={() => {
                         if (!found) {
                           addAttributeQueryNode({
                             value: [attribute.value],
                             trait: attribute.trait_type,
                             operation: 'and',
-                          })
+                          });
                         } else {
                           updateAtrributeQueryNode({
                             id: found.id,
@@ -81,22 +81,22 @@ const TokenCardFilter = ({ metadata }: TokenCardFilter) => {
                               ),
                             },
                             clearOnEmpty: true,
-                          })
+                          });
                         }
 
-                        setAnchorEl(null)
+                        setAnchorEl(null);
                       }}
                     />
                   }
                   label={`${attribute.trait_type}: ${attribute.value}`}
                 />
-              )
+              );
             })}
           </FormGroup>
         </FormControl>
       </Popover>
     </>
-  )
+  );
 }
 
-export default TokenCardFilter
+export default TokenCardFilter;

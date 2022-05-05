@@ -1,5 +1,5 @@
-import type ComposedQueryType from '../../../_types/ComposedQueryType'
-import type QueryNodeType from '../../../_types/QueryNodeType'
+import type ComposedQueryType from '../../../_types/ComposedQueryType';
+import type QueryNodeType from '../../../_types/QueryNodeType';
 
 const updateQueryNode = (
   state: ComposedQueryType,
@@ -12,14 +12,14 @@ const updateQueryNode = (
         return {
           ...child,
           ...update,
-        }
+        };
       }
 
-      return child
+      return child;
     })
-  ) as ComposedQueryType
+  ) as ComposedQueryType;
 
-  return nextQuery
-}
+  return nextQuery;
+};
 
-export default updateQueryNode
+export default updateQueryNode;

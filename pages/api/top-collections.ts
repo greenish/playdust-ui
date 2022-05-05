@@ -1,1 +1,3 @@
-export { default } from '../../src/api/getTopCollections'
+import getTopCollections from '../../src/api/getTopCollections';
+
+export default getTopCollections;

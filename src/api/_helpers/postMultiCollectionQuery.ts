@@ -1,7 +1,7 @@
-import type OpenSearchCollectionSourceType from '../../_types/OpenSearchCollectionSourceType'
-import makePostMultiQuery from './makePostMultiQuery'
+import type OpenSearchCollectionSourceType from '../../_types/OpenSearchCollectionSourceType';
+import makePostMultiQuery from './makePostMultiQuery';
 
 const postMutliCollectionQuery =
-  makePostMultiQuery<OpenSearchCollectionSourceType>()
+  makePostMultiQuery<OpenSearchCollectionSourceType>();
 
-export default postMutliCollectionQuery
+export default postMutliCollectionQuery;

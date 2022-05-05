@@ -1,5 +1,5 @@
 interface OpenSearchHighlightType {
-  [key: string]: string[]
+  [key: string]: string[];
 }
 
-export default OpenSearchHighlightType
+export default OpenSearchHighlightType;

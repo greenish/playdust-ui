@@ -1,13 +1,13 @@
-import { selector } from 'recoil'
-import searchQueryValid from '../../../_atoms/searchQueryValid'
+import { selector } from 'recoil';
+import searchQueryValid from '../../../_atoms/searchQueryValid';
 
 const isRangeQuery = selector({
   key: 'isRangeQuery',
   get: ({ get }) => {
-    const valid = get(searchQueryValid)
+    const valid = get(searchQueryValid);
 
-    return valid[0][0].field === 'range'
+    return valid[0][0].field === 'range';
   },
-})
+});
 
-export default isRangeQuery
+export default isRangeQuery;

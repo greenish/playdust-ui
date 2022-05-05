@@ -1,15 +1,15 @@
-import { Card, Skeleton } from '@mui/material'
-import { Box } from '@mui/system'
-import type { ImageCardProps } from './ImageCard/ImageCard'
-import TokenCardContentContainer from './_sharedComponents/TokenCardContentContainer'
+import { Box, Card, Skeleton } from '@mui/material';
+import React from 'react';
+import type { TokenCardProps } from './TokenCard';
+import TokenCardContentContainer from './_sharedComponents/TokenCardContentContainer';
 
-const SkeletonImageCard = ({
+function SkeletonImageCard({
   imageSize,
   contentHeight,
-}: Partial<ImageCardProps>) => {
+}: Partial<TokenCardProps>) {
   return (
     <div>
-      <Card sx={{ width: imageSize }} square>
+      <Card sx={{ width: imageSize }} square={true}>
         <Skeleton
           sx={{
             height: imageSize,
@@ -28,7 +28,7 @@ const SkeletonImageCard = ({
         </Box>
       </Card>
     </div>
-  )
+  );
 }
 
-export default SkeletonImageCard
+export default SkeletonImageCard;

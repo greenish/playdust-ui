@@ -1,1 +1,3 @@
-export { default } from '../../src/api/getSearchOverview'
+import getSearchOverview from '../../src/api/getSearchOverview';
+
+export default getSearchOverview;

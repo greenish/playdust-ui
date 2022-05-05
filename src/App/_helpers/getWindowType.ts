@@ -1,35 +1,37 @@
-import bs58 from 'bs58'
-import WindowUnion from '../_types/WindowUnionType'
+import bs58 from 'bs58';
+import WindowUnion from '../_types/WindowUnionType';
 
 const getWindowType = (state: string): WindowUnion => {
   if (state === '') {
-    return 'home'
+    return 'home';
   }
 
-  const num = Number(state)
+  const num = Number(state);
 
-  if (!isNaN(num)) {
+  if (!Number.isNaN(num)) {
     // This is a temporary hack that will be resolved in a follow-up task
     if (num < 1000) {
-      return 'epoch'
+      return 'epoch';
     }
 
-    return 'block'
+    return 'block';
   }
 
   try {
-    const decoded = bs58.decode(state)
+    const decoded = bs58.decode(state);
 
     if (decoded.length === 32) {
-      return 'account'
+      return 'account';
     }
 
     if (decoded.length === 64) {
-      return 'tx'
+      return 'tx';
     }
-  } catch (err) {}
+  } catch (e) {
+    return 'search';
+  }
 
-  return 'search'
-}
+  return 'search';
+};
 
-export default getWindowType
+export default getWindowType;

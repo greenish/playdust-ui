@@ -1,34 +1,35 @@
-import styled from '@emotion/styled'
-import type { TokenListProps } from './TokenGrid'
-import TokenCard from './_sharedComponents/TokenCard/TokenCard'
+import styled from '@emotion/styled';
+import React, { useCallback } from 'react';
+import type { TokenListProps } from './TokenGrid';
+import TokenCard from './_sharedComponents/TokenCard/TokenCard';
 import VirtualizedGrid, {
   VirtualizedGridChildProps,
-} from './_sharedComponents/VirtualizedGrid'
+} from './_sharedComponents/VirtualizedGrid';
 
 const RowContainer = styled.div`
   display: flex;
   height: 100%;
   align-items: center;
-`
+`;
 
 interface RowRendererProps {
-  parentProps: TokenListProps
-  gridProps: VirtualizedGridChildProps
+  parentProps: TokenListProps;
+  gridProps: VirtualizedGridChildProps;
 }
 
-const RowRenderer = ({ parentProps, gridProps }: RowRendererProps) => {
-  const { tokens, initialized, total } = parentProps
-  const { index, isLoading } = gridProps
-  const cardsPerRow = gridProps.cardsPerRow!
-  const startingIdx = cardsPerRow * index
-  const tokenRange = Array.from(Array(cardsPerRow).keys())
-  const justifyContent = cardsPerRow > 2 ? 'space-between' : 'space-evenly'
+function RowRenderer({ parentProps, gridProps }: RowRendererProps) {
+  const { tokens, initialized, total } = parentProps;
+  const { index } = gridProps;
+  const { cardsPerRow } = gridProps;
+  const startingIdx = cardsPerRow * index;
+  const tokenRange = Array.from(Array(cardsPerRow).keys());
+  const justifyContent = cardsPerRow > 2 ? 'space-between' : 'space-evenly';
 
   return (
     <RowContainer style={{ justifyContent, marginRight: parentProps.cardGap }}>
       {tokenRange.map((tokenIdx) => {
-        const actualIdx = startingIdx + tokenIdx
-        const metadata = tokens[actualIdx]
+        const actualIdx = startingIdx + tokenIdx;
+        const metadata = tokens[actualIdx];
 
         if (!initialized) {
           return (
@@ -38,14 +39,13 @@ const RowRenderer = ({ parentProps, gridProps }: RowRendererProps) => {
               imageSize={parentProps.imageSize}
               contentHeight={parentProps.contentHeight}
             />
-          )
+          );
         }
 
         return actualIdx < total ? (
           <TokenCard
             key={metadata?.mint || actualIdx}
             metadata={metadata}
-            loading={isLoading}
             imageSize={parentProps.imageSize}
             contentHeight={parentProps.contentHeight}
           />
@@ -57,13 +57,13 @@ const RowRenderer = ({ parentProps, gridProps }: RowRendererProps) => {
               height: parentProps.imageSize,
             }}
           />
-        )
+        );
       })}
     </RowContainer>
-  )
+  );
 }
 
-const TokenList = (props: TokenListProps) => {
+function TokenList(props: TokenListProps) {
   const {
     initialized,
     tokens,
@@ -72,45 +72,48 @@ const TokenList = (props: TokenListProps) => {
     cardGap,
     contentHeight,
     rowGap,
-  } = props
+  } = props;
+
+  const rowWrapper = useCallback(
+    (gridProps) => <RowRenderer gridProps={gridProps} parentProps={props} />,
+    [props]
+  );
 
   return (
     <VirtualizedGrid
       initialized={initialized}
       next={props.next}
       getRowMeta={(width, height, isLoading) => {
-        const cardsPerRow = Math.floor(width / (imageSize + cardGap)) || 1
+        const cardsPerRow = Math.floor(width / (imageSize + cardGap)) || 1;
 
-        const rowHeight = imageSize + contentHeight + rowGap
+        const rowHeight = imageSize + contentHeight + rowGap;
 
         const cardRows = initialized
           ? Math.ceil(tokens.length / cardsPerRow) || 0
-          : Math.ceil(height / rowHeight)
+          : Math.ceil(height / rowHeight);
 
         const maxRows = initialized
           ? Math.ceil(total / cardsPerRow) || 0
-          : cardRows
+          : cardRows;
 
-        const loadingRowOffset = isLoading ? 1 : 0
+        const loadingRowOffset = isLoading ? 1 : 0;
 
         const rowCount = initialized
           ? Math.min(cardRows + loadingRowOffset, maxRows)
-          : cardRows
+          : cardRows;
 
-        const hasMore = total > tokens.length
+        const hasMore = total > tokens.length;
 
         return {
           rowHeight,
           rowCount,
           hasMore,
           cardsPerRow,
-        }
+        };
       }}
-      rowRenderer={(gridProps) => (
-        <RowRenderer gridProps={gridProps} parentProps={props} />
-      )}
+      rowRenderer={rowWrapper}
     />
-  )
+  );
 }
 
-export default TokenList
+export default TokenList;

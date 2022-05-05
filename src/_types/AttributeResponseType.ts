@@ -1,6 +1,6 @@
 type AttributeResponseType = {
-  trait: string
-  options: string[]
-}[]
+  trait: string;
+  options: string[];
+}[];
 
-export default AttributeResponseType
+export default AttributeResponseType;

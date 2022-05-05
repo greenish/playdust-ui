@@ -1,10 +1,10 @@
-import SearchFilterUnionType from './SearchFilterUnionType'
+import SearchFilterUnionType from './SearchFilterUnionType';
 
 interface RangeQueryContentType {
-  field: 'range'
-  value: SearchFilterUnionType
-  min: number
-  max: number
+  field: 'range';
+  value: SearchFilterUnionType;
+  min: number;
+  max: number;
 }
 
-export default RangeQueryContentType
+export default RangeQueryContentType;

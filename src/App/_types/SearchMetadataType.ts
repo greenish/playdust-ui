@@ -1,7 +1,7 @@
-import OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType'
+import OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
 
-export type SearchMetadataOnChain = Pick<SearchMetadata, 'data' | 'mint'>
+export type SearchMetadataOnChain = Pick<SearchMetadata, 'data' | 'mint'>;
 
-type SearchMetadata = OpenSearchNFTSourceType
+type SearchMetadata = OpenSearchNFTSourceType;
 
-export default SearchMetadata
+export default SearchMetadata;

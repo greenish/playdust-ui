@@ -1,6 +1,6 @@
-import QueryNodeIdType from './QueryNodeIdType'
-import RangeQueryContentType from './RangeQueryContentType'
+import QueryNodeIdType from './QueryNodeIdType';
+import RangeQueryContentType from './RangeQueryContentType';
 
 interface RangeQueryNodeType extends RangeQueryContentType, QueryNodeIdType {}
 
-export default RangeQueryNodeType
+export default RangeQueryNodeType;

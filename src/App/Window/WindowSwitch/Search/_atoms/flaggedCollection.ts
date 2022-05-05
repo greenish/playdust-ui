@@ -1,9 +1,9 @@
-import { atom } from 'recoil'
+import { atom } from 'recoil';
 
 interface FlaggedType {
-  id: string
-  type: 'Collection' | 'NFT' | undefined
-  open: boolean
+  id: string;
+  type: 'Collection' | 'NFT' | undefined;
+  open: boolean;
 }
 
 const flaggedCollection = atom<FlaggedType>({
@@ -13,6 +13,6 @@ const flaggedCollection = atom<FlaggedType>({
     id: '',
     type: undefined,
   },
-})
+});
 
-export default flaggedCollection
+export default flaggedCollection;

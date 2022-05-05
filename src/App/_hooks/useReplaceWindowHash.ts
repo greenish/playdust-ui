@@ -1,5 +1,5 @@
-import makeUseNavigateWindowHash from '../_helpers/makeUseNavigateWindowHash'
+import makeUseNavigateWindowHash from '../_helpers/makeUseNavigateWindowHash';
 
-const useReplaceWindowHah = makeUseNavigateWindowHash('replace')
+const useReplaceWindowHah = makeUseNavigateWindowHash('replace');
 
-export default useReplaceWindowHah
+export default useReplaceWindowHah;

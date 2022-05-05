@@ -1,14 +1,14 @@
-import { Edge } from 'react-flow-renderer'
-import { selector } from 'recoil'
-import type QueryNodeType from '../../../../../_types/QueryNodeType'
-import searchStateUncommitted from '../../../_atoms/searchStateUncommitted'
+import { Edge } from 'react-flow-renderer';
+import { selector } from 'recoil';
+import type QueryNodeType from '../../../../../_types/QueryNodeType';
+import searchStateUncommitted from '../../../_atoms/searchStateUncommitted';
 
 interface CreateEdgeInput {
-  sourceId: string
-  sourceHandle?: 'top' | 'left' | 'right' | 'bottom'
-  targetId: string
-  targetHandle?: 'top' | 'left' | 'right' | 'bottom' | 'target'
-  label?: string
+  sourceId: string;
+  sourceHandle?: 'top' | 'left' | 'right' | 'bottom';
+  targetId: string;
+  targetHandle?: 'top' | 'left' | 'right' | 'bottom' | 'target';
+  label?: string;
 }
 
 const createEdge = ({
@@ -25,9 +25,9 @@ const createEdge = ({
   targetHandle,
   animated: true,
   label,
-})
+});
 
-const getAndId = (parent: QueryNodeType[]) => `${parent[0].id}-and`
+const getAndId = (parent: QueryNodeType[]) => `${parent[0].id}-and`;
 
 const getOrEdges = (parent: QueryNodeType[]) =>
   parent.slice(0, -1).map((child, idx) =>
@@ -38,7 +38,7 @@ const getOrEdges = (parent: QueryNodeType[]) =>
       targetHandle: 'top',
       label: 'OR',
     })
-  )
+  );
 
 const getAndSourceEdges = (parent: QueryNodeType[]) =>
   parent.map((child) =>
@@ -48,7 +48,7 @@ const getAndSourceEdges = (parent: QueryNodeType[]) =>
       targetId: getAndId(parent),
       targetHandle: 'target',
     })
-  )
+  );
 
 const getAndTargetEdges = (
   parent: QueryNodeType[],
@@ -60,27 +60,27 @@ const getAndTargetEdges = (
       targetId: child.id,
       targetHandle: 'left',
     })
-  )
+  );
 
 const searchEdges = selector<Edge[]>({
   key: 'searchEdges',
   get: ({ get }) => {
-    const { query } = get(searchStateUncommitted)
-    let edges: Edge[] = []
+    const { query } = get(searchStateUncommitted);
+    const edges: Edge[] = [];
 
     query.forEach((parent, idx) => {
       if (idx !== query.length - 1) {
-        const andTargetEdges = getAndTargetEdges(parent, query[idx + 1])
-        const andSourceEdges = getAndSourceEdges(parent)
-        edges.push(...andTargetEdges, ...andSourceEdges)
+        const andTargetEdges = getAndTargetEdges(parent, query[idx + 1]);
+        const andSourceEdges = getAndSourceEdges(parent);
+        edges.push(...andTargetEdges, ...andSourceEdges);
       }
 
-      const orEdges = getOrEdges(parent)
-      edges.push(...orEdges)
-    })
+      const orEdges = getOrEdges(parent);
+      edges.push(...orEdges);
+    });
 
-    return edges
+    return edges;
   },
-})
+});
 
-export default searchEdges
+export default searchEdges;

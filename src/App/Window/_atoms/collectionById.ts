@@ -1,6 +1,6 @@
-import { selectorFamily } from 'recoil'
-import type OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType'
-import api from '../../_helpers/frontendApi'
+import { selectorFamily } from 'recoil';
+import type OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
+import api from '../../_helpers/frontendApi';
 
 const collectionById = selectorFamily({
   key: 'collectionById',
@@ -8,10 +8,10 @@ const collectionById = selectorFamily({
     const { data } = await api.post<OpenSearchCollectionSourceType[]>(
       '/collections',
       [id]
-    )
+    );
 
-    return data[0]
+    return data[0];
   },
-})
+});
 
-export default collectionById
+export default collectionById;

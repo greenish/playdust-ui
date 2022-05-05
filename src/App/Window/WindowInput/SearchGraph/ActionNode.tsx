@@ -1,33 +1,41 @@
-import styled from '@emotion/styled'
-import { ArrowDownward, ArrowForward } from '@mui/icons-material'
-import { Button, Card, Menu, MenuItem, MenuItemProps } from '@mui/material'
-import { useState } from 'react'
-import { NodeComponentProps } from 'react-flow-renderer'
-import useAddAttributeQueryNode from '../../_hooks/useAddAttributeQueryNode'
+import styled from '@emotion/styled';
+import { ArrowDownward, ArrowForward } from '@mui/icons-material';
+import { Button, Card, Menu, MenuItem, MenuItemProps } from '@mui/material';
+import React, { useState } from 'react';
+import { NodeComponentProps } from 'react-flow-renderer';
+import useAddAttributeQueryNode from '../../_hooks/useAddAttributeQueryNode';
 
 const RoootContainer = styled(Card)`
   display: flex;
-`
+`;
 
-const ActionNode = ({ data }: NodeComponentProps) => {
-  const [operation] = useState<'and' | 'or'>('and')
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>()
-  const addAttributeQueryNode = useAddAttributeQueryNode('memory')
+interface MenuItemHandlerProps extends MenuItemProps {
+  onClose: () => void;
+}
 
-  const open = !!anchorEl
-  const onClose = () => {
-    setAnchorEl(undefined)
-  }
-
-  const MenuItemHandler = ({ onClick, ...props }: MenuItemProps) => (
+function MenuItemHandler({ onClick, onClose, ...props }: MenuItemHandlerProps) {
+  return (
     <MenuItem
       {...props}
       onClick={(evt) => {
-        onClick && onClick(evt)
-        onClose()
+        if (onClick) {
+          onClick(evt);
+        }
+        onClose();
       }}
     />
-  )
+  );
+}
+
+function ActionNode({ data }: NodeComponentProps) {
+  const [operation] = useState<'and' | 'or'>('and');
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
+  const addAttributeQueryNode = useAddAttributeQueryNode('memory');
+
+  const open = !!anchorEl;
+  const onClose = () => {
+    setAnchorEl(undefined);
+  };
 
   return (
     <RoootContainer sx={{ width: data.width }}>
@@ -41,6 +49,7 @@ const ActionNode = ({ data }: NodeComponentProps) => {
               at: data.idx,
             })
           }
+          onClose={onClose}
         >
           Attribute Exact
         </MenuItemHandler>
@@ -48,7 +57,7 @@ const ActionNode = ({ data }: NodeComponentProps) => {
       {!data.disableOr && (
         <Button
           size="small"
-          fullWidth
+          fullWidth={true}
           endIcon={<ArrowDownward />}
           onClick={() => {
             addAttributeQueryNode({
@@ -56,14 +65,14 @@ const ActionNode = ({ data }: NodeComponentProps) => {
               trait: '',
               operation: 'or',
               at: data.idx,
-            })
+            });
           }}
         >
           OR
         </Button>
       )}
       <Button
-        fullWidth
+        fullWidth={true}
         size="small"
         endIcon={<ArrowForward />}
         onClick={() => {
@@ -72,13 +81,13 @@ const ActionNode = ({ data }: NodeComponentProps) => {
             trait: '',
             operation: 'and',
             at: data.idx,
-          })
+          });
         }}
       >
         AND
       </Button>
     </RoootContainer>
-  )
+  );
 }
 
-export default ActionNode
+export default ActionNode;

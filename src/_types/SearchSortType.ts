@@ -4,26 +4,21 @@ const ALL_FIELDS = [
   'list-price',
   'sale-price',
   'rarity-score',
-] as const
-type SortTuple = typeof ALL_FIELDS
-type SortField = SortTuple[number]
+] as const;
+type SortTuple = typeof ALL_FIELDS;
+type SortField = SortTuple[number];
 
-const ALL_DIRECTIONS = ['asc', 'desc'] as const
-type DirectionTuple = typeof ALL_DIRECTIONS
-type SortDirection = DirectionTuple[number]
+const ALL_DIRECTIONS = ['asc', 'desc'] as const;
+type DirectionTuple = typeof ALL_DIRECTIONS;
+type SortDirection = DirectionTuple[number];
 
 interface SearchSortType {
-  field: SortField
-  direction: SortDirection
+  field: SortField;
+  direction: SortDirection;
 }
 
-export const isSearchSort = (
-  value: SearchSortType
-): value is SearchSortType => {
-  return (
-    ALL_FIELDS.includes(value.field as SortField) &&
-    ALL_DIRECTIONS.includes(value.direction as SortDirection)
-  )
-}
+export const isSearchSort = (value: SearchSortType): value is SearchSortType =>
+  ALL_FIELDS.includes(value.field as SortField) &&
+  ALL_DIRECTIONS.includes(value.direction as SortDirection);
 
-export default SearchSortType
+export default SearchSortType;

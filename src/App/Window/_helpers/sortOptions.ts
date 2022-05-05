@@ -1,9 +1,9 @@
-import type SearchSortType from '../../../_types/SearchSortType'
+import type SearchSortType from '../../../_types/SearchSortType';
 
 export type SearchSortOption = {
-  name: string
-  value: SearchSortType
-}
+  name: string;
+  value: SearchSortType;
+};
 
 const makeSortOption = (
   name: string,
@@ -25,14 +25,14 @@ const makeSortOption = (
         direction: 'desc',
       },
     },
-  ]
+  ];
 
   if (reverse) {
-    return result.reverse()
+    return result.reverse();
   }
 
-  return result
-}
+  return result;
+};
 
 const sortOptions: SearchSortOption[] = [
   ...makeSortOption('Rarity', 'rarity-score', true),
@@ -46,6 +46,6 @@ const sortOptions: SearchSortOption[] = [
       direction: 'desc',
     },
   },
-]
+];
 
-export default sortOptions
+export default sortOptions;

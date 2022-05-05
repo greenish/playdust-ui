@@ -1,34 +1,34 @@
-import styled from '@emotion/styled'
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
-import { useMemo } from 'react'
-import { useRecoilValue } from 'recoil'
-import searchStateAtom from '../../../_atoms/searchState'
-import options from '../../../_helpers/sortOptions'
-import useSetSortValue from '../../../_hooks/useSetSortValue'
+import styled from '@emotion/styled';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import React, { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
+import searchStateAtom from '../../../_atoms/searchState';
+import options from '../../../_helpers/sortOptions';
+import useSetSortValue from '../../../_hooks/useSetSortValue';
 
 const RootContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-`
+`;
 
-const sortLabel = 'Sort'
+const sortLabel = 'Sort';
 
-const SortFields = () => {
-  const { sort } = useRecoilValue(searchStateAtom)
-  const setSortValue = useSetSortValue()
+function SortFields() {
+  const { sort } = useRecoilValue(searchStateAtom);
+  const setSortValue = useSetSortValue();
 
   const found = useMemo(() => {
     if (!sort) {
-      return options[0]
+      return options[0];
     }
 
     return options.find(
       (entry) =>
         entry.value.direction === sort.direction &&
         entry.value.field === sort.field
-    )
-  }, [options, sort])
+    );
+  }, [sort]);
 
   return (
     <RootContainer>
@@ -39,11 +39,11 @@ const SortFields = () => {
           value={found?.name}
           label={sortLabel}
           onChange={(evt) => {
-            const sortName = evt.target.value
-            const found = options.find((entry) => entry.name === sortName)
+            const sortName = evt.target.value;
+            const selected = options.find((entry) => entry.name === sortName);
 
-            if (found) {
-              setSortValue(found.value)
+            if (selected) {
+              setSortValue(selected.value);
             }
           }}
         >
@@ -55,7 +55,7 @@ const SortFields = () => {
         </Select>
       </FormControl>
     </RootContainer>
-  )
+  );
 }
 
-export default SortFields
+export default SortFields;

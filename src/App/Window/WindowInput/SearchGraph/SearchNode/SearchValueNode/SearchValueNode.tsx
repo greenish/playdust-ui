@@ -1,35 +1,37 @@
-import { useRecoilValue } from 'recoil'
-import searchQueryChildAtom from '../../../../_atoms/searchQueryChild'
-import SearchAttributeNode from './AttributeNode'
-import SearchCollectionNode from './CollectionNode'
-import RangeNode from './RangeNode'
-import SearchTextNode from './SearchTextNode'
+import React from 'react';
+import { useRecoilValue } from 'recoil';
+import searchQueryChildAtom from '../../../../_atoms/searchQueryChild';
+import SearchAttributeNode from './AttributeNode';
+import SearchCollectionNode from './CollectionNode';
+import RangeNode from './RangeNode';
+import SearchTextNode from './SearchTextNode';
 
 interface SearchValueNodeProps {
-  id: string
+  id: string;
 }
 
-const SearchValueNode = (props: SearchValueNodeProps) => {
-  const data = useRecoilValue(searchQueryChildAtom(props.id))
+function SearchValueNode(props: SearchValueNodeProps) {
+  const data = useRecoilValue(searchQueryChildAtom(props.id));
 
   if (!data) {
-    return <></>
+    return null;
   }
 
   switch (data.field) {
     case 'collection':
-      return <SearchCollectionNode id={props.id} />
+      return <SearchCollectionNode id={props.id} />;
     case 'attribute':
-      return <SearchAttributeNode id={props.id} />
+      return <SearchAttributeNode id={props.id} />;
     case 'text':
-      return <SearchTextNode id={props.id} />
+      return <SearchTextNode id={props.id} />;
     case 'range':
-      return <RangeNode id={props.id} />
-    default:
-      const n: never = data
+      return <RangeNode id={props.id} />;
+    default: {
+      const n: never = data;
 
-      return n
+      return n;
+    }
   }
 }
 
-export default SearchValueNode
+export default SearchValueNode;

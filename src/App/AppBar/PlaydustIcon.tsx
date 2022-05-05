@@ -1,12 +1,12 @@
-import { DetailedHTMLProps, ImgHTMLAttributes } from 'react'
+import React, { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
 
 type ImgProps = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
   HTMLImageElement
->
+>;
 
-const PlaydustIcon = (props: ImgProps) => (
-  <img alt="playdust-icon" src="/playdust-light.svg" {...props} />
-)
+function PlaydustIcon(props: ImgProps) {
+  return <img alt="playdust-icon" src="/playdust-light.svg" {...props} />;
+}
 
-export default PlaydustIcon
+export default PlaydustIcon;

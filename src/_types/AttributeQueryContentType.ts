@@ -1,7 +1,7 @@
-export interface AttributeQueryContentType {
-  field: 'attribute'
-  value: string[]
-  trait: string
+interface AttributeQueryContentType {
+  field: 'attribute';
+  value: string[];
+  trait: string;
 }
 
-export default AttributeQueryContentType
+export default AttributeQueryContentType;

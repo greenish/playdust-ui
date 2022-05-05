@@ -1,9 +1,9 @@
-import { atom } from 'recoil'
-import type SearchFilterUnionType from '../../../../../_types/SearchFilterUnionType'
+import { atom } from 'recoil';
+import type SearchFilterUnionType from '../../../../../_types/SearchFilterUnionType';
 
 export interface SearchFilterType {
-  label: string
-  name: SearchFilterUnionType
+  label: string;
+  name: SearchFilterUnionType;
 }
 
 const searchFilters = atom<SearchFilterType[]>({
@@ -22,6 +22,6 @@ const searchFilters = atom<SearchFilterType[]>({
       name: 'rarity-score',
     },
   ],
-})
+});
 
-export default searchFilters
+export default searchFilters;

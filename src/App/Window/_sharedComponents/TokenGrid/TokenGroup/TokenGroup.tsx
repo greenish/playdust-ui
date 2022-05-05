@@ -1,19 +1,20 @@
-import styled from '@emotion/styled'
-import { Skeleton, Typography } from '@mui/material'
-import Link from '../../Link'
-import type { TokenGroupProps } from '../TokenGrid'
-import TokenCard from '../_sharedComponents/TokenCard/TokenCard'
-import VirtualizedGrid from '../_sharedComponents/VirtualizedGrid'
-import BlurMore from './BlurMore'
+import styled from '@emotion/styled';
+import { Skeleton, Typography } from '@mui/material';
+import React, { useCallback } from 'react';
+import Link from '../../Link';
+import type { TokenGroupProps } from '../TokenGrid';
+import TokenCard from '../_sharedComponents/TokenCard/TokenCard';
+import VirtualizedGrid from '../_sharedComponents/VirtualizedGrid';
+import BlurMore from './BlurMore';
 
-const groupLabelHeight = 55
+const groupLabelHeight = 55;
 
 const RowContainer = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-`
+`;
 
 const LabelContainer = styled.div`
   display: flex;
@@ -23,28 +24,28 @@ const LabelContainer = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-`
+`;
 
 const TokenContainer = styled.div`
   display: flex;
   overflow-y: hidden;
   overflow-x: auto;
   padding-right: 100px;
-`
+`;
 
-const skeletonRange = [...Array(20).keys()]
+const skeletonRange = [...Array(20).keys()];
 
 interface RowRendererProps {
-  index: number
-  parentProps: TokenGroupProps
+  index: number;
+  parentProps: TokenGroupProps;
 }
 
-const RowRenderer = (props: RowRendererProps) => {
+function RowRenderer(props: RowRendererProps) {
   const { imageSize, grouped, initialized, cardGap, contentHeight } =
-    props.parentProps
-  const group = grouped[props.index]
-  const isLoaderRow = !group
-  const showActual = initialized && !isLoaderRow
+    props.parentProps;
+  const group = grouped[props.index];
+  const isLoaderRow = !group;
+  const showActual = initialized && !isLoaderRow;
 
   return (
     <RowContainer>
@@ -86,7 +87,7 @@ const RowRenderer = (props: RowRendererProps) => {
             {skeletonRange.map((entry) => (
               <TokenCard
                 key={entry}
-                skeleton
+                skeleton={true}
                 contentHeight={contentHeight}
                 imageSize={imageSize}
               />
@@ -95,10 +96,15 @@ const RowRenderer = (props: RowRendererProps) => {
         )}
       </TokenContainer>
     </RowContainer>
-  )
+  );
 }
 
-const TokenGroup = (props: TokenGroupProps) => {
+function TokenGroup(props: TokenGroupProps) {
+  const rowWrapper = useCallback(
+    ({ index }) => <RowRenderer index={index} parentProps={props} />,
+    [props]
+  );
+
   return (
     <VirtualizedGrid
       initialized={props.initialized}
@@ -107,21 +113,19 @@ const TokenGroup = (props: TokenGroupProps) => {
           props.imageSize +
           props.contentHeight +
           groupLabelHeight +
-          props.rowGap
-        const loadingRowOffset = isLoading ? 1 : 0
+          props.rowGap;
+        const loadingRowOffset = isLoading ? 1 : 0;
         const rowCount = props.initialized
           ? props.grouped.length + loadingRowOffset
-          : Math.ceil(height / rowHeight)
-        const hasMore = props.totalRows > rowCount
+          : Math.ceil(height / rowHeight);
+        const hasMore = props.totalRows > rowCount;
 
-        return { rowCount, rowHeight, hasMore }
+        return { rowCount, rowHeight, hasMore, cardsPerRow: 1 };
       }}
-      rowRenderer={({ index }) => (
-        <RowRenderer index={index} parentProps={props} />
-      )}
+      rowRenderer={rowWrapper}
       next={props.next}
     />
-  )
+  );
 }
 
-export default TokenGroup
+export default TokenGroup;

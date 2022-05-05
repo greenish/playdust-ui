@@ -5,12 +5,11 @@ export const ALL_WINDOWS = [
   'search',
   'tx',
   'epoch',
-] as const
-type WindowTuple = typeof ALL_WINDOWS
-type WindowUnionType = WindowTuple[number]
+] as const;
+type WindowTuple = typeof ALL_WINDOWS;
+type WindowUnionType = WindowTuple[number];
 
-export const isInWindowUnion = (value: string): value is WindowUnionType => {
-  return ALL_WINDOWS.includes(value as WindowUnionType)
-}
+export const isInWindowUnion = (value: string): value is WindowUnionType =>
+  ALL_WINDOWS.includes(value as WindowUnionType);
 
-export default WindowUnionType
+export default WindowUnionType;

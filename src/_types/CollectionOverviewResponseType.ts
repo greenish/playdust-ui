@@ -1,8 +1,8 @@
-import type OpenSearchCollectionSourceType from './OpenSearchCollectionSourceType'
+import type OpenSearchCollectionSourceType from './OpenSearchCollectionSourceType';
 
 interface CollectionOverviewResponseType
   extends OpenSearchCollectionSourceType {
-  similar: OpenSearchCollectionSourceType[]
+  similar: OpenSearchCollectionSourceType[];
 }
 
-export default CollectionOverviewResponseType
+export default CollectionOverviewResponseType;

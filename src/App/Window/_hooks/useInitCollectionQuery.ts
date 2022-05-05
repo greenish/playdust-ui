@@ -1,6 +1,6 @@
-import { nanoid } from 'nanoid'
-import ComposedQueryType from '../../../_types/ComposedQueryType'
-import makeUseQueryChange from '../_helpers/makeUseQueryChange'
+import { nanoid } from 'nanoid';
+import ComposedQueryType from '../../../_types/ComposedQueryType';
+import makeUseQueryChange from '../_helpers/makeUseQueryChange';
 
 const useInitCollectionQuery = makeUseQueryChange<string>(
   () => (collectionId: string) => {
@@ -12,10 +12,10 @@ const useInitCollectionQuery = makeUseQueryChange<string>(
           id: nanoid(),
         },
       ],
-    ]
+    ];
 
-    return { query: next }
+    return { query: next };
   }
-)
+);
 
-export default useInitCollectionQuery
+export default useInitCollectionQuery;

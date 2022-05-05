@@ -1,9 +1,9 @@
-import type OpenSearchNFTSourceType from './OpenSearchNFTSourceType'
+import type OpenSearchNFTSourceType from './OpenSearchNFTSourceType';
 
 interface SearchResponseType {
-  nfts: OpenSearchNFTSourceType[]
-  cursor: string
-  total: number
+  nfts: OpenSearchNFTSourceType[];
+  cursor: string;
+  total: number;
 }
 
-export default SearchResponseType
+export default SearchResponseType;

@@ -1,1 +1,3 @@
-export { default } from '../../src/api/getMint'
+import mint from '../../src/api/getMint';
+
+export default mint;

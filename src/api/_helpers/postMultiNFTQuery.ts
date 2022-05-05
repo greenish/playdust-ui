@@ -1,6 +1,8 @@
-import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType'
-import makePostMultiQuery from './makePostMultiQuery'
+import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
+import makePostMultiQuery from './makePostMultiQuery';
 
-const postMultiNFTQuery = makePostMultiQuery<OpenSearchNFTSourceType>()
+function postMultiNFTQuery<A = void>(query: string) {
+  return makePostMultiQuery<OpenSearchNFTSourceType, A>()(query);
+}
 
-export default postMultiNFTQuery
+export default postMultiNFTQuery;

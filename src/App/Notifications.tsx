@@ -1,10 +1,11 @@
-import { Alert, Snackbar } from '@mui/material'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
-import notificationAtom from './_atoms/notifcation'
+import { Alert, Snackbar } from '@mui/material';
+import React from 'react';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import notificationAtom from './_atoms/notifcation';
 
-const Notifications = () => {
-  const { open, message, severity } = useRecoilValue(notificationAtom)
-  const reset = useResetRecoilState(notificationAtom)
+function Notifications() {
+  const { open, message, severity } = useRecoilValue(notificationAtom);
+  const reset = useResetRecoilState(notificationAtom);
 
   return (
     <Snackbar
@@ -20,7 +21,7 @@ const Notifications = () => {
         {message}
       </Alert>
     </Snackbar>
-  )
+  );
 }
 
-export default Notifications
+export default Notifications;

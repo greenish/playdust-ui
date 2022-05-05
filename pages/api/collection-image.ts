@@ -1,1 +1,3 @@
-export { default } from '../../src/api/getCollectionImage'
+import getCollectionImage from '../../src/api/getCollectionImage';
+
+export default getCollectionImage;

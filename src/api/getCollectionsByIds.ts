@@ -1,13 +1,13 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType'
-import postCollectionQuery from './_helpers/postCollectionQuery'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
+import postCollectionQuery from './_helpers/postCollectionQuery';
 
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<OpenSearchCollectionSourceType[]>
 ) => {
   try {
-    const ids = req.body as string[]
+    const ids = req.body as string[];
 
     const esQuery = {
       size: ids.length,
@@ -20,15 +20,15 @@ const handler = async (
           },
         },
       },
-    }
+    };
 
-    const response = await postCollectionQuery(esQuery)
-    const results = response.hits.hits.map((entry) => entry._source)
+    const response = await postCollectionQuery(esQuery);
+    const results = response.hits.hits.map((entry) => entry._source);
 
-    res.json(results)
+    res.json(results);
   } catch (e) {
-    res.status(500).end()
+    res.status(500).end();
   }
-}
+};
 
-export default handler
+export default handler;

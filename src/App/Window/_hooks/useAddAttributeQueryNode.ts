@@ -1,13 +1,13 @@
-import type QueryOperationUnionType from '../../../_types/QueryOperationUnionType'
-import addQueryNode from '../_helpers/addQueryNode'
-import makeUseQueryChange from '../_helpers/makeUseQueryChange'
-import type QueryNodeAdditionType from '../_types/QueryNodeAdditionType'
+import type QueryOperationUnionType from '../../../_types/QueryOperationUnionType';
+import addQueryNode from '../_helpers/addQueryNode';
+import makeUseQueryChange from '../_helpers/makeUseQueryChange';
+import type QueryNodeAdditionType from '../_types/QueryNodeAdditionType';
 
 interface UseAddAttributeNodeInput {
-  value: string[]
-  trait: string
-  operation: QueryOperationUnionType
-  at?: number
+  value: string[];
+  trait: string;
+  operation: QueryOperationUnionType;
+  at?: number;
 }
 
 const useAddAttributeQueryNode = makeUseQueryChange<UseAddAttributeNodeInput>(
@@ -21,12 +21,12 @@ const useAddAttributeQueryNode = makeUseQueryChange<UseAddAttributeNodeInput>(
         },
         operation,
         at,
-      }
+      };
 
-      const next = addQueryNode(query, queryAddition)
+      const next = addQueryNode(query, queryAddition);
 
-      return { query: next }
+      return { query: next };
     }
-)
+);
 
-export default useAddAttributeQueryNode
+export default useAddAttributeQueryNode;

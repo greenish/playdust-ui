@@ -1,1 +1,3 @@
-export { default } from '../../src/api/getSearchAggregations'
+import getSearchAggregations from '../../src/api/getSearchAggregations';
+
+export default getSearchAggregations;

@@ -1,5 +1,5 @@
-import QueryNodeType from './QueryNodeType'
+import QueryNodeType from './QueryNodeType';
 
-type ComposedQueryType = QueryNodeType[][]
+type ComposedQueryType = QueryNodeType[][];
 
-export default ComposedQueryType
+export default ComposedQueryType;

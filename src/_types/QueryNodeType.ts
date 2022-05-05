@@ -1,14 +1,14 @@
-import AttributeQueryNodeType from './AttributeQueryNodeType'
-import CollectionQueryNodeType from './CollectionQueryNodeType'
-import RangeQueryNodeType from './RangeQueryNodeType'
-import TextQueryNodeType from './TextQueryNodeType'
+import AttributeQueryNodeType from './AttributeQueryNodeType';
+import CollectionQueryNodeType from './CollectionQueryNodeType';
+import RangeQueryNodeType from './RangeQueryNodeType';
+import TextQueryNodeType from './TextQueryNodeType';
 
-export type OperationType = 'and' | 'or'
+export type OperationType = 'and' | 'or';
 
 type QueryNodeType =
   | CollectionQueryNodeType
   | AttributeQueryNodeType
   | TextQueryNodeType
-  | RangeQueryNodeType
+  | RangeQueryNodeType;
 
-export default QueryNodeType
+export default QueryNodeType;

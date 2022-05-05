@@ -1,1 +1,3 @@
-export { default } from '../../src/api/getCollectionsByIds'
+import getCollectionsByIds from '../../src/api/getCollectionsByIds';
+
+export default getCollectionsByIds;

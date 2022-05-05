@@ -9,48 +9,48 @@ import {
   TableRow,
   Typography,
   useTheme,
-} from '@mui/material'
-import { useMemo } from 'react'
-import { useRecoilValue } from 'recoil'
-import humanizeSolana from '../../../../../_helpers/humanizeSolana'
-import humanizeCollection from '../../../_helpers/humanizeCollection'
-import collectionOverviewAtom from '../../_atoms/collectionOverview'
+} from '@mui/material';
+import React, { useMemo } from 'react';
+import { useRecoilValue } from 'recoil';
+import humanizeSolana from '../../../../../_helpers/humanizeSolana';
+import humanizeCollection from '../../../_helpers/humanizeCollection';
+import collectionOverviewAtom from '../../_atoms/collectionOverview';
 
 interface SimilarCollectionsProps {
-  open: boolean
-  onClick: (selectedId: string) => void
-  onClose: () => void
-  collectionId: string
+  open: boolean;
+  onClick: (selectedId: string) => void;
+  onClose: () => void;
+  collectionId: string;
 }
 
-const SimilarCollections = ({
+function SimilarCollections({
   collectionId,
   open,
   onClose,
   onClick,
-}: SimilarCollectionsProps) => {
-  const overview = useRecoilValue(collectionOverviewAtom(collectionId))
-  const { totalVolume, similar } = overview
-  const theme = useTheme()
+}: SimilarCollectionsProps) {
+  const overview = useRecoilValue(collectionOverviewAtom(collectionId));
+  const { totalVolume, similar } = overview;
+  const theme = useTheme();
 
   const filtered = useMemo(
     () =>
       similar.filter((entry) => {
-        const noName = !entry.name || entry.name === ''
-        const noSymbol = !entry.symbol || entry.symbol === ''
+        const noName = !entry.name || entry.name === '';
+        const noSymbol = !entry.symbol || entry.symbol === '';
 
-        return !(noName && noSymbol)
+        return !(noName && noSymbol);
       }),
     [similar]
-  )
+  );
 
-  const warningColor = theme.palette.warning.main
+  const warningColor = theme.palette.warning.main;
 
   return (
-    <Dialog onClose={onClose} open={open} fullWidth>
+    <Dialog onClose={onClose} open={open} fullWidth={true}>
       <DialogTitle>Similar Collections</DialogTitle>
       <DialogContent>
-        <Table stickyHeader>
+        <Table stickyHeader={true}>
           <TableHead>
             <TableRow>
               <TableCell>Collection</TableCell>
@@ -71,7 +71,7 @@ const SimilarCollections = ({
           </TableHead>
           <TableBody>
             {filtered.map((entry) => {
-              const color = entry.totalVolume > totalVolume ? warningColor : ''
+              const color = entry.totalVolume > totalVolume ? warningColor : '';
 
               return (
                 <TableRow
@@ -82,7 +82,7 @@ const SimilarCollections = ({
                     },
                     cursor: 'pointer',
                   }}
-                  hover
+                  hover={true}
                   onClick={() => onClick(entry.id)}
                 >
                   <TableCell scope="row">
@@ -96,13 +96,13 @@ const SimilarCollections = ({
                     </Typography>
                   </TableCell>
                 </TableRow>
-              )
+              );
             })}
           </TableBody>
         </Table>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-export default SimilarCollections
+export default SimilarCollections;

@@ -1,8 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import type OpenSearchResponseType from '../_types/OpenSearchResponseType'
-import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType'
-import postMultiQuery from './_helpers/postMultiQuery'
-import queriesToMultiSearch from './_helpers/queriesToMultiSearch'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import type OpenSearchResponseType from '../_types/OpenSearchResponseType';
+import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
+import postMutliCollectionQuery from './_helpers/postMultiCollectionQuery';
+import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
 
 const getAttributeQuery = (term: string) => ({
   size: 25,
@@ -29,7 +29,7 @@ const getAttributeQuery = (term: string) => ({
       },
     },
   ],
-})
+});
 
 const getCollectionQuery = (term: string) => ({
   size: 10,
@@ -56,75 +56,75 @@ const getCollectionQuery = (term: string) => ({
       },
     },
   ],
-})
+});
 
 type AttributeNameValues = Pick<
   SearchSuggestionResponseType,
   'attributeNames' | 'attributeValues'
->
+>;
 
 const addActual = (highlight: string) => ({
   highlight,
   actual: highlight.replaceAll('<em>', '').replaceAll('</em>', ''),
-})
+});
 
 const cleanAttributes = (
-  attributeResult: OpenSearchResponseType<any>
+  attributeResult: OpenSearchResponseType
 ): AttributeNameValues => {
   const attributes = attributeResult.hits.hits
-    .map((entry) => entry.highlight!)
+    .map((entry) => entry.highlight)
     .reduce<{ names: string[]; values: string[] }>(
       (acc, curr) => {
-        const values = curr['attributes.values.v'] || []
-        const names = curr['attributes.name'] || []
+        const values = curr['attributes.values.v'] || [];
+        const names = curr['attributes.name'] || [];
 
         return {
           names: [...new Set([...acc.names, ...names])],
           values: [...new Set([...acc.values, ...values])],
-        }
+        };
       },
       { names: [], values: [] }
-    )
+    );
 
   const withActual = {
     attributeNames: attributes.names.map(addActual),
     attributeValues: attributes.values.map(addActual),
-  }
+  };
 
-  return withActual
-}
+  return withActual;
+};
 
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<SearchSuggestionResponseType>
 ) => {
   try {
-    const term = req.body.term as string
+    const term = req.body.term as string;
 
-    const attributeQuery = getAttributeQuery(term)
-    const collectionQuery = getCollectionQuery(term)
+    const attributeQuery = getAttributeQuery(term);
+    const collectionQuery = getCollectionQuery(term);
     const multiCollectionQuery = queriesToMultiSearch(
       [collectionQuery, attributeQuery],
       'nft-collection'
-    )
+    );
 
-    const [collectionResult, attributeResult] = await postMultiQuery(
+    const [collectionResult, attributeResult] = await postMutliCollectionQuery(
       multiCollectionQuery
-    )
+    );
 
-    const attributes = cleanAttributes(attributeResult)
+    const attributes = cleanAttributes(attributeResult);
     const collections = collectionResult.hits.hits.map((entry) => ({
       source: entry._source,
-      highlight: entry.highlight!,
-    }))
+      highlight: entry.highlight,
+    }));
 
     res.json({
       collections,
       ...attributes,
-    })
+    });
   } catch (e) {
-    res.status(500).end(e)
+    res.status(500).end(e);
   }
-}
+};
 
-export default handler
+export default handler;

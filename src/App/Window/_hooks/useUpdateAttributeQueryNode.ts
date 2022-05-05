@@ -1,12 +1,12 @@
-import type AttributeQueryContentType from '../../../_types/AttributeQueryContentType'
-import makeUseQueryChange from '../_helpers/makeUseQueryChange'
-import removeQueryNode from '../_helpers/removeQueryNode'
-import updateQueryNode from '../_helpers/updateQueryNode'
+import type AttributeQueryContentType from '../../../_types/AttributeQueryContentType';
+import makeUseQueryChange from '../_helpers/makeUseQueryChange';
+import removeQueryNode from '../_helpers/removeQueryNode';
+import updateQueryNode from '../_helpers/updateQueryNode';
 
 interface UseUpdateAttributeNodeInput {
-  id: string
-  update: Partial<AttributeQueryContentType>
-  clearOnEmpty?: boolean
+  id: string;
+  update: Partial<AttributeQueryContentType>;
+  clearOnEmpty?: boolean;
 }
 
 const useUpdateAttributeQueryNode =
@@ -18,15 +18,15 @@ const useUpdateAttributeQueryNode =
           update.value !== undefined &&
           update.value.length === 0
         ) {
-          const next = removeQueryNode(query, id)
+          const next = removeQueryNode(query, id);
 
-          return { query: next }
+          return { query: next };
         }
 
-        const next = updateQueryNode(query, id, update)
+        const next = updateQueryNode(query, id, update);
 
-        return { query: next }
+        return { query: next };
       }
-  )
+  );
 
-export default useUpdateAttributeQueryNode
+export default useUpdateAttributeQueryNode;

@@ -1,14 +1,14 @@
-import type OpenSearchCollectionSourceHighlightType from './OpenSearchCollectionSourceHighlightType'
+import type OpenSearchCollectionSourceHighlightType from './OpenSearchCollectionSourceHighlightType';
 
 interface ActualHighlightType {
-  highlight: string
-  actual: string
+  highlight: string;
+  actual: string;
 }
 
 interface SearchSuggestionResponseType {
-  collections: OpenSearchCollectionSourceHighlightType[]
-  attributeNames: ActualHighlightType[]
-  attributeValues: ActualHighlightType[]
+  collections: OpenSearchCollectionSourceHighlightType[];
+  attributeNames: ActualHighlightType[];
+  attributeValues: ActualHighlightType[];
 }
 
-export default SearchSuggestionResponseType
+export default SearchSuggestionResponseType;
