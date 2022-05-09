@@ -143,8 +143,6 @@ The api folder contains all nextJS api endpoints in a folder structure following
    > If reasonable, sub components are named `ComponentName[SubComponent].tsx`. This can be broken or abbrevated in order to prevent component names from getting too long.
 
 
-   > All
-
 1. ### Atoms (and Selectors)
     > Selectors are an implementation detail of atoms
 
