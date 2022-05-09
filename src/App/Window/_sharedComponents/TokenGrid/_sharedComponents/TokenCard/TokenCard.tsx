@@ -48,7 +48,7 @@ function TokenCard({
 }: TokenCardProps) {
   const { image, name } = metadata?.offChainData || {};
   const href = encodeWindowHash({
-    type: 'account',
+    type: 'address',
     state: metadata?.mint || '',
   });
   const { lastListPrice, listed } = metadata || {};

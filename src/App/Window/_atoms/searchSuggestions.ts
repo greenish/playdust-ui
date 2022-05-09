@@ -239,12 +239,12 @@ const searchSuggestions = selectorFamily<SearchSuggetionResults, string>({
         });
       }
 
-      if (windowType === 'account') {
+      if (windowType === 'address') {
         addSuggestion({
           key: 'account-search',
           group: 'Explorer',
           label: `account ${term}`,
-          type: 'account',
+          type: 'address',
         });
 
         return {

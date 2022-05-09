@@ -64,7 +64,7 @@ const transactionResultsBaseSelector = selector<any>({
     try {
       const explorerState = get(explorerStateSelector)
 
-      if (!explorerState || explorerState.type !== 'account') {
+      if (!explorerState || explorerState.type !== 'address') {
         return []
       }
 
@@ -109,7 +109,7 @@ export const useFetchMoreTransactions = () => {
     if (loadable.state === 'hasValue') {
       const { cursor } = loadable.contents
 
-      if (!explorerState || explorerState.type !== 'account') {
+      if (!explorerState || explorerState.type !== 'address') {
         return []
       }
 

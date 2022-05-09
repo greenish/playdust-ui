@@ -21,7 +21,7 @@ const getWindowType = (state: string): WindowUnion => {
     const decoded = bs58.decode(state);
 
     if (decoded.length === 32) {
-      return 'account';
+      return 'address';
     }
 
     if (decoded.length === 64) {

@@ -35,7 +35,7 @@ export function ExplorerLink({
 }
 
 export function AccountLink(props: ExplorerLinkProps) {
-  return <ExplorerLink type="account" {...props} />
+  return <ExplorerLink type="address" {...props} />
 }
 
 export function SlotLink(props: ExplorerLinkProps) {

@@ -8,7 +8,7 @@ const useGoToProfile = () => {
   return () => {
     if (wallet.publicKey) {
       const state = wallet.publicKey.toBase58();
-      pushWindowHash({ type: 'account', state }, { newTab: true });
+      pushWindowHash({ type: 'address', state }, { newTab: true });
     }
   };
 };

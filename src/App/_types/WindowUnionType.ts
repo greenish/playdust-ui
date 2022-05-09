@@ -1,5 +1,5 @@
 export const ALL_WINDOWS = [
-  'account',
+  'address',
   'block',
   'home',
   'search',

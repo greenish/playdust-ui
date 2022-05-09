@@ -119,7 +119,7 @@ const getWindowTab = (window: WindowType): ReactNode | undefined => {
       return <Typography>T</Typography>;
     case 'block':
       return <Typography>B</Typography>;
-    case 'account':
+    case 'address':
       return <Typography>A</Typography>;
     case 'epoch':
       return <Typography>E</Typography>;
