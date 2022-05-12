@@ -5,9 +5,9 @@ import React, { CSSProperties } from 'react';
 import { Handle, NodeComponentProps, Position } from 'react-flow-renderer';
 import { useRecoilValue } from 'recoil';
 import type QueryNodeType from '../../../../../_types/QueryNodeType';
-import searchQueryChildAtom from '../../../_atoms/searchQueryChild';
 import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode';
 import SearchValueNode from './SearchValueNode/SearchValueNode';
+import searchQueryChildAtom from './_atoms/searchQueryChildAtom';
 
 const CloseContainer = styled.div`
   display: flex;

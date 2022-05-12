@@ -1,4 +1,4 @@
-import Cluster from '../_types/ClusterType';
+import ClusterType from '../_types/ClusterType';
 
 const MARKET_REGISTRY: { [key: string]: string } = {
   '7kgkDyW7dmyMeP8KFXzbcUZz1R2WHsovDZ7n3ihZuNDS': 'Serum: MSRM / USDC',
@@ -292,11 +292,11 @@ const MARKET_REGISTRY: { [key: string]: string } = {
     'Serum: SRM / USDT - Vault Owner',
 };
 
-function lookupSerumMarketRegistry(
+function serumMarketRegistry(
   address: string,
-  cluster: Cluster
+  cluster: ClusterType
 ): string | undefined {
-  if (cluster === Cluster.MainnetBeta) return MARKET_REGISTRY[address];
+  if (cluster === ClusterType.MainnetBeta) return MARKET_REGISTRY[address];
 }
 
-export default lookupSerumMarketRegistry;
+export default serumMarketRegistry;

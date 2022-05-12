@@ -1,8 +1,8 @@
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import type TopCollectionsResponseType from '../../../../../_types/TopCollectionsResponseType';
-import frontendApi from '../../../../_helpers/frontendApi';
-import topCollectionsBase from '../_atoms/topCollectionsBase';
-import topCollectionsMore from '../_atoms/topCollectionsMore';
+import frontendApi from '../../../_helpers/frontendApi';
+import topCollectionsBase from '../_atoms/topCollectionsBaseAtom';
+import topCollectionsMore from '../_atoms/topCollectionsMoreAtom';
 
 const useFetchMoreTopCollections = () => {
   const topCollectionsLoadable = useRecoilValueLoadable(topCollectionsBase);

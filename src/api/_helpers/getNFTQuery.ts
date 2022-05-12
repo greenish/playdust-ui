@@ -1,6 +1,6 @@
 import type ComposedQueryType from '../../_types/ComposedQueryType';
 import type QueryNodeType from '../../_types/QueryNodeType';
-import type SearchSortType from '../../_types/SearchSortType';
+import type SearchSortType from '../../_types/SearchSortUnionType';
 import createSingleNFTQuery from './createSingleNFTQuery';
 
 const createOrQuery = (entries: QueryNodeType[]) => ({

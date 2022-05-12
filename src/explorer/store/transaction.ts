@@ -10,10 +10,10 @@ import {
   useRecoilValueLoadable,
   useSetRecoilState,
 } from 'recoil'
-import { WindowType } from '../../App/_atoms/appState'
-import currentState from '../../App/_atoms/currentState'
-import solanaCluster from '../../App/_atoms/solanaCluster'
-import { fetchParsedConfirmedTransaction, fetchSignaturesForAddress } from './'
+import type WindowType from '../../App/_types/WindowType'
+import currentState from '../../App/Window/_atoms/currentStateAtom'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
+import { fetchParsedConfirmedTransaction, fetchSignaturesForAddress } from "."
 
 interface TransactionResults {
   signatures: ConfirmedSignatureInfo[]
@@ -39,9 +39,7 @@ const fetchSignaturesAndTransactions = async (
   const signatures = await fetchSignaturesForAddress(endpoint, pubkey, cursor)
 
   const transactions = await Promise.all(
-    signatures.map((signature) => {
-      return fetchParsedConfirmedTransaction(endpoint, signature.signature)
-    })
+    signatures.map((signature) => fetchParsedConfirmedTransaction(endpoint, signature.signature))
   )
 
   return {
@@ -53,9 +51,7 @@ const fetchSignaturesAndTransactions = async (
 
 export const explorerStateSelector = selector<WindowType | undefined>({
   key: 'explorerState',
-  get: ({ get }) => {
-    return get(currentState)
-  },
+  get: ({ get }) => get(currentState),
 })
 
 const transactionResultsBaseSelector = selector<any>({
@@ -68,7 +64,7 @@ const transactionResultsBaseSelector = selector<any>({
         return []
       }
 
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
       const pubkey = new PublicKey(explorerState.state)
 
       return await fetchSignaturesAndTransactions(endpoint, pubkey)
@@ -100,7 +96,7 @@ export const transactionResultsSelector = selector<any>({
 })
 
 export const useFetchMoreTransactions = () => {
-  const { endpoint } = useRecoilValue(solanaCluster)
+  const { endpoint } = useRecoilValue(solanaClusterAtom)
   const explorerState = useRecoilValue(explorerStateSelector)
   const loadable = useRecoilValueLoadable(transactionResultsSelector)
   const setter = useSetRecoilState(transactionResultsMoreSelector)
@@ -117,13 +113,11 @@ export const useFetchMoreTransactions = () => {
 
       const res = await fetchSignaturesAndTransactions(endpoint, pubkey, cursor)
 
-      setter((curr: TransactionResults) => {
-        return {
+      setter((curr: TransactionResults) => ({
           signatures: [...curr.signatures, ...res.signatures],
           transactions: [...curr.transactions, ...res.transactions],
           cursor: res.cursor,
-        }
-      })
+        }))
     }
   }
 }

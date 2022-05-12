@@ -9,8 +9,8 @@ import { useRecoilValue } from 'recoil';
 import ActionNode from './ActionNode';
 import HandleNode from './HandleNode';
 import SearchNode from './SearchNode/SearchNode';
-import searchEdgesAtom from './_atoms/searchEdges';
-import searchNodesAtom from './_atoms/searchNodes';
+import searchEdgesAtom from './_atoms/searchEdgesAtom';
+import searchNodesAtom from './_atoms/searchNodesAtom';
 
 const nodeTypes = {
   actionNode: ActionNode,

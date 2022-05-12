@@ -6,7 +6,7 @@ import {
   TransactionResponse,
 } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 
 export const fetchParsedConfirmedTransaction = async (
   endpoint: string,
@@ -25,7 +25,7 @@ export const fetchRawTransactionSelector = selectorFamily<
   get:
     (signature) =>
     async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
       const connection = new Connection(endpoint)
 
       return await connection.getTransaction(signature)
@@ -49,7 +49,7 @@ export const fetchRawPopulatedTransactionSelector = selectorFamily<
   get:
     (signature) =>
     async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
       const connection = new Connection(endpoint)
 
       const response = await connection.getTransaction(signature)
@@ -81,7 +81,7 @@ export const fetchParsedConfirmedTransactionSelector = selectorFamily<
   get:
     (signature) =>
     async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
       return await fetchParsedConfirmedTransaction(endpoint, signature)
     },
 })

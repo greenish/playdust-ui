@@ -6,7 +6,7 @@ import {
   TransactionSignature,
 } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 
 export type Confirmations = number | 'max'
 
@@ -49,7 +49,7 @@ export async function fetchTransactionStatus(
       try {
         blockTime = await connection.getBlockTime(value.slot)
       } catch (error) {}
-      let timestamp: Timestamp = blockTime !== null ? blockTime : 'unavailable'
+      const timestamp: Timestamp = blockTime !== null ? blockTime : 'unavailable'
 
       info = {
         slot: value.slot,
@@ -74,7 +74,7 @@ export const fetchTransactionStatusSelector = selectorFamily<
   get:
     (signature) =>
     async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
 
       return fetchTransactionStatus(endpoint, signature)
     },
@@ -91,7 +91,7 @@ export const fetchSignatureStatus = selectorFamily<
   get:
     (signature) =>
     async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
       const connection = new Connection(endpoint)
 
       const { value } = await connection.getSignatureStatus(signature, {

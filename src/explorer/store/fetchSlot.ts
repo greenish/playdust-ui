@@ -1,6 +1,6 @@
 import { Connection, EpochInfo } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 
 export interface SlotDetails {
   slot: number
@@ -14,7 +14,7 @@ export const fetchSlot = selectorFamily<SlotDetails, number>({
     async ({ get }) => {
       const commitment = 'confirmed'
 
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
 
       const connection = new Connection(endpoint)
 

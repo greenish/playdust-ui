@@ -5,7 +5,7 @@ import {
   TransactionSignature,
 } from '@solana/web3.js'
 import { selectorFamily } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 import { pageIdx } from './pageIdx'
 
 export const fetchSignaturesForAddress = async (
@@ -36,7 +36,7 @@ export const fetchSignaturesForAddressSelector = selectorFamily<
     async ({ get }) => {
       get(pageIdx) // bust this cache every page
 
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
 
       return fetchSignaturesForAddress(endpoint, pubkey)
     },

@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type OpenSearchResponseType from '../_types/OpenSearchResponseType';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
 import postMutliCollectionQuery from './_helpers/postMultiCollectionQuery';
 import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
+import type OpenSearchResponseType from './_types/OpenSearchResponseType';
 
 const getAttributeQuery = (term: string) => ({
   size: 25,

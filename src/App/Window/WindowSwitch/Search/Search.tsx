@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import React, { useEffect } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import searchResultsAtom from '../../_atoms/searchResults';
+import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import type WindowProps from '../../_types/WindowPropsType';
 import FlaggedModal from './FlaggedModal';
 import SearchOverview from './SearchOverview/SearchOverview';
-import SearchResults from './SearchResults';
+import SearchResults from './SearchResults/SearchResults';
 import SearchSideBar from './SearchSideBar/SearchSideBar';
 
 const RootContainer = styled.div`

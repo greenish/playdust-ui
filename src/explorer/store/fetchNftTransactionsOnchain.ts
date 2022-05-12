@@ -1,7 +1,7 @@
 import { TransactionResponse } from '@solana/web3.js'
 import { selectorFamily } from 'recoil'
 import * as solana from '../../../solana'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 
 export const fetchNftTransactionsOnchain = selectorFamily<
   TransactionResponse[],
@@ -11,7 +11,7 @@ export const fetchNftTransactionsOnchain = selectorFamily<
   get:
     (mint: string) =>
     async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
       const result = await solana.fetchOnchain.getTransactions(endpoint, mint)
 
       return result

@@ -1,7 +1,7 @@
 import { useWallet } from '@solana/wallet-adapter-react'
 import { Transaction } from '@solana/web3.js'
 import { executeNFTSale } from '../../../../../../App/_helpers/playdustApi'
-import useTriggerNotfication from '../../../../../../App/_hooks/useTriggerNotification'
+import useTriggerNotfication from './useTriggerNotification'
 
 const useConfirmTransaction = () => {
   const { publicKey, signTransaction } = useWallet()

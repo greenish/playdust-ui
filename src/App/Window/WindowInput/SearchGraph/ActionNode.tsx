@@ -3,6 +3,7 @@ import { ArrowDownward, ArrowForward } from '@mui/icons-material';
 import { Button, Card, Menu, MenuItem, MenuItemProps } from '@mui/material';
 import React, { useState } from 'react';
 import { NodeComponentProps } from 'react-flow-renderer';
+import type QueryOperationUnionType from '../../../../_types/QueryOperationUnionType';
 import useAddAttributeQueryNode from '../../_hooks/useAddAttributeQueryNode';
 
 const RoootContainer = styled(Card)`
@@ -28,7 +29,7 @@ function MenuItemHandler({ onClick, onClose, ...props }: MenuItemHandlerProps) {
 }
 
 function ActionNode({ data }: NodeComponentProps) {
-  const [operation] = useState<'and' | 'or'>('and');
+  const [operation] = useState<QueryOperationUnionType>('and');
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const addAttributeQueryNode = useAddAttributeQueryNode('memory');
 

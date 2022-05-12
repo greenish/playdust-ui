@@ -5,7 +5,7 @@ import {
   PublicKey,
 } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 import { pageIdx } from './pageIdx'
 
 export const TOKEN_PROGRAM_ID = new PublicKey(
@@ -22,10 +22,10 @@ export const fetchParsedTokenAccountsByOwner = selectorFamily<
     async ({ get }) => {
       get(pageIdx) // bust this cache every page
 
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
       const connection = new Connection(endpoint, 'processed')
 
-      let resp = await connection.getParsedTokenAccountsByOwner(pubkey, {
+      const resp = await connection.getParsedTokenAccountsByOwner(pubkey, {
         programId: TOKEN_PROGRAM_ID,
       })
 

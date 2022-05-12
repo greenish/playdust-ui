@@ -2,10 +2,11 @@ import styled from '@emotion/styled';
 import { createTheme, Paper, ThemeProvider } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-import AppBar, { appBarWidth } from './AppBar/AppBar';
-import Notifications from './Notifications';
+import AppBar from './AppBar/AppBar';
+import Notifications from './Notifications/Notifications';
 import Provider from './Provider/Provider';
 import Window from './Window/Window';
+import appBarWidth from './_helpers/appBarWidth';
 
 const appBarTheme = createTheme({
   palette: {

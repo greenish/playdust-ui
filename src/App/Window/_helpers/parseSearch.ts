@@ -1,7 +1,8 @@
 import { nanoid } from 'nanoid';
+import isInSearchSortUnion from '../../../_helpers/isInSearchSortUnion';
 import ComposedQueryType from '../../../_types/ComposedQueryType';
-import SearchSortType, { isSearchSort } from '../../../_types/SearchSortType';
-import type { SearchStateType } from '../_atoms/searchState';
+import SearchSortType from '../../../_types/SearchSortUnionType';
+import type SearchStateType from '../_types/SearchStateType';
 import queryValidationPredicate from './queryValidationPredicate';
 
 const parseQuery = (
@@ -37,7 +38,7 @@ const parseOnlyListed = (onlyListed: unknown) => {
 
 const parseSort = (sort: SearchSortType) => {
   try {
-    return isSearchSort(sort) ? sort : undefined;
+    return isInSearchSortUnion(sort) ? sort : undefined;
   } catch {
     return undefined;
   }

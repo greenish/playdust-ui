@@ -16,6 +16,13 @@
     "incremental": true,
     "downlevelIteration": true
   },
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "commonjs",
+      "allowSyntheticDefaultImports": true,
+    }
+  },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "scripts"]
+  "exclude": ["node_modules"]
 }

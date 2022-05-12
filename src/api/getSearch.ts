@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import ComposedQueryType from '../_types/ComposedQueryType';
 import type SearchResponseType from '../_types/SearchResponseType';
-import type SearchSortType from '../_types/SearchSortType';
+import type SearchSortType from '../_types/SearchSortUnionType';
 import getNFTQuery from './_helpers/getNFTQuery';
 import postNFTQuery from './_helpers/postNFTQuery';
 

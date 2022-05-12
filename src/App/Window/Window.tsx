@@ -3,14 +3,14 @@ import { CircularProgress } from '@mui/material';
 import React, { Suspense, useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { userProfile } from '../../me/store';
-import activeTabAtom from '../_atoms/activeTab';
-import activeWindowAtom from '../_atoms/activeWindow';
-import currentState from '../_atoms/currentState';
+import activeTabAtom from '../_atoms/activeTabAtom';
 import usePushWindowHash from '../_hooks/usePushWindowHash';
-import useRouteApp from '../_hooks/useRouteApp';
-import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import WindowInput from './WindowInput/WindowInput';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
+import activeWindowAtom from './_atoms/activeWindowAtom';
+import currentState from './_atoms/currentStateAtom';
+import useRouteApp from './_hooks/useRouteApp';
+import useSetCurrentWindowState from './_hooks/useSetCurrentWindowState';
 import type WindowProps from './_types/WindowPropsType';
 
 const RootContainer = styled.div`

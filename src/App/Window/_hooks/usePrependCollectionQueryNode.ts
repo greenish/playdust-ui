@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import type ComposedQueryType from '../../../_types/ComposedQueryType';
 import type QueryNodeType from '../../../_types/QueryNodeType';
-import makeUseQueryChange from '../_helpers/makeUseQueryChange';
+import makeUseQueryChange from './makeUseQueryChange';
 
 const isRange = (parent: QueryNodeType[]) =>
   parent.length === 1 && parent[0].field === 'range';

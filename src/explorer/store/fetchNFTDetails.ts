@@ -1,9 +1,9 @@
 import { PublicKey } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
 import * as solana from '../../../solana'
-import solanaCluster from '../../App/_atoms/solanaCluster'
-import api from '../../App/_helpers/frontendApi'
-import type SearchMetadata from '../../App/_types/SearchMetadataType'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
+import api from '../../App/Window/_helpers/frontendApi'
+import type SearchMetadata from '../../../solana/SearchMetadataType'
 
 export const fetchNFTDetails = selectorFamily<
   SearchMetadata | undefined,
@@ -20,7 +20,7 @@ export const fetchNFTDetails = selectorFamily<
           return data
         }
 
-        const { endpoint } = get(solanaCluster)
+        const { endpoint } = get(solanaClusterAtom)
 
         return solana.fetchOnchain.byMintAddress(endpoint, mint)
       } catch (e) {

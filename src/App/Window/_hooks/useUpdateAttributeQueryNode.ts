@@ -1,7 +1,7 @@
 import type AttributeQueryContentType from '../../../_types/AttributeQueryContentType';
-import makeUseQueryChange from '../_helpers/makeUseQueryChange';
 import removeQueryNode from '../_helpers/removeQueryNode';
 import updateQueryNode from '../_helpers/updateQueryNode';
+import makeUseQueryChange from './makeUseQueryChange';
 
 interface UseUpdateAttributeNodeInput {
   id: string;

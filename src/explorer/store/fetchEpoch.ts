@@ -1,6 +1,6 @@
 import { Connection } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaClusterInfo from '../../App/_atoms/solanaClusterInfo'
+import solanaClusterInfo from './solanaClusterInfo'
 
 type EpochDetails = {
   currentEpoch: number

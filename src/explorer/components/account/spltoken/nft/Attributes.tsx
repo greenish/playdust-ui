@@ -8,7 +8,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material'
-import SearchMetadata from '../../../../../App/_types/SearchMetadataType'
+import SearchMetadata from '../../../../../../solana/SearchMetadataType'
 
 const Item = styled(Paper)``
 

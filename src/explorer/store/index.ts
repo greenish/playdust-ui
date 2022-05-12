@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 import { userProfile } from '../../me/store'
 
 export * from './coinPrice'
@@ -25,5 +25,5 @@ export * from './fetchVerifiableBuilds'
 export * from './pageIdx'
 export * from './transaction'
 
-export const useSolanaCluster = () => useRecoilValue(solanaCluster)
+export const useSolanaCluster = () => useRecoilValue(solanaClusterAtom)
 export const useUserProfile = () => useRecoilValue(userProfile)

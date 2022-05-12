@@ -1,7 +1,7 @@
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
-import type { SearchMetadataOnChain } from '../../src/App/_types/SearchMetadataType'
+import type { SearchMetadataOnChain } from '../SearchMetadataType'
 
 const getTokensByOwner = async (
   connection: Connection,

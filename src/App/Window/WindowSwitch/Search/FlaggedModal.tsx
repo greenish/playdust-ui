@@ -14,7 +14,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useState } from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { setFlagCollection, setFlagNFT } from '../../../_helpers/playdustApi';
-import flaggedCollection from './_atoms/flaggedCollection';
+import flaggedCollection from './_atoms/flaggedCollectionAtom';
 
 function FlaggedModal() {
   const [selected, setSelected] = useState('');

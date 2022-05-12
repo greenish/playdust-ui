@@ -2,7 +2,8 @@ import Link from 'next/link'
 import ellipsisify from '../../../App/_helpers/ellipsisify'
 import encodeWindowHash from '../../../App/_helpers/encodeWindowHash'
 import WindowUnion from '../../../App/_types/WindowUnionType'
-import { CopyButton } from '../common'
+import { CopyButton } from './CopyButton'
+
 
 export interface ExplorerLinkProps {
   url?: string
@@ -21,7 +22,7 @@ export function ExplorerLink({
   type,
 }: ExplorerLinkProps) {
   const display =
-    label || (ellipsis ? ellipsisify('' + to, ellipsis[0], ellipsis[1]) : to)
+    label || (ellipsis ? ellipsisify(`${  to}`, ellipsis[0], ellipsis[1]) : to)
 
   const href = type ? encodeWindowHash({ type, state: String(to) }) : '#'
   return (

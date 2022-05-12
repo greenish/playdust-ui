@@ -2,7 +2,7 @@ import AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
 import type AttributeResponseType from '../../_types/AttributeResponseType';
 import type ComposedQueryType from '../../_types/ComposedQueryType';
 import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
-import type OpenSearchResponseType from '../../_types/OpenSearchResponseType';
+import type OpenSearchResponseType from '../_types/OpenSearchResponseType';
 import getAttributeAggQuery from './getAttributeAggQuery';
 import getNFTQuery from './getNFTQuery';
 

@@ -1,7 +1,7 @@
-const enum StatusEnum {
+const enum StatusEnumType {
   None,
   Censored,
   NSFW,
 }
 
-export default StatusEnum;
+export default StatusEnumType;

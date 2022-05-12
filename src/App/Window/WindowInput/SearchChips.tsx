@@ -4,9 +4,9 @@ import React from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import CollectionQueryNodeType from '../../../_types/CollectionQueryNodeType';
 import type QueryNodeType from '../../../_types/QueryNodeType';
-import collectionByIdAtom from '../_atoms/collectionById';
-import searchStateAtom from '../_atoms/searchState';
+import searchStateAtom from '../_atoms/searchStateAtom';
 import useRemoveQueryNode from '../_hooks/useRemoveQueryNode';
+import collectionByIdAtom from './_atoms/collectionByIdAtom';
 
 const ChipContainer = styled.div`
   display: flex;

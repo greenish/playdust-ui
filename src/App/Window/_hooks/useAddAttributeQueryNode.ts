@@ -1,7 +1,7 @@
 import type QueryOperationUnionType from '../../../_types/QueryOperationUnionType';
 import addQueryNode from '../_helpers/addQueryNode';
-import makeUseQueryChange from '../_helpers/makeUseQueryChange';
 import type QueryNodeAdditionType from '../_types/QueryNodeAdditionType';
+import makeUseQueryChange from './makeUseQueryChange';
 
 interface UseAddAttributeNodeInput {
   value: string[];

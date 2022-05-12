@@ -12,15 +12,17 @@ import {
   SYSVAR_STAKE_HISTORY_PUBKEY,
   VOTE_PROGRAM_ID,
 } from '@solana/web3.js';
-import Cluster from '../_types/ClusterType';
-import lookupSerumMarketRegistry from './serumMarketRegistry';
+import ClusterType from '../_types/ClusterType';
+import serumMarketRegistry from './serumMarketRegistry';
 
-const walletAdapterNetworkToClusterMap: Record<WalletAdapterNetwork, Cluster> =
-  {
-    [WalletAdapterNetwork.Mainnet]: Cluster.MainnetBeta,
-    [WalletAdapterNetwork.Testnet]: Cluster.Testnet,
-    [WalletAdapterNetwork.Devnet]: Cluster.Devnet,
-  };
+const walletAdapterNetworkToClusterMap: Record<
+  WalletAdapterNetwork,
+  ClusterType
+> = {
+  [WalletAdapterNetwork.Mainnet]: ClusterType.MainnetBeta,
+  [WalletAdapterNetwork.Testnet]: ClusterType.Testnet,
+  [WalletAdapterNetwork.Devnet]: ClusterType.Devnet,
+};
 
 enum ProgramNames {
   // native built-ins
@@ -87,14 +89,18 @@ enum ProgramNames {
 }
 
 const ALL_CLUSTERS = [
-  Cluster.Custom,
-  Cluster.Devnet,
-  Cluster.Testnet,
-  Cluster.MainnetBeta,
+  ClusterType.Custom,
+  ClusterType.Devnet,
+  ClusterType.Testnet,
+  ClusterType.MainnetBeta,
 ];
 
-const LIVE_CLUSTERS = [Cluster.Devnet, Cluster.Testnet, Cluster.MainnetBeta];
-const MAINNET_ONLY = [Cluster.MainnetBeta];
+const LIVE_CLUSTERS = [
+  ClusterType.Devnet,
+  ClusterType.Testnet,
+  ClusterType.MainnetBeta,
+];
+const MAINNET_ONLY = [ClusterType.MainnetBeta];
 
 const PROGRAM_DEPLOYMENTS = {
   // native built-ins
@@ -128,7 +134,10 @@ const PROGRAM_DEPLOYMENTS = {
   [ProgramNames.MANGO_2]: MAINNET_ONLY,
   [ProgramNames.MANGO_3]: MAINNET_ONLY,
   [ProgramNames.MARINADE]: MAINNET_ONLY,
-  [ProgramNames.MERCURIAL]: [Cluster.Devnet, Cluster.MainnetBeta] as Cluster[],
+  [ProgramNames.MERCURIAL]: [
+    ClusterType.Devnet,
+    ClusterType.MainnetBeta,
+  ] as ClusterType[],
   [ProgramNames.METAPLEX]: LIVE_CLUSTERS,
   [ProgramNames.NFT_AUCTION]: LIVE_CLUSTERS,
   [ProgramNames.NFT_CANDY_MACHINE]: LIVE_CLUSTERS,
@@ -148,10 +157,13 @@ const PROGRAM_DEPLOYMENTS = {
   [ProgramNames.RAYDIUM_LP_2]: MAINNET_ONLY,
   [ProgramNames.RAYDIUM_STAKING]: MAINNET_ONLY,
   [ProgramNames.SABER_ROUTER]: [
-    Cluster.Devnet,
-    Cluster.MainnetBeta,
-  ] as Cluster[],
-  [ProgramNames.SABER_SWAP]: [Cluster.Devnet, Cluster.MainnetBeta] as Cluster[],
+    ClusterType.Devnet,
+    ClusterType.MainnetBeta,
+  ] as ClusterType[],
+  [ProgramNames.SABER_SWAP]: [
+    ClusterType.Devnet,
+    ClusterType.MainnetBeta,
+  ] as ClusterType[],
   [ProgramNames.SERUM_1]: MAINNET_ONLY,
   [ProgramNames.SERUM_2]: MAINNET_ONLY,
   [ProgramNames.SERUM_3]: MAINNET_ONLY,
@@ -290,7 +302,7 @@ function addressLabel(
     SYSVAR_IDS[address] ||
     SPECIAL_IDS[address] ||
     tokenLabel(address, tokenRegistry) ||
-    lookupSerumMarketRegistry(address, cluster)
+    serumMarketRegistry(address, cluster)
   );
 }
 

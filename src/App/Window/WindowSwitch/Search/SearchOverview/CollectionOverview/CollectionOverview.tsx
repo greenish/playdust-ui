@@ -18,15 +18,15 @@ import React, { useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userProfile } from '../../../../../../me/store';
-import humanizeSolana from '../../../../../_helpers/humanizeSolana';
 import { setCollectionCensorStatus } from '../../../../../_helpers/playdustApi';
 import Status from '../../../../../_types/StatusEnumType';
-import collectionStatusAtom from '../../../../_atoms/collectionStatus';
-import useInitCollectionQuery from '../../../../_hooks/useInitCollectionQuery';
-import collectionIdAtom from '../../_atoms/collectionId';
-import collectionOverviewAtom from '../../_atoms/collectionOverview';
-import useOpenFlaggedModal from '../../_hooks/useOpenFlaggedModal';
+import collectionStatusAtom from '../../../_atoms/collectionStatusAtom';
+import humanizeSolana from '../../../_helpers/humanizeSolana';
+import useInitCollectionQuery from '../../../_hooks/useInitCollectionQuery';
+import collectionIdAtom from '../_atoms/collectionIdAtom';
 import SimilarCollections from './SimilarCollections';
+import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
+import useOpenFlaggedModal from './_hooks/useOpenFlaggedModal';
 
 const RootContainer = styled.div`
   display: flex;

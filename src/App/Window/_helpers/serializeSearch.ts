@@ -1,4 +1,4 @@
-import type { SearchStateType } from '../_atoms/searchState';
+import type SearchStateType from '../_types/SearchStateType';
 
 const serializeSearch = (state: SearchStateType) => {
   const { query, sort, onlyListed } = state;

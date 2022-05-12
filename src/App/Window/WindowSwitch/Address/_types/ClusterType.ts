@@ -1,8 +1,8 @@
-enum Cluster {
+enum ClusterType {
   MainnetBeta,
   Testnet,
   Devnet,
   Custom,
 }
 
-export default Cluster;
+export default ClusterType;

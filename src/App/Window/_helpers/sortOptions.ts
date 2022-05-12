@@ -1,6 +1,6 @@
-import type SearchSortType from '../../../_types/SearchSortType';
+import type SearchSortType from '../../../_types/SearchSortUnionType';
 
-export type SearchSortOption = {
+type SearchSortOption = {
   name: string;
   value: SearchSortType;
 };

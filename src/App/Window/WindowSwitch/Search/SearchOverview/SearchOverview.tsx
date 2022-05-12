@@ -3,10 +3,10 @@ import { Chip, Skeleton, Typography } from '@mui/material';
 import React, { Suspense } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import type SearchOverviewResponseType from '../../../../../_types/SearchOverviewResponseType';
-import humanizeSolana from '../../../../_helpers/humanizeSolana';
-import collectionIdAtom from '../_atoms/collectionId';
-import searchOverviewAtom from '../_atoms/searchOverview';
+import humanizeSolana from '../../_helpers/humanizeSolana';
 import CollectionOverview from './CollectionOverview/CollectionOverview';
+import collectionIdAtom from './_atoms/collectionIdAtom';
+import searchOverviewAtom from './_atoms/searchOverviewAtom';
 
 const RootContainer = styled.div`
   height: 48px;

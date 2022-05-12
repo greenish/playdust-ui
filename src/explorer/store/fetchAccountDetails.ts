@@ -1,7 +1,7 @@
 import { MetadataJson, programs } from '@metaplex/js'
 import { Connection, ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue, useRecoilValueLoadable } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 import { getEditionInfo } from '../helpers/getEditionInfo'
 import pubkeyToString from '../helpers/pubKeyToString'
 import { fetchTokenRegistry } from './fetchTokenRegistry'
@@ -70,7 +70,7 @@ export const fetchAccountDetails = selectorFamily<AccountDetails, any>({
     (pubkey: PublicKey) =>
     async ({ get }) => {
       const tokenRegistry = get(fetchTokenRegistry)
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
 
       const connection = new Connection(endpoint)
 
@@ -118,7 +118,7 @@ export const fetchEditionInfo = selectorFamily<any, any>({
   get:
     (pubkey: PublicKey) =>
     async ({ get }) => {
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
 
       const connection = new Connection(endpoint)
 

@@ -1,0 +1,19 @@
+import { selector } from 'recoil';
+import type TopCollectionsResponseType from '../../../../../_types/TopCollectionsResponseType';
+import topCollectionsBaseAtom from './topCollectionsBaseAtom';
+import topCollectionsMoreAtom from './topCollectionsMoreAtom';
+
+const topCollectionsAtom = selector<TopCollectionsResponseType>({
+  key: 'topCollectionsAtom',
+  get: ({ get }) => {
+    const base = get(topCollectionsBaseAtom);
+    const more = get(topCollectionsMoreAtom);
+
+    return {
+      ...base,
+      results: [...base.results, ...more],
+    };
+  },
+});
+
+export default topCollectionsAtom;

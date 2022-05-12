@@ -8,7 +8,7 @@ import {
 import { Connection, PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 
 // Name auctionning Program ID
 export const PROGRAM_ID = new PublicKey(
@@ -96,7 +96,7 @@ export const fetchUserDomains = selectorFamily<DomainInfo[] | null, any>({
       // TODO: Allow only mainnet and custom
       // if (![Cluster.MainnetBeta, Cluster.Custom].includes(cluster)) return;
 
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
 
       const connection = new Connection(endpoint, 'confirmed')
 

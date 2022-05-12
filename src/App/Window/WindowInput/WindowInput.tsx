@@ -14,24 +14,23 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useDebounceCallback } from '@react-hook/debounce';
 import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import getWindowType from '../../_helpers/getWindowType';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
-import isSearchQueryValidAtom from '../_atoms/isSearchQueryValid';
-import searchQueryValidAtom from '../_atoms/searchQueryValid';
-import searchResultsAtom from '../_atoms/searchResults';
-import searchStateUncommittedAtom from '../_atoms/searchStateUncommitted';
-import searchSuggestionsAtom, {
-  SearchSuggestionType,
-} from '../_atoms/searchSuggestions';
-import searchSuggestionTermAtom from '../_atoms/searchSuggestionTerm';
+import searchQueryValidAtom from '../_atoms/searchQueryValidAtom';
+import searchResultsAtom from '../_atoms/searchResultsAtom';
+import searchStateUncommittedAtom from '../_atoms/searchStateUncommittedAtom';
 import serializeSearch from '../_helpers/serializeSearch';
 import useAddAttributeQueryNode from '../_hooks/useAddAttributeQueryNode';
-import useAddTextQueryNode from '../_hooks/useAddTextQueryNode';
 import usePrependCollectionQueryNode from '../_hooks/usePrependCollectionQueryNode';
 import WindowProps from '../_types/WindowPropsType';
 import SearchChips from './SearchChips';
 import SearchGraph from './SearchGraph/SearchGraph';
 import SuggestionResult from './SuggestionResult';
+import isSearchQueryValidAtom from './_atoms/isSearchQueryValidAtom';
+import searchSuggestionsAtom from './_atoms/searchSuggestionsAtom';
+import searchSuggestionTermAtom from './_atoms/searchSuggestionTermAtom';
+import getWindowType from './_helpers/getWindowType';
+import useAddTextQueryNode from './_hooks/useAddTextQueryNode';
+import type SearchSuggestionType from './_types/SearchSuggestionType';
 
 const RootContainer = styled.div`
   display: flex;

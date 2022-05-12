@@ -1,13 +1,13 @@
 import { PublicKey } from '@solana/web3.js';
 import { selector } from 'recoil';
-import currentStateAtom from '../../../../_atoms/currentState';
-import solanaClusterAtom from '../../../../_atoms/solanaCluster';
+import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import currentStateAtom from '../../../_atoms/currentStateAtom';
 import addressLabel from '../_helpers/addressLabel';
 import AddressExplorerType from '../_types/AddressExplorerType';
 import tokenRegistryAtom from './tokenRegistryAtom';
 
-const addressState = selector<AddressExplorerType>({
-  key: 'addressState',
+const addressStateAtom = selector<AddressExplorerType>({
+  key: 'addressStateAtom',
   get: ({ get }) => {
     const currentState = get(currentStateAtom);
 
@@ -37,4 +37,4 @@ const addressState = selector<AddressExplorerType>({
   },
 });
 
-export default addressState;
+export default addressStateAtom;

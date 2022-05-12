@@ -3,8 +3,6 @@ import CollectionQueryNodeType from './CollectionQueryNodeType';
 import RangeQueryNodeType from './RangeQueryNodeType';
 import TextQueryNodeType from './TextQueryNodeType';
 
-export type OperationType = 'and' | 'or';
-
 type QueryNodeType =
   | CollectionQueryNodeType
   | AttributeQueryNodeType

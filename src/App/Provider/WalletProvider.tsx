@@ -1,6 +1,6 @@
 import {
   ConnectionProvider,
-  WalletProvider,
+  WalletProvider as SolanaWalletProvider,
 } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import '@solana/wallet-adapter-react-ui/styles.css';
@@ -15,9 +15,9 @@ import {
 } from '@solana/wallet-adapter-wallets';
 import React, { PropsWithChildren, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import solanaClusterAtom from '../_atoms/solanaCluster';
+import solanaClusterAtom from '../_atoms/solanaClusterAtom';
 
-function Wallet({ children }: PropsWithChildren<object>) {
+function WalletProvider({ children }: PropsWithChildren<object>) {
   const { network, endpoint } = useRecoilValue(solanaClusterAtom);
   const wallets = useMemo(
     () => [
@@ -34,11 +34,11 @@ function Wallet({ children }: PropsWithChildren<object>) {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider autoConnect={true} wallets={wallets}>
+      <SolanaWalletProvider autoConnect={true} wallets={wallets}>
         <WalletModalProvider>{children}</WalletModalProvider>
-      </WalletProvider>
+      </SolanaWalletProvider>
     </ConnectionProvider>
   );
 }
 
-export default Wallet;
+export default WalletProvider;

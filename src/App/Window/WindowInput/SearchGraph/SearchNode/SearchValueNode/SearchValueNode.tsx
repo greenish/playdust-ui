@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import searchQueryChildAtom from '../../../../_atoms/searchQueryChild';
-import SearchAttributeNode from './AttributeNode';
+import searchQueryChildAtom from '../_atoms/searchQueryChildAtom';
+import SearchAttributeNode from './AttributeNode/AttributeNode';
 import SearchCollectionNode from './CollectionNode';
 import RangeNode from './RangeNode';
-import SearchTextNode from './SearchTextNode';
+import SearchTextNode from './SearchTextNode/SearchTextNode';
 
 interface SearchValueNodeProps {
   id: string;

@@ -1,5 +1,7 @@
-import type { AppStateType, TabType, WindowType } from '../_atoms/appState';
-import { isInWindowUnion } from '../_types/WindowUnionType';
+import type AppStateType from '../_types/AppStateType';
+import type TabType from '../_types/TabType';
+import type WindowType from '../_types/WindowType';
+import isInWindowUnion from './isInWindowUnionType';
 
 const validateWindows = (windows: WindowType[]) => {
   if (windows.length === 0) {

@@ -1,6 +1,6 @@
 import { Connection, PublicKey, StakeActivationData } from '@solana/web3.js'
 import { selectorFamily, useRecoilValue } from 'recoil'
-import solanaCluster from '../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../App/_atoms/solanaClusterAtom'
 import { pageIdx } from './pageIdx'
 
 export const fetchStakeActivation = selectorFamily<StakeActivationData, any>({
@@ -10,7 +10,7 @@ export const fetchStakeActivation = selectorFamily<StakeActivationData, any>({
     async ({ get }) => {
       get(pageIdx) // bust this cache every page
 
-      const { endpoint } = get(solanaCluster)
+      const { endpoint } = get(solanaClusterAtom)
 
       const connection = new Connection(endpoint, 'confirmed')
 

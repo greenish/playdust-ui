@@ -1,5 +1,5 @@
-import makeUseQueryChange from '../_helpers/makeUseQueryChange';
 import removeQueryNode from '../_helpers/removeQueryNode';
+import makeUseQueryChange from './makeUseQueryChange';
 
 const useRemoveQueryNode = makeUseQueryChange<string>(
   (query) => (id: string) => {

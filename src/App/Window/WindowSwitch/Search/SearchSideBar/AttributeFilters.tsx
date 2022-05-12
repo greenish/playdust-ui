@@ -12,8 +12,8 @@ import {
 import React, { useState } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import type AttributeQueryNodeType from '../../../../../_types/AttributeQueryNodeType';
-import searchAggregationsAtom from '../../../_atoms/searchAggregations';
-import searchQueryAttributesAtom from '../../../_atoms/searchQueryAttributes';
+import searchAggregationsAtom from '../../../_atoms/searchAggregationsAtom';
+import searchQueryAttributesAtom from '../../../_atoms/searchQueryAttributesAtom';
 import useAddAttributeQueryNode from '../../../_hooks/useAddAttributeQueryNode';
 import useUpdateAttributeQueryNode from '../../../_hooks/useUpdateAttributeQueryNode';
 

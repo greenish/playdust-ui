@@ -1,4 +1,4 @@
-import type OpenSearchResponseType from '../../_types/OpenSearchResponseType';
+import type OpenSearchResponseType from '../_types/OpenSearchResponseType';
 import postAxios from './postAxios';
 
 function makePostScrollQuery<T>() {

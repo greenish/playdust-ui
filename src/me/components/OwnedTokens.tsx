@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { Container, Typography } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useRecoilValue } from 'recoil'
-import TokenGrid from '../../App/Window/_sharedComponents/TokenGrid/TokenGrid'
+import TokenGrid from '../../App/Window/WindowSwitch/_sharedComponents/TokenGrid/TokenGrid'
 import { fetchOwned } from '../store'
 
 const HelperMessageContainer = styled.div`

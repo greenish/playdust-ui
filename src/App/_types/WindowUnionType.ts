@@ -1,15 +1,6 @@
-export const ALL_WINDOWS = [
-  'address',
-  'block',
-  'home',
-  'search',
-  'tx',
-  'epoch',
-] as const;
-type WindowTuple = typeof ALL_WINDOWS;
-type WindowUnionType = WindowTuple[number];
+import allWindowOptions from '../_helpers/allWindowOptions';
 
-export const isInWindowUnion = (value: string): value is WindowUnionType =>
-  ALL_WINDOWS.includes(value as WindowUnionType);
+type WindowTuple = typeof allWindowOptions;
+type WindowUnionType = WindowTuple[number];
 
 export default WindowUnionType;

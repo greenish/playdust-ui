@@ -1,11 +1,7 @@
 import { nanoid } from 'nanoid';
-import type { WindowType } from '../_atoms/appState';
+import type EncodeHashOptionsType from '../_types/EncodeHashOptionsType';
+import type WindowType from '../_types/WindowType';
 import decodeWindowHash from './decodeWindowHash';
-
-export interface EncodeHashOptionsType {
-  tabOverride?: string;
-  newTab?: boolean;
-}
 
 const getTabId = (options?: EncodeHashOptionsType) => {
   const { tabOverride, newTab } = options || {};

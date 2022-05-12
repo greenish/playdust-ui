@@ -13,7 +13,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import SearchMetadata from '../../../../../App/_types/SearchMetadataType'
+import SearchMetadata from '../../../../../../solana/SearchMetadataType'
 import { AccountLink } from '../../../common'
 
 interface CreatorInfo {

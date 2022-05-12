@@ -1,6 +1,6 @@
 import type RangeQueryContentType from '../../../_types/RangeQueryContentType';
-import makeUseQueryChange from '../_helpers/makeUseQueryChange';
 import updateQueryNode from '../_helpers/updateQueryNode';
+import makeUseQueryChange from './makeUseQueryChange';
 
 interface UseUpdateRangeNodeInput {
   id: string;

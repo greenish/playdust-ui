@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import { Divider } from '@mui/material';
 import React from 'react';
 import AttributeFilters from './AttributeFilters';
-import OnlyListedSwitch from './OnlyListedSwitch';
-import RangeFilters from './RangeFilters';
-import SortFields from './SortFields';
+import OnlyListedSwitch from './OnlyListedSwitch/OnlyListedSwitch';
+import RangeFilters from './RangeFilters/RangeFilters';
+import SortFields from './SortFields/SortFields';
 
 const RootContainer = styled.div`
   width: 300px;

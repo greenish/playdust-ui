@@ -1,7 +1,7 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js'
 import { BigNumber } from 'bignumber.js'
 import { useRecoilValue } from 'recoil'
-import solanaCluster from '../../../../App/_atoms/solanaCluster'
+import solanaClusterAtom from '../../../../App/_atoms/solanaClusterAtom'
 import compact from '../../../helpers/compact'
 import { addressLabel } from '../../../helpers/tx'
 import { useAccountInfo, useTokenRegistry } from '../../../store'
@@ -13,7 +13,7 @@ interface TokenAccountProps {
 
 const TokenAccountContent = ({ pubkey }: TokenAccountProps) => {
   const account = useAccountInfo(pubkey)
-  const cluster = useRecoilValue(solanaCluster)
+  const cluster = useRecoilValue(solanaClusterAtom)
   const tokenRegistry = useTokenRegistry()
   const label = addressLabel(pubkey.toBase58(), cluster.network, tokenRegistry)
 

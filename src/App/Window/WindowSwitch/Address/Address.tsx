@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import ExplorerCard from './ExplorerCard/ExplorerCard';
+import ExplorerGrid from './ExplorerGrid';
+import ExplorerLink from './ExplorerLink/ExplorerLink';
 import addressStateAtom from './_atoms/addressStateAtom';
-import ExplorerCard from './_sharedComponents/ExplorerCard/ExplorerCard';
-import ExplorerGrid from './_sharedComponents/ExplorerGrid';
-import ExplorerLink from './_sharedComponents/ExplorerLink';
 
 function AddressOverview() {
   const addressState = useRecoilValue(addressStateAtom);

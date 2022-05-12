@@ -12,9 +12,9 @@ import {
 } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import humanizeSolana from '../../../../../_helpers/humanizeSolana';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
-import collectionOverviewAtom from '../../_atoms/collectionOverview';
+import humanizeSolana from '../../../_helpers/humanizeSolana';
+import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
 
 interface SimilarCollectionsProps {
   open: boolean;

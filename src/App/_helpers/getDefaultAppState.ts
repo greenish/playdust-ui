@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
-import type { AppStateType, WindowType } from '../_atoms/appState';
+import type AppStateType from '../_types/AppStateType';
+import type WindowType from '../_types/WindowType';
 
 const homeWindow: WindowType = {
   type: 'home',

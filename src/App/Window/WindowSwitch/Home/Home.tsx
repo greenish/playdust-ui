@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import React, { useMemo } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import humanizeSolana from '../../../_helpers/humanizeSolana';
-import useInitCollectionQuery from '../../_hooks/useInitCollectionQuery';
-import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
 import humanizeCollection from '../_helpers/humanizeCollection';
-import topCollectionsAtom from './_atoms/topCollections';
+import humanizeSolana from '../_helpers/humanizeSolana';
+import useInitCollectionQuery from '../_hooks/useInitCollectionQuery';
+import TokenGrid from '../_sharedComponents/TokenGrid/TokenGrid';
+import topCollectionsAtom from './_atoms/topCollectionsAtom';
 import useFetchMoreTopCollections from './_hooks/useFetchMoreTopCollections';
 
 const RootContainer = styled.div`

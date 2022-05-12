@@ -17,7 +17,17 @@
     "@typescript-eslint/no-explicit-any": 2,
     "@typescript-eslint/no-non-null-assertion": 2
   },
+  "overrides": [
+    {
+      "files": ["scripts/**"],
+      "rules": {
+        "no-console": 0,
+        "import/no-extraneous-dependencies": [2, { "devDependencies": true }]
+      }
+    }
+  ],
   "parserOptions": {
+    "files": ["*.ts", "*.tsx"],
     "project": ["tsconfig.json"]
   }
 }

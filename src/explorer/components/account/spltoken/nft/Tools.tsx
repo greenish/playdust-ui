@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { PublicKey } from '@solana/web3.js'
 import { useCookies } from 'react-cookie'
 import FlaggedModal from '../../../../../App/Window/WindowSwitch/Search/FlaggedModal'
-import useOpenFlaggedModal from '../../../../../App/Window/WindowSwitch/Search/_hooks/useOpenFlaggedModal'
+import useOpenFlaggedModal from '../../../../../App/Window/WindowSwitch/Search/SearchOverview/CollectionOverview/_hooks/useOpenFlaggedModal'
 import { useUserProfile } from '../../../../store'
 
 const ReportButton = styled(Button)``

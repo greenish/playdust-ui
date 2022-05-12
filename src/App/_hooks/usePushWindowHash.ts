@@ -1,4 +1,4 @@
-import makeUseNavigateWindowHash from '../_helpers/makeUseNavigateWindowHash';
+import makeUseNavigateWindowHash from './makeUseNavigateWindowHash';
 
 const usePushWindowHash = makeUseNavigateWindowHash('push');
 

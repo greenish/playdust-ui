@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
-import type { WindowType } from '../_atoms/appState';
-import { isInWindowUnion } from '../_types/WindowUnionType';
+import type WindowType from '../_types/WindowType';
 import getWindowHash from './getWindowHash';
+import isInWindowUnion from './isInWindowUnionType';
 
 const decodeWindowHash = (
   input?: string
