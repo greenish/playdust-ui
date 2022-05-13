@@ -1,7 +1,14 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Add, Close, DeleteSweep, Home, Search } from '@mui/icons-material';
-import { Fab, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import {
+  Fab,
+  IconButton,
+  SxProps,
+  Theme,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { PropsWithChildren, ReactNode, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -9,6 +16,7 @@ import activeTabAtom from '../_atoms/activeTabAtom';
 import appStateAtom from '../_atoms/appStateAtom';
 import appBarWidth from '../_helpers/appBarWidth';
 import getCDNUrl from '../_helpers/getCDNUrl';
+import useGoHome from '../_hooks/useGoHome';
 import type WindowType from '../_types/WindowType';
 import Playdust from './PlaydustIcon';
 import WalletButton from './WalletButton/WalletButton';
@@ -159,6 +167,7 @@ function AppBar() {
   const goToNewTab = useGoToNewTab();
   const router = useRouter();
   const theme = useTheme();
+  const goHome = useGoHome();
 
   if (!router.isReady) {
     return null;
@@ -170,7 +179,9 @@ function AppBar() {
   return (
     <RootContainer>
       <TopContainer>
-        <Playdust width={largeButtonSize} />
+        <IconButton onClick={() => goHome()}>
+          <Playdust width={largeButtonSize} />
+        </IconButton>
         {tabs.map((tab) => {
           const isActive = inWindowManager && tab.id === activeTab?.id;
           const currentWindow = tab.windows[tab.selectedWindowIdx];

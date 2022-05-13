@@ -1,5 +1,4 @@
-import match from 'autosuggest-highlight/match';
-import parse from 'autosuggest-highlight/parse';
+import { matchSorter } from 'match-sorter';
 import { noWait, selector, selectorFamily } from 'recoil';
 import type AttributeQueryNodeType from '../../../../_types/AttributeQueryNodeType';
 import type AttributeResponseType from '../../../../_types/AttributeResponseType';
@@ -59,14 +58,7 @@ const defaultSuggestions = {
   loading: false,
 };
 
-const getFuzzySuggestion = (term: string): SearchSuggestionType => ({
-  key: 'fuzzy-search',
-  group: 'Search',
-  label: `search for ${term}`,
-  type: 'search',
-});
-
-const getAggregationSuggestions = (
+const getClientSuggestions = (
   attributes: AttributeResponseType,
   selected: AttributeQueryNodeType[],
   term: string
@@ -77,26 +69,10 @@ const getAggregationSuggestions = (
     return options
       .filter((option) => !(parentFound && parentFound.value.includes(option)))
       .map((option) => {
-        const combined = `${trait}: ${option}`;
-        const matched = match(combined, term, {
-          findAllOccurrences: true,
-          insideWords: true,
-        });
-        const parsed = parse(combined, matched);
-        const highlight = parsed
-          .map((portion) => {
-            if (!portion.highlight) {
-              return portion.text;
-            }
-
-            return `<em>${portion.text}</em>`;
-          })
-          .join('');
-
         const suggestion: SearchSuggestionType = {
           key: `attribute:${trait}:${option}`,
           group: 'Attribute',
-          label: highlight,
+          label: `${trait}: ${option}`,
           attributeMeta: {
             trait,
             option,
@@ -108,7 +84,33 @@ const getAggregationSuggestions = (
       });
   });
 
-  return result;
+  const uppercasedTerm = term.toUpperCase();
+  const matched = matchSorter(result, term, { keys: ['label'] });
+  const withHighlight: SearchSuggestionType[] = matched.map((entry) => ({
+    ...entry,
+    label: entry.label
+      .split(' ')
+      .map((word) => {
+        let matchCount = 0;
+        const chars = word.split('');
+        const highlighted = chars
+          .map((char) => {
+            if (uppercasedTerm.includes(char.toUpperCase())) {
+              matchCount += 1;
+
+              return `<em>${char}</em>`;
+            }
+
+            return char;
+          })
+          .join('');
+
+        return matchCount > 1 ? highlighted : word;
+      })
+      .join(' '),
+  }));
+
+  return withHighlight;
 };
 
 const getServerSuggestions = ({
@@ -159,7 +161,13 @@ const searchSuggestionsAtom = selectorFamily<SearchSuggetionResults, string>({
     (current) =>
     ({ get }) => {
       const term = get(searchSuggestionTerm);
-      const fuzzySuggestion = getFuzzySuggestion(term);
+      const highlightedTerm = `<em>${term}</em>`;
+      const fuzzySuggestion: SearchSuggestionType = {
+        key: 'fuzzy-search',
+        group: 'Search',
+        label: `search for ${highlightedTerm}`,
+        type: 'search',
+      };
 
       if (current !== '') {
         const aggregations = get(noWait(searchAggregations));
@@ -167,7 +175,7 @@ const searchSuggestionsAtom = selectorFamily<SearchSuggetionResults, string>({
         if (aggregations.state === 'hasValue') {
           const attributeNodes = get(searchQueryAttributes);
           const { attributes } = aggregations.contents;
-          const aggSuggestions = getAggregationSuggestions(
+          const aggSuggestions = getClientSuggestions(
             attributes,
             attributeNodes,
             term
@@ -206,13 +214,13 @@ const searchSuggestionsAtom = selectorFamily<SearchSuggetionResults, string>({
         addSuggestion({
           key: 'block-search',
           group: 'Explorer',
-          label: `block ${term}`,
+          label: `block ${highlightedTerm}`,
           type: 'block',
         });
         addSuggestion({
           key: 'epoch-search',
           group: 'Explorer',
-          label: `epoch ${term}`,
+          label: `epoch ${highlightedTerm}`,
           type: 'epoch',
         });
       }
@@ -221,7 +229,7 @@ const searchSuggestionsAtom = selectorFamily<SearchSuggetionResults, string>({
         addSuggestion({
           key: 'account-search',
           group: 'Explorer',
-          label: `account ${term}`,
+          label: `account ${highlightedTerm}`,
           type: 'address',
         });
 
@@ -235,7 +243,7 @@ const searchSuggestionsAtom = selectorFamily<SearchSuggetionResults, string>({
         addSuggestion({
           key: 'transaction-search',
           group: 'Explorer',
-          label: `transaction ${term}`,
+          label: `transaction ${highlightedTerm}`,
           type: 'tx',
         });
 

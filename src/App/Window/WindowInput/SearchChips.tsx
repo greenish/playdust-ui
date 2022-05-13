@@ -4,6 +4,7 @@ import React from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import CollectionQueryNodeType from '../../../_types/CollectionQueryNodeType';
 import type QueryNodeType from '../../../_types/QueryNodeType';
+import useGoHome from '../../_hooks/useGoHome';
 import searchStateAtom from '../_atoms/searchStateAtom';
 import useRemoveQueryNode from '../_hooks/useRemoveQueryNode';
 import collectionByIdAtom from './_atoms/collectionByIdAtom';
@@ -68,12 +69,12 @@ const getChipLabel = (child: QueryNodeType) => {
 
 interface SearchChipsProps {
   disabled: boolean;
-  clearState: () => void;
 }
 
-function SearchChips({ disabled, clearState }: SearchChipsProps) {
+function SearchChips({ disabled }: SearchChipsProps) {
   const { query } = useRecoilValue(searchStateAtom);
   const removeQueryNode = useRemoveQueryNode();
+  const goHome = useGoHome();
 
   return (
     <ChipContainer>
@@ -88,9 +89,7 @@ function SearchChips({ disabled, clearState }: SearchChipsProps) {
               label={getChipLabel(child)}
               variant="outlined"
               onDelete={() =>
-                query.flat().length === 1
-                  ? clearState()
-                  : removeQueryNode(child.id)
+                query.flat().length === 1 ? goHome() : removeQueryNode(child.id)
               }
             />
           );

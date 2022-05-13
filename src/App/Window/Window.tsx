@@ -4,7 +4,6 @@ import React, { Suspense, useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { userProfile } from '../../me/store';
 import activeTabAtom from '../_atoms/activeTabAtom';
-import usePushWindowHash from '../_hooks/usePushWindowHash';
 import WindowInput from './WindowInput/WindowInput';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
 import activeWindowAtom from './_atoms/activeWindowAtom';
@@ -44,16 +43,10 @@ function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
   const setCurrentWindowState = useSetCurrentWindowState();
   const profile = useRecoilValue(userProfile);
-  const pushWindowHash = usePushWindowHash();
 
-  const windowProps = useMemo<WindowProps>(() => {
-    const currentId = activeTab.id;
-
-    return {
+  const windowProps = useMemo<WindowProps>(
+    () => ({
       ...activeWindow,
-      clearState: () => {
-        pushWindowHash({ type: 'home', state: '' }, { tabOverride: currentId });
-      },
       setWindowImages: (images: string[]) => {
         const activeImages = (activeWindow.images || []).join(',');
         const nextImages = images.join(',');
@@ -69,8 +62,9 @@ function Window() {
           );
         }
       },
-    };
-  }, [activeTab.id, activeWindow, pushWindowHash, setCurrentWindowState]);
+    }),
+    [activeTab.id, activeWindow, setCurrentWindowState]
+  );
 
   const { didMount } = useRouteApp();
 

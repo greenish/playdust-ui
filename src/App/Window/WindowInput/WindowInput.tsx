@@ -10,10 +10,10 @@ import {
   TextField,
   Tooltip,
 } from '@mui/material';
-import { createFilterOptions } from '@mui/material/Autocomplete';
 import { useDebounceCallback } from '@react-hook/debounce';
 import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import useGoHome from '../../_hooks/useGoHome';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import searchQueryValidAtom from '../_atoms/searchQueryValidAtom';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
@@ -30,7 +30,6 @@ import searchSuggestionsAtom from './_atoms/searchSuggestionsAtom';
 import searchSuggestionTermAtom from './_atoms/searchSuggestionTermAtom';
 import getWindowType from './_helpers/getWindowType';
 import useAddTextQueryNode from './_hooks/useAddTextQueryNode';
-import type SearchSuggestionType from './_types/SearchSuggestionType';
 
 const RootContainer = styled.div`
   display: flex;
@@ -38,11 +37,7 @@ const RootContainer = styled.div`
   width: 100%;
 `;
 
-const clientFilter = createFilterOptions({
-  stringify: (option: SearchSuggestionType) => option.label,
-});
-
-function WindowInput({ state, type, clearState }: WindowProps) {
+function WindowInput({ state, type }: WindowProps) {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const isQueryValid = useRecoilValue(isSearchQueryValidAtom);
@@ -54,6 +49,7 @@ function WindowInput({ state, type, clearState }: WindowProps) {
   const addAttributeQueryNode = useAddAttributeQueryNode();
   const prependCollectionQueryNode = usePrependCollectionQueryNode();
   const pushWindowHash = usePushWindowHash();
+  const goHome = useGoHome();
 
   const [suggestionTerm, setSuggestionTerm] = useRecoilState(
     searchSuggestionTermAtom
@@ -88,12 +84,12 @@ function WindowInput({ state, type, clearState }: WindowProps) {
       <Autocomplete
         size="small"
         open={searchOpen}
-        filterOptions={filterOnServer ? (x) => x : clientFilter}
+        filterOptions={(x) => x}
         onOpen={() => setSearchOpen(true)}
         onClose={() => setSearchOpen(false)}
         onChange={(_evt, onChangeValue, reason) => {
           if (reason === 'clear') {
-            return clearState();
+            return goHome();
           }
 
           const value = onChangeValue[1];
@@ -181,13 +177,13 @@ function WindowInput({ state, type, clearState }: WindowProps) {
         )}
         renderTags={() =>
           isSearchable ? (
-            <SearchChips disabled={disabled} clearState={clearState} />
+            <SearchChips disabled={disabled} />
           ) : (
             <Chip
               size="small"
               label={`${type}: ${state}`}
               variant="outlined"
-              onDelete={() => clearState()}
+              onDelete={() => goHome()}
             />
           )
         }
