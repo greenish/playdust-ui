@@ -2,7 +2,8 @@ import { nanoid } from 'nanoid';
 import { selector } from 'recoil';
 import type SearchResponseType from '../../../_types/SearchResponseType';
 import api from '../_helpers/frontendApi';
-import searchState from './searchStateAtom';
+import parseSearch from '../_helpers/parseSearch';
+import searchStateSerializedAtom from './searchStateSerializedAtom';
 
 const initialState = {
   total: 0,
@@ -14,7 +15,8 @@ const searchResultsBaseAtom = selector<SearchResponseType>({
   key: 'searchResultsBaseAtom',
   get: async ({ get }) => {
     try {
-      const parsed = get(searchState);
+      const serialized = get(searchStateSerializedAtom);
+      const parsed = parseSearch(serialized);
 
       if (!parsed || parsed.query.length === 0) {
         return initialState;

@@ -1,4 +1,4 @@
-import { FilterAlt } from '@mui/icons-material';
+import { FilterAltOutlined } from '@mui/icons-material';
 import {
   Button,
   Checkbox,
@@ -33,8 +33,11 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
 
   return (
     <>
-      <IconButton onClick={(evt) => setAnchorEl(evt.currentTarget)}>
-        <FilterAlt />
+      <IconButton
+        onClick={(evt) => setAnchorEl(evt.currentTarget)}
+        size="small"
+      >
+        <FilterAltOutlined />
       </IconButton>
       <Popover
         anchorEl={anchorEl}

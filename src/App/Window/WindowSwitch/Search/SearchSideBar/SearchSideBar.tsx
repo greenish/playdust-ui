@@ -14,20 +14,15 @@ const RootContainer = styled.div`
   flex-direction: column;
 `;
 
-const SortContainer = styled.div`
-  padding: 8px 0;
-`;
-
 function SearchSideBar() {
   return (
     <RootContainer>
-      <SortContainer>
-        <SortFields />
-      </SortContainer>
+      <SortFields />
       <OnlyListedSwitch />
       <RangeFilters />
       <br />
       <Divider />
+      <br />
       <AttributeFilters />
     </RootContainer>
   );

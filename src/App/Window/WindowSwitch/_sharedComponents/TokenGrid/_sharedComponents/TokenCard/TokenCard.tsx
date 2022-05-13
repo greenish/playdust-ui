@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { Typography } from '@mui/material';
 import React from 'react';
 import encodeWindowHash from '../../../../../../_helpers/encodeWindowHash';
 import getCDNUrl from '../../../../../../_helpers/getCDNUrl';
-import Link from '../Link';
+import humanizeSolana from '../../../../_helpers/humanizeSolana';
+import Link from '../../../Link';
 import ImageCard from './ImageCard/ImageCard';
 import SkeletonImageCard from './SkeletonImageCard';
 import TokenCardFilter from './TokenCardFilter';
@@ -11,22 +11,31 @@ import type TokenCardProps from './_types/TokenCardProps';
 
 const CardContentContainer = styled.div`
   display: flex;
-  flex-wrap: nowrap;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
+  height: 100%;
 `;
 
 const CardTextContainer = styled.div`
   display: flex;
   flex: 1;
-  flex-direction: column;
-  overflow: hidden;
-  justify-content: center;
+  align-items: flex-end;
 `;
 
-const CardText = styled(Typography)`
+const CardText = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+const CardSecondaryContainer = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 90%;
+  padding-bottom: 4px;
 `;
 
 const TokenCardFilterContainer = styled.div`
@@ -64,17 +73,17 @@ function TokenCard({
               <CardText>
                 <Link href={href}>{name || metadata?.data?.name}</Link>
               </CardText>
-              {listed && lastListPrice && (
-                <CardText sx={{ fontSize: '90%' }}>
-                  {lastListPrice} SOL
-                </CardText>
-              )}
             </CardTextContainer>
-            <TokenCardFilterContainer>
-              {metadata && metadata.offChainData?.attributes && (
-                <TokenCardFilter metadata={metadata} />
-              )}
-            </TokenCardFilterContainer>
+            <CardSecondaryContainer>
+              <span>
+                {listed ? humanizeSolana(lastListPrice) : humanizeSolana()}
+              </span>
+              <TokenCardFilterContainer>
+                {metadata && metadata.offChainData?.attributes && (
+                  <TokenCardFilter metadata={metadata} />
+                )}
+              </TokenCardFilterContainer>
+            </CardSecondaryContainer>
           </CardContentContainer>
         ) : null
       }

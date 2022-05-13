@@ -13,7 +13,7 @@ function SolBalance({
 }: SolBalanceProps) {
   return (
     <span>
-      ◎<pre>{lamportsToSolString(lamports, maximumFractionDigits)}</pre>
+      <pre>◎ {lamportsToSolString(lamports, maximumFractionDigits)}</pre>
     </span>
   );
 }

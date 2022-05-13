@@ -48,7 +48,6 @@ function FlaggedModal() {
           <Select
             labelId="censor-label"
             value={selected}
-            label="Reason"
             onChange={(e) => setSelected(e.target.value)}
           >
             <MenuItem value="Explicit content">

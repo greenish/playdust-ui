@@ -7,7 +7,6 @@ import {
   FormControlLabel,
   FormGroup,
   Skeleton,
-  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
@@ -49,39 +48,18 @@ const normalizeOptions = (
     return normalized;
   }
 
-  const numChecked = normalized.filter((option) => option.checked).length;
-  const sliceAmount = Math.max(numChecked, 5);
-
-  return normalized.slice(0, sliceAmount);
+  return normalized.filter((entry) => entry.checked);
 };
 
 function AttributeFiltersSkeleton() {
-  const count = 10;
+  const count = 50;
 
   return (
     <>
       {[...Array(count).keys()].map((entry) => (
-        <div key={`attribute-skeleton-${entry}`}>
-          <Typography variant="h4">
-            <Skeleton />
-          </Typography>
-          <Typography>
-            <Skeleton />
-          </Typography>
-          <Typography>
-            <Skeleton />
-          </Typography>
-          <Typography>
-            <Skeleton />
-          </Typography>
-          <Typography>
-            <Skeleton />
-          </Typography>
-          <Typography>
-            <Skeleton />
-          </Typography>
-          <br />
-        </div>
+        <Button key={`attribute-skeleton-${entry}`}>
+          <Skeleton sx={{ width: '100%' }} />
+        </Button>
       ))}
     </>
   );
@@ -115,7 +93,11 @@ function AttributeFilters() {
             key={attribute.trait}
           >
             <Button
-              size="small"
+              sx={{
+                justifyContent: 'space-between',
+                fontWeight: '700',
+                textAlign: 'left',
+              }}
               endIcon={isExpanded ? <ExpandMore /> : <ChevronRight />}
               onClick={() =>
                 setShowAll({ ...showAll, [attribute.trait]: !isExpanded })
@@ -129,6 +111,7 @@ function AttributeFilters() {
                   key={option}
                   control={
                     <Checkbox
+                      sx={{ ml: 2 }}
                       size="small"
                       checked={checked}
                       onChange={() => {

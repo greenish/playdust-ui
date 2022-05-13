@@ -1,6 +1,6 @@
 import OpenSearchHighlightType from '../../_types/OpenSearchHighlightType';
 
-interface OpenSearchResponseType<T = unknown, A = unknown> {
+interface OpenSearchResponseType<T = void, A = void> {
   _scroll_id: string;
   hits: {
     total: {

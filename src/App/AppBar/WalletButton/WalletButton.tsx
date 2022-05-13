@@ -18,7 +18,12 @@ import { autoRefresh } from '../../_helpers/playdustApi';
 import shortenPublicKey from './_helpers/shortenPublicKey';
 import useGoToProfile from './_hooks/useGoToProfile';
 
-function WalletButton({ active }: { active: boolean }) {
+interface WalletButtonProps {
+  backgroundColor: string;
+  size: number;
+}
+
+function WalletButton({ backgroundColor, size }: WalletButtonProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const walletModal = useWalletModal();
   const wallet = useWallet();
@@ -55,8 +60,7 @@ function WalletButton({ active }: { active: boolean }) {
       <Fab
         {...buttonProps}
         size="small"
-        color={active ? 'primary' : 'default'}
-        sx={{ width: 36, height: 36 }}
+        sx={{ width: size, height: size, backgroundColor }}
       >
         <Person />
       </Fab>
@@ -95,7 +99,6 @@ function WalletButton({ active }: { active: boolean }) {
             <InputLabel>Network</InputLabel>
             <Select
               value={solanaClusters.selectedIndex}
-              label="Network"
               onChange={(evt) => {
                 const nextIndex = evt.target.value;
                 if (typeof nextIndex === 'number') {

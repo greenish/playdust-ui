@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
 import postMutliCollectionQuery from './_helpers/postMultiCollectionQuery';
 import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
@@ -69,7 +70,7 @@ const addActual = (highlight: string) => ({
 });
 
 const cleanAttributes = (
-  attributeResult: OpenSearchResponseType
+  attributeResult: OpenSearchResponseType<OpenSearchCollectionSourceType>
 ): AttributeNameValues => {
   const attributes = attributeResult.hits.hits
     .map((entry) => entry.highlight)

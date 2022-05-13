@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { createTheme, Paper, ThemeProvider } from '@mui/material';
+import { Paper, styled as muiStyled } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import AppBar from './AppBar/AppBar';
@@ -8,18 +8,15 @@ import Provider from './Provider/Provider';
 import Window from './Window/Window';
 import appBarWidth from './_helpers/appBarWidth';
 
-const appBarTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
-
-const AppBarContainer = styled(Paper)`
+const AppBarContainer = muiStyled(Paper)(
+  ({ theme }) => `
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-`;
+  background-color: ${theme.palette.text.primary};
+`
+);
 
 const ChildrenContainer = styled.div`
   position: absolute;
@@ -45,11 +42,9 @@ function App() {
 
   return (
     <Provider>
-      <ThemeProvider theme={appBarTheme}>
-        <AppBarContainer square={true} elevation={3}>
-          <AppBar />
-        </AppBarContainer>
-      </ThemeProvider>
+      <AppBarContainer>
+        <AppBar />
+      </AppBarContainer>
       <ChildrenContainer>
         <ChildrenRelativeContainer>
           <Window />

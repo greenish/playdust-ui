@@ -42,12 +42,7 @@ function ExplorerGrid({ rows }: ExplorerGridProps) {
   });
 
   return (
-    <Box
-      sx={{
-        backgroundColor: '#efefef',
-        borderRadius: '12px',
-      }}
-    >
+    <Box>
       <TableContainer>
         <Table>
           <TableBody>{content}</TableBody>

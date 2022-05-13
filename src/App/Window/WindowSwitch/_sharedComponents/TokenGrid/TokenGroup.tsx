@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
+import { ArrowForwardIos } from '@mui/icons-material';
 import { Skeleton, Typography } from '@mui/material';
 import React, { useCallback } from 'react';
-import Link from '../_sharedComponents/Link';
-import TokenCard from '../_sharedComponents/TokenCard/TokenCard';
-import VirtualizedGrid from '../_sharedComponents/VirtualizedGrid';
-import type TokenGroupProps from '../_types/TokenGroupProps';
-import BlurMore from './BlurMore';
+import Link from '../Link';
+import TokenCard from './_sharedComponents/TokenCard/TokenCard';
+import VirtualizedGrid from './_sharedComponents/VirtualizedGrid';
+import type TokenGroupProps from './_types/TokenGroupProps';
 
 const groupLabelHeight = 55;
 
@@ -19,11 +19,23 @@ const RowContainer = styled.div`
 const LabelContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   height: ${groupLabelHeight}px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`;
+
+const LabelSecondaryContainer = styled.div`
+  display: flex;
+  gap: 32px;
+  align-items: center;
+`;
+
+const ViewMoreContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const TokenContainer = styled.div`
@@ -55,9 +67,18 @@ function RowRenderer(props: RowRendererProps) {
             <Link href={group.groupHref}>
               <Typography variant="h4">{group.groupLabel}</Typography>
             </Link>
-            {group.groupSecondary && (
-              <Typography>({group.groupSecondary})</Typography>
-            )}
+            <LabelSecondaryContainer>
+              {group.groupSecondary && (
+                <Typography>{group.groupSecondary}</Typography>
+              )}
+              <Link href={group.groupHref}>
+                <ViewMoreContainer>
+                  View {(group.groupTotal - group.nfts.length).toLocaleString()}{' '}
+                  more
+                  <ArrowForwardIos />
+                </ViewMoreContainer>
+              </Link>
+            </LabelSecondaryContainer>
           </>
         ) : (
           <Typography variant="h4">
@@ -66,25 +87,16 @@ function RowRenderer(props: RowRendererProps) {
         )}
       </LabelContainer>
       <TokenContainer style={{ height: imageSize, gap: cardGap }}>
-        {showActual ? (
-          <>
-            {group.nfts.map((nft) => (
+        {showActual
+          ? group.nfts.map((nft) => (
               <TokenCard
                 key={nft.mint}
                 metadata={nft}
                 imageSize={imageSize}
                 contentHeight={contentHeight}
               />
-            ))}
-            <BlurMore
-              count={group.groupTotal - group.nfts.length}
-              height={imageSize}
-              href={group.groupHref}
-            />
-          </>
-        ) : (
-          <>
-            {skeletonRange.map((entry) => (
+            ))
+          : skeletonRange.map((entry) => (
               <TokenCard
                 key={entry}
                 skeleton={true}
@@ -92,8 +104,6 @@ function RowRenderer(props: RowRendererProps) {
                 imageSize={imageSize}
               />
             ))}
-          </>
-        )}
       </TokenContainer>
     </RowContainer>
   );

@@ -37,7 +37,6 @@ function SortFields() {
         <Select
           size="small"
           value={found?.name}
-          label={sortLabel}
           onChange={(evt) => {
             const sortName = evt.target.value;
             const selected = options.find((entry) => entry.name === sortName);

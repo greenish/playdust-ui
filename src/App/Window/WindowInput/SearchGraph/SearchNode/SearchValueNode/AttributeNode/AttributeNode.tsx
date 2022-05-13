@@ -63,7 +63,6 @@ function AttributeNode(props: AttributeNodeProps) {
         <Select
           multiple={true}
           disabled={!options.length || data.value.length === options.length}
-          label={valueLabel}
           value={data.value || []}
           onChange={(evt) =>
             updateAttributeQueryNode({

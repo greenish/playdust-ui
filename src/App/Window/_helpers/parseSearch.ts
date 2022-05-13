@@ -45,17 +45,23 @@ const parseSort = (sort: SearchSortType) => {
 };
 
 const parseSearch = (input: string): SearchStateType => {
-  const { query, onlyListed, sort } = JSON.parse(input);
+  try {
+    const { query, onlyListed, sort } = JSON.parse(input);
 
-  const parsedQuery = parseQuery(query);
-  const parsedOnlyListed = parseOnlyListed(onlyListed);
-  const parsedSort = parseSort(sort);
+    const parsedQuery = parseQuery(query);
+    const parsedOnlyListed = parseOnlyListed(onlyListed);
+    const parsedSort = parseSort(sort);
 
-  return {
-    query: parsedQuery,
-    onlyListed: parsedOnlyListed,
-    sort: parsedSort,
-  };
+    return {
+      query: parsedQuery,
+      onlyListed: parsedOnlyListed,
+      sort: parsedSort,
+    };
+  } catch {
+    return {
+      query: [],
+    };
+  }
 };
 
 export default parseSearch;

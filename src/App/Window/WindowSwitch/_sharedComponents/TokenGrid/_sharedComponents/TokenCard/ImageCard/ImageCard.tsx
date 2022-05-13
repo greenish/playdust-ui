@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
-import { Box, Paper, Skeleton } from '@mui/material';
+import { Box, Card, Skeleton } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import StatusEnum from '../../../../../../../_types/StatusEnumType';
 import collectionStatusAtom from '../../../../../_atoms/collectionStatusAtom';
-import Link from '../../Link';
+import Link from '../../../../Link';
 import TokenCardContentContainer from '../_sharedComponents/TokenCardContentContainer';
 import LazyImage from './LazyImage';
 
@@ -32,7 +32,7 @@ function ImageCard({
   const status = useRecoilValue(collectionStatusAtom);
 
   return (
-    <Paper sx={{ width: imageSize }} square={true}>
+    <Card sx={{ minWidth: imageSize, maxWidth: imageSize }}>
       <Link href={href}>
         {src && (
           <CardImageContainer style={{ maxHeight: imageSize }}>
@@ -82,7 +82,7 @@ function ImageCard({
           <TokenCardContentContainer>{content}</TokenCardContentContainer>
         </Box>
       )}
-    </Paper>
+    </Card>
   );
 }
 

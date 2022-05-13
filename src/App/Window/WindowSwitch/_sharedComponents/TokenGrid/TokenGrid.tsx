@@ -1,5 +1,5 @@
 import React from 'react';
-import TokenGroup from './TokenGroup/TokenGroup';
+import TokenGroup from './TokenGroup';
 import TokenList from './TokenList';
 import type TokenGroupProps from './_types/TokenGroupProps';
 import type TokenListProps from './_types/TokenListProps';

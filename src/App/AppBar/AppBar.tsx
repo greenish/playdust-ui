@@ -57,6 +57,19 @@ const ActiveHighlight = styled.div`
   z-index: 100;
 `;
 
+const CloseButtonContainer = styled.div`
+  position: absolute;
+  padding: 8px;
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 0.25s;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 1;
+  }
+`;
+
 type SizedButtonProps = PropsWithChildren<{
   size?: number;
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
@@ -69,6 +82,8 @@ function SizedButton({
   children,
   images,
 }: SizedButtonProps) {
+  const theme = useTheme();
+
   const sx = useMemo<SxProps<Theme>>(() => {
     const baseStyleProps = {
       maxWidth: size,
@@ -77,6 +92,11 @@ function SizedButton({
       minHeight: size,
       boxShadow: '0px 0px 2px 0px #fefefe',
       zIndex: 2,
+      backgroundColor: theme.palette.background.default,
+
+      '&:hover': {
+        backgroundColor: theme.palette.grey['200'],
+      },
     };
 
     if (images) {
@@ -100,7 +120,7 @@ function SizedButton({
     }
 
     return baseStyleProps;
-  }, [images, size]);
+  }, [images, size, theme]);
 
   return (
     <Fab sx={sx} onClick={onClick}>
@@ -145,6 +165,7 @@ function AppBar() {
   }
 
   const inWindowManager = router.pathname === '/';
+  const backgroundColor = theme.palette.background.default;
 
   return (
     <RootContainer>
@@ -168,15 +189,20 @@ function AppBar() {
                   <ActiveHighlight
                     style={{
                       height: largeButtonSize,
-                      background: theme.palette.primary.main,
+                      backgroundColor,
                     }}
                   />
                 )}
               </div>
               {isActive && (
-                <SizedButton size={smallButtonSize} onClick={() => removeTab()}>
-                  <Close fontSize="small" />
-                </SizedButton>
+                <CloseButtonContainer>
+                  <SizedButton
+                    size={smallButtonSize}
+                    onClick={() => removeTab()}
+                  >
+                    <Close fontSize="small" />
+                  </SizedButton>
+                </CloseButtonContainer>
               )}
             </TabButtonContainer>
           );
@@ -199,7 +225,7 @@ function AppBar() {
           )}
         </TabButtonContainer>
       </TopContainer>
-      <WalletButton active={!inWindowManager} />
+      <WalletButton backgroundColor={backgroundColor} size={largeButtonSize} />
     </RootContainer>
   );
 }

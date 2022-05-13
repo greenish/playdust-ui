@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import React from 'react';
 import ellipsisify from '../../../../../../_helpers/ellipsisify';
 import encodeWindowHash from '../../../../../../_helpers/encodeWindowHash';
+import Link from '../../../../_sharedComponents/Link';
 import CopyButton from './CopyButton';
 import ExplorerLinkProps from './_types/ExplorerLinkProps';
 

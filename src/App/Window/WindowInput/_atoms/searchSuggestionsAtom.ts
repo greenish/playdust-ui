@@ -8,7 +8,6 @@ import type SearchSuggestionResponseType from '../../../../_types/SearchSuggesti
 import isCollectionQueryAtom from '../../_atoms/isCollectionQueryAtom';
 import searchAggregations from '../../_atoms/searchAggregationsAtom';
 import searchQueryAttributes from '../../_atoms/searchQueryAttributesAtom';
-import searchState from '../../_atoms/searchStateAtom';
 import frontendApi from '../../_helpers/frontendApi';
 import getWindowType from '../_helpers/getWindowType';
 import type SearchSuggestionType from '../_types/SearchSuggestionType';
@@ -20,7 +19,6 @@ const fetchSearchSuggestions = selector<
   key: 'fetchSearchSuggestions',
   get: async ({ get }) => {
     const term = get(searchSuggestionTerm);
-    const parsed = get(searchState);
     const isCollectionQuery = get(isCollectionQueryAtom);
 
     if (isCollectionQuery) {
@@ -31,8 +29,6 @@ const fetchSearchSuggestions = selector<
       '/search-suggestions',
       {
         term,
-        query: parsed?.query,
-        onlyListed: parsed?.onlyListed,
       }
     );
 

@@ -1,4 +1,4 @@
-export * from '../../../App/Window/WindowSwitch/_sharedComponents/TokenGrid/_sharedComponents/Link'
+export * from '../../../App/Window/WindowSwitch/_sharedComponents/Link'
 export * from './Copyable'
 export * from './CopyButton'
 export * from './Downloadable'

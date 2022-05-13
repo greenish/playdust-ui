@@ -22,7 +22,7 @@ function CollectionNode(props: CollectionNodeProps) {
   return (
     <FormControl fullWidth={true} sx={{ mt: 1 }}>
       <InputLabel>{label}</InputLabel>
-      <Select value={value} label={label} readOnly={true}>
+      <Select value={value} readOnly={true}>
         <MenuItem value={value}>{collectionName}</MenuItem>
       </Select>
     </FormControl>

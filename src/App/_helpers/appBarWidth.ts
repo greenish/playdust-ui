@@ -1,3 +1,3 @@
-const appBarWidth = 48 as const;
+const appBarWidth = 56 as const;
 
 export default appBarWidth;

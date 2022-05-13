@@ -32,7 +32,6 @@ const searchFilters: SearchFilterType[] = [
 const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 8px;
 `;
 
 function RangeFilter({ label, name }: SearchFilterType) {

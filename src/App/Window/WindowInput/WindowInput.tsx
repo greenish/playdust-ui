@@ -38,12 +38,6 @@ const RootContainer = styled.div`
   width: 100%;
 `;
 
-const TextFieldInput = styled(TextField)(() => ({
-  '& fieldset': {
-    borderRadius: 0,
-  },
-}));
-
 const clientFilter = createFilterOptions({
   stringify: (option: SearchSuggestionType) => option.label,
 });
@@ -200,7 +194,7 @@ function WindowInput({ state, type, clearState }: WindowProps) {
         filterSelectedOptions={true}
         disabled={disabled}
         renderInput={(params) => (
-          <TextFieldInput
+          <TextField
             {...params}
             placeholder={isSearchable ? 'Search...' : ''}
             onChange={(evt) =>
