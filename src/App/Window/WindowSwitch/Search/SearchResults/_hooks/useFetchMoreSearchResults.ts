@@ -1,25 +1,24 @@
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
-import type SearchCursorResponseType from '../../../../../../_types/SearchCursorResponseType';
-import searchResultsBase from '../../../../_atoms/searchResultsBaseAtom';
+import {
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from 'recoil';
+import searchResultsAtom from '../../../../_atoms/searchResultsAtom';
 import searchResultsMore from '../../../../_atoms/searchResultsMoreAtom';
-import api from '../../../../_helpers/frontendApi';
+import searchStateSerializedAtom from '../../../../_atoms/searchStateSerializedAtom';
+import fetchSearchResults from '../../../../_helpers/fetchSearchResults';
 
 const useFetchMoreSearchResults = () => {
-  const loadable = useRecoilValueLoadable(searchResultsBase);
   const setter = useSetRecoilState(searchResultsMore);
+  const serialized = useRecoilValue(searchStateSerializedAtom);
+  const loadable = useRecoilValueLoadable(searchResultsAtom);
 
   return async () => {
     if (loadable.state === 'hasValue') {
-      const { cursor } = loadable.contents;
+      const { page } = loadable.contents;
+      const nextPage = await fetchSearchResults(serialized, page + 1);
 
-      const { data } = await api.post<SearchCursorResponseType>(
-        '/search-cursor',
-        {
-          cursor,
-        }
-      );
-
-      setter((curr) => [...curr, ...data.nfts]);
+      setter((curr) => [...curr, nextPage]);
     }
   };
 };

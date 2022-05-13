@@ -6,8 +6,8 @@ type TopCollectionsResponseType = {
     collection: OpenSearchCollectionSourceType;
     nfts: OpenSearchNFTSourceType[];
   }[];
-  cursor: string;
   total: number;
+  page: number;
 };
 
 export default TopCollectionsResponseType;

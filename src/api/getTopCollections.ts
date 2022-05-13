@@ -1,17 +1,18 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import type TopCollectionsResponseType from '../_types/TopCollectionsResponseType';
+import nextApiHandler from './_helpers/nextApiHandler';
 import postCollectionQuery from './_helpers/postCollectionQuery';
-import postCollectionScrollQuery from './_helpers/postCollectionScrollQuery';
 import postMultiNFTQuery from './_helpers/postMultiNFTQuery';
 import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
 
+const collectionPageSize = 25;
 const topCollectionLimit = 100;
 
-const topCollectionQuery = {
+const getTopCollectionQuery = (page: number) => ({
   _source: {
     exclude: ['attributes'],
   },
-  size: 25,
+  size: collectionPageSize,
+  from: page * collectionPageSize,
   sort: [
     '_score',
     {
@@ -20,7 +21,7 @@ const topCollectionQuery = {
       },
     },
   ],
-};
+});
 
 const getNFTQuery = (collectionId: string) => ({
   size: 20,
@@ -53,29 +54,12 @@ const getNFTQuery = (collectionId: string) => ({
   ],
 });
 
-const fetchTopCollections = async (cursor?: string) => {
-  if (cursor) {
-    const result = await postCollectionScrollQuery(cursor);
+const getTopCollections = nextApiHandler<TopCollectionsResponseType>(
+  async (req) => {
+    const page = req.body.page || (0 as number);
 
-    return result;
-  }
-
-  const topCollectionResult = await postCollectionQuery(
-    topCollectionQuery,
-    true
-  );
-
-  return topCollectionResult;
-};
-
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<TopCollectionsResponseType>
-) => {
-  try {
-    const cursor = req.body.cursor as string | undefined;
-
-    const topCollectionResult = await fetchTopCollections(cursor);
+    const topCollectionQuery = getTopCollectionQuery(page);
+    const topCollectionResult = await postCollectionQuery(topCollectionQuery);
 
     const topNFTQueries = topCollectionResult.hits.hits.map((entry) =>
       getNFTQuery(entry._id)
@@ -91,14 +75,12 @@ const handler = async (
       nfts: nftSources[idx],
     }));
 
-    res.json({
+    return {
       results,
-      cursor: topCollectionResult._scroll_id,
       total: topCollectionLimit,
-    });
-  } catch (e) {
-    res.status(500).end(e);
+      page,
+    };
   }
-};
+);
 
-export default handler;
+export default getTopCollections;

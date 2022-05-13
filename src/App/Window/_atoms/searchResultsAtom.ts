@@ -9,10 +9,16 @@ const searchResultsAtom = selector<SearchResponseType>({
     const base = get(searchResultsBase);
     const more = get(searchResultsMore);
 
-    return {
-      ...base,
-      nfts: [...base.nfts, ...more],
-    };
+    const result = more.reduce<SearchResponseType>(
+      (acc, curr) => ({
+        ...acc,
+        page: Math.max(acc.page, curr.page),
+        nfts: [...acc.nfts, ...curr.nfts],
+      }),
+      base
+    );
+
+    return result;
   },
 });
 

@@ -1,23 +1,18 @@
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
-import type TopCollectionsResponseType from '../../../../../_types/TopCollectionsResponseType';
-import frontendApi from '../../../_helpers/frontendApi';
-import topCollectionsBase from '../_atoms/topCollectionsBaseAtom';
+import topCollectionsAtom from '../_atoms/topCollectionsAtom';
 import topCollectionsMore from '../_atoms/topCollectionsMoreAtom';
+import fetchTopCollections from '../_helpers/fetchTopCollections';
 
 const useFetchMoreTopCollections = () => {
-  const topCollectionsLoadable = useRecoilValueLoadable(topCollectionsBase);
+  const topCollectionsLoadable = useRecoilValueLoadable(topCollectionsAtom);
   const setter = useSetRecoilState(topCollectionsMore);
 
   return async () => {
     if (topCollectionsLoadable.state === 'hasValue') {
-      const { data } = await frontendApi.post<TopCollectionsResponseType>(
-        '/top-collections',
-        {
-          cursor: topCollectionsLoadable.contents.cursor,
-        }
-      );
+      const { page } = topCollectionsLoadable.contents;
+      const nextPage = await fetchTopCollections(page + 1);
 
-      setter((curr) => [...curr, ...data.results]);
+      setter((curr) => [...curr, nextPage]);
     }
   };
 };

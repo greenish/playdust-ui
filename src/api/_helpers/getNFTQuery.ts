@@ -44,9 +44,10 @@ const getNFTQueryBase = (query: ComposedQueryType, onlyListed: boolean) => {
 
 const getNFTQuery = (
   query: ComposedQueryType,
-  resultSize: number,
+  size: number,
   sort?: SearchSortType,
-  onlyListed?: boolean
+  onlyListed?: boolean,
+  from?: number
 ) => {
   const queryBase = getNFTQueryBase(query, Boolean(onlyListed));
 
@@ -56,8 +57,9 @@ const getNFTQuery = (
     [filterKey]: queryBase,
   };
 
-  const nftQuery: { [key: string]: object | number } = {
-    size: resultSize === undefined ? 25 : resultSize,
+  const nftQuery: { [key: string]: object | number | undefined } = {
+    size,
+    from,
     query: {
       bool:
         query.length === 0

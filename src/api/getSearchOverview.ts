@@ -1,7 +1,7 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import ComposedQueryType from '../_types/ComposedQueryType';
 import type SearchOverviewResponseType from '../_types/SearchOverviewResponseType';
 import getNFTQuery from './_helpers/getNFTQuery';
+import nextApiHandler from './_helpers/nextApiHandler';
 import postMultiNFTQuery from './_helpers/postMultiNFTQuery';
 import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
 
@@ -14,11 +14,8 @@ interface SearchOverviewAggregationType {
   };
 }
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<SearchOverviewResponseType>
-) => {
-  try {
+const getSearchOverview = nextApiHandler<SearchOverviewResponseType>(
+  async (req) => {
     const query = req.body.query as ComposedQueryType;
 
     const countQuery = getNFTQuery(query, 0);
@@ -45,16 +42,13 @@ const handler = async (
     const ceiling = aggResult.aggregations.ceiling.value;
     const count = countResult.hits.total.value;
 
-    res.json({
+    return {
       listed,
       floor,
       ceiling,
       count,
-    });
-  } catch (e) {
-    console.error('e', e);
-    res.status(500).end();
+    };
   }
-};
+);
 
-export default handler;
+export default getSearchOverview;

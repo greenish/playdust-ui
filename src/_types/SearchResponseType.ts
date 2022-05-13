@@ -2,8 +2,8 @@ import type OpenSearchNFTSourceType from './OpenSearchNFTSourceType';
 
 interface SearchResponseType {
   nfts: OpenSearchNFTSourceType[];
-  cursor: string;
   total: number;
+  page: number;
 }
 
 export default SearchResponseType;

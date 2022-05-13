@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
 import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
+import nextApiHandler from './_helpers/nextApiHandler';
 import postCollectionQuery from './_helpers/postCollectionQuery';
 
 const getSeedQuery = (collectionId: string) => ({
@@ -76,11 +76,8 @@ const getSimilarCollectionQuery = ({
   ],
 });
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<CollectionOverviewResponseType>
-) => {
-  try {
+const getCollectionOverview = nextApiHandler<CollectionOverviewResponseType>(
+  async (req) => {
     const collectionId = req.query.id as string;
 
     const seedQuery = getSeedQuery(collectionId);
@@ -97,16 +94,13 @@ const handler = async (
       }))
       .sort((a, b) => b.totalVolume - a.totalVolume);
 
-    res.json({
+    return {
       ...seed,
       totalVolume: seed.totalVolume || 0,
       elementCount: seed.elementCount || 0,
       similar,
-    });
-  } catch (e) {
-    console.error('e', e);
-    res.status(500).end();
+    };
   }
-};
+);
 
-export default handler;
+export default getCollectionOverview;

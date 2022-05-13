@@ -1,11 +1,11 @@
 import axios from 'axios';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import sharp from 'sharp';
+import nextApiHandler from './_helpers/nextApiHandler';
 import postNFTQuery from './_helpers/postNFTQuery';
 
 const cdnBase = 'https://cdn.playdust.dev/api/image/';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const getCollectionImage = nextApiHandler<Buffer>(async (req, res) => {
   const collectionId = req.query.id as string;
   const size = parseInt(req.query.s as string, 10);
   const halfSize = size / 2;
@@ -92,10 +92,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       .toBuffer();
 
     res.setHeader('Cache-Control', 'max-age=86400, s-maxage=86400');
-    res.json(output);
-  } catch (e) {
-    res.json(await baseImage.png().toBuffer());
-  }
-};
 
-export default handler;
+    return output;
+  } catch (e) {
+    return await baseImage.png().toBuffer();
+  }
+});
+export default getCollectionImage;

@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
+import nextApiHandler from './_helpers/nextApiHandler';
 import postMutliCollectionQuery from './_helpers/postMultiCollectionQuery';
 import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
 import type OpenSearchResponseType from './_types/OpenSearchResponseType';
@@ -95,11 +95,8 @@ const cleanAttributes = (
   return withActual;
 };
 
-const handler = async (
-  req: NextApiRequest,
-  res: NextApiResponse<SearchSuggestionResponseType>
-) => {
-  try {
+const getSearchSuggetions = nextApiHandler<SearchSuggestionResponseType>(
+  async (req) => {
     const term = req.body.term as string;
 
     const attributeQuery = getAttributeQuery(term);
@@ -119,13 +116,11 @@ const handler = async (
       highlight: entry.highlight,
     }));
 
-    res.json({
+    return {
       collections,
       ...attributes,
-    });
-  } catch (e) {
-    res.status(500).end(e);
+    };
   }
-};
+);
 
-export default handler;
+export default getSearchSuggetions;

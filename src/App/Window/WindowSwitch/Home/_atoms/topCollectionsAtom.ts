@@ -9,10 +9,17 @@ const topCollectionsAtom = selector<TopCollectionsResponseType>({
     const base = get(topCollectionsBaseAtom);
     const more = get(topCollectionsMoreAtom);
 
-    return {
-      ...base,
-      results: [...base.results, ...more],
-    };
+    const result = more.reduce<TopCollectionsResponseType>(
+      (acc, curr) => ({
+        ...acc,
+        total: curr.total,
+        page: Math.max(acc.page, curr.page),
+        results: [...acc.results, ...curr.results],
+      }),
+      base
+    );
+
+    return result;
   },
 });
 
