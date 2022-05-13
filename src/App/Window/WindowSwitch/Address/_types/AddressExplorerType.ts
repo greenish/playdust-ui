@@ -5,6 +5,7 @@ interface AddressExplorerType {
   type: 'address';
   pubkey: PublicKey;
   label?: string;
+  hasPrivateKey: boolean;
 }
 
 export default AddressExplorerType;

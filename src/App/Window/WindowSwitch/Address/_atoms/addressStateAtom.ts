@@ -27,12 +27,14 @@ const addressStateAtom = selector<AddressExplorerType>({
     const tokenRegistry = get(tokenRegistryAtom);
 
     const label = addressLabel(state, solanaCluster.network, tokenRegistry);
+    const hasPrivateKey = PublicKey.isOnCurve(pubkey.toBytes());
 
     return {
       type,
       state,
       pubkey,
       label,
+      hasPrivateKey,
     };
   },
 });

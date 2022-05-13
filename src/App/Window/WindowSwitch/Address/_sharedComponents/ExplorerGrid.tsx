@@ -7,11 +7,10 @@ import {
   TableRow,
 } from '@mui/material';
 import React from 'react';
-
-type ExplorerGridRow = (string | JSX.Element)[] | '' | undefined;
+import ExplorerGridRowType from '../_types/ExplorerGridRowType';
 
 interface ExplorerGridProps {
-  rows: ExplorerGridRow[];
+  rows: ExplorerGridRowType[];
 }
 
 function ExplorerGrid({ rows }: ExplorerGridProps) {

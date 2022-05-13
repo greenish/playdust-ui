@@ -141,7 +141,6 @@ MyComponent/
 
    > If reasonable, sub components are named `ComponentName[SubComponent].tsx`. This can be broken or abbrevated in order to prevent component names from getting too long.
 
-
 1. ### Atoms (and Selectors)
 
    > Selectors are an implementation detail of atoms

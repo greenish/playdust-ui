@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
-import ellipsisify from '../../../../_helpers/ellipsisify';
-import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
+import ellipsisify from '../../../../../../_helpers/ellipsisify';
+import encodeWindowHash from '../../../../../../_helpers/encodeWindowHash';
 import CopyButton from './CopyButton';
 import ExplorerLinkProps from './_types/ExplorerLinkProps';
 
@@ -14,7 +14,14 @@ function ExplorerLink({
 }: ExplorerLinkProps) {
   const display =
     label ||
-    (ellipsis ? ellipsisify(String(to), ellipsis[0], ellipsis[1]) : to);
+    (ellipsis
+      ? ellipsisify(
+          String(to),
+          ellipsis.cutoff,
+          ellipsis.remain,
+          ellipsis.ellipsis
+        )
+      : to);
 
   const href = type ? encodeWindowHash({ type, state: String(to) }) : '#';
   return (
