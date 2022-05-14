@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';

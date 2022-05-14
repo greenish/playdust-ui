@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material';
-import React, { PropsWithChildren, Suspense } from 'react';
-import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import React, { PropsWithChildren } from 'react';
+import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 
 interface ExplorerCardProps {
   title?: string;
-  error: JSX.Element;
-  loading: JSX.Element;
+  loading: React.SuspenseProps['fallback'];
+  error: React.SuspenseProps['fallback'];
 }
 
 function ExplorerCard({

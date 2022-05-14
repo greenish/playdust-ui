@@ -1,11 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren } from 'react';
 
-type ExplorerCardErrorBoundaryProps = { 
-  fallback: React.SuspenseProps["fallback"]
+type ExplorerCardErrorBoundaryProps = {
+  fallback: React.SuspenseProps['fallback'];
 };
 
 class ExplorerCardErrorBoundary extends React.Component<
-  ExplorerCardErrorBoundaryProps,
+  PropsWithChildren<ExplorerCardErrorBoundaryProps>,
   { hasError: boolean }
 > {
   constructor(props: ExplorerCardErrorBoundaryProps) {
@@ -22,9 +22,7 @@ class ExplorerCardErrorBoundary extends React.Component<
   }
 
   render() {
-    return this.state.hasError ? 
-      this.props.fallback:
-      this.props.children;
+    return this.state.hasError ? this.props.fallback : this.props.children;
   }
 }
 
