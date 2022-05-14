@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react';
 
-type ExplorerCardErrorBoundaryProps = { children?: ReactNode | undefined };
+type ExplorerCardErrorBoundaryProps = { 
+  fallback: React.SuspenseProps["fallback"]
+};
 
 class ExplorerCardErrorBoundary extends React.Component<
   ExplorerCardErrorBoundaryProps,
@@ -15,12 +17,14 @@ class ExplorerCardErrorBoundary extends React.Component<
     return { hasError: true };
   }
 
-  render() {
-    if (this.state.hasError) {
-      return <div>Something went wrong.</div>;
-    }
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error(error, errorInfo);
+  }
 
-    return this.props.children;
+  render() {
+    return this.state.hasError ? 
+      this.props.fallback:
+      this.props.children;
   }
 }
 

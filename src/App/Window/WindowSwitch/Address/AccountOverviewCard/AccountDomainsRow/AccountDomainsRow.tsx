@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { useRecoilValue } from 'recoil';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
+import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import accountDomainsAtom from './_atoms/accountDomainsAtom';
 
 function AccountDomainsRowContent() {
@@ -33,9 +34,9 @@ function AccountDomainsRowContent() {
 
 function AccountDomainsRow() {
   return (
-    <Suspense fallback={null}>
+    <SuspenseBoundary loading={null} error={null}>
       <AccountDomainsRowContent />
-    </Suspense>
+    </SuspenseBoundary>
   );
 }
 
