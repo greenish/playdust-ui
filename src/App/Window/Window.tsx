@@ -4,10 +4,11 @@ import React, { Suspense, useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import { userProfile } from '../../me/store';
 import activeTabAtom from '../_atoms/activeTabAtom';
+import userProfileString from '../_atoms/userProfileStringAtom';
 import WindowInput from './WindowInput/WindowInput';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
 import activeWindowAtom from './_atoms/activeWindowAtom';
-import currentState from './_atoms/currentStateAtom';
+import currentStateString from './_atoms/currentStateStringAtom';
 import useRouteApp from './_hooks/useRouteApp';
 import useSetCurrentWindowState from './_hooks/useSetCurrentWindowState';
 import type WindowProps from './_types/WindowPropsType';
@@ -76,8 +77,8 @@ function Window() {
     <RecoilRoot
       key={`${activeTab.id}:${windowProps.state}`}
       initializeState={({ set }) => {
-        set(userProfile, profile);
-        set(currentState, activeWindow);
+        set(userProfileString, JSON.stringify(profile));
+        set(currentStateString, JSON.stringify(activeWindow));
       }}
     >
       <RootContainer>

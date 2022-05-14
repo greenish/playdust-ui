@@ -9,7 +9,7 @@ const tokenRegistryAtom = selector<TokenInfoMap>({
   key: 'tokenRegistryAtom',
   get: async () => {
     const resp = await axios.get<TokenList>(tokenRegistryUrl);
-    const tokenList = resp.data.tokens;
+    const tokenList = resp.data.tokens ?? [];
 
     const tokenRegistryMap = tokenList.reduce(
       (map: TokenInfoMap, item: TokenInfo) => {

@@ -9,33 +9,37 @@ import SolanaClusterType from '../../../../../../_types/SolanaClusterType';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 
-const fetchAccountInfo = async (
-  solanaCluster: SolanaClusterType,
-  pubkey: PublicKey
-) => {
-  if (!solanaCluster || !pubkey) {
-    return null;
-  }
 
-  const { endpoint } = solanaCluster;
-
-  const connection = new Connection(endpoint, 'confirmed');
-
-  const { value } = await connection.getParsedAccountInfo(pubkey);
-
-  return value;
-};
-
-const accountInfoAtom = selector<AccountInfo<
+type AccountInfoType = AccountInfo<
   Buffer | ParsedAccountData
-> | null>({
+> & { 
+  space: number 
+  pubkey: PublicKey,
+  label?: string, 
+}
+
+const accountInfoAtom = selector<AccountInfoType>({
   key: 'accountInfo',
-  get: ({ get }) => {
+  get: async ({ get }) => {
     const addressState = get(addressStateAtom);
-
     const solanaCluster = get(solanaClusterAtom);
+    
+    const connection = new Connection(solanaCluster.endpoint, 'confirmed');
+    const accountInfoResult = await connection.getParsedAccountInfo(addressState.pubkey);
+    const accountInfo = accountInfoResult?.value;
 
-    return fetchAccountInfo(solanaCluster, addressState.pubkey);
+    if (!accountInfo) {
+      throw new Error(`Could Not Fetch AccountInfo for ${addressState.pubkey}`);
+    }
+
+    return {
+      ...accountInfo,
+      label: addressState.label,
+      pubkey: addressState.pubkey,
+      space: !('parsed' in accountInfo.data) ? 
+        accountInfo.data.length : 
+        accountInfo.data.space
+    };
   },
 });
 

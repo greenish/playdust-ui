@@ -4,8 +4,8 @@ interface AddressExplorerType {
   state: string;
   type: 'address';
   pubkey: PublicKey;
-  label?: string;
   hasPrivateKey: boolean;
+  label?: string;
 }
 
 export default AddressExplorerType;

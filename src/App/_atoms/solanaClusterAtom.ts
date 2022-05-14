@@ -7,7 +7,13 @@ const solanaClusterAtom = selector<SolanaClusterType>({
   get: ({ get }) => {
     const { clusters, selectedIndex } = get(solanaClusters);
 
-    return clusters[selectedIndex];
+    const cluster = clusters[selectedIndex];
+
+    if(!cluster) {
+      throw new Error(`Invalid cluster index: ${selectedIndex}`);
+    }
+
+    return cluster;
   },
 });
 

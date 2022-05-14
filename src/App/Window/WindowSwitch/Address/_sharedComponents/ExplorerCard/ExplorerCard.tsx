@@ -7,23 +7,17 @@ type SkeletonType = 'table';
 
 interface ExplorerCardProps {
   title?: string;
-  skeleton?: SkeletonType;
+  fallback: JSX.Element;
 }
 
 function ExplorerCard({
   title,
-  skeleton,
+  fallback,
   children,
 }: PropsWithChildren<ExplorerCardProps>) {
-  const fallback =
-    skeleton === 'table' ? <TableSkeleton /> : <CircularProgress />;
 
   return (
-    <Box
-      sx={{
-        bgcolor: 'background.paper',
-      }}
-    >
+    <Box>
       {title && (
         <Typography variant="h5" component="h2" gutterBottom={true}>
           {title}

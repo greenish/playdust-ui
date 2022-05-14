@@ -1,4 +1,4 @@
-type Profile = {
+type ProfileType = {
   username: string
   email: string
   bio: string
@@ -7,4 +7,4 @@ type Profile = {
   roles: Array<String>
 }
 
-export default Profile
+export default ProfileType;

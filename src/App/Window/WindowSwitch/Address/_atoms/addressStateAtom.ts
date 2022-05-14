@@ -8,7 +8,7 @@ import tokenRegistryAtom from './tokenRegistryAtom';
 
 const addressStateAtom = selector<AddressExplorerType>({
   key: 'addressStateAtom',
-  get: ({ get }) => {
+  get: async ({ get }) => {
     const currentState = get(currentStateAtom);
 
     if (!currentState) {
