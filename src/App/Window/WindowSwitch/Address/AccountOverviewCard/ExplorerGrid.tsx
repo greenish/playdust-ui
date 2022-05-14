@@ -1,12 +1,7 @@
-import {
-  Box,
-  Table,
-  TableBody,
-  TableContainer,
-} from '@mui/material';
-import React from 'react';
+import { Box, Table, TableBody, TableContainer } from '@mui/material';
+import React, { PropsWithChildren } from 'react';
 
-const ExplorerGrid: React.FC<{}> = ({ children }) => {
+function ExplorerGrid({ children }: PropsWithChildren<null>) {
   return (
     <Box>
       <TableContainer>

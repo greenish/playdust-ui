@@ -1,9 +1,6 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React, { PropsWithChildren, Suspense } from 'react';
 import ExplorerCardErrorBoundary from './ExplorerCardErrorBoundary';
-import TableSkeleton from './TableSkeleton/TableSkeleton';
-
-type SkeletonType = 'table';
 
 interface ExplorerCardProps {
   title?: string;
@@ -15,7 +12,6 @@ function ExplorerCard({
   fallback,
   children,
 }: PropsWithChildren<ExplorerCardProps>) {
-
   return (
     <Box>
       {title && (

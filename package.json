@@ -16,7 +16,8 @@
     "guidelines:write": "ts-node scripts/writeGuidelines.ts",
     "delete:emptyDirs": "find ./src -type d -empty -delete",
     "hooks:install": "husky install",
-    "hooks:uninstall": "git config --unset core.hooksPath"
+    "hooks:uninstall": "git config --unset core.hooksPath",
+    "fix:all": "yarn lint:fix; yarn prettier:write;  yarn guidelines:write"
   },
   "lint-staged": {
     "**/*.(ts|tsx)": [

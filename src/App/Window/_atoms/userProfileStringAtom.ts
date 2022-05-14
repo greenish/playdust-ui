@@ -1,8 +1,8 @@
 import { atom } from 'recoil';
 
-const userProfileStringAtom = atom<string|null>({
+const userProfileStringAtom = atom<string | null>({
   key: 'userProfileString',
-  default: null
+  default: null,
 });
 
 export default userProfileStringAtom;

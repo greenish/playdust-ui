@@ -5,27 +5,25 @@ import {
   PublicKey,
 } from '@solana/web3.js';
 import { selector } from 'recoil';
-import SolanaClusterType from '../../../../../../_types/SolanaClusterType';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import addressStateAtom from '../../_atoms/addressStateAtom';
+import addressStateAtom from './addressStateAtom';
 
-
-type AccountInfoType = AccountInfo<
-  Buffer | ParsedAccountData
-> & { 
-  space: number 
-  pubkey: PublicKey,
-  label?: string, 
-}
+type AccountInfoType = AccountInfo<Buffer | ParsedAccountData> & {
+  space: number;
+  pubkey: PublicKey;
+  label?: string;
+};
 
 const accountInfoAtom = selector<AccountInfoType>({
   key: 'accountInfo',
   get: async ({ get }) => {
     const addressState = get(addressStateAtom);
     const solanaCluster = get(solanaClusterAtom);
-    
+
     const connection = new Connection(solanaCluster.endpoint, 'confirmed');
-    const accountInfoResult = await connection.getParsedAccountInfo(addressState.pubkey);
+    const accountInfoResult = await connection.getParsedAccountInfo(
+      addressState.pubkey
+    );
     const accountInfo = accountInfoResult?.value;
 
     if (!accountInfo) {
@@ -36,9 +34,9 @@ const accountInfoAtom = selector<AccountInfoType>({
       ...accountInfo,
       label: addressState.label,
       pubkey: addressState.pubkey,
-      space: !('parsed' in accountInfo.data) ? 
-        accountInfo.data.length : 
-        accountInfo.data.space
+      space: !('parsed' in accountInfo.data)
+        ? accountInfo.data.length
+        : accountInfo.data.space,
     };
   },
 });

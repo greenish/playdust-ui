@@ -1,49 +1,48 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerCard from '../_sharedComponents/ExplorerCard/ExplorerCard';
-import TableSkeleton from '../_sharedComponents/ExplorerCard/TableSkeleton/TableSkeleton';
-import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
-import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import AccountDomainsRow from './AccountDomainsRow';
+import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
+import ExplorerCard from './ExplorerCard/ExplorerCard';
+import ExplorerGrid from './ExplorerGrid';
+import LabeledAddressLink from './LabeledAddressLink/LabeledAddressLink';
 import SolBalance from './SolBalance/SolBalance';
+import TableSkeleton from './TableSkeleton/TableSkeleton';
 import accountInfoAtom from './_atoms/accountInfoAtom';
+import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 
 function AccountOverviewCard() {
   const accountInfo = useRecoilValue(accountInfoAtom);
 
   return (
     <ExplorerCard fallback={<TableSkeleton />}>
-      <ExplorerGrid >
+      <ExplorerGrid>
         <ExplorerGridRow
-          label='Address'
-          value={<LabeledAddressLink pubkey={accountInfo.pubkey} allowCopy={true} />}
+          label="Address"
+          value={
+            <LabeledAddressLink pubkey={accountInfo.pubkey} allowCopy={true} />
+          }
         />
-        {accountInfo.label !== undefined &&
-          <ExplorerGridRow
-            label='Address Label'
-            value={accountInfo.label}
-          />
-        }
+        {accountInfo.label !== undefined && (
+          <ExplorerGridRow label="Address Label" value={accountInfo.label} />
+        )}
         <AccountDomainsRow />
         <ExplorerGridRow
-          label='Balance (SOL)'
+          label="Balance (SOL)"
           value={<SolBalance lamports={accountInfo.lamports ?? 0} />}
         />
-        {accountInfo.space !== undefined &&
+        {accountInfo.space !== undefined && (
           <ExplorerGridRow
-            label='Allocated Data Size'
+            label="Allocated Data Size"
             value={`${accountInfo.space} byte(s)`}
           />
-        }
-        {accountInfo.owner &&
+        )}
+        {accountInfo.owner && (
           <ExplorerGridRow
-            label='Assigned Program Id'
+            label="Assigned Program Id"
             value={<LabeledAddressLink pubkey={accountInfo.owner} />}
           />
-        }
+        )}
         <ExplorerGridRow
-          label='Executable'
+          label="Executable"
           value={accountInfo.executable ? 'Yes' : 'No'}
         />
       </ExplorerGrid>

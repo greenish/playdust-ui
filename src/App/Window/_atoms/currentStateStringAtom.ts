@@ -1,4 +1,4 @@
-import { atom } from 'Recoil';
+import { atom } from 'recoil';
 
 const currentStateStringAtom = atom<string | null>({
   key: 'currentStateString',

@@ -9,7 +9,7 @@ const solanaClusterAtom = selector<SolanaClusterType>({
 
     const cluster = clusters[selectedIndex];
 
-    if(!cluster) {
+    if (!cluster) {
       throw new Error(`Invalid cluster index: ${selectedIndex}`);
     }
 
