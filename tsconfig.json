@@ -18,13 +18,20 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/_atoms/*":[
+        "src/App/_atoms/*",
+        "src/App/Window/_atoms/*"
+      ]
+    }
   },
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": {
       "module": "commonjs",
-      "allowSyntheticDefaultImports": true
+      "allowSyntheticDefaultImports": true,
     }
   },
   "include": [

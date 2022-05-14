@@ -1,14 +1,14 @@
+import activeTabAtom from '@/_atoms/activeTabAtom';
+import activeWindowAtom from '@/_atoms/activeWindowAtom';
+import currentStateStringAtom from '@/_atoms/currentStateStringAtom';
 import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
 import React, { Suspense, useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
+import userProfileStringAtom from '@/_atoms/userProfileStringAtom';
 import { userProfile } from '../../me/store';
-import activeTabAtom from '../_atoms/activeTabAtom';
 import WindowInput from './WindowInput/WindowInput';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import activeWindowAtom from './_atoms/activeWindowAtom';
-import currentStateString from './_atoms/currentStateStringAtom';
-import userProfileString from './_atoms/userProfileStringAtom';
 import useRouteApp from './_hooks/useRouteApp';
 import useSetCurrentWindowState from './_hooks/useSetCurrentWindowState';
 import type WindowProps from './_types/WindowPropsType';
@@ -77,8 +77,8 @@ function Window() {
     <RecoilRoot
       key={`${activeTab.id}:${windowProps.state}`}
       initializeState={({ set }) => {
-        set(userProfileString, JSON.stringify(profile));
-        set(currentStateString, JSON.stringify(activeWindow));
+        set(userProfileStringAtom, JSON.stringify(profile));
+        set(currentStateStringAtom, JSON.stringify(activeWindow));
       }}
     >
       <RootContainer>
