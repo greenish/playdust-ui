@@ -1,7 +1,7 @@
 import { Box, Table, TableBody, TableContainer } from '@mui/material';
-import React, { PropsWithChildren } from 'react';
+import React, { ReactNode } from 'react';
 
-function ExplorerGrid({ children }: PropsWithChildren<null>) {
+function ExplorerGrid({ children }: { children: ReactNode | undefined }) {
   return (
     <Box>
       <TableContainer>
