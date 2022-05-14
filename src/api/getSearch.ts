@@ -1,4 +1,6 @@
+import { NextApiRequest } from 'next';
 import ComposedQueryType from '../_types/ComposedQueryType';
+import OpenSearchNFTSourceType from '../_types/OpenSearchNFTSourceType';
 import type SearchSortType from '../_types/SearchSortUnionType';
 import getNFTQuery from './_helpers/getNFTQuery';
 import nextApiHandler from './_helpers/nextApiHandler';
@@ -31,22 +33,43 @@ const getSizeFrom = (page: number) => {
   return { size: nextSearchSize, from };
 };
 
-const getSearch = nextApiHandler(async (req) => {
-  const query = req.body.query as ComposedQueryType;
-  const sort = req.body.sort as SearchSortType;
-  const page = req.body.page || (0 as number);
-  const onlyListed = Boolean(req.body.onlyListed);
+type SearchResponseType = {
+  nfts: OpenSearchNFTSourceType[];
+  total: number;
+  page: number;
+};
 
-  const { size, from } = getSizeFrom(page);
+interface ExtendedNextApiRequest extends NextApiRequest {
+  body: {
+    query?: ComposedQueryType;
+    onlyListed?: boolean;
+    sort?: SearchSortType;
+    page?: number;
+  };
+}
 
-  const nftQuery = getNFTQuery(query, size, sort, onlyListed, from);
-  const nftResult = await postNFTQuery(nftQuery);
+const getSearch = nextApiHandler<SearchResponseType>(
+  async (req: ExtendedNextApiRequest): Promise<SearchResponseType> => {
+    const query = req.body.query as ComposedQueryType;
+    const sort = req.body.sort as SearchSortType;
+    const page = req.body.page || (0 as number);
+    const onlyListed = Boolean(req.body.onlyListed);
 
-  const { hits } = nftResult;
-  const nfts = hits.hits.map((entry) => entry._source);
-  const total = hits.total.value as number;
+    if (!query || !sort) {
+      throw new Error('No `query` or `sort` supplied!');
+    }
 
-  return { nfts, total, page };
-});
+    const { size, from } = getSizeFrom(page);
+
+    const nftQuery = getNFTQuery(query, size, sort, onlyListed, from);
+    const nftResult = await postNFTQuery(nftQuery);
+
+    const { hits } = nftResult;
+    const nfts = hits.hits.map((entry) => entry._source);
+    const total = hits.total.value;
+
+    return { nfts, total, page };
+  }
+);
 
 export default getSearch;

@@ -1,10 +1,11 @@
+import safePromise from '../../_helpers/safePromise';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 
 const useGoToNewTab = () => {
   const pushWindowHash = usePushWindowHash();
 
   return () => {
-    pushWindowHash({ type: 'home', state: '' }, { newTab: true });
+    safePromise(pushWindowHash({ type: 'home', state: '' }, { newTab: true }));
   };
 };
 

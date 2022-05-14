@@ -6,6 +6,7 @@ import Link from '../Link';
 import TokenCard from './_sharedComponents/TokenCard/TokenCard';
 import VirtualizedGrid from './_sharedComponents/VirtualizedGrid';
 import type TokenGroupProps from './_types/TokenGroupProps';
+import VirtualizedGridChildProps from './_types/VirtualizedGridChildProps';
 
 const groupLabelHeight = 55;
 
@@ -110,10 +111,9 @@ function RowRenderer(props: RowRendererProps) {
 }
 
 function TokenGroup(props: TokenGroupProps) {
-  const rowWrapper = useCallback(
-    ({ index }) => <RowRenderer index={index} parentProps={props} />,
-    [props]
-  );
+  const rowWrapper = useCallback<
+    (gridprops: VirtualizedGridChildProps) => JSX.Element
+  >(({ index }) => <RowRenderer index={index} parentProps={props} />, [props]);
 
   return (
     <VirtualizedGrid

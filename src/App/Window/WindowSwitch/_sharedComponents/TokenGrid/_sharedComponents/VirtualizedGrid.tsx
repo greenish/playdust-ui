@@ -6,7 +6,12 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { AutoSizer, InfiniteLoader, List } from 'react-virtualized';
+import {
+  AutoSizer,
+  InfiniteLoader,
+  List,
+  ListRowRenderer,
+} from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import type RowMetaProps from '../_types/RowMetaProps';
 import type VirtualizedGridChildProps from '../_types/VirtualizedGridChildProps';
@@ -53,7 +58,7 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
   );
   const { rowHeight, rowCount, hasMore } = meta;
 
-  const rowWrapper = useCallback(
+  const rowWrapper = useCallback<ListRowRenderer>(
     ({ key, style, index }) => (
       <div
         key={key}
@@ -79,12 +84,13 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
           }
           return index + 1 < rowCount;
         }}
-        loadMoreRows={async () => {
+        loadMoreRows={() => {
           if (next && !isLoading) {
             setIsLoading(true);
-            await next();
+            next();
             setIsLoading(false);
           }
+          return Promise.resolve();
         }}
         rowCount={rowCount}
         threshold={2}

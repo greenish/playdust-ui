@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import activeTabAtom from '../../_atoms/activeTabAtom';
 import appStateAtom from '../../_atoms/appStateAtom';
 import decodeWindowHash from '../../_helpers/decodeWindowHash';
+import safePromise from '../../_helpers/safePromise';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
 import useAddTab from './useAddTab';
 import useReplaceWindowHash from './useReplaceWindowHash';
@@ -22,7 +23,7 @@ const useRouteApp = () => {
   const replaceWindowHash = useReplaceWindowHash();
 
   const handleLocationChange = useCallback(
-    (trigger: string) => {
+    async (trigger: string) => {
       const { windowState, tab } = decodeWindowHash();
       const isEmptyUrlState = windowState.state === '';
       const foundURLTab = tabs.find((entry) => entry.id === tab);
@@ -88,7 +89,7 @@ const useRouteApp = () => {
   );
 
   useEffect(() => {
-    handleLocationChange(location.trigger);
+    safePromise(handleLocationChange(location.trigger));
   }, [location]); // eslint-disable-line
 
   return { didMount };

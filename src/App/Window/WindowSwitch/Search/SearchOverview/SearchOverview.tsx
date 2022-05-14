@@ -44,7 +44,7 @@ const chips = [
 ];
 
 function SearchOverview() {
-  const { state, contents } = useRecoilValueLoadable(searchOverviewAtom);
+  const searchOverview = useRecoilValueLoadable(searchOverviewAtom);
   const collectionId = useRecoilValue(collectionIdAtom);
 
   return (
@@ -57,8 +57,8 @@ function SearchOverview() {
           label={
             <ChipContentContainer>
               {chip.label}:{' '}
-              {state === 'hasValue' ? (
-                chip.getValue(contents)
+              {searchOverview.state === 'hasValue' ? (
+                chip.getValue(searchOverview.contents)
               ) : (
                 <Skeleton variant="text" width={35} />
               )}

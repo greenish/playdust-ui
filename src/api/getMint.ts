@@ -4,7 +4,11 @@ import nextApiHandler from './_helpers/nextApiHandler';
 import postNFTQuery from './_helpers/postNFTQuery';
 
 const getMint = nextApiHandler<OpenSearchNFTSourceType>(async (req) => {
-  const mintAddress = req.query.address as string;
+  const mintAddress = req.query.address;
+
+  if (typeof mintAddress !== 'string') {
+    throw new Error('No valid `address` supplied!');
+  }
 
   const requestBody = esb
     .requestBodySearch()

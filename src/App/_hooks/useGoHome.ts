@@ -1,10 +1,11 @@
+import safePromise from '../_helpers/safePromise';
 import usePushWindowHash from './usePushWindowHash';
 
 const useGoHome = () => {
   const pushWindowHash = usePushWindowHash();
 
   return () => {
-    pushWindowHash({ type: 'home', state: '' });
+    safePromise(pushWindowHash({ type: 'home', state: '' }));
   };
 };
 

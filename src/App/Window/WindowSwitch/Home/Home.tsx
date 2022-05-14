@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import React, { useMemo } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
+import safePromise from '../../../_helpers/safePromise';
 import humanizeCollection from '../_helpers/humanizeCollection';
 import humanizeSolana from '../_helpers/humanizeSolana';
 import useInitCollectionQuery from '../_hooks/useInitCollectionQuery';
@@ -48,8 +49,8 @@ function Home() {
         cardGap={16}
         rowGap={24}
         contentHeight={0}
-        next={async () => {
-          await fetchMore();
+        next={() => {
+          safePromise(fetchMore());
         }}
       />
     </RootContainer>

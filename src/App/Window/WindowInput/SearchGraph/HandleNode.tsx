@@ -1,8 +1,9 @@
 import { Typography } from '@mui/material';
 import React from 'react';
 import { Handle, NodeProps, Position } from 'react-flow-renderer';
+import HandleNodeDataType from './_types/HandleNodeDataType';
 
-function HandleNode({ data }: NodeProps) {
+function HandleNode({ data }: NodeProps<HandleNodeDataType>) {
   return (
     <>
       <Typography fontSize={10}>{data.label || ''}</Typography>

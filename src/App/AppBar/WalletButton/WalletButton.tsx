@@ -15,6 +15,7 @@ import { useCookies } from 'react-cookie';
 import { useRecoilState } from 'recoil';
 import solanaClustersAtom from '../../_atoms/solanaClustersAtom';
 import { autoRefresh } from '../../_helpers/playdustApi';
+import safePromise from '../../_helpers/safePromise';
 import shortenPublicKey from './_helpers/shortenPublicKey';
 import useGoToProfile from './_hooks/useGoToProfile';
 
@@ -30,7 +31,10 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
   const open = !!anchorEl;
   const [solanaClusters, setSolanaClusters] =
     useRecoilState(solanaClustersAtom);
-  const [cookies, setCookie, removeCookie] = useCookies(['authToken', 'nonce']);
+  const [cookies, setCookie, removeCookie] = useCookies<
+    string,
+    { authToken: string; nonce: string }
+  >(['authToken', 'nonce']);
   const goToProfile = useGoToProfile();
 
   const buttonProps =
@@ -87,7 +91,7 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
         <MenuItem
           sx={{ p: 2 }}
           onClick={() => {
-            wallet.disconnect();
+            safePromise(wallet.disconnect());
             removeCookie('authToken');
             setAnchorEl(null);
           }}

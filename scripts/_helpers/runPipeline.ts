@@ -4,6 +4,7 @@ import { exit } from 'process';
 import type FileMetaType from '../_types/FileMetaType';
 import getFileMeta from './getFileMeta';
 import makeValidateStructure from './makeValidateStructure';
+import safePromise from './safePromise';
 import validateCurrentLocation from './validateCurrentLocation';
 import validateExport from './validateExport';
 import validateFileContent from './validateFileContent';
@@ -163,7 +164,7 @@ const runPipeline = async (write: boolean) => {
 
   if (write) {
     // Run read pipeline after writing
-    runPipeline(false);
+    safePromise(runPipeline(false));
   } else {
     printSuccessSummary();
   }

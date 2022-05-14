@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 import getDefaultAppState from '../_helpers/getDefaultAppState';
-import validateAppState from '../_helpers/validateAppState';
+import parseAppState from '../_helpers/parseAppState';
 import type AppStateType from '../_types/AppStateType';
 
 const appStateAtom = atom<AppStateType>({
@@ -17,13 +17,13 @@ const appStateAtom = atom<AppStateType>({
       const savedValue = localStorage.getItem(key);
 
       if (trigger === 'get' && savedValue) {
-        const isValid = validateAppState(savedValue);
+        const appState = parseAppState(savedValue);
 
-        if (!isValid) {
+        if (!appState) {
           return localStorage.removeItem(key);
         }
 
-        setSelf(JSON.parse(savedValue));
+        setSelf(appState);
       }
 
       onSet((newValue, _, isReset) => {
@@ -33,8 +33,8 @@ const appStateAtom = atom<AppStateType>({
 
         const nextValue = JSON.stringify(newValue);
 
-        if (validateAppState(nextValue)) {
-          localStorage.setItem(key, JSON.stringify(newValue));
+        if (parseAppState(nextValue)) {
+          localStorage.setItem(key, nextValue);
         }
       });
     },

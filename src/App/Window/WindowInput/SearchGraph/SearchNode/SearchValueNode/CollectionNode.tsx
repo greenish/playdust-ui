@@ -15,9 +15,11 @@ function CollectionNode(props: CollectionNodeProps) {
   const { value } = useRecoilValue(
     searchQueryChildAtom(props.id)
   ) as CollectionQueryNodeType;
-  const { state, contents } = useRecoilValueLoadable(collectionByIdAtom(value));
+  const collectionById = useRecoilValueLoadable(collectionByIdAtom(value));
   const collectionName =
-    state === 'hasValue' ? contents.name || contents.symbol : value;
+    collectionById.state === 'hasValue'
+      ? collectionById.contents.name || collectionById.contents.symbol
+      : value;
 
   return (
     <FormControl fullWidth={true} sx={{ mt: 1 }}>

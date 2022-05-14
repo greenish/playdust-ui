@@ -14,6 +14,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import React, { useState } from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
 import { setFlagCollection, setFlagNFT } from '../../../_helpers/playdustApi';
+import safePromise from '../../../_helpers/safePromise';
 import flaggedCollection from './_atoms/flaggedCollectionAtom';
 
 function FlaggedModal() {
@@ -32,9 +33,9 @@ function FlaggedModal() {
     }
 
     if (type === 'NFT') {
-      setFlagNFT(id, publicKeyString, reasonSelected);
+      safePromise(setFlagNFT(id, publicKeyString, reasonSelected));
     } else {
-      setFlagCollection(id, publicKeyString, reasonSelected);
+      safePromise(setFlagCollection(id, publicKeyString, reasonSelected));
     }
     close();
   };

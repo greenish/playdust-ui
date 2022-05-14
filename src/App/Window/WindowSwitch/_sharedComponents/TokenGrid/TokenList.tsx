@@ -73,7 +73,9 @@ function TokenList(props: TokenListProps) {
     rowGap,
   } = props;
 
-  const rowWrapper = useCallback(
+  const rowWrapper = useCallback<
+    (gridprops: VirtualizedGridChildProps) => JSX.Element
+  >(
     (gridProps) => <RowRenderer gridProps={gridProps} parentProps={props} />,
     [props]
   );

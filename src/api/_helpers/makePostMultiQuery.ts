@@ -7,9 +7,13 @@ function makePostMultiQuery<T = unknown, A = unknown>() {
       'Content-type': 'application/x-ndjson',
     };
 
-    const data = await postAxios(query, '/_msearch', headers);
+    const data = await postAxios<{ responses: OpenSearchResponseType<T, A>[] }>(
+      query,
+      '/_msearch',
+      headers
+    );
 
-    return data.responses as OpenSearchResponseType<T, A>[];
+    return data.responses;
   };
 }
 

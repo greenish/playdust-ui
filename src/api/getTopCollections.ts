@@ -1,3 +1,4 @@
+import { NextApiRequest } from 'next';
 import type TopCollectionsResponseType from '../_types/TopCollectionsResponseType';
 import nextApiHandler from './_helpers/nextApiHandler';
 import postCollectionQuery from './_helpers/postCollectionQuery';
@@ -54,9 +55,15 @@ const getNFTQuery = (collectionId: string) => ({
   ],
 });
 
+interface ExtendedNextApiRequest extends NextApiRequest {
+  body: {
+    page?: number;
+  };
+}
+
 const getTopCollections = nextApiHandler<TopCollectionsResponseType>(
-  async (req) => {
-    const page = req.body.page || (0 as number);
+  async (req: ExtendedNextApiRequest): Promise<TopCollectionsResponseType> => {
+    const page: number = req.body.page || 0;
 
     const topCollectionQuery = getTopCollectionQuery(page);
     const topCollectionResult = await postCollectionQuery(topCollectionQuery);

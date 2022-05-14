@@ -17,7 +17,8 @@
     "delete:emptyDirs": "find ./src -type d -empty -delete",
     "hooks:install": "husky install",
     "hooks:uninstall": "git config --unset core.hooksPath",
-    "fix:all": "yarn lint:fix; yarn prettier:write;  yarn guidelines:write"
+    "check:all": "yarn lint && yarn prettier:check && yarn guidelines:check ",
+    "fix:all": "yarn lint:fix && yarn prettier:write &&  yarn guidelines:write"
   },
   "lint-staged": {
     "**/*.(ts|tsx)": [
@@ -73,6 +74,7 @@
     "sharp": "^0.30.1"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^12.1.6",
     "@types/async-retry": "^1.4.3",
     "@types/fs-extra": "^9.0.13",
     "@types/luxon": "^2.0.9",
@@ -90,7 +92,8 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-next": "12.0.8",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",

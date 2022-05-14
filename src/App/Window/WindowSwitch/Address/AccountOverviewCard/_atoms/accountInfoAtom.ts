@@ -27,7 +27,9 @@ const accountInfoAtom = selector<AccountInfoType>({
     const accountInfo = accountInfoResult?.value;
 
     if (!accountInfo) {
-      throw new Error(`Could Not Fetch AccountInfo for ${addressState.pubkey}`);
+      throw new Error(
+        `Could Not Fetch AccountInfo for ${addressState.pubkey.toBase58()}`
+      );
     }
 
     return {

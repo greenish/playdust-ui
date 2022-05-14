@@ -16,6 +16,7 @@ import activeTabAtom from '../_atoms/activeTabAtom';
 import appStateAtom from '../_atoms/appStateAtom';
 import appBarWidth from '../_helpers/appBarWidth';
 import getCDNUrl from '../_helpers/getCDNUrl';
+import safePromise from '../_helpers/safePromise';
 import useGoHome from '../_hooks/useGoHome';
 import type WindowType from '../_types/WindowType';
 import Playdust from './PlaydustIcon';
@@ -227,7 +228,7 @@ function AppBar() {
               size={24}
               onClick={() => {
                 localStorage.clear();
-                router.replace('/');
+                safePromise(router.replace('/'));
                 router.reload();
               }}
             >

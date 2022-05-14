@@ -1,7 +1,9 @@
 import { Node } from 'react-flow-renderer';
 import { selector } from 'recoil';
-import type QueryNodeType from '../../../../../_types/QueryNodeType';
 import searchStateUncommitted from '../../../_atoms/searchStateUncommittedAtom';
+import ActionNodeDataType from '../_types/ActionNodeDataType';
+import HandleNodeDataType from '../_types/HandleNodeDataType';
+import SearchNodeDataType from '../_types/SearchNodeDataType';
 
 const cardHeight = 175;
 const yPaddingBottom = 75;
@@ -16,8 +18,13 @@ const createNode = (
   id: string,
   x: number,
   y: number,
-  handles: object
-): Node => ({
+  handles: {
+    top: boolean;
+    right: boolean;
+    bottom: boolean;
+    left: boolean;
+  }
+): Node<SearchNodeDataType> => ({
   id,
   type: 'searchNode',
   data: {
@@ -43,7 +50,9 @@ const getY = (
   return totalOffset * yTotal + searchNodeOffset;
 };
 
-const searchNodesAtom = selector<(Node | Node<QueryNodeType>)[]>({
+const searchNodesAtom = selector<
+  Node<ActionNodeDataType | SearchNodeDataType | HandleNodeDataType>[]
+>({
   key: 'searchNodesAtom',
   get: ({ get }) => {
     const { query } = get(searchStateUncommitted);
@@ -62,7 +71,7 @@ const searchNodesAtom = selector<(Node | Node<QueryNodeType>)[]>({
         return createNode(entry.id, x, y, handles);
       });
       const isRange = parent.length === 1 && parent[0].field === 'range';
-      const actionNode = {
+      const actionNode: Node<ActionNodeDataType> = {
         id: `${idx}-action`,
         type: 'actionNode',
         data: { idx, width: cardWidth, disableOr: isRange },
@@ -74,17 +83,19 @@ const searchNodesAtom = selector<(Node | Node<QueryNodeType>)[]>({
 
       return [...mainNodes, actionNode];
     });
-    const andNodes = query.slice(0, -1).map((parent, idx) => ({
-      id: `${parent[0].id}-and`,
-      type: 'handleNode',
-      data: {
-        label: 'AND',
-      },
-      position: {
-        x: getX(idx) + andOffset,
-        y: getY(0, 1, largestColumn, false) + 3,
-      },
-    }));
+    const andNodes: Node<HandleNodeDataType>[] = query
+      .slice(0, -1)
+      .map((parent, idx) => ({
+        id: `${parent[0].id}-and`,
+        type: 'handleNode',
+        data: {
+          label: 'AND',
+        },
+        position: {
+          x: getX(idx) + andOffset,
+          y: getY(0, 1, largestColumn, false) + 3,
+        },
+      }));
 
     return [...queryNodes, ...andNodes];
   },
