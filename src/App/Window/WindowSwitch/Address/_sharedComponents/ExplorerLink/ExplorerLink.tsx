@@ -13,7 +13,7 @@ function ExplorerLink({
   type,
 }: ExplorerLinkProps) {
   const fullLabel = label || String(to);
-  const display = ellipsis
+  const shortLabel = ellipsis
     ? ellipsisify(
         fullLabel,
         ellipsis.cutoff,
@@ -22,12 +22,16 @@ function ExplorerLink({
       )
     : fullLabel;
 
+  const isShortened = fullLabel.length > shortLabel.length;
+  const display = isShortened ? shortLabel : fullLabel;
+
   const href = type ? encodeWindowHash({ type, state: String(to) }) : '#';
   return (
     <>
       {allowCopy && <CopyButton value={to} />}
-      <Link href={href} title={fullLabel}>
+      <Link href={href} title={String(to)}>
         <pre style={{ display: 'inline' }}>{display}</pre>
+        {isShortened && <sub>{` ${fullLabel.length}`}</sub>}
       </Link>
     </>
   );
