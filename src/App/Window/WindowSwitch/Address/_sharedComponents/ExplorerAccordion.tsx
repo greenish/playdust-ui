@@ -4,8 +4,8 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import TableSkeleton from './_sharedComponents/TableSkeleton/TableSkeleton';
+import SuspenseBoundary from './SuspenseBoundary/SuspenseBoundary';
+import TableSkeleton from './TableSkeleton/TableSkeleton';
 
 type ExplorerAccordionPropTypes = {
   id: string;
