@@ -5,6 +5,7 @@ import {
   TransactionSignature,
 } from '@solana/web3.js';
 import SolanaClusterType from '../../../../../../_types/SolanaClusterType';
+import safePubkey from '../../_helpers/safePubkey';
 import TransactionType from '../_types/TransactionType';
 
 async function fetchTransactionsForAddress(
@@ -16,7 +17,7 @@ async function fetchTransactionsForAddress(
   const connection = new Connection(cluster.endpoint);
 
   const signatureInfos = await connection.getConfirmedSignaturesForAddress2(
-    pubkey,
+    safePubkey(pubkey),
     { limit, before }
   );
   const signatures = signatureInfos.map((info) => info.signature);

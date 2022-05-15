@@ -2,12 +2,12 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import accountInfoAtom from '../_atoms/accountInfoAtom';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
+import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
 import TableSkeleton from '../_sharedComponents/TableSkeleton/TableSkeleton';
 import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
 import ExplorerCard from './ExplorerCard';
 import ExplorerGrid from './ExplorerGrid';
-import LabeledAddressLink from './LabeledAddressLink/LabeledAddressLink';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 
 function AccountOverviewCard() {
@@ -21,7 +21,7 @@ function AccountOverviewCard() {
           value={
             <ExplorerLink
               type="address"
-              to={accountInfo.pubkey.toBase58()}
+              to={accountInfo.pubkey}
               allowCopy={true}
             />
           }
@@ -43,7 +43,7 @@ function AccountOverviewCard() {
         {accountInfo.owner && (
           <ExplorerGridRow
             label="Assigned Program Id"
-            value={<LabeledAddressLink pubkey={accountInfo.owner} />}
+            value={<LabeledAddressLink to={accountInfo.owner} />}
           />
         )}
         <ExplorerGridRow

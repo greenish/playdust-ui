@@ -6,6 +6,7 @@ import {
 } from '@solana/web3.js';
 import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import safePubkey from '../_helpers/safePubkey';
 import addressStateAtom from './addressStateAtom';
 
 type AccountInfoType = AccountInfo<Buffer | ParsedAccountData> & {
@@ -22,7 +23,7 @@ const accountInfoAtom = selector<AccountInfoType>({
 
     const connection = new Connection(solanaCluster.endpoint, 'confirmed');
     const accountInfoResult = await connection.getParsedAccountInfo(
-      addressState.pubkey
+      safePubkey(addressState.pubkey)
     );
     const accountInfo = accountInfoResult?.value;
 
