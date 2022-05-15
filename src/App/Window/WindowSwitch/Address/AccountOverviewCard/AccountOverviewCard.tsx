@@ -4,9 +4,9 @@ import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
 import ExplorerCard from './ExplorerCard';
 import ExplorerGrid from './ExplorerGrid';
 import LabeledAddressLink from './LabeledAddressLink/LabeledAddressLink';
-import SolBalance from './SolBalance/SolBalance';
-import TableSkeleton from './TableSkeleton/TableSkeleton';
-import accountInfoAtom from './_atoms/accountInfoAtom';
+import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
+import TableSkeleton from '../_sharedComponents/TableSkeleton/TableSkeleton';
+import accountInfoAtom from '../_atoms/accountInfoAtom';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 
 function AccountOverviewCard() {

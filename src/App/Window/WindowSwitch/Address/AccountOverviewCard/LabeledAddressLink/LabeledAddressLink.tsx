@@ -1,7 +1,7 @@
 import { PublicKey } from '@solana/web3.js';
 import React from 'react';
-import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
-import ExplorerLinkDisplayPropsType from '../_types/ExplorerLinkDisplayPropsType';
+import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
+import ExplorerLinkDisplayPropsType from '../../_types/ExplorerLinkDisplayPropsType';
 import useAddressLabel from './_hooks/useAddressLabel';
 
 interface LabeledAddressLinkBaseProps {

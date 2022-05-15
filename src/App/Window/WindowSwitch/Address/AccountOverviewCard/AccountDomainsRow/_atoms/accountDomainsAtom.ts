@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../../../_atoms/solanaClusterAtom';
-import addressStateAtom from '../../_atoms/addressStateAtom';
+import addressStateAtom from '../../../_atoms/addressStateAtom';
 import fetchUserDomains from '../_helpers/fetchUserDomains';
 
 type AccountDomainsType = Awaited<ReturnType<typeof fetchUserDomains>>;
