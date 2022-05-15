@@ -10,7 +10,19 @@ const tokenAccountsForAddressAtom = selector<TokenAccountsType[]>({
     const accountInfo = get(accountInfoAtom);
     const custer = get(solanaClusterAtom);
 
-    return fetchTokenAccountsForAddress(custer, accountInfo.pubkey);
+    const tokenAccounts = await fetchTokenAccountsForAddress(
+      custer,
+      accountInfo.pubkey
+    );
+
+    // sort by token balance desc.
+    tokenAccounts.sort(
+      (a, b) =>
+        (b.account.data.parsed.info?.tokenAmount?.uiAmount ?? 0) -
+        (a.account.data.parsed.info?.tokenAmount?.uiAmount ?? 0)
+    );
+
+    return tokenAccounts;
   },
 });
 
