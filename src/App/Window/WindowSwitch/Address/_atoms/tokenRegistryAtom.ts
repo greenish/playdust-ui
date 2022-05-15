@@ -1,17 +1,22 @@
-import { TokenInfo, TokenInfoMap, TokenList } from '@solana/spl-token-registry';
-import axios from 'axios';
+import {
+  Strategy,
+  TokenInfo,
+  TokenInfoMap,
+  TokenListProvider,
+} from '@solana/spl-token-registry';
 import { selector } from 'recoil';
-
-const tokenRegistryUrl =
-  'https://cdn.jsdelivr.net/gh/solana-labs/token-list@main/src/tokens/solana.tokenlist.json';
+import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
 
 const tokenRegistryAtom = selector<TokenInfoMap>({
-  key: 'tokenRegistryAtom',
-  get: async () => {
-    const resp = await axios.get<TokenList>(tokenRegistryUrl);
-    const tokenList = resp?.data?.tokens ?? [];
+  key: 'tokenRegistry',
+  get: async ({ get }) => {
+    const cluster = get(solanaClusterAtom);
+    const tokens = await new TokenListProvider().resolve(Strategy.CDN);
+    const tokenList = tokens
+      .filterByChainId(cluster.tokenRegistryENV)
+      .getList();
 
-    const tokenRegistryMap = tokenList.reduce(
+    const tokenRegistry = tokenList.reduce(
       (map: TokenInfoMap, item: TokenInfo) => {
         map.set(item.address, item);
         return map;
@@ -19,7 +24,7 @@ const tokenRegistryAtom = selector<TokenInfoMap>({
       new Map()
     );
 
-    return tokenRegistryMap;
+    return tokenRegistry;
   },
 });
 
