@@ -12,22 +12,21 @@ function ExplorerLink({
   ellipsis,
   type,
 }: ExplorerLinkProps) {
-  const display =
-    label ||
-    (ellipsis
-      ? ellipsisify(
-          String(to),
-          ellipsis.cutoff,
-          ellipsis.remain,
-          ellipsis.ellipsis
-        )
-      : to);
+  const fullLabel = label || String(to);
+  const display = ellipsis
+    ? ellipsisify(
+        fullLabel,
+        ellipsis.cutoff,
+        ellipsis.remain,
+        ellipsis.ellipsis
+      )
+    : fullLabel;
 
   const href = type ? encodeWindowHash({ type, state: String(to) }) : '#';
   return (
     <>
       {allowCopy && <CopyButton value={to} />}
-      <Link href={href}>
+      <Link href={href} title={fullLabel}>
         <pre style={{ display: 'inline' }}>{display}</pre>
       </Link>
     </>

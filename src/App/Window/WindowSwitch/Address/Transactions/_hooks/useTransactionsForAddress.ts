@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import solanaClusterAtom from '../../../../../../_atoms/solanaClusterAtom';
-import accountInfoAtom from '../../../_atoms/accountInfoAtom';
+import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
+import accountInfoAtom from '../../_atoms/accountInfoAtom';
 import addressTransactionsAtom from '../_atoms/addressTransactionsAtom';
 import fetchTransactionsForAddress from '../_helpers/fetchTransactionsForAddress';
 import TransactionType from '../_types/TransactionType';
