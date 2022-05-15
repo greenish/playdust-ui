@@ -2,6 +2,7 @@ import SuccessIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import {
   Button,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -10,10 +11,10 @@ import {
   TableRow,
 } from '@mui/material';
 import { DateTime } from 'luxon';
-import React from 'react';
-import safePromise from '../../../../../_helpers/safePromise';
-import SolBalance from '../../_sharedComponents/SolBalance/SolBalance';
-import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
+import React, { useCallback, useState } from 'react';
+import safePromise from '../../../../_helpers/safePromise';
+import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
+import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
 import useTransactionsForAddress from './_hooks/useTransactionsForAddress';
 import TransactionType from './_types/TransactionType';
 
@@ -38,7 +39,15 @@ function TransactionRow({ transaction }: { transaction: TransactionType }) {
         )}
       </TableCell>
       <TableCell>
-        <ExplorerLink type="tx" to={transaction.signature} allowCopy={true} />
+        <ExplorerLink
+          type="tx"
+          to={transaction.signature}
+          allowCopy={true}
+          ellipsis={{
+            cutoff: 4,
+            remain: 4,
+          }}
+        />
       </TableCell>
       <TableCell>
         <ExplorerLink
@@ -48,7 +57,19 @@ function TransactionRow({ transaction }: { transaction: TransactionType }) {
         />
       </TableCell>
       <TableCell>{time}</TableCell>
-      <TableCell>{sender?.toString()}</TableCell>
+      <TableCell>
+        {sender ? (
+          <ExplorerLink
+            type="address"
+            to={sender.toString()}
+            allowCopy={true}
+            ellipsis={{
+              cutoff: 4,
+              remain: 4,
+            }}
+          />
+        ) : null}
+      </TableCell>
       <TableCell>
         <SolBalance lamports={fee} />
       </TableCell>
@@ -58,6 +79,13 @@ function TransactionRow({ transaction }: { transaction: TransactionType }) {
 
 function Transactions() {
   const [transactions, fetchMoreTransactions] = useTransactionsForAddress();
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const loadMoreHandler = useCallback(async () => {
+    setLoadingMore(true);
+    await fetchMoreTransactions();
+    setLoadingMore(false);
+  }, [fetchMoreTransactions, setLoadingMore]);
 
   return (
     <>
@@ -83,8 +111,8 @@ function Transactions() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button onClick={() => safePromise(fetchMoreTransactions())}>
-        Load More
+      <Button onClick={() => safePromise(loadMoreHandler())}>
+        {loadingMore ? <CircularProgress /> : 'Load More'}
       </Button>
     </>
   );
