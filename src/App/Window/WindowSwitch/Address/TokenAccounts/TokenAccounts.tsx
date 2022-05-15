@@ -34,7 +34,7 @@ function RenderTokenAccount({
             style={{
               margin: '-8px 0',
             }}
-            alt={`Token (${String(tokenInfo?.symbol ?? '')}) logo`}
+            alt={`Token logo (${String(tokenInfo?.symbol ?? '')})`}
           />
         )}
       </TableCell>
@@ -68,6 +68,7 @@ function RenderTokenAccount({
 
 function RenderTokenAccounts() {
   const tokenAccounts = useRecoilValue(tokenAccountsForAddressAtom);
+
   return (
     <Table>
       <TableHead>
