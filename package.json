@@ -41,6 +41,7 @@
     "@mui/material": "^5.7.0",
     "@mui/x-data-grid": "^5.5.1",
     "@react-hook/debounce": "^4.0.0",
+    "@solana/spl-token": "^0.2.0",
     "@solana/spl-token-registry": "^0.2.2268",
     "@solana/wallet-adapter-base": "^0.9.2",
     "@solana/wallet-adapter-react": "^0.15.2",
