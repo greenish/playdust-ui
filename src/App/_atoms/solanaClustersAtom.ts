@@ -7,12 +7,14 @@ const { persistAtom } = recoilPersist();
 
 const MAINNET = {
   network: WalletAdapterNetwork.Mainnet,
-  endpoint: 'https://explorer-api.mainnet-beta.solana.com/', // 'https://solana-api.projectserum.com', 'https://api.mainnet-beta.solana.com',
+  endpoint:
+    'https://polished-young-mountain.solana-mainnet.quiknode.pro/53eaa4a0729b507f78443988672faf40c0a29eb5/', // 'https://explorer-api.mainnet-beta.solana.com/', // 'https://solana-api.projectserum.com', 'https://api.mainnet-beta.solana.com',
 };
 
 const DEVNET = {
   network: WalletAdapterNetwork.Devnet,
-  endpoint: 'https://api.devnet.solana.com',
+  endpoint:
+    'https://wispy-damp-violet.solana-devnet.quiknode.pro/9150f53f1702a07cf569fcad3d7048c388b69676/', // 'https://api.devnet.solana.com',
 };
 
 type SolanaClustersType = {
