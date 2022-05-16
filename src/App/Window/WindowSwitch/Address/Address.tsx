@@ -4,12 +4,15 @@ import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
 import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
+import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 
 function Address() {
   return (
     <Container maxWidth="lg">
       <Stack spacing={2}>
-        <AccountOverviewCard />
+        <SuspenseBoundary error={null} loading={null}>
+          <AccountOverviewCard />
+        </SuspenseBoundary>
         <TokenAccounts />
         <ExplorerAccordion
           id="transactions"
