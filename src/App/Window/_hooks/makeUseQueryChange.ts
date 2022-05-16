@@ -1,7 +1,6 @@
 import { useRecoilState } from 'recoil';
 import ComposedQueryType from '../../../_types/ComposedQueryType';
 import encodeWindowHash from '../../_helpers/encodeWindowHash';
-import safePromise from '../../_helpers/safePromise';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import type WindowType from '../../_types/WindowType';
 import searchStateUncommitted from '../_atoms/searchStateUncommittedAtom';
@@ -37,7 +36,7 @@ function makeUseQueryChange<T>(
       const nextUrlState: WindowType = { type: 'search', state: serialized };
 
       if (method === 'router') {
-        safePromise(pushWindowHash(nextUrlState));
+        pushWindowHash(nextUrlState);
       }
 
       if (method === 'memory') {

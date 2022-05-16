@@ -30,7 +30,7 @@ interface VirtualizedGridProps {
   ) => RowMetaProps;
   rowRenderer: (childProps: VirtualizedGridChildProps) => React.ReactElement;
   initialized: boolean;
-  next?: () => void;
+  next?: () => Promise<void>;
 }
 
 interface AutoSizedContainerProps extends VirtualizedGridProps {
@@ -84,10 +84,10 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
           }
           return index + 1 < rowCount;
         }}
-        loadMoreRows={() => {
+        loadMoreRows={async () => {
           if (next && !isLoading) {
             setIsLoading(true);
-            next();
+            await next();
             setIsLoading(false);
           }
           return Promise.resolve();

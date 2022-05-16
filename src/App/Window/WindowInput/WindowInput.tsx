@@ -13,7 +13,6 @@ import {
 import { useDebounceCallback } from '@react-hook/debounce';
 import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import safePromise from '../../_helpers/safePromise';
 import useGoHome from '../../_hooks/useGoHome';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import searchQueryValidAtom from '../_atoms/searchQueryValidAtom';
@@ -71,12 +70,10 @@ function WindowInput({ state, type }: WindowProps) {
       return;
     }
 
-    safePromise(
-      pushWindowHash({
-        type: 'search',
-        state: serializeSearch(uncommitted),
-      })
-    );
+    pushWindowHash({
+      type: 'search',
+      state: serializeSearch(uncommitted),
+    });
 
     setOpen(false);
   };
@@ -90,80 +87,76 @@ function WindowInput({ state, type }: WindowProps) {
         filterOptions={(x) => x}
         onOpen={() => setSearchOpen(true)}
         onClose={() => setSearchOpen(false)}
-        onChange={(__evt, _onChangeValue, _reason) => {
-          safePromise(
-            (async (_evt, onChangeValue, reason) => {
-              if (reason === 'clear') {
-                return goHome();
-              }
+        onChange={(_evt, onChangeValue, reason) => {
+          if (reason === 'clear') {
+            return goHome();
+          }
 
-              const value = onChangeValue[1];
+          const value = onChangeValue[1];
 
-              if (!value) {
+          if (!value) {
+            return undefined;
+          }
+
+          setSuggestionTerm('');
+
+          // value is string if enter key is pressed
+          if (typeof value === 'string') {
+            const windowType = getWindowType(value);
+
+            if (windowType !== 'search') {
+              return pushWindowHash({
+                type: windowType,
+                state: value,
+              });
+            }
+
+            return addTextQueryNode(value);
+          }
+
+          switch (value.group) {
+            case 'Collections':
+              return value.meta && prependCollectionQueryNode(value.meta);
+            case 'Search':
+              return addTextQueryNode(suggestionTerm);
+            case 'Explorer':
+              return pushWindowHash({
+                type: value.type,
+                state: suggestionTerm,
+              });
+            case 'Attribute':
+              if (!value.attributeMeta) {
                 return undefined;
               }
 
-              setSuggestionTerm('');
-
-              // value is string if enter key is pressed
-              if (typeof value === 'string') {
-                const windowType = getWindowType(value);
-
-                if (windowType !== 'search') {
-                  return pushWindowHash({
-                    type: windowType,
-                    state: value,
-                  });
-                }
-
-                return addTextQueryNode(value);
-              }
-
-              switch (value.group) {
-                case 'Collections':
-                  return value.meta && prependCollectionQueryNode(value.meta);
-                case 'Search':
-                  return addTextQueryNode(suggestionTerm);
-                case 'Explorer':
-                  return pushWindowHash({
-                    type: value.type,
-                    state: suggestionTerm,
-                  });
-                case 'Attribute':
-                  if (!value.attributeMeta) {
-                    return undefined;
-                  }
-
-                  return addAttributeQueryNode({
-                    value: [value.attributeMeta.option],
-                    trait: value.attributeMeta.trait,
-                    operation: 'and',
-                  });
-                case 'Attribute Value':
-                  return (
-                    value.meta &&
-                    addAttributeQueryNode({
-                      value: [value.meta],
-                      trait: '',
-                      operation: 'and',
-                    })
-                  );
-                case 'Attribute Trait':
-                  return (
-                    value.meta &&
-                    addAttributeQueryNode({
-                      value: [],
-                      trait: value.meta,
-                      operation: 'and',
-                    })
-                  );
-                default: {
-                  const n: never = value.group;
-                  return n;
-                }
-              }
-            })(__evt, _onChangeValue, _reason)
-          );
+              return addAttributeQueryNode({
+                value: [value.attributeMeta.option],
+                trait: value.attributeMeta.trait,
+                operation: 'and',
+              });
+            case 'Attribute Value':
+              return (
+                value.meta &&
+                addAttributeQueryNode({
+                  value: [value.meta],
+                  trait: '',
+                  operation: 'and',
+                })
+              );
+            case 'Attribute Trait':
+              return (
+                value.meta &&
+                addAttributeQueryNode({
+                  value: [],
+                  trait: value.meta,
+                  operation: 'and',
+                })
+              );
+            default: {
+              const n: never = value.group;
+              return n;
+            }
+          }
         }}
         freeSolo={true}
         multiple={true}

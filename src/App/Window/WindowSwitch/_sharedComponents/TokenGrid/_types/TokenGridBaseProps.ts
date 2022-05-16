@@ -4,7 +4,7 @@ interface TokenGridBaseProps {
   cardGap: number;
   contentHeight: number;
   rowGap: number;
-  next?: () => void;
+  next?: () => Promise<void>;
 }
 
 export default TokenGridBaseProps;

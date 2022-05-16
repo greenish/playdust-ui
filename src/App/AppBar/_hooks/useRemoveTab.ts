@@ -1,7 +1,6 @@
 import { useRecoilState } from 'recoil';
 import appState from '../../_atoms/appStateAtom';
 import getDefaultAppState from '../../_helpers/getDefaultAppState';
-import safePromise from '../../_helpers/safePromise';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import type AppStateType from '../../_types/AppStateType';
 
@@ -52,7 +51,7 @@ const useRemoveTab = () => {
     if (activeTab) {
       const activeWindow = activeTab.windows[activeTab.selectedWindowIdx];
 
-      safePromise(pushWindowHash(activeWindow, { tabOverride: activeTab.id }));
+      pushWindowHash(activeWindow, { tabOverride: activeTab.id });
     }
   };
 };
