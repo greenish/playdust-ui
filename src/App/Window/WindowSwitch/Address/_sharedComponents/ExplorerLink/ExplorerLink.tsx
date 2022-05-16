@@ -2,8 +2,9 @@ import React from 'react';
 import ellipsisify from '../../../../../_helpers/ellipsisify';
 import encodeWindowHash from '../../../../../_helpers/encodeWindowHash';
 import Link from '../../../_sharedComponents/Link';
+import safePubkeyString from '../../_helpers/safePubkeyString';
+import ExplorerLinkProps from '../_types/ExplorerLinkProps';
 import CopyButton from './CopyButton';
-import ExplorerLinkProps from './_types/ExplorerLinkProps';
 
 function ExplorerLink({
   to,
@@ -12,7 +13,8 @@ function ExplorerLink({
   ellipsis,
   type,
 }: ExplorerLinkProps) {
-  const fullLabel = label || String(to);
+  const toString = safePubkeyString(to);
+  const fullLabel = label ?? toString;
   const shortLabel = ellipsis
     ? ellipsisify(
         fullLabel,
@@ -21,18 +23,16 @@ function ExplorerLink({
         ellipsis.ellipsis
       )
     : fullLabel;
-
   const isShortened = fullLabel.length > shortLabel.length;
   const display = isShortened ? shortLabel : fullLabel;
-
-  const href = type ? encodeWindowHash({ type, state: String(to) }) : '#';
+  const href = encodeWindowHash({ type, state: toString });
   return (
     <>
-      {allowCopy && <CopyButton value={to} />}
-      <Link href={href} title={String(to)}>
+      {allowCopy && <CopyButton value={toString} />}
+      <Link href={href} title={toString}>
         <pre style={{ display: 'inline' }}>{display}</pre>
-        {isShortened && <sub>{` ${fullLabel.length}`}</sub>}
       </Link>
+      {isShortened && <sub>{` ${fullLabel.length}`}</sub>}
     </>
   );
 }

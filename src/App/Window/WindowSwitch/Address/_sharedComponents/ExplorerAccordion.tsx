@@ -4,8 +4,8 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import TableSkeleton from './_sharedComponents/TableSkeleton/TableSkeleton';
+import SuspenseBoundary from './SuspenseBoundary/SuspenseBoundary';
+import TableSkeleton from './TableSkeleton/TableSkeleton';
 
 type ExplorerAccordionPropTypes = {
   id: string;
@@ -24,7 +24,7 @@ function ExplorerAccordion({
 }: ExplorerAccordionPropTypes) {
   const [accordionState, setAccordionState] = useState({
     expanded,
-    shouldRender: expanded,
+    wasExpanded: expanded,
   });
 
   const currentlyExpanded = onChange ? expanded : accordionState.expanded;
@@ -35,7 +35,7 @@ function ExplorerAccordion({
       onChange={(e, isExpanded) => {
         setAccordionState({
           expanded: isExpanded,
-          shouldRender: accordionState.shouldRender || isExpanded,
+          wasExpanded: accordionState.wasExpanded || isExpanded,
         });
         if (onChange) {
           onChange(e, isExpanded);
@@ -56,7 +56,7 @@ function ExplorerAccordion({
         <SuspenseBoundary
           loading={<TableSkeleton />}
           error={null}
-          shouldRender={accordionState.shouldRender}
+          shouldRender={accordionState.wasExpanded}
         >
           {content}
         </SuspenseBoundary>

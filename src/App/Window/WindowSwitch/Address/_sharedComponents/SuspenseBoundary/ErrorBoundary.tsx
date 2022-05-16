@@ -1,14 +1,14 @@
 import React, { PropsWithChildren } from 'react';
 
-type ExplorerCardErrorBoundaryProps = {
+type ErrorBoundaryProps = {
   fallback: React.SuspenseProps['fallback'];
 };
 
-class ExplorerCardErrorBoundary extends React.Component<
-  PropsWithChildren<ExplorerCardErrorBoundaryProps>,
+class ErrorBoundary extends React.Component<
+  PropsWithChildren<ErrorBoundaryProps>,
   { hasError: boolean }
 > {
-  constructor(props: ExplorerCardErrorBoundaryProps) {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
   }
@@ -26,4 +26,4 @@ class ExplorerCardErrorBoundary extends React.Component<
   }
 }
 
-export default ExplorerCardErrorBoundary;
+export default ErrorBoundary;
