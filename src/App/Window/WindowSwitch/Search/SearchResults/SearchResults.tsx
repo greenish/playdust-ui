@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import safePromise from '../../../../_helpers/safePromise';
 import searchResultsAtom from '../../../_atoms/searchResultsAtom';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
@@ -25,7 +24,6 @@ function SearchResults() {
       </NoTokensContainer>
     );
   }
-
   return (
     <TokenGrid
       initialized={hasValue}
@@ -35,9 +33,7 @@ function SearchResults() {
       rowGap={16}
       tokens={hasValue ? loadable.contents.nfts : []}
       total={hasValue ? loadable.contents.total : 0}
-      next={() => {
-        safePromise(fetchMoreSearchResults());
-      }}
+      next={fetchMoreSearchResults}
     />
   );
 }

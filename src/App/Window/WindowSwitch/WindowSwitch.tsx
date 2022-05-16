@@ -1,7 +1,4 @@
 import React from 'react';
-import { BlockPage } from '../../../explorer/pages/BlockPage';
-import { EpochPage } from '../../../explorer/pages/EpochPage';
-import { TxPage } from '../../../explorer/pages/TxPage';
 import WindowProps from '../_types/WindowPropsType';
 import Address from './Address/Address';
 import Home from './Home/Home';
@@ -16,11 +13,11 @@ function WindowSwitch(props: WindowProps) {
     case 'address':
       return <Address />;
     case 'block':
-      return <BlockPage {...props} />;
+      return null;
     case 'tx':
-      return <TxPage {...props} />;
+      return null;
     case 'epoch':
-      return <EpochPage {...props} />;
+      return null;
     default: {
       const n: never = props.type;
 

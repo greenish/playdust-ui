@@ -19,8 +19,7 @@ const nextConfig = {
   ],
   ignoreDuringBuilds: true,
   typescript: {
-    tsconfigPath: "tsconfig.json",
-    ignoreBuildErrors: true,
+    tsconfigPath: "tsconfig.json"
   }
 }
 
