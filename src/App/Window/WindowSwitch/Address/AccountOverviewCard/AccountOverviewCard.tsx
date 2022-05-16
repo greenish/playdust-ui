@@ -1,12 +1,13 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import accountInfoAtom from '../_atoms/accountInfoAtom';
+import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
+import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
+import TableSkeleton from '../_sharedComponents/TableSkeleton/TableSkeleton';
 import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
 import ExplorerCard from './ExplorerCard';
 import ExplorerGrid from './ExplorerGrid';
 import LabeledAddressLink from './LabeledAddressLink/LabeledAddressLink';
-import SolBalance from './SolBalance/SolBalance';
-import TableSkeleton from './TableSkeleton/TableSkeleton';
-import accountInfoAtom from './_atoms/accountInfoAtom';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 
 function AccountOverviewCard() {
@@ -18,7 +19,11 @@ function AccountOverviewCard() {
         <ExplorerGridRow
           label="Address"
           value={
-            <LabeledAddressLink pubkey={accountInfo.pubkey} allowCopy={true} />
+            <ExplorerLink
+              type="address"
+              to={accountInfo.pubkey.toBase58()}
+              allowCopy={true}
+            />
           }
         />
         {accountInfo.label !== undefined && (

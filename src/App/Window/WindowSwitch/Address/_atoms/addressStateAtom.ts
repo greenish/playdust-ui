@@ -1,7 +1,7 @@
 import { PublicKey } from '@solana/web3.js';
 import { selector } from 'recoil';
-import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import currentStateAtom from '../../../../_atoms/currentStateAtom';
+import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import currentStateAtom from '../../../_atoms/currentStateAtom';
 import addressLabel from '../_helpers/addressLabel';
 import AddressExplorerType from '../_types/AddressExplorerType';
 import tokenRegistryAtom from './tokenRegistryAtom';

@@ -1,4 +1,4 @@
-import WindowUnion from '../../../../../../../_types/WindowUnionType';
+import WindowUnion from '../../../../../../_types/WindowUnionType';
 import ExplorerLinkDisplayProps from '../../../_types/ExplorerLinkDisplayPropsType';
 
 interface ExplorerLinkProps extends ExplorerLinkDisplayProps {
