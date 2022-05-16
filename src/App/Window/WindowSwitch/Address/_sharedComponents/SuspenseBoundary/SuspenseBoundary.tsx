@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, Suspense } from 'react';
-import ExplorerCardErrorBoundary from './ExplorerCardErrorBoundary';
+import ErrorBoundary from './ErrorBoundary';
 
 interface ExplorerCardProps {
   loading: React.SuspenseProps['fallback'];
@@ -13,9 +13,9 @@ function SuspenseBoundary({
   shouldRender = true,
 }: PropsWithChildren<ExplorerCardProps>) {
   return !shouldRender ? null : (
-    <ExplorerCardErrorBoundary fallback={error}>
+    <ErrorBoundary fallback={error}>
       <Suspense fallback={loading}>{children}</Suspense>
-    </ExplorerCardErrorBoundary>
+    </ErrorBoundary>
   );
 }
 
