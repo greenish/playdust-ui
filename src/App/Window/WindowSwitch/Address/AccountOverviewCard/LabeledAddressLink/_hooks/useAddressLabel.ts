@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useRecoilValue } from 'recoil';
 import solanaClusterAtom from '../../../../../../_atoms/solanaClusterAtom';
-import tokenRegistryAtom from '../../../_atoms/tokenRegistryAtom';
-import addressLabel from '../../../_helpers/addressLabel';
+import tokenRegistryAtom from '../../_atoms/tokenRegistryAtom';
+import addressLabel from '../../_helpers/addressLabel';
 
 function useAddressLabel() {
   const solanaCluster = useRecoilValue(solanaClusterAtom);

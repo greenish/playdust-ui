@@ -1,7 +1,7 @@
 /* eslint-disable */
 import axios, { AxiosInstance } from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
-import type Profile from '../../me/types/Profile';
+import type Profile from '../_types/ProfileType';
 import StatusType from '../_types/StatusEnumType';
 
 const instance: AxiosInstance = axios.create({

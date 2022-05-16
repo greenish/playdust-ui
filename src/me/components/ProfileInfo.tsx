@@ -19,7 +19,7 @@ import instance, {
   UpdateProfile,
 } from '../../App/_helpers/playdustApi'
 import * as store from '../store'
-import type Profile from '../types/Profile'
+import type Profile from '../../App/_types/ProfileType'
 
 const PaperContainer = styled(Paper)`
   display: flex;

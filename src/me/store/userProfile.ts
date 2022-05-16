@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import type Profile from '../types/Profile'
+import ProfileType from '../../App/_types/ProfileType'
 
 const defaultProfile = {
   username: '',
@@ -10,7 +10,7 @@ const defaultProfile = {
   roles: [],
 }
 
-export const userProfile = atom<Profile>({
+export const userProfile = atom<ProfileType>({
   key: 'userProfile',
   default: defaultProfile,
 })
