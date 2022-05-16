@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
-import ExplorerCard from './ExplorerCard/ExplorerCard';
+import ExplorerCard from './ExplorerCard';
 import ExplorerGrid from './ExplorerGrid';
 import LabeledAddressLink from './LabeledAddressLink/LabeledAddressLink';
 import SolBalance from './SolBalance/SolBalance';
@@ -13,7 +13,7 @@ function AccountOverviewCard() {
   const accountInfo = useRecoilValue(accountInfoAtom);
 
   return (
-    <ExplorerCard fallback={<TableSkeleton />}>
+    <ExplorerCard loading={<TableSkeleton />} error={null}>
       <ExplorerGrid>
         <ExplorerGridRow
           label="Address"
