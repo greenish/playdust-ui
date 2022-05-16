@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import accountInfoAtom from '../../_atoms/accountInfoAtom';
+import addressStateAtom from '../../_atoms/addressStateAtom';
 import addressTransactionsAtom from '../_atoms/addressTransactionsAtom';
 import fetchTransactionsForAddress from '../_helpers/fetchTransactionsForAddress';
 import TransactionType from '../_types/TransactionType';
 
 function useTransactionsForAddress(): [TransactionType[], () => Promise<void>] {
-  const accountInfo = useRecoilValue(accountInfoAtom);
+  const addressState = useRecoilValue(addressStateAtom);
   const cluster = useRecoilValue(solanaClusterAtom);
   const [addressTransactions, setAddressTransactions] = useRecoilState(
     addressTransactionsAtom
@@ -18,13 +18,13 @@ function useTransactionsForAddress(): [TransactionType[], () => Promise<void>] {
 
     const newTransactions = await fetchTransactionsForAddress(
       cluster,
-      accountInfo.pubkey,
+      addressState.pubkey,
       10,
       lastSignature
     );
 
     setAddressTransactions((curr) => [...curr, ...newTransactions]);
-  }, [accountInfo, cluster, addressTransactions, setAddressTransactions]);
+  }, [addressState, cluster, addressTransactions, setAddressTransactions]);
 
   return [addressTransactions, fetchMoreTransactionsForAddress];
 }
