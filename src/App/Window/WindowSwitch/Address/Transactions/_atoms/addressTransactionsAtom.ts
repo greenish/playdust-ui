@@ -1,16 +1,16 @@
 import { atom, selector } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import accountInfoAtom from '../../_atoms/accountInfoAtom';
+import addressStateAtom from '../../_atoms/addressStateAtom';
 import fetchTransactionsForAddress from '../_helpers/fetchTransactionsForAddress';
 import TransactionType from '../_types/TransactionType';
 
 const defaultAddressTransactionsAtom = selector<TransactionType[]>({
   key: 'defaultAddressTransactionsAtom',
   get: async ({ get }) => {
-    const accountInfo = get(accountInfoAtom);
+    const addressState = get(addressStateAtom);
     const custer = get(solanaClusterAtom);
 
-    return fetchTransactionsForAddress(custer, accountInfo.pubkey, 10);
+    return fetchTransactionsForAddress(custer, addressState.pubkey, 10);
   },
 });
 

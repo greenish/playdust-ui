@@ -1,17 +1,16 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import accountInfoAtom from '../_atoms/accountInfoAtom';
+import addressStateAtom from '../_atoms/addressStateAtom';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
-import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
 import TableSkeleton from '../_sharedComponents/TableSkeleton/TableSkeleton';
 import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
+import AccountInfoRows from './AccountInfoRows/AccountInfoRows';
 import ExplorerCard from './ExplorerCard';
 import ExplorerGrid from './ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 
 function AccountOverviewCard() {
-  const accountInfo = useRecoilValue(accountInfoAtom);
+  const addressState = useRecoilValue(addressStateAtom);
 
   return (
     <ExplorerCard loading={<TableSkeleton />} error={null}>
@@ -21,35 +20,16 @@ function AccountOverviewCard() {
           value={
             <ExplorerLink
               type="address"
-              to={accountInfo.pubkey}
+              to={addressState.pubkey}
               allowCopy={true}
             />
           }
         />
-        {accountInfo.label !== undefined && (
-          <ExplorerGridRow label="Address Label" value={accountInfo.label} />
+        {addressState.label !== undefined && (
+          <ExplorerGridRow label="Address Label" value={addressState.label} />
         )}
         <AccountDomainsRow />
-        <ExplorerGridRow
-          label="Balance (SOL)"
-          value={<SolBalance lamports={accountInfo.lamports ?? 0} />}
-        />
-        {accountInfo.space !== undefined && (
-          <ExplorerGridRow
-            label="Allocated Data Size"
-            value={`${accountInfo.space} byte(s)`}
-          />
-        )}
-        {accountInfo.owner && (
-          <ExplorerGridRow
-            label="Assigned Program Id"
-            value={<LabeledAddressLink to={accountInfo.owner} />}
-          />
-        )}
-        <ExplorerGridRow
-          label="Executable"
-          value={accountInfo.executable ? 'Yes' : 'No'}
-        />
+        <AccountInfoRows />
       </ExplorerGrid>
     </ExplorerCard>
   );
