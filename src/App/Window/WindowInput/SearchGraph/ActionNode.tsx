@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { NodeComponentProps } from 'react-flow-renderer';
 import type QueryOperationUnionType from '../../../../_types/QueryOperationUnionType';
 import useAddAttributeQueryNode from '../../_hooks/useAddAttributeQueryNode';
+import ActionNodeDataType from './_types/ActionNodeDataType';
 
 const RoootContainer = styled(Card)`
   display: flex;
@@ -28,7 +29,7 @@ function MenuItemHandler({ onClick, onClose, ...props }: MenuItemHandlerProps) {
   );
 }
 
-function ActionNode({ data }: NodeComponentProps) {
+function ActionNode({ data }: NodeComponentProps<ActionNodeDataType>) {
   const [operation] = useState<QueryOperationUnionType>('and');
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const addAttributeQueryNode = useAddAttributeQueryNode('memory');

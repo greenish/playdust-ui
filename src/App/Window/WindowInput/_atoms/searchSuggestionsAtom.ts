@@ -197,8 +197,11 @@ const searchSuggestionsAtom = selectorFamily<SearchSuggetionResults, string>({
         return defaultSuggestions;
       }
 
-      const { state, contents } = get(noWait(fetchSearchSuggestions));
-      const results = state === 'hasValue' ? contents : [];
+      const searchSuggestions = get(noWait(fetchSearchSuggestions));
+      const results =
+        searchSuggestions.state === 'hasValue'
+          ? searchSuggestions.contents
+          : [];
 
       if (!results) {
         return defaultSuggestions;
@@ -255,14 +258,19 @@ const searchSuggestionsAtom = selectorFamily<SearchSuggetionResults, string>({
 
       addSuggestion(fuzzySuggestion);
 
-      if (state === 'hasValue' && contents) {
-        const serverSuggestions = getServerSuggestions(contents);
+      if (
+        searchSuggestions.state === 'hasValue' &&
+        searchSuggestions.contents
+      ) {
+        const serverSuggestions = getServerSuggestions(
+          searchSuggestions.contents
+        );
         serverSuggestions.map(addSuggestion);
       }
 
       return {
         suggestions,
-        loading: state === 'loading',
+        loading: searchSuggestions.state === 'loading',
       };
     },
 });

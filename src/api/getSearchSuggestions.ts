@@ -1,3 +1,4 @@
+import { NextApiRequest } from 'next';
 import OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
 import nextApiHandler from './_helpers/nextApiHandler';
@@ -95,9 +96,21 @@ const cleanAttributes = (
   return withActual;
 };
 
+interface ExtendedNextApiRequest extends NextApiRequest {
+  body: {
+    term?: string;
+  };
+}
+
 const getSearchSuggetions = nextApiHandler<SearchSuggestionResponseType>(
-  async (req) => {
-    const term = req.body.term as string;
+  async (
+    req: ExtendedNextApiRequest
+  ): Promise<SearchSuggestionResponseType> => {
+    const { term } = req.body;
+
+    if (!term) {
+      throw new Error('No search `term` supplied!');
+    }
 
     const attributeQuery = getAttributeQuery(term);
     const collectionQuery = getCollectionQuery(term);

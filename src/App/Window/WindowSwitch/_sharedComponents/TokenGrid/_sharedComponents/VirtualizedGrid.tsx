@@ -6,7 +6,12 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { AutoSizer, InfiniteLoader, List } from 'react-virtualized';
+import {
+  AutoSizer,
+  InfiniteLoader,
+  List,
+  ListRowRenderer,
+} from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import type RowMetaProps from '../_types/RowMetaProps';
 import type VirtualizedGridChildProps from '../_types/VirtualizedGridChildProps';
@@ -25,7 +30,7 @@ interface VirtualizedGridProps {
   ) => RowMetaProps;
   rowRenderer: (childProps: VirtualizedGridChildProps) => React.ReactElement;
   initialized: boolean;
-  next?: () => void;
+  next?: () => Promise<void>;
 }
 
 interface AutoSizedContainerProps extends VirtualizedGridProps {
@@ -53,7 +58,7 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
   );
   const { rowHeight, rowCount, hasMore } = meta;
 
-  const rowWrapper = useCallback(
+  const rowWrapper = useCallback<ListRowRenderer>(
     ({ key, style, index }) => (
       <div
         key={key}
@@ -85,6 +90,7 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
             await next();
             setIsLoading(false);
           }
+          return Promise.resolve();
         }}
         rowCount={rowCount}
         threshold={2}

@@ -1,9 +1,11 @@
 {
   "extends": [
+    "plugin:@next/next/recommended",
     "airbnb",
     "airbnb/hooks",
     "airbnb-typescript",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier"
   ],
   "rules": {
@@ -17,6 +19,12 @@
     "@typescript-eslint/no-explicit-any": 2,
     "@typescript-eslint/no-non-null-assertion": 2
   },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "parser": "@typescript-eslint/parser",
   "overrides": [
     {
       "files": ["scripts/**"],
@@ -29,5 +37,9 @@
   "parserOptions": {
     "files": ["*.ts", "*.tsx"],
     "project": ["tsconfig.json"]
-  }
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "import"
+  ]
 }

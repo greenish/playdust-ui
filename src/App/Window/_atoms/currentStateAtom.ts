@@ -2,7 +2,7 @@ import { selector } from 'recoil';
 import type WindowType from '../../_types/WindowType';
 import currentStateStringAtom from './currentStateStringAtom';
 
-const currentStateAtom = selector<WindowType | undefined>({
+const currentStateAtom = selector<WindowType | null>({
   key: 'currentStateAtom',
   get: ({ get }) => {
     const currentStateString = get(currentStateStringAtom);
@@ -11,7 +11,7 @@ const currentStateAtom = selector<WindowType | undefined>({
       return null;
     }
 
-    return JSON.parse(currentStateString);
+    return JSON.parse(currentStateString) as WindowType;
   },
 });
 

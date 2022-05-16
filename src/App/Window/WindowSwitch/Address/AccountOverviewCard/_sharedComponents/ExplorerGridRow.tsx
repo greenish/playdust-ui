@@ -4,12 +4,11 @@ import React from 'react';
 type ExplorerGridRowProps = {
   label: string | JSX.Element;
   value: string | JSX.Element;
-  key?: string;
 };
 
-function ExplorerGridRow({ label, value, key }: ExplorerGridRowProps) {
+function ExplorerGridRow({ label, value }: ExplorerGridRowProps) {
   return (
-    <TableRow key={key}>
+    <TableRow>
       <TableCell sx={{ borderBottom: '1px solid white' }}>{label}</TableCell>
       <TableCell
         sx={{

@@ -18,6 +18,10 @@ const nextConfig = {
     },
   ],
   ignoreDuringBuilds: true,
+  typescript: {
+    tsconfigPath: "tsconfig.json",
+    ignoreBuildErrors: true,
+  }
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;

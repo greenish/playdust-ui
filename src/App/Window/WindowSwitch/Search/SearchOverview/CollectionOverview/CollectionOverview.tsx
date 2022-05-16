@@ -19,6 +19,7 @@ import { useCookies } from 'react-cookie';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userProfile } from '../../../../../../me/store';
 import { setCollectionCensorStatus } from '../../../../../_helpers/playdustApi';
+import safePromise from '../../../../../_helpers/safePromise';
 import Status from '../../../../../_types/StatusEnumType';
 import collectionStatusAtom from '../../../_atoms/collectionStatusAtom';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
@@ -58,7 +59,9 @@ function CollectionOverview() {
     const publicKeyString = publicKey?.toBase58();
 
     if (publicKeyString) {
-      setCollectionCensorStatus(collectionId, publicKeyString, status);
+      safePromise(
+        setCollectionCensorStatus(collectionId, publicKeyString, status)
+      );
     }
 
     setStatus(censorState);

@@ -43,7 +43,7 @@ const placeFiles = (fileMap: FileMapType): FileMapType => {
   const nextFileMap = readyToPlace.reduce<FileMapType>((acc, curr) => {
     const parentPaths = curr.importedBy
       .map((entry) => fileMap[entry].correctPath)
-      .filter(Boolean) as string[];
+      .filter(Boolean);
 
     const rootPath = findHighestSharedPath(parentPaths);
     const correctPath = getCorrectPath(curr, rootPath);

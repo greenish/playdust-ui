@@ -1,3 +1,4 @@
+import { NextApiRequest } from 'next';
 import ComposedQueryType from '../_types/ComposedQueryType';
 import type SearchOverviewResponseType from '../_types/SearchOverviewResponseType';
 import getNFTQuery from './_helpers/getNFTQuery';
@@ -14,9 +15,20 @@ interface SearchOverviewAggregationType {
   };
 }
 
+interface ExtendedNextApiRequest extends NextApiRequest {
+  body: {
+    query?: ComposedQueryType;
+    onlyListed?: boolean;
+  };
+}
+
 const getSearchOverview = nextApiHandler<SearchOverviewResponseType>(
-  async (req) => {
-    const query = req.body.query as ComposedQueryType;
+  async (req: ExtendedNextApiRequest): Promise<SearchOverviewResponseType> => {
+    const { query } = req.body;
+
+    if (!query) {
+      throw new Error('No `query` supplied!');
+    }
 
     const countQuery = getNFTQuery(query, 0);
     const nftQueryListed = getNFTQuery(query, 0, undefined, true);

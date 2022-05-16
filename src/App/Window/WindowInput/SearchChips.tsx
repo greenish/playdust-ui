@@ -28,10 +28,15 @@ const ParenTypography = styled(Typography)`
 `;
 
 function CollectionChip({ value }: CollectionQueryNodeType) {
-  const { state, contents } = useRecoilValueLoadable(collectionByIdAtom(value));
+  const collectionById = useRecoilValueLoadable(collectionByIdAtom(value));
 
-  if (state === 'hasValue') {
-    return <span>Collection: {contents.name || contents.symbol}</span>;
+  if (collectionById.state === 'hasValue') {
+    return (
+      <span>
+        Collection:{' '}
+        {collectionById.contents.name || collectionById.contents.symbol}
+      </span>
+    );
   }
 
   return <span>Collection:</span>;

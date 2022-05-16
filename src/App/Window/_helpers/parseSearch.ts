@@ -9,7 +9,7 @@ const parseQuery = (
   nextState: ComposedQueryType
 ): ComposedQueryType | never => {
   const isValid = nextState.flat().every(queryValidationPredicate);
-  const query = nextState as ComposedQueryType;
+  const query = nextState;
   const cleaned = query.map((parent) =>
     parent.map((child) => ({
       ...child,
@@ -36,9 +36,9 @@ const parseOnlyListed = (onlyListed: unknown) => {
   }
 };
 
-const parseSort = (sort: SearchSortType) => {
+const parseSort = (sort: SearchSortType | undefined) => {
   try {
-    return isInSearchSortUnion(sort) ? sort : undefined;
+    return sort && isInSearchSortUnion(sort) ? sort : undefined;
   } catch {
     return undefined;
   }
@@ -46,7 +46,7 @@ const parseSort = (sort: SearchSortType) => {
 
 const parseSearch = (input: string): SearchStateType => {
   try {
-    const { query, onlyListed, sort } = JSON.parse(input);
+    const { query, onlyListed, sort } = JSON.parse(input) as SearchStateType;
 
     const parsedQuery = parseQuery(query);
     const parsedOnlyListed = parseOnlyListed(onlyListed);

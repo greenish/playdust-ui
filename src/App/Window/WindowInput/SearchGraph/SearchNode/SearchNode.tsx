@@ -6,6 +6,7 @@ import { Handle, NodeComponentProps, Position } from 'react-flow-renderer';
 import { useRecoilValue } from 'recoil';
 import type QueryNodeType from '../../../../../_types/QueryNodeType';
 import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode';
+import SearchNodeDataType from '../_types/SearchNodeDataType';
 import SearchValueNode from './SearchValueNode/SearchValueNode';
 import searchQueryChildAtom from './_atoms/searchQueryChildAtom';
 
@@ -44,10 +45,15 @@ const getTitle = (query: QueryNodeType) => {
   }
 };
 
-function SearchNode({ id, data }: NodeComponentProps) {
+function SearchNode({ id, data }: NodeComponentProps<SearchNodeDataType>) {
   const removeQueryNode = useRemoveQueryNode('memory');
   const query = useRecoilValue(searchQueryChildAtom(id));
-  const handles = data?.handles || {};
+  const handles = data.handles ?? {
+    top: false,
+    right: false,
+    bottom: false,
+    left: false,
+  };
 
   if (!query) {
     return null;

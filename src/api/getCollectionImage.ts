@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosPromise } from 'axios';
 import sharp from 'sharp';
 import nextApiHandler from './_helpers/nextApiHandler';
 import postNFTQuery from './_helpers/postNFTQuery';
@@ -6,8 +6,15 @@ import postNFTQuery from './_helpers/postNFTQuery';
 const cdnBase = 'https://cdn.playdust.dev/api/image/';
 
 const getCollectionImage = nextApiHandler<Buffer>(async (req, res) => {
-  const collectionId = req.query.id as string;
-  const size = parseInt(req.query.s as string, 10);
+  const collectionId = req.query.id;
+  const sizeString = req.query.s;
+
+  if (typeof collectionId !== 'string' || typeof sizeString !== 'string') {
+    throw new Error(`Invalid collectionId "id" or size "s" supplied`);
+  }
+
+  const size = parseInt(sizeString, 10);
+
   const halfSize = size / 2;
 
   const baseImage = sharp({
@@ -59,7 +66,7 @@ const getCollectionImage = nextApiHandler<Buffer>(async (req, res) => {
         responseType: 'arraybuffer',
       })
     );
-    const results = await Promise.all(cdnFetches);
+    const results = await Promise.all<AxiosPromise<ArrayBuffer>>(cdnFetches);
     const buffers = results.map((entry) => entry.data) as Buffer[];
 
     const output = await baseImage
@@ -98,4 +105,5 @@ const getCollectionImage = nextApiHandler<Buffer>(async (req, res) => {
     return await baseImage.png().toBuffer();
   }
 });
+
 export default getCollectionImage;

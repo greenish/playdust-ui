@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import encodeWindowHash from '../_helpers/encodeWindowHash';
 import getWindowHash from '../_helpers/getWindowHash';
+import safePromise from '../_helpers/safePromise';
 import type EncodeHashOptionsType from '../_types/EncodeHashOptionsType';
 import type WindowType from '../_types/WindowType';
 
@@ -14,7 +15,7 @@ const makeUseNavigateWindowHash = (method: 'push' | 'replace') =>
       const didUrlChange = encoded !== actual;
 
       if (didUrlChange) {
-        router[method](encoded);
+        safePromise(router[method](encoded));
       }
     };
   };

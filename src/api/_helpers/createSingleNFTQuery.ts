@@ -1,8 +1,5 @@
-import type AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
-import type CollectionQueryNodeTYpe from '../../_types/CollectionQueryNodeType';
 import type QueryNodeType from '../../_types/QueryNodeType';
 import type SearchFilterUnionType from '../../_types/SearchFilterUnionType';
-import type TextQueryNodeType from '../../_types/TextQueryNodeType';
 
 const getRangeField = (field: SearchFilterUnionType) => {
   switch (field) {
@@ -23,7 +20,7 @@ const getRangeField = (field: SearchFilterUnionType) => {
 const createSingleNFTQuery = (child: QueryNodeType) => {
   switch (child.field) {
     case 'attribute': {
-      const { trait, value } = child as AttributeQueryNodeType;
+      const { trait, value } = child;
 
       return {
         nested: {
@@ -53,7 +50,7 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
       };
     }
     case 'collection': {
-      const { value } = child as CollectionQueryNodeTYpe;
+      const { value } = child;
 
       return {
         term: {
@@ -62,7 +59,7 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
       };
     }
     case 'text': {
-      const { value } = child as TextQueryNodeType;
+      const { value } = child;
 
       return {
         nested: {

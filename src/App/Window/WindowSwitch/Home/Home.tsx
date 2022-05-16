@@ -48,9 +48,7 @@ function Home() {
         cardGap={16}
         rowGap={24}
         contentHeight={0}
-        next={async () => {
-          await fetchMore();
-        }}
+        next={fetchMore}
       />
     </RootContainer>
   );

@@ -49,18 +49,18 @@ const validateSelectedTabId = (input: unknown) => {
   throw new Error('invalid selected tab id');
 };
 
-const validateAppState = (input: string): boolean => {
+const parseAppState = (input: string): AppStateType | null => {
   try {
-    const { selectedTabId, tabs } = JSON.parse(input) as AppStateType;
+    const appState = JSON.parse(input) as AppStateType;
 
-    validateSelectedTabId(selectedTabId);
-    validateTabs(tabs);
+    validateSelectedTabId(appState.selectedTabId);
+    validateTabs(appState.tabs);
 
-    return true;
+    return appState;
   } catch (e) {
     console.error('Unable to validate window state:', e);
-    return false;
+    return null;
   }
 };
 
-export default validateAppState;
+export default parseAppState;

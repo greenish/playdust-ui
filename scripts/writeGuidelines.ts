@@ -1,3 +1,4 @@
 import runPipeline from './_helpers/runPipeline';
+import safePromise from './_helpers/safePromise';
 
-runPipeline(true);
+safePromise(runPipeline(true));

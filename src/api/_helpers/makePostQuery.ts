@@ -1,12 +1,10 @@
 import type OpenSearchResponseType from '../_types/OpenSearchResponseType';
 import postAxios from './postAxios';
 
-function makePostQuery<T>(index: string) {
+function makePostQuery<ResponseType>(index: string) {
   return async (query: object) => {
     const path = `/${index}/_search`;
-    const result = await postAxios(query, path);
-
-    return result as OpenSearchResponseType<T>;
+    return postAxios<OpenSearchResponseType<ResponseType>>(query, path);
   };
 }
 
