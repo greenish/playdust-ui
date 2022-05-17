@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import SolBalance from '../../_sharedComponents/SolBalance/SolBalance';
-import SuspenseBoundary from '../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
-import accountInfoAtom from './_atoms/accountInfoAtom';
+import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
+import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
+import accountInfoAtom from '../_atoms/accountInfoAtom';
 
 function AccountInfoRowsContent() {
   const accountInfo = useRecoilValue(accountInfoAtom);

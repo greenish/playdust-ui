@@ -5,9 +5,9 @@ import {
   PublicKey,
 } from '@solana/web3.js';
 import { selector } from 'recoil';
-import solanaClusterAtom from '../../../../../../_atoms/solanaClusterAtom';
-import addressStateAtom from '../../../_atoms/addressStateAtom';
-import safePubkey from '../../../_helpers/safePubkey';
+import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import addressStateAtom from './addressStateAtom';
+import safePubkey from '../_helpers/safePubkey';
 
 type AccountInfoType = AccountInfo<Buffer | ParsedAccountData> & {
   space: number;

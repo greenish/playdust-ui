@@ -4,7 +4,7 @@ import addressStateAtom from '../_atoms/addressStateAtom';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import TableSkeleton from '../_sharedComponents/TableSkeleton/TableSkeleton';
 import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
-import AccountInfoRows from './AccountInfoRows/AccountInfoRows';
+import AccountInfoRows from './AccountInfoRows';
 import ExplorerCard from './ExplorerCard';
 import ExplorerGrid from './ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
