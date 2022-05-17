@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn lint && yarn prettier:check && yarn guidelines:check && next build",
+    "build": "yarn check:all && next build",
     "start": "next start",
     "lint": "eslint 'pages/**' 'src/App/**' 'src/api/**' 'src/_types/**' 'scripts/**'",
     "lint:fix": "yarn lint --fix",
@@ -17,8 +17,8 @@
     "delete:emptyDirs": "find ./src -type d -empty -delete",
     "hooks:install": "husky install",
     "hooks:uninstall": "git config --unset core.hooksPath",
-    "check:all": "yarn lint && yarn prettier:check && yarn guidelines:check ",
-    "fix:all": "yarn lint:fix && yarn prettier:write &&  yarn guidelines:write"
+    "check:all": "yarn lint && yarn tsc:check && yarn prettier:check && yarn guidelines:check ",
+    "fix:all": "yarn lint:fix && yarn tsc:check && yarn prettier:write &&  yarn guidelines:write"
   },
   "lint-staged": {
     "**/*.(ts|tsx)": [
@@ -96,7 +96,7 @@
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
     "fast-glob": "^3.2.11",
     "fastq": "^1.13.0",
