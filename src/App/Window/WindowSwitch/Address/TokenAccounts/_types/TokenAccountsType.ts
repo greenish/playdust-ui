@@ -1,27 +1,13 @@
 import { AccountInfo, ParsedAccountData, PublicKey } from '@solana/web3.js';
+import { ParsedTokenAccountType } from './ParsedTokenAccountType';
 
-// keeping all types nullable to enforce defensive programming around external type.
-interface ParsedTokenAccountData extends ParsedAccountData {
-  parsed: {
-    info?: {
-      isNative?: boolean;
-      mint?: string;
-      owner?: string;
-      state?: string;
-      tokenAmount?: {
-        amount?: string;
-        decimals?: number;
-        uiAmount?: number;
-        uiAmountString?: string;
-      };
-    };
-    type?: 'account';
-  };
+interface AccountData extends ParsedAccountData {
+  parsed: ParsedTokenAccountType;
 }
 
 type TokenAccountsType = {
   pubkey: PublicKey;
-  account: AccountInfo<ParsedTokenAccountData>;
+  account: AccountInfo<AccountData>;
 };
 
 export default TokenAccountsType;

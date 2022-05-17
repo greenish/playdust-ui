@@ -8,11 +8,12 @@ import {
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
+import safePubkeyString from '../_helpers/safePubkeyString';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import tokenAccountsForAddressAtom from './_atoms/tokenAccountsForAddressAtom';
-import TokenAccountsType from './_types/TokenAccountsType';
+import { TokenAccountsType } from './_types/TokenAccountsType';
 
 function RenderTokenAccount({
   tokenAccount,
@@ -23,7 +24,7 @@ function RenderTokenAccount({
   const mintAddress = tokenAccount.account.data.parsed.info?.mint;
   const balance =
     tokenAccount.account.data.parsed.info?.tokenAmount?.uiAmountString;
-  const tokenInfo = tokenRegistry.get(mintAddress ?? '');
+  const tokenInfo = tokenRegistry.get(safePubkeyString(mintAddress) ?? '');
   return (
     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
       <TableCell component="th" scope="row">
