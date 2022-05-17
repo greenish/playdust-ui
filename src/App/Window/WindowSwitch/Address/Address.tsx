@@ -1,6 +1,7 @@
 import { Container, Stack } from '@mui/material';
 import React from 'react';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
+import RawAccountData from './RawAccountData';
 import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
@@ -19,6 +20,7 @@ function Address() {
           title="Transactions"
           content={<Transactions />}
         />
+        <RawAccountData />
       </Stack>
     </Container>
   );
