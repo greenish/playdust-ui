@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "yarn lint && yarn tsc:check && yarn prettier:check && yarn guidelines:check && next build",
+    "build": "yarn check:all && next build",
     "start": "next start",
     "lint": "eslint 'pages/**' 'src/App/**' 'src/api/**' 'src/_types/**' 'scripts/**'",
     "lint:fix": "yarn lint --fix",
