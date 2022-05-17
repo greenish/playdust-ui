@@ -2,7 +2,7 @@ import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 import fetchTokenAccountsForAddress from '../_helpers/fetchTokenAccountsForAddress';
-import { TokenAccountsType } from '../_types/TokenAccountsType';
+import TokenAccountsType from '../_types/TokenAccountsType';
 
 const tokenAccountsForAddressAtom = selector<TokenAccountsType[]>({
   key: 'tokenAccountsForAddressAtom',
@@ -18,8 +18,7 @@ const tokenAccountsForAddressAtom = selector<TokenAccountsType[]>({
     // sort by token balance desc.
     tokenAccounts.sort(
       (a, b) =>
-        (b.account.data.parsed.info?.tokenAmount?.uiAmount ?? 0) -
-        (a.account.data.parsed.info?.tokenAmount?.uiAmount ?? 0)
+        b.data.info.tokenAmount.uiAmount - a.data.info.tokenAmount.uiAmount
     );
 
     return tokenAccounts;

@@ -17,17 +17,21 @@ const validateExport = (files: FileMetaType[]): string[] => {
         if (!exportTypes.includes('const') || !exportTypes.includes('type')) {
           return `${file.path} has incorrect exports: Types should export a single 'default' or one 'type' and one 'const'`;
         }
-
-      }
-      else if (splitExports.length !== 1 || splitExports[0][1] !== "default") {
+      } else if (
+        splitExports.length !== 1 ||
+        splitExports[0][1] !== 'default'
+      ) {
         return `${file.path} has incorrect exports: Files should have one 'default' export`;
       }
 
-      const badlyNamedExport = splitExports.find((exportParts) => exportParts[2] !== file.fileName);
+      const badlyNamedExport = splitExports.find(
+        (exportParts) => exportParts[2] !== file.fileName
+      );
 
       if (badlyNamedExport) {
-        return `${file.path
-          } has incorrect named export: ${badlyNamedExport[2].replace(';', '')}`;
+        return `${
+          file.path
+        } has incorrect named export: ${badlyNamedExport[2].replace(';', '')}`;
       }
 
       return '';
