@@ -1,18 +1,18 @@
 import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import accountInfoAtom from '../../_atoms/accountInfoAtom';
+import addressStateAtom from '../../_atoms/addressStateAtom';
 import fetchTokenAccountsForAddress from '../_helpers/fetchTokenAccountsForAddress';
 import TokenAccountsType from '../_types/TokenAccountsType';
 
 const tokenAccountsForAddressAtom = selector<TokenAccountsType[]>({
   key: 'tokenAccountsForAddressAtom',
   get: async ({ get }) => {
-    const accountInfo = get(accountInfoAtom);
+    const addressState = get(addressStateAtom);
     const custer = get(solanaClusterAtom);
 
     const tokenAccounts = await fetchTokenAccountsForAddress(
       custer,
-      accountInfo.pubkey
+      addressState.pubkey
     );
 
     // sort by token balance desc.
