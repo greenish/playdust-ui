@@ -1,9 +1,9 @@
 import { PublicKey } from '@solana/web3.js';
-import { ParsedTokenAccountType } from './ParsedTokenAccountType';
+import { ParsedTokenAccountAccountType } from './ParsedTokenAccountAccountType';
 
 type TokenAccountsType = {
   pubkey: PublicKey;
-  data: ParsedTokenAccountType;
+  data: ParsedTokenAccountAccountType;
 };
 
 export default TokenAccountsType;

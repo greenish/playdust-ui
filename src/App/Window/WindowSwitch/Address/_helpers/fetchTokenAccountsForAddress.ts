@@ -1,6 +1,7 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import { create } from 'superstruct';
 import SolanaClusterType from '../../../../../_types/SolanaClusterType';
+import { AccountInfoType } from '../_types/AccountInfoType';
 import { ParsedTokenAccountType } from '../_types/ParsedTokenAccountType';
 import TokenAccountsType from '../_types/TokenAccountsType';
 import safePubkey from './safePubkey';
@@ -22,12 +23,29 @@ async function fetchTokenAccountsForAddress(
     }
   );
 
-  const typedTokenAccounts = tokenAccounts.value.map<TokenAccountsType>(
-    (account) => ({
-      pubkey: account.pubkey,
-      data: create(account.account.data.parsed, ParsedTokenAccountType),
+  const typedTokenAccounts = tokenAccounts.value
+    .map<TokenAccountsType | null>((account) => {
+      const accountInfo = create(account.account, AccountInfoType);
+
+      if (Buffer.isBuffer(accountInfo.data)) {
+        return null;
+      }
+
+      const parsedAccountData = create(
+        accountInfo.data.parsed,
+        ParsedTokenAccountType
+      );
+
+      if (parsedAccountData.type !== 'account') {
+        return null;
+      }
+
+      return {
+        pubkey: account.pubkey,
+        data: parsedAccountData,
+      };
     })
-  );
+    .filter((account): account is TokenAccountsType => Boolean(account));
 
   return typedTokenAccounts;
 }
