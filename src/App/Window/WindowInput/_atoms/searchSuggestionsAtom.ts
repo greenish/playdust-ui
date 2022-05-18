@@ -230,9 +230,9 @@ const searchSuggestionsAtom = selectorFamily<SearchSuggetionResults, string>({
 
       if (windowType === 'address') {
         addSuggestion({
-          key: 'account-search',
+          key: 'address-search',
           group: 'Explorer',
-          label: `account ${highlightedTerm}`,
+          label: `address ${highlightedTerm}`,
           type: 'address',
         });
 

@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import { Box, Card, Skeleton } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import StatusEnum from '../../../../../../../_types/StatusEnumType';
-import collectionStatusAtom from '../../../../../_atoms/collectionStatusAtom';
-import Link from '../../../../Link';
+import StatusEnum from '../../../../../_types/StatusEnumType';
+import collectionStatusAtom from '../../../_atoms/collectionStatusAtom';
+import Link from '../../Link';
 import TokenCardContentContainer from '../_sharedComponents/TokenCardContentContainer';
 import LazyImage from './LazyImage';
 

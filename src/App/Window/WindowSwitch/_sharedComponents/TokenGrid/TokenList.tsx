@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, { useCallback } from 'react';
-import TokenCard from './_sharedComponents/TokenCard/TokenCard';
+import TokenCard from '../TokenCard/TokenCard';
 import VirtualizedGrid from './_sharedComponents/VirtualizedGrid';
 import type TokenListProps from './_types/TokenListProps';
 import type VirtualizedGridChildProps from './_types/VirtualizedGridChildProps';

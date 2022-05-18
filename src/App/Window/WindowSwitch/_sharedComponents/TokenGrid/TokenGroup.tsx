@@ -3,7 +3,7 @@ import { ArrowForwardIos } from '@mui/icons-material';
 import { Skeleton, Typography } from '@mui/material';
 import React, { useCallback } from 'react';
 import Link from '../Link';
-import TokenCard from './_sharedComponents/TokenCard/TokenCard';
+import TokenCard from '../TokenCard/TokenCard';
 import VirtualizedGrid from './_sharedComponents/VirtualizedGrid';
 import type TokenGroupProps from './_types/TokenGroupProps';
 import VirtualizedGridChildProps from './_types/VirtualizedGridChildProps';

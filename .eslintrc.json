@@ -19,7 +19,8 @@
     "consistent-return": 0,
     "@typescript-eslint/no-explicit-any": 2,
     "@typescript-eslint/no-non-null-assertion": 2,
-    "@typescript-eslint/no-redeclare": 0
+    "@typescript-eslint/no-redeclare": 0,
+    "import/order": 0
   },
   "settings": {
     "import/resolver": {

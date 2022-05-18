@@ -7,12 +7,12 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
-import safePubkeyString from '../_helpers/safePubkeyString';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
-import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
-import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import tokenAccountsForAddressAtom from './_atoms/tokenAccountsForAddressAtom';
+import tokenRegistryAtom from './_atoms/tokenRegistryAtom';
+import safePubkeyString from './_helpers/safePubkeyString';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
+import ExplorerLink from './_sharedComponents/ExplorerLink/ExplorerLink';
+import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import TokenAccountsType from './_types/TokenAccountsType';
 
 function RenderTokenAccount({

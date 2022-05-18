@@ -10,12 +10,12 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import type OpenSearchNFTSourceType from '../../../../../../../_types/OpenSearchNFTSourceType';
-import isCollectionQueryAtom from '../../../../../_atoms/isCollectionQueryAtom';
-import searchQueryAttributesAtom from '../../../../../_atoms/searchQueryAttributesAtom';
-import useAddAttributeQueryNode from '../../../../../_hooks/useAddAttributeQueryNode';
-import usePrependCollectionQueryNode from '../../../../../_hooks/usePrependCollectionQueryNode';
-import useUpdateAttributeQueryNode from '../../../../../_hooks/useUpdateAttributeQueryNode';
+import type OpenSearchNFTSourceType from '../../../../../_types/OpenSearchNFTSourceType';
+import isCollectionQueryAtom from '../../../_atoms/isCollectionQueryAtom';
+import searchQueryAttributesAtom from '../../../_atoms/searchQueryAttributesAtom';
+import useAddAttributeQueryNode from '../../../_hooks/useAddAttributeQueryNode';
+import usePrependCollectionQueryNode from '../../../_hooks/usePrependCollectionQueryNode';
+import useUpdateAttributeQueryNode from '../../../_hooks/useUpdateAttributeQueryNode';
 
 interface TokenCardFilterProps {
   metadata: OpenSearchNFTSourceType;

@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import encodeWindowHash from '../../../../../../_helpers/encodeWindowHash';
-import getCDNUrl from '../../../../../../_helpers/getCDNUrl';
-import humanizeSolana from '../../../../_helpers/humanizeSolana';
-import Link from '../../../Link';
+import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
+import getCDNUrl from '../../../../_helpers/getCDNUrl';
+import humanizeSolana from '../../_helpers/humanizeSolana';
+import Link from '../Link';
 import ImageCard from './ImageCard/ImageCard';
 import SkeletonImageCard from './SkeletonImageCard';
 import TokenCardFilter from './TokenCardFilter';
@@ -47,6 +47,7 @@ function TokenCard({
   contentHeight,
   metadata,
   skeleton,
+  disableQuickFilter = false,
 }: TokenCardProps) {
   const { image, name } = metadata?.offChainData || {};
   const href = encodeWindowHash({
@@ -78,11 +79,13 @@ function TokenCard({
               <span>
                 {listed ? humanizeSolana(lastListPrice) : humanizeSolana()}
               </span>
-              <TokenCardFilterContainer>
-                {metadata && metadata.offChainData?.attributes && (
-                  <TokenCardFilter metadata={metadata} />
-                )}
-              </TokenCardFilterContainer>
+              {!disableQuickFilter && (
+                <TokenCardFilterContainer>
+                  {metadata && metadata.offChainData?.attributes && (
+                    <TokenCardFilter metadata={metadata} />
+                  )}
+                </TokenCardFilterContainer>
+              )}
             </CardSecondaryContainer>
           </CardContentContainer>
         ) : null
