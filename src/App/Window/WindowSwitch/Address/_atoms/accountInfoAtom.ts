@@ -1,21 +1,12 @@
-import {
-  AccountInfo,
-  Connection,
-  ParsedAccountData,
-  PublicKey,
-} from '@solana/web3.js';
+import { Connection } from '@solana/web3.js';
 import { selector } from 'recoil';
+import { create } from 'superstruct';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import { AccountInfoType } from '../_types/AccountInfoType';
 import safePubkey from '../_helpers/safePubkey';
 import addressStateAtom from './addressStateAtom';
 
-type AccountInfoType = AccountInfo<Buffer | ParsedAccountData> & {
-  space: number;
-  pubkey: PublicKey;
-  label?: string;
-};
-
-const accountInfoAtom = selector<AccountInfoType>({
+const accountInfoAtom = selector<AccountInfoType | null>({
   key: 'accountInfo',
   get: async ({ get }) => {
     const addressState = get(addressStateAtom);
@@ -25,19 +16,15 @@ const accountInfoAtom = selector<AccountInfoType>({
     const accountInfoResult = await connection.getParsedAccountInfo(
       safePubkey(addressState.pubkey)
     );
-    const accountInfo = accountInfoResult?.value;
 
-    if (!accountInfo) {
-      throw new Error(
-        `Could Not Fetch AccountInfo for ${addressState.pubkey.toBase58()}`
-      );
+    if (accountInfoResult.value === null) {
+      return null;
     }
+    const accountInfo = create(accountInfoResult?.value, AccountInfoType);
 
     return {
       ...accountInfo,
-      label: addressState.label,
-      pubkey: addressState.pubkey,
-      space: !('parsed' in accountInfo.data)
+      space: Buffer.isBuffer(accountInfo.data)
         ? accountInfo.data.length
         : accountInfo.data.space,
     };
