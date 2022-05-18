@@ -1,6 +1,8 @@
 import { Connection, PublicKey } from '@solana/web3.js';
+import { create } from 'superstruct';
 import SolanaClusterType from '../../../../../../_types/SolanaClusterType';
 import safePubkey from '../../_helpers/safePubkey';
+import { ParsedTokenAccountType } from '../_types/ParsedTokenAccountType';
 import TokenAccountsType from '../_types/TokenAccountsType';
 
 const TOKEN_PROGRAM_ID = new PublicKey(
@@ -20,7 +22,14 @@ async function fetchTokenAccountsForAddress(
     }
   );
 
-  return tokenAccounts.value;
+  const typedTokenAccounts = tokenAccounts.value.map<TokenAccountsType>(
+    (account) => ({
+      pubkey: account.pubkey,
+      data: create(account.account.data.parsed, ParsedTokenAccountType),
+    })
+  );
+
+  return typedTokenAccounts;
 }
 
 export default fetchTokenAccountsForAddress;

@@ -8,7 +8,9 @@ import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 
 function AccountInfoRowsContent() {
   const accountInfo = useRecoilValue(accountInfoAtom);
-
+  if (accountInfo === null) {
+    return null;
+  }
   return (
     <>
       <ExplorerGridRow

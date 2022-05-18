@@ -12,9 +12,14 @@ const DynamicReactJson = dynamic(import('react-json-view'), {
 function RenderRawAccountData() {
   const accountInfo = useRecoilValue(accountInfoAtom);
 
+  if (!accountInfo) {
+    return null;
+  }
+
   const src = Buffer.isBuffer(accountInfo.data)
     ? accountInfo.data.toJSON()
     : accountInfo.data;
+
   return (
     <DynamicReactJson
       name={null}

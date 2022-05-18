@@ -18,8 +18,7 @@ const tokenAccountsForAddressAtom = selector<TokenAccountsType[]>({
     // sort by token balance desc.
     tokenAccounts.sort(
       (a, b) =>
-        (b.account.data.parsed.info?.tokenAmount?.uiAmount ?? 0) -
-        (a.account.data.parsed.info?.tokenAmount?.uiAmount ?? 0)
+        b.data.info.tokenAmount.uiAmount - a.data.info.tokenAmount.uiAmount
     );
 
     return tokenAccounts;

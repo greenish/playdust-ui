@@ -1,4 +1,5 @@
 import type FileMetaType from '../_types/FileMetaType';
+import getFileType from './getFileType';
 import temporaryExcludes from './temporaryExcludes';
 
 const validateExport = (files: FileMetaType[]): string[] => {
@@ -7,21 +8,30 @@ const validateExport = (files: FileMetaType[]): string[] => {
       (entry) => !temporaryExcludes.internalFiles.includes(entry.fileName)
     )
     .map((file) => {
-      const exportCount = (file.content.match(/export/g) || []).length;
-      const exportDefaultIdx = file.content.indexOf('export default');
+      const fileType = getFileType(file.fileName);
+      const exports = file.content.match(/export \w+ \w+/g) ?? [];
+      const splitExports = exports.map((exportStr) => exportStr.split(' '));
 
-      if (exportCount > 1 || exportDefaultIdx === -1) {
-        return `${file.fileNameExt} has incorrect exports`;
+      if (fileType === 'type' && splitExports.length === 2) {
+        const exportTypes = splitExports.map((exportParts) => exportParts[1]);
+        if (!exportTypes.includes('const') || !exportTypes.includes('type')) {
+          return `${file.path} has incorrect exports: Types should export a single 'default' or one 'type' and one 'const'`;
+        }
+      } else if (
+        splitExports.length !== 1 ||
+        splitExports[0][1] !== 'default'
+      ) {
+        return `${file.path} has incorrect exports: Files should have one 'default' export`;
       }
 
-      const exportDefaultLine = file.content.slice(exportDefaultIdx);
-      const exportDefaultName = exportDefaultLine.slice(
-        exportDefaultLine.lastIndexOf(' ') + 1,
-        exportDefaultLine.indexOf(';')
+      const badlyNamedExport = splitExports.find(
+        (exportParts) => exportParts[2] !== file.fileName
       );
 
-      if (exportDefaultName !== file.fileName) {
-        return `${file.fileNameExt} has incorrect named default export: ${exportDefaultName}`;
+      if (badlyNamedExport) {
+        return `${
+          file.path
+        } has incorrect named export: ${badlyNamedExport[2].replace(';', '')}`;
       }
 
       return '';
