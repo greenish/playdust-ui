@@ -2,7 +2,7 @@ import { Container, Stack } from '@mui/material';
 import React from 'react';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
 import RawAccountData from './RawAccountData';
-import TokenAccounts from './TokenAccounts';
+import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import WalletGallery from './WalletGallery/WalletGallery';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
@@ -12,17 +12,31 @@ function Address() {
   return (
     <Container maxWidth="lg">
       <Stack spacing={2}>
-        <SuspenseBoundary error={null} loading={null}>
-          <AccountOverviewCard />
-        </SuspenseBoundary>
-        <WalletGallery />
-        <TokenAccounts />
+        <SuspenseBoundary
+          content={<AccountOverviewCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<WalletGallery />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<TokenAccounts />}
+          error={null}
+          loading={null}
+        />
         <ExplorerAccordion
           id="transactions"
           title="Transactions"
           content={<Transactions />}
         />
-        <RawAccountData />
+        <SuspenseBoundary
+          content={<RawAccountData />}
+          error={null}
+          loading={null}
+        />
       </Stack>
     </Container>
   );

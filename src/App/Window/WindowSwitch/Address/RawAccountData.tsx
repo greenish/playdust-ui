@@ -31,6 +31,12 @@ function RenderRawAccountData() {
 }
 
 function RawAccountData() {
+  const accountInfo = useRecoilValue(accountInfoAtom);
+
+  if (!accountInfo?.space || accountInfo.space <= 0) {
+    return null;
+  }
+
   return (
     <ExplorerAccordion
       id="accountData"

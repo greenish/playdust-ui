@@ -54,12 +54,11 @@ function ExplorerAccordion({
       </AccordionSummary>
       <AccordionDetails aria-labelledby={`${id}-header`} id={`${id}-content`}>
         <SuspenseBoundary
+          content={content}
           loading={<TableSkeleton />}
           error={null}
           shouldRender={accordionState.wasExpanded}
-        >
-          {content}
-        </SuspenseBoundary>
+        />
       </AccordionDetails>
     </Accordion>
   );

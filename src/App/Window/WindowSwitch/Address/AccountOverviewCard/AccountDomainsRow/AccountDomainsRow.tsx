@@ -1,11 +1,10 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
-import SuspenseBoundary from '../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import accountDomainsAtom from './_atoms/accountDomainsAtom';
 
-function AccountDomainsRowContent() {
+function AccountDomainsRow() {
   const accountDomains = useRecoilValue(accountDomainsAtom);
 
   if (accountDomains.length < 1) {
@@ -29,14 +28,6 @@ function AccountDomainsRowContent() {
         </>
       }
     />
-  );
-}
-
-function AccountDomainsRow() {
-  return (
-    <SuspenseBoundary loading={null} error={null}>
-      <AccountDomainsRowContent />
-    </SuspenseBoundary>
   );
 }
 

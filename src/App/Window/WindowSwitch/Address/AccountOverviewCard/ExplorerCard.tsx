@@ -21,9 +21,7 @@ function ExplorerCard({
           {title}
         </Typography>
       )}
-      <SuspenseBoundary loading={loading} error={error}>
-        {children}
-      </SuspenseBoundary>
+      <SuspenseBoundary loading={loading} error={error} content={children} />
     </Box>
   );
 }

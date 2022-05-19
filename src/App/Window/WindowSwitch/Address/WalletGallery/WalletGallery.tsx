@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import TokenCard from '../../_sharedComponents/TokenCard/TokenCard';
+import useIsWallet from '../_hooks/useIsWallet';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import nftsForAddressAtom from './_atoms/nftsForAddressAtom';
 
@@ -35,6 +36,12 @@ function WalletGalleryContent() {
 }
 
 function WalletGallery() {
+  const isWallet = useIsWallet();
+
+  if (!isWallet) {
+    return null;
+  }
+
   return (
     <ExplorerAccordion
       id="wallet-gallery"
