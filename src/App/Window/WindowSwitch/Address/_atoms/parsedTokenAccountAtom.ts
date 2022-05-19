@@ -8,9 +8,9 @@ const parsedTokenAccountAtom = selector<ParsedTokenAccountType | null>({
   get: ({ get }) => {
     const accountInfo = get(accountInfoAtom);
 
-    if(!accountInfo || Buffer.isBuffer(accountInfo.data)) {
-      return null
-    };
+    if (!accountInfo || Buffer.isBuffer(accountInfo.data)) {
+      return null;
+    }
 
     assert(accountInfo.data.parsed, ParsedTokenAccountType);
     return accountInfo.data.parsed;

@@ -1,4 +1,12 @@
-import { array, boolean, Infer, literal, number, string, type } from 'superstruct';
+import {
+  array,
+  boolean,
+  Infer,
+  literal,
+  number,
+  string,
+  type,
+} from 'superstruct';
 
 const MultisigAccountInfo = type({
   numRequiredSigners: number(),
