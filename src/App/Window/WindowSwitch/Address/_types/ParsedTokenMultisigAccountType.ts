@@ -1,11 +1,18 @@
-import { array, boolean, Infer, literal, number, type } from 'superstruct';
-import PubkeyFromStringType from './PubkeyFromStringType';
+import {
+  array,
+  boolean,
+  Infer,
+  literal,
+  number,
+  string,
+  type,
+} from 'superstruct';
 
 const MultisigAccountInfo = type({
   numRequiredSigners: number(),
   numValidSigners: number(),
   isInitialized: boolean(),
-  signers: array(PubkeyFromStringType),
+  signers: array(string()),
 });
 
 export type ParsedTokenMultisigAccountType = Infer<
