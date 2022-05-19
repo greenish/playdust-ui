@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import PaginatedList from '../_sharedComponents/PaginatedList';
 import tokenAccountsForAddressAtom from '../_atoms/tokenAccountsForAddressAtom';
 import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
 import safePubkeyString from '../_helpers/safePubkeyString';
@@ -72,24 +73,29 @@ function RenderTokenAccounts() {
   const tokenAccounts = useRecoilValue(tokenAccountsForAddressAtom);
 
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Logo</TableCell>
-          <TableCell>Account Address</TableCell>
-          <TableCell>Mint Address</TableCell>
-          <TableCell>Balance</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {tokenAccounts.map((tokenAccount) => (
-          <RenderTokenAccount
-            tokenAccount={tokenAccount}
-            key={String(tokenAccount.pubkey)}
-          />
-        ))}
-      </TableBody>
-    </Table>
+    <PaginatedList
+      items={tokenAccounts}
+      itemsPerPage={10}
+      renderContainer={(children) => (
+        <Table sx={{ paddingBottom: '24px' }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Logo</TableCell>
+              <TableCell>Account Address</TableCell>
+              <TableCell>Mint Address</TableCell>
+              <TableCell>Balance</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>{children}</TableBody>
+        </Table>
+      )}
+      renderItem={(tokenAccount) => (
+        <RenderTokenAccount
+          tokenAccount={tokenAccount}
+          key={String(tokenAccount.pubkey)}
+        />
+      )}
+    />
   );
 }
 

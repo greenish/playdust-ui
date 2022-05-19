@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import TokenCard from '../../_sharedComponents/TokenCard/TokenCard';
 import useIsWallet from '../_hooks/useIsWallet';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import PaginatedList from '../_sharedComponents/PaginatedList';
 import nftsForAddressAtom from './_atoms/nftsForAddressAtom';
 
 const RootContainer = styled.div`
@@ -11,6 +12,12 @@ const RootContainer = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 16px;
+  padding-bottom: 16px;
+  padding-top: 16px;
+  ::after {
+    content: '';
+    flex: auto;
+  }
 `;
 
 function WalletGalleryContent() {
@@ -21,8 +28,11 @@ function WalletGalleryContent() {
   }
 
   return (
-    <RootContainer>
-      {nfts.map((nft) => (
+    <PaginatedList
+      items={nfts}
+      itemsPerPage={15}
+      renderContainer={(children) => <RootContainer>{children}</RootContainer>}
+      renderItem={(nft) => (
         <TokenCard
           key={nft.mint}
           imageSize={225}
@@ -30,8 +40,8 @@ function WalletGalleryContent() {
           metadata={nft}
           disableQuickFilter={true}
         />
-      ))}
-    </RootContainer>
+      )}
+    />
   );
 }
 
