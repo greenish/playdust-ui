@@ -1,10 +1,10 @@
 import { PublicKey } from '@solana/web3.js';
-import WindowUnion from '../../../../../_types/WindowUnionType';
+import type { WindowUnionType } from '../../../../../_types/WindowUnionType';
 
 interface ExplorerLinkProps {
   to: PublicKey | string | number;
   label?: string;
-  type: WindowUnion;
+  type: WindowUnionType;
   allowCopy?: boolean;
   ellipsis?: {
     cutoff: number;

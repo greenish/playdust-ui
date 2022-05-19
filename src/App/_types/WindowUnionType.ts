@@ -1,6 +1,11 @@
-import allWindowOptions from '../_helpers/allWindowOptions';
+import { enums, Infer } from 'superstruct';
 
-type WindowTuple = typeof allWindowOptions;
-type WindowUnionType = WindowTuple[number];
-
-export default WindowUnionType;
+export type WindowUnionType = Infer<typeof WindowUnionType>;
+export const WindowUnionType = enums([
+  'address',
+  'block',
+  'home',
+  'search',
+  'tx',
+  'epoch',
+]);

@@ -1,9 +1,9 @@
-import type WindowUnion from '../../_types/WindowUnionType';
+import type { WindowUnionType } from '../../_types/WindowUnionType';
 
 interface WindowPropsType {
   state: string;
   setWindowImages: (images: string[]) => void;
-  type: WindowUnion;
+  type: WindowUnionType;
 }
 
 export default WindowPropsType;

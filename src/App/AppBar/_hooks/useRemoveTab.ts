@@ -2,7 +2,7 @@ import { useRecoilState } from 'recoil';
 import appState from '../../_atoms/appStateAtom';
 import getDefaultAppState from '../../_helpers/getDefaultAppState';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
-import type AppStateType from '../../_types/AppStateType';
+import type { AppStateType } from '../../_types/AppStateType';
 
 const useRemoveTab = () => {
   const [curr, setter] = useRecoilState(appState);

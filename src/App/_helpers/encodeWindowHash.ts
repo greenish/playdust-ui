@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 import type EncodeHashOptionsType from '../_types/EncodeHashOptionsType';
-import type WindowType from '../_types/WindowType';
+import type { WindowType } from '../_types/WindowType';
 import decodeWindowHash from './decodeWindowHash';
 
 const getTabId = (options?: EncodeHashOptionsType) => {

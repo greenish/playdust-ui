@@ -1,9 +1,9 @@
-import type WindowType from './WindowType';
+import { array, Infer, number, object, string } from 'superstruct';
+import { WindowType } from './WindowType';
 
-interface TabType {
-  id: string;
-  windows: WindowType[];
-  selectedWindowIdx: number;
-}
-
-export default TabType;
+export type TabType = Infer<typeof TabType>;
+export const TabType = object({
+  id: string(),
+  windows: array(WindowType),
+  selectedWindowIdx: number(),
+});

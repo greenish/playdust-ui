@@ -18,7 +18,7 @@ import appBarWidth from '../_helpers/appBarWidth';
 import getCDNUrl from '../_helpers/getCDNUrl';
 import safePromise from '../_helpers/safePromise';
 import useGoHome from '../_hooks/useGoHome';
-import type WindowType from '../_types/WindowType';
+import type { WindowType } from '../_types/WindowType';
 import Playdust from './PlaydustIcon';
 import WalletButton from './WalletButton/WalletButton';
 import useGoToNewTab from './_hooks/useGoToNewTab';

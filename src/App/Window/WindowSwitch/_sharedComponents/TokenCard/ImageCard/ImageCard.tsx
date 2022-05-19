@@ -1,9 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Card, Skeleton } from '@mui/material';
 import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import StatusEnum from '../../../../../_types/StatusEnumType';
-import collectionStatusAtom from '../../../_atoms/collectionStatusAtom';
 import Link from '../../Link';
 import TokenCardContentContainer from '../_sharedComponents/TokenCardContentContainer';
 import LazyImage from './LazyImage';
@@ -19,6 +16,7 @@ interface ImageCardProps {
   imageSize: number;
   content: JSX.Element | null;
   contentHeight: number;
+  censored?: boolean;
 }
 
 function ImageCard({
@@ -27,9 +25,9 @@ function ImageCard({
   imageSize,
   content,
   contentHeight,
+  censored,
 }: ImageCardProps) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const status = useRecoilValue(collectionStatusAtom);
 
   return (
     <Card sx={{ minWidth: imageSize, maxWidth: imageSize }}>
@@ -44,11 +42,7 @@ function ImageCard({
                       objectFit: 'cover',
                       width: imageSize,
                       height: imageSize,
-                      filter:
-                        status === StatusEnum.Censored ||
-                        status === StatusEnum.NSFW
-                          ? 'blur(1.5rem)'
-                          : 'none',
+                      filter: censored ? 'blur(1.5rem)' : 'none',
                     }
                   : { display: 'none' }
               }

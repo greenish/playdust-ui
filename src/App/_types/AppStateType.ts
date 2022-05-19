@@ -1,8 +1,8 @@
-import type TabType from './TabType';
+import { array, Infer, object, string } from 'superstruct';
+import { TabType } from './TabType';
 
-interface AppStateType {
-  tabs: TabType[];
-  selectedTabId: string;
-}
-
-export default AppStateType;
+export type AppStateType = Infer<typeof AppStateType>;
+export const AppStateType = object({
+  tabs: array(TabType),
+  selectedTabId: string(),
+});

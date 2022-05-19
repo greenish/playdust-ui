@@ -12,16 +12,14 @@ import getWindowType from '../_helpers/getWindowType';
 import type SearchSuggestionType from '../_types/SearchSuggestionType';
 import searchSuggestionTerm from './searchSuggestionTermAtom';
 
-const fetchSearchSuggestions = selector<
-  SearchSuggestionResponseType | undefined
->({
+const fetchSearchSuggestions = selector<SearchSuggestionResponseType | null>({
   key: 'fetchSearchSuggestions',
   get: async ({ get }) => {
     const term = get(searchSuggestionTerm);
     const isCollectionQuery = get(isCollectionQueryAtom);
 
     if (isCollectionQuery) {
-      return undefined;
+      return null;
     }
 
     const { data } = await frontendApi.post<SearchSuggestionResponseType>(

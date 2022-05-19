@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 type GetResponseType<T> = (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<T>
 ) => Promise<T>;
 
 function nextApiHandler<T>(getResponse: GetResponseType<T>) {

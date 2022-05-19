@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import type WindowProps from '../../_types/WindowPropsType';
-import FlaggedModal from './FlaggedModal';
 import SearchOverview from './SearchOverview/SearchOverview';
 import SearchResults from './SearchResults/SearchResults';
 import SearchSideBar from './SearchSideBar/SearchSideBar';
@@ -52,18 +51,15 @@ function Search({ setWindowImages }: WindowProps) {
   }, [searchResults, setWindowImages]);
 
   return (
-    <>
-      <RootContainer>
-        <SearchSideBar />
-        <RightContainer>
-          <SearchOverview />
-          <TokenContainer>
-            <SearchResults />
-          </TokenContainer>
-        </RightContainer>
-      </RootContainer>
-      <FlaggedModal />
-    </>
+    <RootContainer>
+      <SearchSideBar />
+      <RightContainer>
+        <SearchOverview />
+        <TokenContainer>
+          <SearchResults />
+        </TokenContainer>
+      </RightContainer>
+    </RootContainer>
   );
 }
 

@@ -1,5 +1,7 @@
 import { nanoid } from 'nanoid';
-import type WindowType from '../_types/WindowType';
+import { create } from 'superstruct';
+import type { WindowType } from '../_types/WindowType';
+import { WindowUnionType } from '../_types/WindowUnionType';
 import getWindowHash from './getWindowHash';
 import isInWindowUnion from './isInWindowUnionType';
 
@@ -15,7 +17,7 @@ const decodeWindowHash = (
   if (isInWindowUnion(type)) {
     return {
       windowState: {
-        type,
+        type: create(type, WindowUnionType),
         state: state || '',
       },
       tab,

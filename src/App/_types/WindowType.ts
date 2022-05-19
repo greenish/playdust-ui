@@ -1,9 +1,9 @@
-import type WindowUnionType from './WindowUnionType';
+import { array, Infer, object, optional, string } from 'superstruct';
+import { WindowUnionType } from './WindowUnionType';
 
-interface WindowType {
-  state: string;
-  type: WindowUnionType;
-  images?: string[];
-}
-
-export default WindowType;
+export type WindowType = Infer<typeof WindowType>;
+export const WindowType = object({
+  state: string(),
+  type: WindowUnionType,
+  images: optional(array(string())),
+});

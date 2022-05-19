@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import type WindowType from '../../_types/WindowType';
+import type { WindowType } from '../../_types/WindowType';
 import currentStateStringAtom from './currentStateStringAtom';
 
 const currentStateAtom = selector<WindowType | null>({

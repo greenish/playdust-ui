@@ -1,4 +1,4 @@
-import type WindowUnionType from '../../../_types/WindowUnionType';
+import type { WindowUnionType } from '../../../_types/WindowUnionType';
 
 interface SearchSuggestionType {
   key: string;

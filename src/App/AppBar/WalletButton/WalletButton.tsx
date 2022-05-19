@@ -6,18 +6,20 @@ import {
   Menu,
   MenuItem,
   Select,
-  Typography,
 } from '@mui/material';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React, { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import solanaClustersAtom from '../../_atoms/solanaClustersAtom';
-import { autoRefresh } from '../../_helpers/playdustApi';
 import safePromise from '../../_helpers/safePromise';
+import connectedWalletAtom from './_atoms/connectedWalletAtom';
+import isAdminAtom from './_atoms/isAdminAtom';
+import isLoggedInAtom from './_atoms/isLoggedInAtom';
 import shortenPublicKey from './_helpers/shortenPublicKey';
 import useGoToProfile from './_hooks/useGoToProfile';
+import useLogout from './_hooks/useLogout';
+import useSignAuthMessage from './_hooks/useSignAuthMessage';
 
 interface WalletButtonProps {
   backgroundColor: string;
@@ -29,43 +31,38 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
   const walletModal = useWalletModal();
   const wallet = useWallet();
   const open = !!anchorEl;
+  const logout = useLogout();
+  const signAuthMessage = useSignAuthMessage();
   const [solanaClusters, setSolanaClusters] =
     useRecoilState(solanaClustersAtom);
-  const [cookies, setCookie, removeCookie] = useCookies<
-    string,
-    { authToken: string; nonce: string }
-  >(['authToken', 'nonce']);
   const goToProfile = useGoToProfile();
-
-  const buttonProps =
-    wallet.connected && wallet.publicKey
-      ? {
-          children: shortenPublicKey(wallet.publicKey),
-          onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
-            setAnchorEl(event.currentTarget),
-        }
-      : {
-          children: 'Connect Wallet',
-          onClick: () => walletModal.setVisible(true),
-        };
+  const [connectedWallet, setConnectedWallet] =
+    useRecoilState(connectedWalletAtom);
+  const isAdmin = useRecoilValue(isAdminAtom);
+  const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   useEffect(() => {
-    if (cookies && wallet.connected) {
-      const pubKey = wallet.publicKey?.toBase58();
+    if (wallet.connected && wallet.publicKey) {
+      const publicKeyString = wallet.publicKey.toString();
 
-      if (pubKey) {
-        autoRefresh(pubKey, cookies.nonce, cookies.authToken, setCookie);
-      }
+      setConnectedWallet(publicKeyString);
     }
-  }, [cookies, setCookie, wallet]);
+  }, [setConnectedWallet, wallet.connected, wallet.publicKey]);
+
+  const buttonProps = connectedWallet
+    ? {
+        children: shortenPublicKey(connectedWallet),
+        onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
+          setAnchorEl(event.currentTarget),
+      }
+    : {
+        children: 'Connect Wallet',
+        onClick: () => walletModal.setVisible(true),
+      };
 
   return (
     <>
-      <Fab
-        {...buttonProps}
-        size="small"
-        sx={{ width: size, height: size, backgroundColor }}
-      >
+      <Fab {...buttonProps} sx={{ width: size, height: size, backgroundColor }}>
         <Person />
       </Fab>
       <Menu
@@ -82,45 +79,51 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
         }}
         sx={{ ml: 2 }}
       >
-        <Typography sx={{ p: 2 }}>
-          {wallet.publicKey && shortenPublicKey(wallet.publicKey)}
-        </Typography>
-        <MenuItem sx={{ p: 2 }} onClick={() => goToProfile()}>
-          View Profile
+        <MenuItem onClick={() => goToProfile()}>
+          Wallet: {wallet.publicKey && shortenPublicKey(wallet.publicKey)}
         </MenuItem>
+        {!isLoggedIn && (
+          <MenuItem
+            onClick={() => {
+              safePromise(signAuthMessage());
+            }}
+          >
+            Login
+          </MenuItem>
+        )}
         <MenuItem
-          sx={{ p: 2 }}
           onClick={() => {
-            safePromise(wallet.disconnect());
-            removeCookie('authToken');
             setAnchorEl(null);
+            safePromise(logout());
           }}
         >
-          Disconnect
+          {isLoggedIn ? 'Logout' : 'Disconnect'}
         </MenuItem>
-        <MenuItem sx={{ p: 2 }}>
-          <FormControl fullWidth={true}>
-            <InputLabel>Network</InputLabel>
-            <Select
-              value={solanaClusters.selectedIndex}
-              onChange={(evt) => {
-                const nextIndex = evt.target.value;
-                if (typeof nextIndex === 'number') {
-                  setSolanaClusters((curr) => ({
-                    ...curr,
-                    selectedIndex: nextIndex,
-                  }));
-                }
-              }}
-            >
-              {solanaClusters.clusters.map((cluster, idx) => (
-                <MenuItem value={idx} key={cluster.network}>
-                  {cluster.network}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </MenuItem>
+        {isAdmin && (
+          <MenuItem>
+            <FormControl fullWidth={true}>
+              <InputLabel>Network</InputLabel>
+              <Select
+                value={solanaClusters.selectedIndex}
+                onChange={(evt) => {
+                  const nextIndex = evt.target.value;
+                  if (typeof nextIndex === 'number') {
+                    setSolanaClusters((curr) => ({
+                      ...curr,
+                      selectedIndex: nextIndex,
+                    }));
+                  }
+                }}
+              >
+                {solanaClusters.clusters.map((cluster, idx) => (
+                  <MenuItem value={idx} key={cluster.network}>
+                    {cluster.network}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </MenuItem>
+        )}
       </Menu>
     </>
   );

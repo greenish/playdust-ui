@@ -1,7 +1,7 @@
 import bs58 from 'bs58';
-import WindowUnion from '../../../_types/WindowUnionType';
+import type { WindowUnionType } from '../../../_types/WindowUnionType';
 
-const getWindowType = (state: string): WindowUnion => {
+const getWindowType = (state: string): WindowUnionType => {
   if (state === '') {
     return 'home';
   }

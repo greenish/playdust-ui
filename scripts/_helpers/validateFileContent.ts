@@ -25,7 +25,10 @@ const validateFileContent = (files: FileMetaType[]): string[] =>
         }
         case 'helper':
         case 'type':
-          if (includesReact || includesRecoil) {
+          if (
+            (includesReact || includesRecoil) &&
+            !fileNameExt.endsWith('Effect.ts')
+          ) {
             return `${fileType} file ${fileNameExt} includes React and/or recoil`;
           }
 

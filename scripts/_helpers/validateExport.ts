@@ -1,12 +1,8 @@
 import type FileMetaType from '../_types/FileMetaType';
 import getFileType from './getFileType';
-import temporaryExcludes from './temporaryExcludes';
 
 const validateExport = (files: FileMetaType[]): string[] => {
   const errors = files
-    .filter(
-      (entry) => !temporaryExcludes.internalFiles.includes(entry.fileName)
-    )
     .map((file) => {
       const fileType = getFileType(file.fileName);
       const exports = file.content.match(/export \w+ \w+/g) ?? [];

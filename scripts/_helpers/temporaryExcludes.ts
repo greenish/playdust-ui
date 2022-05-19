@@ -1,7 +1,7 @@
 // TODO remove this file once refactors are finished
 
 const temporaryExcludes = {
-  internalFiles: ['playdustApi'],
+  internalFiles: [],
   externalPaths: ['/explorer/', '/me/'],
 };
 

@@ -1,7 +1,6 @@
-import type WindowUnionType from '../_types/WindowUnionType';
-import allWindowOptions from './allWindowOptions';
+import { is } from 'superstruct';
+import { WindowUnionType } from '../_types/WindowUnionType';
 
-const isInWindowUnionType = (value: string): value is WindowUnionType =>
-  allWindowOptions.includes(value as WindowUnionType);
+const isInWindowUnionType = (value: string) => is(value, WindowUnionType);
 
 export default isInWindowUnionType;

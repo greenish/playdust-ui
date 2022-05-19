@@ -1,13 +1,8 @@
 import FileMetaType from '../_types/FileMetaType';
-import temporaryExcludes from './temporaryExcludes';
 
 const warnHelperToAtom = (files: FileMetaType[]): string[] =>
   files
-    .filter(
-      (entry) =>
-        entry.fileType === 'helper' &&
-        !temporaryExcludes.internalFiles.includes(entry.fileName)
-    )
+    .filter((entry) => entry.fileType === 'helper')
     .map((file) => {
       const componentParents = file.importedBy.filter((parent) => {
         const found = files.find((entry) => entry.fileName === parent);
