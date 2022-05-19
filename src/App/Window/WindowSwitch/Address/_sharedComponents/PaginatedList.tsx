@@ -18,12 +18,16 @@ type PaginatedListProps<T> = {
 
 function PaginatedList<T>({
   items,
-  itemsPerPage = 2,
+  itemsPerPage = 10,
   renderItem,
   renderContainer,
 }: PaginatedListProps<T>) {
   const [page, updatePage] = useState(1);
   const chunks = chunk(items, itemsPerPage);
+
+  if (chunks.length <= 0) {
+    return null;
+  }
 
   return (
     <>
@@ -31,12 +35,14 @@ function PaginatedList<T>({
         count={chunks.length}
         page={page}
         onChange={(e, newPage) => updatePage(newPage)}
+        disabled={chunks.length === 1}
       />
       {renderContainer(chunks[page - 1].map(renderItem))}
       <Pagination
         count={chunks.length}
         page={page}
         onChange={(e, newPage) => updatePage(newPage)}
+        disabled={chunks.length === 1}
       />
     </>
   );
