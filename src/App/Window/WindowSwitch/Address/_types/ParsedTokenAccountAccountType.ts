@@ -8,7 +8,6 @@ import {
   string,
   type,
 } from 'superstruct';
-import PubkeyFromStringType from './PubkeyFromStringType';
 
 const TokenAmount = type({
   decimals: number(),
@@ -20,15 +19,15 @@ const TokenAmount = type({
 const AccountState = enums(['initialized', 'uninitialized', 'frozen']);
 
 const TokenAccountInfo = type({
-  mint: PubkeyFromStringType,
-  owner: PubkeyFromStringType,
+  mint: string(),
+  owner: string(),
   tokenAmount: TokenAmount,
-  delegate: optional(PubkeyFromStringType),
+  delegate: optional(string()),
   state: AccountState,
   isNative: boolean(),
   rentExemptReserve: optional(TokenAmount),
   delegatedAmount: optional(TokenAmount),
-  closeAuthority: optional(PubkeyFromStringType),
+  closeAuthority: optional(string()),
 });
 
 export type ParsedTokenAccountAccountType = Infer<

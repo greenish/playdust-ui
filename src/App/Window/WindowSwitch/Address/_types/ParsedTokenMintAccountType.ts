@@ -7,14 +7,13 @@ import {
   string,
   type,
 } from 'superstruct';
-import PubkeyFromStringType from './PubkeyFromStringType';
 
 const MintAccountInfo = type({
-  mintAuthority: nullable(PubkeyFromStringType),
+  mintAuthority: nullable(string()),
   supply: string(),
   decimals: number(),
   isInitialized: boolean(),
-  freezeAuthority: nullable(PubkeyFromStringType),
+  freezeAuthority: nullable(string()),
 });
 
 export type ParsedTokenMintAccountType = Infer<
