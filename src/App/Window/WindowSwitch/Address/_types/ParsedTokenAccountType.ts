@@ -1,40 +1,13 @@
-import {
-  boolean,
-  enums,
-  Infer,
-  literal,
-  number,
-  optional,
-  string,
-  type,
-} from 'superstruct';
-import PubkeyFromStringType from './PubkeyFromStringType';
+import { Infer, union } from 'superstruct';
+import { ParsedTokenAccountAccountType } from './ParsedTokenAccountAccountType';
+import { ParsedTokenMintAccountType } from './ParsedTokenMintAccountType';
+import { ParsedTokenMultisigAccountType } from './ParsedTokenMultisigAccountType';
 
-const TokenAmount = type({
-  decimals: number(),
-  uiAmountString: string(),
-  uiAmount: number(),
-  amount: string(),
-});
-
-// const TokenAccountType = enums(["mint", "account", "multisig"]);
-
-const AccountState = enums(['initialized', 'uninitialized', 'frozen']);
-
-const TokenAccountInfo = type({
-  mint: PubkeyFromStringType,
-  owner: PubkeyFromStringType,
-  tokenAmount: TokenAmount,
-  delegate: optional(PubkeyFromStringType),
-  state: AccountState,
-  isNative: boolean(),
-  rentExemptReserve: optional(TokenAmount),
-  delegatedAmount: optional(TokenAmount),
-  closeAuthority: optional(PubkeyFromStringType),
-});
+// https://github.com/solana-labs/solana/blob/master/explorer/src/validators/accounts/token.ts
 
 export type ParsedTokenAccountType = Infer<typeof ParsedTokenAccountType>;
-export const ParsedTokenAccountType = type({
-  type: literal('account'),
-  info: TokenAccountInfo,
-});
+export const ParsedTokenAccountType = union([
+  ParsedTokenAccountAccountType,
+  ParsedTokenMintAccountType,
+  ParsedTokenMultisigAccountType,
+]);
