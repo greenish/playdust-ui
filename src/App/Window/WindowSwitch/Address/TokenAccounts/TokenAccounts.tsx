@@ -10,12 +10,12 @@ import { useRecoilValue } from 'recoil';
 import tokenAccountsForAddressAtom from '../_atoms/tokenAccountsForAddressAtom';
 import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
 import safePubkeyString from '../_helpers/safePubkeyString';
-import useIsProgram from './_hooks/useIsProgram';
 import useIsWallet from '../_hooks/useIsWallet';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import TokenAccountsType from '../_types/TokenAccountsType';
+import useIsProgram from './_hooks/useIsProgram';
 
 function RenderTokenAccount({
   tokenAccount,
