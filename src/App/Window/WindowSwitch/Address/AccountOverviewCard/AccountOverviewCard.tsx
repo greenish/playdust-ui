@@ -2,6 +2,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import addressStateAtom from '../_atoms/addressStateAtom';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
+import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import TableSkeleton from '../_sharedComponents/TableSkeleton/TableSkeleton';
 import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
 import AccountInfoRows from './AccountInfoRows';
@@ -28,8 +29,16 @@ function AccountOverviewCard() {
         {addressState.label !== undefined && (
           <ExplorerGridRow label="Address Label" value={addressState.label} />
         )}
-        <AccountDomainsRow />
-        <AccountInfoRows />
+        <SuspenseBoundary
+          content={<AccountDomainsRow />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<AccountInfoRows />}
+          error={null}
+          loading={null}
+        />
       </ExplorerGrid>
     </ExplorerCard>
   );
