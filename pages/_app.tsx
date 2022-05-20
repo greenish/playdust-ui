@@ -15,7 +15,8 @@ function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>playdust</title>
-        <link rel="icon" href="/playdust-dark.svg" />
+        <link rel="icon" href="/fav-icon-circle.svg" />
+        <link rel="apple-touch-icon" href="/fav-icon-square.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
