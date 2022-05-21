@@ -1,11 +1,11 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import addressStateAtom from '../_atoms/addressStateAtom';
 import ExplorerCard from '../_sharedComponents/ExplorerCard';
 import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
-import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import TableSkeleton from '../_sharedComponents/TableSkeleton/TableSkeleton';
 import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
 import AccountInfoRows from './AccountInfoRows';

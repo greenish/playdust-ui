@@ -6,8 +6,8 @@ import AppBar from './AppBar/AppBar';
 import Notifications from './Notifications/Notifications';
 import Provider from './Provider/Provider';
 import Window from './Window/Window';
-import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import appBarWidth from './_helpers/appBarWidth';
+import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 
 const AppBarContainer = muiStyled(Paper)(
   ({ theme }) => `
