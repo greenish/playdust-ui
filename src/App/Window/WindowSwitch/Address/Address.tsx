@@ -11,7 +11,7 @@ import Transactions from './Transactions/Transactions';
 import ValidatorInfoConfigAccountCard from './ValidatorInfoConfigAccountCard';
 import WalletGallery from './WalletGallery/WalletGallery';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
-import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 
 function Address() {
   return (

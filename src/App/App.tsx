@@ -6,7 +6,7 @@ import AppBar from './AppBar/AppBar';
 import Notifications from './Notifications/Notifications';
 import Provider from './Provider/Provider';
 import Window from './Window/Window';
-import SuspenseBoundary from './Window/WindowSwitch/Address/_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import appBarWidth from './_helpers/appBarWidth';
 
 const AppBarContainer = muiStyled(Paper)(
@@ -44,19 +44,11 @@ function App() {
   return (
     <Provider>
       <AppBarContainer>
-        <SuspenseBoundary 
-          loading={null} 
-          error={null} 
-          content={<AppBar />} 
-        />
+        <SuspenseBoundary loading={null} error={null} content={<AppBar />} />
       </AppBarContainer>
       <ChildrenContainer>
         <ChildrenRelativeContainer>
-          <SuspenseBoundary 
-            loading={null} 
-            error={null} 
-            content={<Window />} 
-          />
+          <SuspenseBoundary loading={null} error={null} content={<Window />} />
         </ChildrenRelativeContainer>
       </ChildrenContainer>
       <Notifications />

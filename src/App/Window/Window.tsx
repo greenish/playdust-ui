@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
-import React, { Suspense, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import WindowInput from './WindowInput/WindowInput';
-import SuspenseBoundary from './WindowSwitch/Address/_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
 import activeWindowAtom from './_atoms/activeWindowAtom';
 import currentStateString from './_atoms/currentStateStringAtom';

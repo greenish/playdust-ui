@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React, { PropsWithChildren } from 'react';
-import SuspenseBoundary from './SuspenseBoundary/SuspenseBoundary';
+import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 
 interface ExplorerCardProps {
   title?: string;
