@@ -1,4 +1,5 @@
 import React, { PropsWithChildren } from 'react';
+import logger from '../../../_helpers/logger';
 
 type ErrorBoundaryProps = {
   fallback: React.SuspenseProps['fallback'];
@@ -18,7 +19,7 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error(error, errorInfo);
+    logger.log(error, errorInfo);
   }
 
   render() {
