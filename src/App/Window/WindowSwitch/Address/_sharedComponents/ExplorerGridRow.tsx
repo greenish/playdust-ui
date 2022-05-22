@@ -2,8 +2,8 @@ import { TableCell, TableRow } from '@mui/material';
 import React from 'react';
 
 type ExplorerGridRowProps = {
-  label: string | JSX.Element;
-  value: string | JSX.Element;
+  label: number | string | JSX.Element;
+  value: number | string | JSX.Element;
 };
 
 function ExplorerGridRow({ label, value }: ExplorerGridRowProps) {

@@ -2,6 +2,9 @@ import { Container, Stack } from '@mui/material';
 import React from 'react';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
 import RawAccountData from './RawAccountData';
+import SPLTokenAccount from './SPLTokenAccount';
+import SPLTokenMint from './SPLTokenMint/SPLTokenMint';
+import SPLTokenMultisig from './SPLTokenMultisig';
 import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import WalletGallery from './WalletGallery/WalletGallery';
@@ -12,6 +15,21 @@ function Address() {
   return (
     <Container maxWidth="lg">
       <Stack spacing={2}>
+        <SuspenseBoundary
+          content={<SPLTokenAccount />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SPLTokenMint />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SPLTokenMultisig />}
+          error={null}
+          loading={null}
+        />
         <SuspenseBoundary
           content={<AccountOverviewCard />}
           error={null}

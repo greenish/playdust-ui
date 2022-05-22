@@ -15,7 +15,7 @@ import {
 
 const BufferType = define<Buffer>('Buffer', (value) => Buffer.isBuffer(value));
 
-const ParsedAccountData: Describe<ParsedAccountData> = type({
+const ParsedAccountDataType: Describe<ParsedAccountData> = type({
   program: string(),
   parsed: unknown(),
   space: number(),
@@ -26,7 +26,7 @@ export const AccountInfoType = type({
   executable: boolean(),
   owner: instance(PublicKey),
   lamports: number(),
-  data: union([ParsedAccountData, BufferType]),
+  data: union([ParsedAccountDataType, BufferType]),
   rentEpoch: optional(number()),
   space: optional(number()),
 });
