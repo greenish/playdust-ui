@@ -11,6 +11,7 @@ const IDENTICON_WIDTH = 64;
 function SPLTokenMintFungibleHeader() {
   const addressState = useRecoilValue(addressStateAtom);
   const parsedTokenAccount = useRecoilValue(parsedTokenAccountAtom);
+  const nftDetails = useRecoilValue(nftDetailsAtom);
   const tokenRegistry = useRecoilValue(tokenRegistryAtom);
 
   if (
