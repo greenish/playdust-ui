@@ -18,6 +18,9 @@ class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    ineum('reportError', error, {
+      componentStack: errorInfo.componentStack,
+    });
     console.error(error, errorInfo);
   }
 

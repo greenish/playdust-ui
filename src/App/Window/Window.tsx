@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
-import React, { Suspense, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
+import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
 import WindowInputNew from './WindowInputNew/WindowInputNew';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
@@ -80,21 +81,25 @@ function Window() {
     >
       <RootContainer>
         <SearchInputContainer>
-          <WindowInput {...windowProps} />
+          <SuspenseBoundary
+            loading={null}
+            error={null}
+            content={<WindowInput {...windowProps} />}
+          />
         </SearchInputContainer>
         <SearchInputContainer>
           <WindowInputNew />
         </SearchInputContainer>
         <ContentContainer>
-          <Suspense
-            fallback={
+          <SuspenseBoundary
+            loading={
               <SpinnerContainer>
                 <CircularProgress />
               </SpinnerContainer>
             }
-          >
-            <WindowSwitch {...windowProps} />
-          </Suspense>
+            error={null}
+            content={<WindowSwitch {...windowProps} />}
+          />
         </ContentContainer>
       </RootContainer>
     </RecoilRoot>
