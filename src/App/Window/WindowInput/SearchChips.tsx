@@ -5,9 +5,9 @@ import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import CollectionQueryNodeType from '../../../_types/CollectionQueryNodeType';
 import type QueryNodeType from '../../../_types/QueryNodeType';
 import useGoHome from '../../_hooks/useGoHome';
+import collectionByIdAtom from '../_atoms/collectionByIdAtom';
 import searchStateAtom from '../_atoms/searchStateAtom';
 import useRemoveQueryNode from '../_hooks/useRemoveQueryNode';
-import collectionByIdAtom from './_atoms/collectionByIdAtom';
 
 const ChipContainer = styled.div`
   display: flex;

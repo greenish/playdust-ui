@@ -1,6 +1,6 @@
 import { selectorFamily } from 'recoil';
-import type OpenSearchCollectionSourceType from '../../../../_types/OpenSearchCollectionSourceType';
-import api from '../../_helpers/frontendApi';
+import type OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
+import api from '../_helpers/frontendApi';
 
 const collectionByIdAtom = selectorFamily({
   key: 'collectionByIdAtom',

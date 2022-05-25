@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import type CollectionQueryNodeType from '../../../../../../_types/CollectionQueryNodeType';
-import collectionByIdAtom from '../../../_atoms/collectionByIdAtom';
+import collectionByIdAtom from '../../../../_atoms/collectionByIdAtom';
 import searchQueryChildAtom from '../_atoms/searchQueryChildAtom';
 
 const label = 'is:';

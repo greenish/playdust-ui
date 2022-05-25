@@ -4,6 +4,7 @@ import React, { Suspense, useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import WindowInput from './WindowInput/WindowInput';
+import WindowInputNew from './WindowInputNew/WindowInputNew';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
 import activeWindowAtom from './_atoms/activeWindowAtom';
 import currentStateString from './_atoms/currentStateStringAtom';
@@ -19,7 +20,7 @@ const RootContainer = styled.div`
 `;
 
 const SearchInputContainer = styled.div`
-  padding: 16px;
+  margin-bottom: 16px;
   position: sticky;
   width: 100%;
 `;
@@ -80,6 +81,9 @@ function Window() {
       <RootContainer>
         <SearchInputContainer>
           <WindowInput {...windowProps} />
+        </SearchInputContainer>
+        <SearchInputContainer>
+          <WindowInputNew />
         </SearchInputContainer>
         <ContentContainer>
           <Suspense
