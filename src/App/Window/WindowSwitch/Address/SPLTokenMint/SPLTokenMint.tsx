@@ -10,6 +10,7 @@ import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import TableSkeleton from '../_sharedComponents/TableSkeleton/TableSkeleton';
 import ExternalLink from './ExternalLink';
+import SPLTokenMintFungible from './SPLTokenMintFungible/SPLTokenMintFungible';
 
 function normalizeTokenAmount(raw: string | number, decimals: number): number {
   let rawTokens: number;
@@ -78,11 +79,14 @@ function SPLTokenMintRows() {
 
 function SPLTokenMint() {
   return (
-    <ExplorerCard loading={<TableSkeleton />} error={null}>
-      <ExplorerGrid>
-        <SPLTokenMintRows />
-      </ExplorerGrid>
-    </ExplorerCard>
+    <>
+      <SPLTokenMintFungible />
+      <ExplorerCard loading={<TableSkeleton />} error={null}>
+        <ExplorerGrid>
+          <SPLTokenMintRows />
+        </ExplorerGrid>
+      </ExplorerCard>
+    </>
   );
 }
 
