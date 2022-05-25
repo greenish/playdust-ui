@@ -14,6 +14,7 @@ import useIsWallet from '../_hooks/useIsWallet';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import PaginatedList from '../_sharedComponents/PaginatedList';
 import TokenAccountsType from '../_types/TokenAccountsType';
 import useIsProgram from './_hooks/useIsProgram';
 
@@ -72,24 +73,29 @@ function RenderTokenAccounts() {
   const tokenAccounts = useRecoilValue(tokenAccountsForAddressAtom);
 
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell>Logo</TableCell>
-          <TableCell>Account Address</TableCell>
-          <TableCell>Mint Address</TableCell>
-          <TableCell>Balance</TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {tokenAccounts.map((tokenAccount) => (
-          <RenderTokenAccount
-            tokenAccount={tokenAccount}
-            key={String(tokenAccount.pubkey)}
-          />
-        ))}
-      </TableBody>
-    </Table>
+    <PaginatedList
+      items={tokenAccounts}
+      itemsPerPage={10}
+      renderContainer={(children) => (
+        <Table sx={{ paddingBottom: '24px' }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Logo</TableCell>
+              <TableCell>Account Address</TableCell>
+              <TableCell>Mint Address</TableCell>
+              <TableCell>Balance</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>{children}</TableBody>
+        </Table>
+      )}
+      renderItem={(tokenAccount) => (
+        <RenderTokenAccount
+          tokenAccount={tokenAccount}
+          key={String(tokenAccount.pubkey)}
+        />
+      )}
+    />
   );
 }
 
