@@ -5,7 +5,12 @@ function safePromise<T>(
 function safePromise<T>(promise: Promise<T>, passthrough: false): void;
 function safePromise<T>(promise: Promise<T>): void;
 function safePromise<T>(promise: Promise<T>, passthrough?: boolean) {
-  const caught = promise.catch((e) => {
+  const caught = promise.catch((e: Error) => {
+    ineum('reportError', e, {
+      meta: {
+        reason: 'SafePromise Caught Error',
+      },
+    });
     console.error('SafePromise Caught', e);
   });
   if (passthrough) {

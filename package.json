@@ -49,6 +49,7 @@
     "@solana/wallet-adapter-react-ui": "^0.9.6",
     "@solana/wallet-adapter-wallets": "^0.16.1",
     "@solana/web3.js": "^1.41.9",
+    "@types/ineum": "^216.0.0",
     "axios": "^0.25.0",
     "bignumber.js": "^9.0.2",
     "bn.js": "^5.2.0",

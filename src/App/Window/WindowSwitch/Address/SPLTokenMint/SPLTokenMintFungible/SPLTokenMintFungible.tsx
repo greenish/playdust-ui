@@ -1,5 +1,5 @@
 import React from 'react';
-import SuspenseBoundary from '../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import SuspenseBoundary from '../../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import TableSkeleton from '../../_sharedComponents/TableSkeleton/TableSkeleton';
 import SPLTokenMintFungibleHeader from './SPLTokenMintFungibleHeader';
 import SPLTokenMintFungibleStats from './SPLTokenMintFungibleStats/SPLTokenMintFungibleStats';

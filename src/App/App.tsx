@@ -7,6 +7,7 @@ import Notifications from './Notifications/Notifications';
 import Provider from './Provider/Provider';
 import Window from './Window/Window';
 import appBarWidth from './_helpers/appBarWidth';
+import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 
 const AppBarContainer = muiStyled(Paper)(
   ({ theme }) => `
@@ -43,11 +44,11 @@ function App() {
   return (
     <Provider>
       <AppBarContainer>
-        <AppBar />
+        <SuspenseBoundary loading={null} error={null} content={<AppBar />} />
       </AppBarContainer>
       <ChildrenContainer>
         <ChildrenRelativeContainer>
-          <Window />
+          <SuspenseBoundary loading={null} error={null} content={<Window />} />
         </ChildrenRelativeContainer>
       </ChildrenContainer>
       <Notifications />

@@ -1229,6 +1229,11 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
 
+"@types/ineum@^216.0.0":
+  version "216.0.0"
+  resolved "https://registry.yarnpkg.com/@types/ineum/-/ineum-216.0.0.tgz#124c02c74c344626d8982f82fe50b2dc5aa501da"
+  integrity sha512-qxp6wDEwIAusl6vvTSTw/pYXH3McH8cLt+Fe7okgUlqyVc2MeFZTCoAH8ljC6bHQb7TpWKzFa6z6mcjAJ4IC9Q==
+
 "@types/js-cookie@^2.2.6":
   version "2.2.7"
   resolved "https://registry.npmjs.org/@types/js-cookie/-/js-cookie-2.2.7.tgz"
