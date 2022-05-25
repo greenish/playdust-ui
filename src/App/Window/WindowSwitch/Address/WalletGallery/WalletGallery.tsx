@@ -10,7 +10,7 @@ import nftsForAddressAtom from './_atoms/nftsForAddressAtom';
 const RootContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: start;
   gap: 16px;
   padding-bottom: 16px;
   padding-top: 16px;
