@@ -27,6 +27,20 @@ function App({ Component, pageProps }: AppProps) {
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap"
           rel="stylesheet"
         />
+        <script>
+          {`(function(s,t,a,n){s[t] || (s[t] = a, n = s[a] = function () { n.q.push(arguments) },
+            n.q = [], n.v = 2, n.l = 1 * new Date)})(window,"InstanaEumObject","ineum");
+
+          ineum('reportingUrl', 'https://eum-coral-saas.instana.io');
+          ineum('key', '1B3NJfo-SYO74INLQP0RmQ');
+          ineum('trackSessions');
+          `}
+        </script>
+        <script
+          defer={true}
+          crossOrigin="anonymous"
+          src="https://eum.instana.io/eum.min.js"
+        />
       </Head>
       <Component {...pageProps} />
     </>
