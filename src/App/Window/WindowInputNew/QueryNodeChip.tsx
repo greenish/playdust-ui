@@ -72,6 +72,10 @@ function QueryNodeChip({
       variant="outlined"
       color={isActive ? 'primary' : 'default'}
       onClick={onClick}
+      sx={{
+        border: isActive ? '2px solid red' : '',
+        margin: '-1px',
+      }}
     />
   );
 }

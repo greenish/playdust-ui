@@ -9,12 +9,12 @@ const searchQueryAtom = atom<SearchQueryType>({
       'group-root': {
         id: 'group-root',
         operator: 'or',
-        children: ['group-and', 'degod-id'],
+        children: ['dape-and', 'degod-and'],
       },
-      'group-and': {
-        id: 'group-and',
+      'dape-and': {
+        id: 'dape-and',
         operator: 'and',
-        children: ['dape-id', 'nested-attribute-or', 'background-blue'],
+        children: ['dape-id', 'nested-dape-or', 'background-blue'],
       },
       'dape-id': {
         id: 'dape-id',
@@ -27,15 +27,26 @@ const searchQueryAtom = atom<SearchQueryType>({
         trait: 'background',
         value: ['blue'],
       },
+      'degod-and': {
+        id: 'degod-and',
+        operator: 'and',
+        children: ['degod-id', 'background-green'],
+      },
       'degod-id': {
         id: 'degod-id',
         field: 'collection',
         value: '3f96def7-9b95-4af8-886c-dcea80dd37bd',
       },
-      'nested-attribute-or': {
-        id: 'nested-attribute-or',
+      'background-green': {
+        id: 'background-green',
+        field: 'attribute',
+        trait: 'background',
+        value: ['green'],
+      },
+      'nested-dape-or': {
+        id: 'nested-dape-or',
         operator: 'or',
-        children: ['head-spacehelmet', 'eyes-sunglasses'],
+        children: ['head-spacehelmet', 'deeply-nested-and'],
       },
       'head-spacehelmet': {
         id: 'head-spacehelmet',
@@ -43,11 +54,22 @@ const searchQueryAtom = atom<SearchQueryType>({
         trait: 'head',
         value: ['space helmet'],
       },
+      'deeply-nested-and': {
+        id: 'deeply-nested-and',
+        operator: 'and',
+        children: ['eyes-sunglasses', 'teeth-golden'],
+      },
       'eyes-sunglasses': {
         id: 'eyes-sunglasses',
         field: 'attribute',
         trait: 'eyes',
         value: ['sunglasses'],
+      },
+      'teeth-golden': {
+        id: 'teeth-golden',
+        field: 'attribute',
+        trait: 'teeth',
+        value: ['golden'],
       },
     },
   },

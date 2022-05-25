@@ -12,15 +12,14 @@ import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
 import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
 import GroupNodeType from './_types/GroupNodeType';
 
-const rootHeight = 40;
+const activeColor = 'red';
 
 const RootContainer = styled(Box)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%;
-  padding: 0 8px;
-  height: ${rootHeight + 16}px;
+  padding: 12px 16px;
+  margin: 8px 24px;
   font-size: 80%;
   background: none;
 `;
@@ -28,7 +27,6 @@ const RootContainer = styled(Box)`
 const GroupNodeContainer = styled(Box)`
   display: flex;
   align-items: center;
-  padding: 0 8px;
 `;
 
 const GroupNodeChildrenContainer = styled.div`
@@ -39,38 +37,53 @@ const GroupNodeChildrenContainer = styled.div`
 
 const GroupNodeJoinContainer = styled.div`
   display: flex;
-  height: ${rootHeight}px;
   align-items: center;
-  padding: 0 4px;
+  padding: 0 8px;
 `;
 
 const QueryNodeChipContainer = styled.div`
   display: flex;
-  height: ${rootHeight}px;
   align-items: center;
+`;
+
+const ActiveOperator = styled.b`
+  color: ${activeColor};
+  margin: '-2px';
 `;
 
 type FlattenedElementsProps = {
   id: string;
   depth?: number;
   textInput: JSX.Element;
+  inActiveGroup?: boolean;
 };
 
 function FlattenedElements({
   id,
   depth = 0,
   textInput,
+  inActiveGroup = false,
 }: FlattenedElementsProps) {
-  const { nodes } = useRecoilValue(searchQueryAtom);
+  const { rootId, nodes } = useRecoilValue(searchQueryAtom);
   const [activeNodeId, setActiveNodeId] = useRecoilState(
     searchQueryActiveNodeIdAtom
   );
   const node = nodes[id];
-  const theme = useTheme();
+  // const theme = useTheme();
+
+  const activeGroupStyles = {
+    background: 'rgb(255,0,0, 0.08)',
+    padding: '4px',
+    margin: '-4px',
+  };
 
   if (!is(node, GroupNodeType)) {
     return (
-      <QueryNodeChipContainer>
+      <QueryNodeChipContainer
+        style={{
+          ...(inActiveGroup ? activeGroupStyles : {}),
+        }}
+      >
         <QueryNodeChip
           isActive={id === activeNodeId}
           node={node}
@@ -85,25 +98,20 @@ function FlattenedElements({
     );
   }
 
+  const isRoot = id === rootId;
   const isActiveGroup = activeNodeId === id;
-  const background = theme.palette.grey[500];
-  const height = rootHeight - depth * 4;
-  const outlineColor = isActiveGroup ? theme.palette.primary.main : background;
 
   return (
     <GroupNodeContainer
       sx={{
-        background,
-        outline: `solid 1px ${outlineColor}`,
-        filter: 'brightness(115%)',
-        height,
-        borderRadius: `${height / 2}px`,
+        ...(inActiveGroup ? activeGroupStyles : {}),
       }}
       onClick={(evt) => {
         setActiveNodeId(id);
         evt.stopPropagation();
       }}
     >
+      {!isRoot && (isActiveGroup ? <ActiveOperator>(</ActiveOperator> : '(')}
       {node.children.map((childId, idx) => {
         const isLast = idx === node.children.length - 1;
 
@@ -113,15 +121,26 @@ function FlattenedElements({
               id={childId}
               depth={depth + 1}
               textInput={textInput}
+              inActiveGroup={isActiveGroup}
             />
             {!isLast && (
-              <GroupNodeJoinContainer>{node.operator}</GroupNodeJoinContainer>
+              <GroupNodeJoinContainer>
+                {isActiveGroup ? (
+                  <ActiveOperator>{node.operator}</ActiveOperator>
+                ) : (
+                  node.operator
+                )}
+              </GroupNodeJoinContainer>
             )}
             {isActiveGroup && isLast && (
               <>
                 {activeNodeId && (
                   <GroupNodeJoinContainer>
-                    {node.operator}
+                    {isActiveGroup ? (
+                      <ActiveOperator>{node.operator}</ActiveOperator>
+                    ) : (
+                      node.operator
+                    )}
                   </GroupNodeJoinContainer>
                 )}
                 {textInput}
@@ -130,6 +149,7 @@ function FlattenedElements({
           </GroupNodeChildrenContainer>
         );
       })}
+      {!isRoot && (isActiveGroup ? <ActiveOperator>)</ActiveOperator> : ')')}
     </GroupNodeContainer>
   );
 }
