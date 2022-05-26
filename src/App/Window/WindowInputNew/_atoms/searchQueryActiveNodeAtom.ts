@@ -2,11 +2,11 @@ import { atom } from 'recoil';
 
 type SearchQueryActiveNodeType =
   | {
-      type?: 'value';
+      type: 'query';
       nodeId: string;
     }
   | {
-      type?: 'group';
+      type: 'group';
       nodeId: string;
       index: number;
     };

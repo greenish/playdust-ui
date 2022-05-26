@@ -86,7 +86,7 @@ function QueryNode({ node, inActiveGroup = false }: QueryNodeProps) {
         node={node}
         disabled={false}
         onClick={(evt) => {
-          setActiveNode({ nodeId: node.id });
+          setActiveNode({ nodeId: node.id, type: 'query' });
 
           evt.stopPropagation();
         }}
@@ -282,7 +282,11 @@ function WindowInputNew() {
   useWindowInputKeyEvent();
 
   useEffect(() => {
-    setActiveNode({ nodeId: rootNode.id });
+    setActiveNode({
+      type: 'group',
+      nodeId: rootNode.id,
+      index: rootNode.children.length,
+    });
     inputRef?.current?.focus();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
