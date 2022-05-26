@@ -3,24 +3,26 @@ import { Box, useTheme } from '@mui/material';
 import React, { useCallback, useEffect, useRef } from 'react';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { is } from 'superstruct';
+import QueryNodeType from '../../../_types/QueryNodeType';
 import QueryNodeChip from './QueryNodeChip';
-import searchQueryActiveNodeIdAtom from './_atoms/searchQueryActiveNodeIdAtom';
+import searchQueryActiveNodeAtom from './_atoms/searchQueryActiveNodeAtom';
 import searchQueryAtom from './_atoms/searchQueryAtom';
+import searchQueryNodeAtom from './_atoms/searchQueryNodeAtom';
+import searchQueryRootNodeAtom from './_atoms/searchQueryRootNodeAtom';
 import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
 import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
 import GroupNodeType from './_types/GroupNodeType';
 
-const rootHeight = 40;
+const activeColor = 'red';
 
 const RootContainer = styled(Box)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%;
-  padding: 0 8px;
-  height: ${rootHeight + 16}px;
+  padding: 12px 16px;
+  margin: 8px 24px;
   font-size: 80%;
   background: none;
 `;
@@ -28,7 +30,6 @@ const RootContainer = styled(Box)`
 const GroupNodeContainer = styled(Box)`
   display: flex;
   align-items: center;
-  padding: 0 8px;
 `;
 
 const GroupNodeChildrenContainer = styled.div`
@@ -39,106 +40,227 @@ const GroupNodeChildrenContainer = styled.div`
 
 const GroupNodeJoinContainer = styled.div`
   display: flex;
-  height: ${rootHeight}px;
   align-items: center;
-  padding: 0 4px;
+  padding: 0 8px;
 `;
 
 const QueryNodeChipContainer = styled.div`
   display: flex;
-  height: ${rootHeight}px;
   align-items: center;
 `;
 
-type FlattenedElementsProps = {
-  id: string;
+const ActiveOperator = styled.b`
+  color: ${activeColor};
+  margin: '-2px';
+`;
+
+type GroupNodeProps = {
+  node: GroupNodeType;
+  textInput: JSX.Element;
   depth?: number;
+  inActiveGroup?: boolean;
+};
+
+type QueryNodeProps = {
+  node: QueryNodeType;
+  inActiveGroup?: boolean;
+};
+
+const activeGroupStyles = {
+  background: 'rgb(255,0,0, 0.08)',
+  padding: '4px',
+  margin: '-4px',
+};
+
+function QueryNode({ node, inActiveGroup = false }: QueryNodeProps) {
+  const [activeNode, setActiveNode] = useRecoilState(searchQueryActiveNodeAtom);
+
+  return (
+    <QueryNodeChipContainer
+      style={{
+        ...(inActiveGroup ? activeGroupStyles : {}),
+      }}
+    >
+      <QueryNodeChip
+        isActive={node.id === activeNode?.nodeId}
+        node={node}
+        disabled={false}
+        onClick={(evt) => {
+          setActiveNode({ nodeId: node.id });
+
+          evt.stopPropagation();
+        }}
+      />
+    </QueryNodeChipContainer>
+  );
+}
+type GroupOperator = {
+  groupPosition: number;
+  groupNode: GroupNodeType;
   textInput: JSX.Element;
 };
 
-function FlattenedElements({
-  id,
-  depth = 0,
-  textInput,
-}: FlattenedElementsProps) {
-  const { nodes } = useRecoilValue(searchQueryAtom);
-  const [activeNodeId, setActiveNodeId] = useRecoilState(
-    searchQueryActiveNodeIdAtom
-  );
-  const node = nodes[id];
-  const theme = useTheme();
+function GroupOperator({ groupNode, groupPosition, textInput }: GroupOperator) {
+  const [activeNode, setActiveNode] = useRecoilState(searchQueryActiveNodeAtom);
+  const setGroupNode = useSetRecoilState(searchQueryNodeAtom(groupNode.id));
+  const isActiveGroup =
+    activeNode?.type === 'group' && activeNode?.nodeId === groupNode.id;
+  const isFirst = groupPosition === 0;
+  const isLast = groupPosition === groupNode.children.length;
 
-  if (!is(node, GroupNodeType)) {
+  const operator = groupNode.operator === 'and' ? 'AND' : 'OR';
+
+  if (isActiveGroup && groupPosition === activeNode.index) {
     return (
-      <QueryNodeChipContainer>
-        <QueryNodeChip
-          isActive={id === activeNodeId}
-          node={node}
-          disabled={false}
+      <>
+        <GroupNodeJoinContainer
           onClick={(evt) => {
-            setActiveNodeId(id);
-
+            setGroupNode({
+              ...groupNode,
+              operator: groupNode.operator === 'and' ? 'or' : 'and',
+            });
             evt.stopPropagation();
           }}
-        />
-      </QueryNodeChipContainer>
+        >
+          <ActiveOperator
+            style={{ color: 'grey' }}
+          >{`${operator}:`}</ActiveOperator>
+        </GroupNodeJoinContainer>
+        {textInput}
+        {!isLast && (
+          <GroupNodeJoinContainer
+            onClick={(evt) => {
+              setActiveNode({
+                type: 'group',
+                nodeId: groupNode.id,
+                index: groupPosition,
+              });
+              evt.stopPropagation();
+            }}
+          >
+            {isActiveGroup ? (
+              <ActiveOperator>{operator}</ActiveOperator>
+            ) : (
+              operator
+            )}
+          </GroupNodeJoinContainer>
+        )}
+      </>
     );
   }
 
-  const isActiveGroup = activeNodeId === id;
-  const background = theme.palette.grey[500];
-  const height = rootHeight - depth * 4;
-  const outlineColor = isActiveGroup ? theme.palette.primary.main : background;
+  if (isFirst || isLast) {
+    return null;
+  }
+
+  return (
+    <GroupNodeJoinContainer
+      onClick={(evt) => {
+        setActiveNode({
+          type: 'group',
+          nodeId: groupNode.id,
+          index: groupPosition,
+        });
+        evt.stopPropagation();
+      }}
+    >
+      {isActiveGroup ? <ActiveOperator>{operator}</ActiveOperator> : operator}
+    </GroupNodeJoinContainer>
+  );
+}
+
+function GroupNode({
+  node,
+  depth = 0,
+  textInput,
+  inActiveGroup = false,
+}: GroupNodeProps) {
+  const { rootId, nodes } = useRecoilValue(searchQueryAtom);
+  const [activeNode, setActiveNode] = useRecoilState(searchQueryActiveNodeAtom);
+
+  const isRoot = node.id === rootId;
+  const isActiveGroup = activeNode?.nodeId === node.id;
 
   return (
     <GroupNodeContainer
       sx={{
-        background,
-        outline: `solid 1px ${outlineColor}`,
-        filter: 'brightness(115%)',
-        height,
-        borderRadius: `${height / 2}px`,
-      }}
-      onClick={(evt) => {
-        setActiveNodeId(id);
-        evt.stopPropagation();
+        ...(inActiveGroup ? activeGroupStyles : {}),
       }}
     >
+      {!isRoot && (
+        <GroupNodeJoinContainer
+          onClick={(evt) => {
+            setActiveNode({
+              type: 'group',
+              nodeId: node.id,
+              index: 0,
+            });
+            evt.stopPropagation();
+          }}
+          style={{
+            paddingLeft: '0px',
+          }}
+        >
+          {isActiveGroup ? <ActiveOperator>(</ActiveOperator> : '('}
+        </GroupNodeJoinContainer>
+      )}
       {node.children.map((childId, idx) => {
+        const childNode = nodes[childId];
         const isLast = idx === node.children.length - 1;
 
         return (
           <GroupNodeChildrenContainer key={childId}>
-            <FlattenedElements
-              id={childId}
-              depth={depth + 1}
+            <GroupOperator
+              groupNode={node}
+              groupPosition={idx}
               textInput={textInput}
             />
-            {!isLast && (
-              <GroupNodeJoinContainer>{node.operator}</GroupNodeJoinContainer>
+            {!is(childNode, GroupNodeType) ? (
+              <QueryNode node={childNode} inActiveGroup={isActiveGroup} />
+            ) : (
+              <GroupNode
+                node={childNode}
+                depth={depth + 1}
+                textInput={textInput}
+                inActiveGroup={isActiveGroup}
+              />
             )}
-            {isActiveGroup && isLast && (
-              <>
-                {activeNodeId && (
-                  <GroupNodeJoinContainer>
-                    {node.operator}
-                  </GroupNodeJoinContainer>
-                )}
-                {textInput}
-              </>
+            {isLast && (
+              <GroupOperator
+                groupNode={node}
+                groupPosition={idx + 1}
+                textInput={textInput}
+              />
             )}
           </GroupNodeChildrenContainer>
         );
       })}
+      {!isRoot && (
+        <GroupNodeJoinContainer
+          onClick={(evt) => {
+            setActiveNode({
+              type: 'group',
+              nodeId: node.id,
+              index: node.children.length,
+            });
+            evt.stopPropagation();
+          }}
+          style={{
+            paddingRight: '0px',
+          }}
+        >
+          {isActiveGroup ? <ActiveOperator>)</ActiveOperator> : ')'}
+        </GroupNodeJoinContainer>
+      )}
     </GroupNodeContainer>
   );
 }
 
 function WindowInputNew() {
-  const [activeNodeId, setActiveNodeId] = useRecoilState(
-    searchQueryActiveNodeIdAtom
+  const [activeNodeId, setActiveNode] = useRecoilState(
+    searchQueryActiveNodeAtom
   );
-  const { rootId } = useRecoilValue(searchQueryAtom);
+  const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const [term, setTerm] = useRecoilState(searchQueryTermAtom);
   const theme = useTheme();
   const isActive = !!activeNodeId;
@@ -154,13 +276,13 @@ function WindowInputNew() {
   }, []);
 
   useClickAway(containerRef, () => {
-    setActiveNodeId(null);
+    setActiveNode(null);
   });
 
   useWindowInputKeyEvent();
 
   useEffect(() => {
-    setActiveNodeId(rootId);
+    setActiveNode({ nodeId: rootNode.id });
     inputRef?.current?.focus();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -176,11 +298,16 @@ function WindowInputNew() {
       }}
       ref={containerRef}
       onClick={() => {
-        setActiveNodeId(rootId);
+        setActiveNode({
+          type: 'group',
+          nodeId: rootNode.id,
+          index: rootNode.children.length,
+        });
+        inputRef?.current?.focus();
       }}
     >
-      <FlattenedElements
-        id={rootId}
+      <GroupNode
+        node={rootNode}
         textInput={
           <AutosizeInput
             inputStyle={{
@@ -193,6 +320,7 @@ function WindowInputNew() {
             value={term}
             onChange={(evt) => setTerm(evt.target.value)}
             autoFocus={true}
+            onClick={(e) => e.stopPropagation()}
           />
         }
       />
