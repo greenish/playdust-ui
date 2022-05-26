@@ -3,8 +3,8 @@ import { assert } from 'superstruct';
 import GroupNodeType from '../_types/GroupNodeType';
 import searchQueryAtom from './searchQueryAtom';
 
-const searchQueryNodeAtom = selector<GroupNodeType>({
-  key: 'searchQueryNodeAtom',
+const searchQueryRootNodeAtom = selector<GroupNodeType>({
+  key: 'searchQueryRootNodeAtom',
   get: ({ get }) => {
     const { rootId, nodes } = get(searchQueryAtom);
     const rootNode = nodes[rootId];
@@ -12,4 +12,4 @@ const searchQueryNodeAtom = selector<GroupNodeType>({
     return rootNode;
   },
 });
-export default searchQueryNodeAtom;
+export default searchQueryRootNodeAtom;
