@@ -1,3 +1,5 @@
+import logger from './logger';
+
 function safePromise<T>(
   promise: Promise<T>,
   passthrough: true
@@ -6,12 +8,7 @@ function safePromise<T>(promise: Promise<T>, passthrough: false): void;
 function safePromise<T>(promise: Promise<T>): void;
 function safePromise<T>(promise: Promise<T>, passthrough?: boolean) {
   const caught = promise.catch((e: Error) => {
-    ineum('reportError', e, {
-      meta: {
-        reason: 'SafePromise Caught Error',
-      },
-    });
-    console.error('SafePromise Caught', e);
+    logger('SafePromise Caught', e);
   });
   if (passthrough) {
     return caught;
