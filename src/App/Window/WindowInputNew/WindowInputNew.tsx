@@ -10,6 +10,7 @@ import QueryNodeChip from './QueryNodeChip';
 import searchQueryActiveNodeAtom from './_atoms/searchQueryActiveNodeAtom';
 import searchQueryAtom from './_atoms/searchQueryAtom';
 import searchQueryNodeAtom from './_atoms/searchQueryNodeAtom';
+import searchQueryRootNodeAtom from './_atoms/searchQueryRootNodeAtom';
 import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
 import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
 import GroupNodeType from './_types/GroupNodeType';
@@ -116,7 +117,7 @@ function GroupOperator({ groupNode, groupPosition, textInput }: GroupOperator) {
           onClick={(evt) => {
             setGroupNode({
               ...groupNode,
-              operator: groupNode.operator === 'and' ? 'or' : 'and'
+              operator: groupNode.operator === 'and' ? 'or' : 'and',
             });
             evt.stopPropagation();
           }}
@@ -126,13 +127,24 @@ function GroupOperator({ groupNode, groupPosition, textInput }: GroupOperator) {
           >{`${operator}:`}</ActiveOperator>
         </GroupNodeJoinContainer>
         {textInput}
-        {!isLast && <GroupNodeJoinContainer
-          onClick={(evt) => {
-            evt.stopPropagation();
-          }}
-        >
-          {isActiveGroup ? <ActiveOperator>{operator}</ActiveOperator> : operator}
-        </GroupNodeJoinContainer>}
+        {!isLast && (
+          <GroupNodeJoinContainer
+            onClick={(evt) => {
+              setActiveNode({
+                type: 'group',
+                nodeId: groupNode.id,
+                index: groupPosition,
+              });
+              evt.stopPropagation();
+            }}
+          >
+            {isActiveGroup ? (
+              <ActiveOperator>{operator}</ActiveOperator>
+            ) : (
+              operator
+            )}
+          </GroupNodeJoinContainer>
+        )}
       </>
     );
   }
@@ -141,18 +153,20 @@ function GroupOperator({ groupNode, groupPosition, textInput }: GroupOperator) {
     return null;
   }
 
-  return <GroupNodeJoinContainer
-    onClick={(evt) => {
-      setActiveNode({
-        type: "group",
-        nodeId: groupNode.id,
-        index: groupPosition
-      })
-      evt.stopPropagation();
-    }}
-  >
-    {isActiveGroup ? <ActiveOperator>{operator}</ActiveOperator> : operator}
-  </GroupNodeJoinContainer>;
+  return (
+    <GroupNodeJoinContainer
+      onClick={(evt) => {
+        setActiveNode({
+          type: 'group',
+          nodeId: groupNode.id,
+          index: groupPosition,
+        });
+        evt.stopPropagation();
+      }}
+    >
+      {isActiveGroup ? <ActiveOperator>{operator}</ActiveOperator> : operator}
+    </GroupNodeJoinContainer>
+  );
 }
 
 function GroupNode({
@@ -161,10 +175,10 @@ function GroupNode({
   textInput,
   inActiveGroup = false,
 }: GroupNodeProps) {
-  const { rootNode, nodes } = useRecoilValue(searchQueryAtom);
+  const { rootId, nodes } = useRecoilValue(searchQueryAtom);
   const [activeNode, setActiveNode] = useRecoilState(searchQueryActiveNodeAtom);
 
-  const isRoot = node.id === rootNode.id;
+  const isRoot = node.id === rootId;
   const isActiveGroup = activeNode?.nodeId === node.id;
 
   return (
@@ -246,7 +260,7 @@ function WindowInputNew() {
   const [activeNodeId, setActiveNode] = useRecoilState(
     searchQueryActiveNodeAtom
   );
-  const { rootNode } = useRecoilValue(searchQueryAtom);
+  const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const [term, setTerm] = useRecoilState(searchQueryTermAtom);
   const theme = useTheme();
   const isActive = !!activeNodeId;
@@ -289,6 +303,7 @@ function WindowInputNew() {
           nodeId: rootNode.id,
           index: rootNode.children.length,
         });
+        inputRef?.current?.focus();
       }}
     >
       <GroupNode
