@@ -3,12 +3,13 @@ import { Box, useTheme } from '@mui/material';
 import React, { useCallback, useEffect, useRef } from 'react';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { is } from 'superstruct';
 import QueryNodeType from '../../../_types/QueryNodeType';
 import QueryNodeChip from './QueryNodeChip';
 import searchQueryActiveNodeAtom from './_atoms/searchQueryActiveNodeAtom';
 import searchQueryAtom from './_atoms/searchQueryAtom';
+import searchQueryNodeAtom from './_atoms/searchQueryNodeAtom';
 import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
 import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
 import GroupNodeType from './_types/GroupNodeType';
@@ -100,36 +101,22 @@ type GroupOperator = {
 
 function GroupOperator({ groupNode, groupPosition, textInput }: GroupOperator) {
   const [activeNode, setActiveNode] = useRecoilState(searchQueryActiveNodeAtom);
+  const setGroupNode = useSetRecoilState(searchQueryNodeAtom(groupNode.id));
   const isActiveGroup =
     activeNode?.type === 'group' && activeNode?.nodeId === groupNode.id;
   const isFirst = groupPosition === 0;
   const isLast = groupPosition === groupNode.children.length;
 
   const operator = groupNode.operator === 'and' ? 'AND' : 'OR';
-  const Operator = (
-    <GroupNodeJoinContainer
-      onClick={(evt) => {
-        setActiveNode({
-          type: 'group',
-          nodeId: groupNode.id,
-          index: groupPosition,
-        });
-        evt.stopPropagation();
-      }}
-    >
-      {isActiveGroup ? <ActiveOperator>{operator}</ActiveOperator> : operator}
-    </GroupNodeJoinContainer>
-  );
 
   if (isActiveGroup && groupPosition === activeNode.index) {
     return (
       <>
         <GroupNodeJoinContainer
           onClick={(evt) => {
-            setActiveNode({
-              type: 'group',
-              nodeId: groupNode.id,
-              index: groupPosition,
+            setGroupNode({
+              ...groupNode,
+              operator: groupNode.operator === 'and' ? 'or' : 'and'
             });
             evt.stopPropagation();
           }}
@@ -139,7 +126,13 @@ function GroupOperator({ groupNode, groupPosition, textInput }: GroupOperator) {
           >{`${operator}:`}</ActiveOperator>
         </GroupNodeJoinContainer>
         {textInput}
-        {!isLast && Operator}
+        {!isLast && <GroupNodeJoinContainer
+          onClick={(evt) => {
+            evt.stopPropagation();
+          }}
+        >
+          {isActiveGroup ? <ActiveOperator>{operator}</ActiveOperator> : operator}
+        </GroupNodeJoinContainer>}
       </>
     );
   }
@@ -148,7 +141,18 @@ function GroupOperator({ groupNode, groupPosition, textInput }: GroupOperator) {
     return null;
   }
 
-  return Operator;
+  return <GroupNodeJoinContainer
+    onClick={(evt) => {
+      setActiveNode({
+        type: "group",
+        nodeId: groupNode.id,
+        index: groupPosition
+      })
+      evt.stopPropagation();
+    }}
+  >
+    {isActiveGroup ? <ActiveOperator>{operator}</ActiveOperator> : operator}
+  </GroupNodeJoinContainer>;
 }
 
 function GroupNode({
