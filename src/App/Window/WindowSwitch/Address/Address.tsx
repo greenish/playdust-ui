@@ -7,6 +7,8 @@ import SPLTokenAccount from './SPLTokenAccount';
 import SPLTokenMint from './SPLTokenMint/SPLTokenMint';
 import SPLTokenMultisig from './SPLTokenMultisig';
 import StakeConfigAccountCard from './StakeConfigAccountCard';
+import SysvarAccountSlotHashesCard from './SysvarAccountSlotHashesCard';
+import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
 import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import ValidatorInfoConfigAccountCard from './ValidatorInfoConfigAccountCard';
@@ -44,6 +46,16 @@ function Address() {
         />
         <SuspenseBoundary
           content={<AccountOverviewCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SysvarAccountSlotHashesCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SysvarAccountStakeHistoryCard />}
           error={null}
           loading={null}
         />

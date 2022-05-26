@@ -3,14 +3,12 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
 import tokenRegistryAtom from './_atoms/tokenRegistryAtom';
-import ExplorerCard from './_sharedComponents/ExplorerCard';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import TableSkeleton from './_sharedComponents/TableSkeleton/TableSkeleton';
 
 // DNiJ7fmPKDNNMXTAmiWKDTwgHdWW6KUuTZcEyP1Pmh4j
-function SPLTokenAccountRows() {
+function SPLTokenAccount() {
   const parsedTokenAccount = useRecoilValue(parsedTokenAccountAtom);
   const tokenRegistry = useRecoilValue(tokenRegistryAtom);
 
@@ -35,7 +33,7 @@ function SPLTokenAccountRows() {
   }
 
   return (
-    <>
+    <ExplorerGrid>
       <ExplorerGridRow
         label="Mint"
         value={<LabeledAddressLink to={info.mint} allowCopy={true} />}
@@ -56,17 +54,7 @@ function SPLTokenAccountRows() {
           )}
         />
       )}
-    </>
-  );
-}
-
-function SPLTokenAccount() {
-  return (
-    <ExplorerCard loading={<TableSkeleton />} error={null}>
-      <ExplorerGrid>
-        <SPLTokenAccountRows />
-      </ExplorerGrid>
-    </ExplorerCard>
+    </ExplorerGrid>
   );
 }
 

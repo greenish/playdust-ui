@@ -1,14 +1,12 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedConfigAccountAtom from './_atoms/parsedConfigAccountAtom';
-import ExplorerCard from './_sharedComponents/ExplorerCard';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
-import TableSkeleton from './_sharedComponents/TableSkeleton/TableSkeleton';
 
 const MAX_SLASH_PENALTY = 2 ** 8;
 
-function StakeConfigAccountCardRows() {
+function StakeConfigAccountCard() {
   const parsedConfigAccount = useRecoilValue(parsedConfigAccountAtom);
 
   if (!parsedConfigAccount || parsedConfigAccount.type !== 'stakeConfig') {
@@ -28,23 +26,13 @@ function StakeConfigAccountCardRows() {
   }).format(info.slashPenalty / MAX_SLASH_PENALTY);
 
   return (
-    <>
+    <ExplorerGrid>
       <ExplorerGridRow
         label="Warmup / Cooldown Rate"
         value={warmupCooldownFormatted}
       />
       <ExplorerGridRow label="Slash Penalty" value={slashPenaltyFormatted} />
-    </>
-  );
-}
-
-function StakeConfigAccountCard() {
-  return (
-    <ExplorerCard loading={<TableSkeleton />} error={null}>
-      <ExplorerGrid>
-        <StakeConfigAccountCardRows />
-      </ExplorerGrid>
-    </ExplorerCard>
+    </ExplorerGrid>
   );
 }
 

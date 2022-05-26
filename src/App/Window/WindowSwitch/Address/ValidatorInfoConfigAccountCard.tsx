@@ -1,14 +1,12 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedConfigAccountAtom from './_atoms/parsedConfigAccountAtom';
-import ExplorerCard from './_sharedComponents/ExplorerCard';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import TableSkeleton from './_sharedComponents/TableSkeleton/TableSkeleton';
 
 // 7qUt9itGTzT7QLNTbmoPwXCKR93pd4i8TqZp1BEj5ah8
-function ValidatorInfoConfigAccountCardRows() {
+function ValidatorInfoConfigAccountCard() {
   const parsedConfigAccount = useRecoilValue(parsedConfigAccountAtom);
 
   if (!parsedConfigAccount || parsedConfigAccount.type !== 'validatorInfo') {
@@ -18,7 +16,7 @@ function ValidatorInfoConfigAccountCardRows() {
   const { info } = parsedConfigAccount;
 
   return (
-    <>
+    <ExplorerGrid>
       {info.configData.name && (
         <ExplorerGridRow label="Name" value={info.configData.name} />
       )}
@@ -40,17 +38,7 @@ function ValidatorInfoConfigAccountCardRows() {
           value={<LabeledAddressLink to={pubkey} allowCopy={true} />}
         />
       ))}
-    </>
-  );
-}
-
-function ValidatorInfoConfigAccountCard() {
-  return (
-    <ExplorerCard loading={<TableSkeleton />} error={null}>
-      <ExplorerGrid>
-        <ValidatorInfoConfigAccountCardRows />
-      </ExplorerGrid>
-    </ExplorerCard>
+    </ExplorerGrid>
   );
 }
 
