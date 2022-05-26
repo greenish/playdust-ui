@@ -4,13 +4,12 @@ import type SearchQueryType from '../_types/SearchQueryType';
 const searchQueryAtom = atom<SearchQueryType>({
   key: 'searchQueryAtom',
   default: {
-    rootId: 'group-root',
+    rootNode: {
+      id: 'root',
+      operator: 'or',
+      children: ['dape-and', 'degod-and'],
+    },
     nodes: {
-      'group-root': {
-        id: 'group-root',
-        operator: 'or',
-        children: ['dape-and', 'degod-and'],
-      },
       'dape-and': {
         id: 'dape-and',
         operator: 'and',

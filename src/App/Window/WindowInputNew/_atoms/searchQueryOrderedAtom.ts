@@ -5,9 +5,12 @@ import type SearchQueryNodeType from '../_types/SearchQueryNodeType';
 import type SearchQueryType from '../_types/SearchQueryType';
 import searchQueryNewAtom from './searchQueryAtom';
 
-const makeFlattenNodes = (nodes: SearchQueryType['nodes']) =>
-  function flattenNode(id: string): SearchQueryNodeType[] {
-    const node = nodes[id];
+const makeFlattenNodes = (
+  nodes: SearchQueryType['nodes'],
+  rootNode: GroupNodeType
+) =>
+  function flattenNode(id?: string): SearchQueryNodeType[] {
+    const node = id ? nodes[id] : rootNode;
 
     if (!is(node, GroupNodeType)) {
       return [node];
@@ -24,9 +27,9 @@ const makeFlattenNodes = (nodes: SearchQueryType['nodes']) =>
 const searchQueryOrderedAtom = selector({
   key: 'searchQueryOrderedAtom',
   get: ({ get }) => {
-    const { rootId, nodes } = get(searchQueryNewAtom);
+    const { rootNode, nodes } = get(searchQueryNewAtom);
 
-    return makeFlattenNodes(nodes)(rootId);
+    return makeFlattenNodes(nodes, rootNode)();
   },
 });
 

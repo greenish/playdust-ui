@@ -1,7 +1,8 @@
+import GroupNodeType from './GroupNodeType';
 import SearchQueryNodeType from './SearchQueryNodeType';
 
 type SearchQueryType = {
-  rootId: string;
+  rootNode: GroupNodeType;
   nodes: {
     [nodeId: string]: SearchQueryNodeType;
   };
