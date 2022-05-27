@@ -2,6 +2,7 @@ import { Container, Stack } from '@mui/material';
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
+import NonceAccountCard from './NonceAccountCard/NonceAccountCard';
 import RawAccountData from './RawAccountData';
 import SPLTokenAccount from './SPLTokenAccount';
 import SPLTokenMint from './SPLTokenMint/SPLTokenMint';
@@ -41,6 +42,11 @@ function Address() {
         />
         <SuspenseBoundary
           content={<StakeConfigAccountCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<NonceAccountCard />}
           error={null}
           loading={null}
         />
