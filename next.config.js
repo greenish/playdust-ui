@@ -7,6 +7,14 @@ const { PLAYDUST_API_HOST } = process.env
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env.VERCEL_ENV': JSON.stringify(process.env.VERCEL_ENV),
+      })
+    );
+    return config;
+  },
   rewrites: async () => [
     {
       source: '/cdn/:path*',
