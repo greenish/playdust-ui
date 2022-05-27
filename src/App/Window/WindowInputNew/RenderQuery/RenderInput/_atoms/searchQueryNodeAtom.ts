@@ -1,7 +1,7 @@
 import { DefaultValue, selectorFamily } from 'recoil';
-import SearchQueryNodeType from '../_types/SearchQueryNodeType';
-import SearchQueryType from '../_types/SearchQueryType';
-import searchQueryAtom from './searchQueryAtom';
+import searchQueryAtom from '../../../_atoms/searchQueryAtom';
+import SearchQueryNodeType from '../../../_types/SearchQueryNodeType';
+import SearchQueryType from '../../../_types/SearchQueryType';
 
 const searchQueryNodeAtom = selectorFamily<SearchQueryNodeType | null, string>({
   key: 'searchQueryNodeAtom',

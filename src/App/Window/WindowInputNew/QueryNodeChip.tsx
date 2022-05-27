@@ -1,8 +1,15 @@
+import styled from '@emotion/styled';
 import { Chip } from '@mui/material';
 import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
-import type QueryNodeType from '../../../_types/QueryNodeType';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
+import QueryNodeType from '../../../_types/QueryNodeType';
 import collectionByIdAtom from '../_atoms/collectionByIdAtom';
+import searchQueryActiveNodeAtom from './_atoms/searchQueryActiveNodeAtom';
+
+const QueryNodeChipContainer = styled.div`
+  display: flex;
+  align-items: start;
+`;
 
 function CollectionChip({ value }: QueryNodeType) {
   const collectionById = useRecoilValueLoadable(collectionByIdAtom(value));
@@ -57,7 +64,7 @@ interface SearchChipsProps {
   className?: string;
 }
 
-function QueryNodeChip({
+function RenderQueryNodeChip({
   className,
   disabled,
   isActive,
@@ -77,6 +84,29 @@ function QueryNodeChip({
         margin: '-1px',
       }}
     />
+  );
+}
+
+type QueryNodeProps = {
+  node: QueryNodeType;
+  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+};
+
+function QueryNodeChip({ node, onClick }: QueryNodeProps) {
+  const [activeNode, setActiveNode] = useRecoilState(searchQueryActiveNodeAtom);
+
+  return (
+    <QueryNodeChipContainer onClick={onClick}>
+      <RenderQueryNodeChip
+        isActive={node.id === activeNode?.nodeId}
+        node={node}
+        disabled={false}
+        onClick={(evt) => {
+          setActiveNode({ nodeId: node.id, type: 'query' });
+          evt.stopPropagation();
+        }}
+      />
+    </QueryNodeChipContainer>
   );
 }
 

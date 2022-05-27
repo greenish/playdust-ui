@@ -1,15 +1,5 @@
 import { atom } from 'recoil';
-
-type SearchQueryActiveNodeType =
-  | {
-      type: 'query';
-      nodeId: string;
-    }
-  | {
-      type: 'group';
-      nodeId: string;
-      index: number;
-    };
+import SearchQueryActiveNodeType from '../_types/SearchQueryActiveNodeType';
 
 const searchQueryActiveNodeAtom = atom<SearchQueryActiveNodeType | null>({
   key: 'searchQueryActiveNodeAtom',
