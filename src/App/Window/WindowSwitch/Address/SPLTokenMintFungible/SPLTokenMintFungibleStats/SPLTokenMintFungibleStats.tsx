@@ -1,7 +1,6 @@
 import { Box, Chip, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import nftDetailsAtom from '../../SPLTokenMintNonFungible/_atoms/nftDetailsAtom';
 import SPLTokenMintFungibleStatsCard from './SPLTokenMintFungibleStatsCard';
 import coinGeckoAtom from './_atoms/coinGeckoAtom';
 
@@ -17,12 +16,7 @@ function abbreviatedNumber(value: number | undefined, fixed = 1) {
 }
 
 function SPLTokenMintFungibleStats() {
-  const nftDetails = useRecoilValue(nftDetailsAtom);
   const coinGecko = useRecoilValue(coinGeckoAtom);
-
-  if (nftDetails.data.offChainData) {
-    return null;
-  }
 
   if (!coinGecko) {
     return null;

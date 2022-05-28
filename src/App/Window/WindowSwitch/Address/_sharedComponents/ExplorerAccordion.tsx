@@ -8,15 +8,18 @@ import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/Sus
 import SkeletonRows from '../../_sharedComponents/SkeletonRows';
 
 type ExplorerAccordionPropTypes = {
-  id: string;
+  id?: string;
   title: JSX.Element | string;
   content: JSX.Element;
   expanded?: boolean;
   onChange?: AccordionProps['onChange'];
 };
 
+const slug = (input: string): string => input.replace(" ", "_").replace(/[^A-Za-z0-9\s]/g, '');
+const randomSlug = ()=>(Math.random() + 1).toString(36).substring(7);
+
 function ExplorerAccordion({
-  id,
+  id: customId,
   title,
   content,
   expanded = false,
@@ -26,7 +29,7 @@ function ExplorerAccordion({
     expanded,
     wasExpanded: expanded,
   });
-
+  const id = customId ?? typeof title === "string" ? slug(title) : randomSlug();
   const currentlyExpanded = onChange ? expanded : accordionState.expanded;
 
   return (

@@ -1,16 +1,14 @@
 import React from 'react';
 import styled from '@emotion/styled'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
+    Box,
     Grid,
     Paper,
     Typography,
 } from '@mui/material'
 import nftDetailsAtom from './_atoms/nftDetailsAtom';
 import { useRecoilValue } from 'recoil';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 
 const Item = styled(Paper)`
 	background-color: #f6f6f6;
@@ -26,7 +24,7 @@ type AttributeBoxProps = AttributePair
 
 // color: #747474;
 
-const AttributeBox = ({ trait_type, value }: AttributeBoxProps) => {
+function AttributeBox({ trait_type, value }: AttributeBoxProps) {
     return (
         <Grid item={true} xs={4}>
             <Item>
@@ -50,13 +48,20 @@ function Attributes() {
     const details = nftDetails.data;
 
     return (
-        <Grid container={true} spacing={2}>
-            {(details?.offChainData?.attributes || []).map(
-                (attribute: AttributePair, index: number) => (
-                    <AttributeBox key={index} {...attribute} />
-                )
-            )}
-        </Grid>
+        <ExplorerAccordion
+            title="Attributes"
+            expanded={true}
+            content={<Box>
+                <Grid container={true} spacing={2}>
+                    {(details?.offChainData?.attributes || []).map(
+                        (attribute: AttributePair, index: number) => (
+                            <AttributeBox key={index} {...attribute} />
+                        )
+                    )}
+                </Grid>
+            </Box>}
+        />
+
     );
 }
 

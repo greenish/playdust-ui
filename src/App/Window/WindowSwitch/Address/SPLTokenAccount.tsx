@@ -3,6 +3,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
 import tokenRegistryAtom from './_atoms/tokenRegistryAtom';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
@@ -33,28 +34,35 @@ function SPLTokenAccount() {
   }
 
   return (
-    <ExplorerGrid>
-      <ExplorerGridRow
-        label="Mint"
-        value={<LabeledAddressLink to={info.mint} allowCopy={true} />}
-      />
-      <ExplorerGridRow
-        label="Owner"
-        value={<LabeledAddressLink to={info.owner} allowCopy={true} />}
-      />
-      <ExplorerGridRow label={`Token balance (${unit})`} value={balance} />
-      {info.state === 'uninitialized' && (
-        <ExplorerGridRow label="Status" value="Uninitialized" />
-      )}
-      {info.rentExemptReserve && (
-        <ExplorerGridRow
-          label="Rent-exempt reserve (SOL)"
-          value={new BigNumber(info.rentExemptReserve.uiAmountString).toFormat(
-            9
+    <ExplorerAccordion
+      id="splTokenAccountInfo"
+      title="SPL Token Account"
+      expanded={true}
+      content={
+        <ExplorerGrid>
+          <ExplorerGridRow
+            label="Mint"
+            value={<LabeledAddressLink to={info.mint} allowCopy={true} />}
+          />
+          <ExplorerGridRow
+            label="Owner"
+            value={<LabeledAddressLink to={info.owner} allowCopy={true} />}
+          />
+          <ExplorerGridRow label={`Token balance (${unit})`} value={balance} />
+          {info.state === 'uninitialized' && (
+            <ExplorerGridRow label="Status" value="Uninitialized" />
           )}
-        />
-      )}
-    </ExplorerGrid>
+          {info.rentExemptReserve && (
+            <ExplorerGridRow
+              label="Rent-exempt reserve (SOL)"
+              value={new BigNumber(info.rentExemptReserve.uiAmountString).toFormat(
+                9
+              )}
+            />
+          )}
+        </ExplorerGrid>
+      }
+    />
   );
 }
 

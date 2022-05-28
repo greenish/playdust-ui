@@ -1,15 +1,15 @@
 import { Connection } from '@solana/web3.js'
 import { programs } from '@metaplex/js'
 import { selector } from 'recoil'
-import SearchMetadata from '../../../../../../../../solana/SearchMetadataType';
-import fetchOnchain from '../../../../../../../../solana/fetchOnchain';
-import solanaClusterAtom from '../../../../../../_atoms/solanaClusterAtom';
+import SearchMetadata from '../../../../../../../solana/SearchMetadataType';
+import fetchOnchain from '../../../../../../../solana/fetchOnchain';
+import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
 import { getNFTCensorStatus } from '../_helpers/playdustApi';
-import addressStateAtom from '../../../_atoms/addressStateAtom';
-import frontendApi from '../../../../../_helpers/frontendApi';
+import addressStateAtom from '../../_atoms/addressStateAtom';
+import frontendApi from '../../../../_helpers/frontendApi';
 import StatusEnumType from '../_types/StatusEnumType'
 
-const Metadata = programs.metadata.Metadata
+const {Metadata} = programs.metadata
 
 const nftDetailsAtom = selector<
   any // SearchMetadata | undefined

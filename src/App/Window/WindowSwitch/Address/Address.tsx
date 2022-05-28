@@ -1,13 +1,15 @@
-import { Container, Stack } from '@mui/material';
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
 import ConfigAccountStakeConfigCard from './ConfigAccountStakeConfigCard';
 import ConfigAccountValidatorInfoCard from './ConfigAccountValidatorInfoCard';
+import ContentContainer from './ContentContainer';
 import NonceAccountCard from './NonceAccountCard/NonceAccountCard';
 import RawAccountData from './RawAccountData';
 import SPLTokenAccount from './SPLTokenAccount';
 import SPLTokenMint from './SPLTokenMint/SPLTokenMint';
+import SPLTokenMintFungible from './SPLTokenMintFungible/SPLTokenMintFungible';
+import SPLTokenMintNonFungible from './SPLTokenMintNonFungible/SPLTokenMintNonFungible';
 import SPLTokenMultisig from './SPLTokenMultisig';
 import StakeAccount from './StakeAccount/StakeAccount';
 import SysvarAccountSlotHashesCard from './SysvarAccountSlotHashesCard';
@@ -19,30 +21,52 @@ import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 
 function Address() {
   return (
-    <Container maxWidth="lg">
-      <Stack spacing={2}>
+    <>
+
+      {/* Special Account Views */}
+
+      <SuspenseBoundary
+        content={<SPLTokenMintNonFungible />}
+        error={null}
+        loading={null}
+      />
+
+      <SuspenseBoundary
+        content={<SPLTokenMintFungible />}
+        error={null}
+        loading={null}
+      />
+
+      {/* User Wallet Accounts */}
+      <ContentContainer  sx={{ backgroundColor: 'ghostwhite' }}>
+        <SuspenseBoundary
+          content={<WalletGallery />}
+          error={null}
+          loading={null}
+        />
+
+        <SuspenseBoundary
+          content={<TokenAccounts />}
+          error={null}
+          loading={null}
+        />
+      </ContentContainer>
+      <ContentContainer sx={{ backgroundColor: 'lightgrey', padding: "16px 0px" }}>
+        {/* All Accounts */}
+        <SuspenseBoundary
+          content={<AccountOverviewCard />}
+          error={null}
+          loading={null}
+        />
+
+        {/* Token Accounts */}
         <SuspenseBoundary
           content={<SPLTokenAccount />}
           error={null}
           loading={null}
         />
-        <SuspenseBoundary
+          <SuspenseBoundary
           content={<SPLTokenMint />}
-          error={null}
-          loading={null}
-        />
-        <SuspenseBoundary
-          content={<SPLTokenMultisig />}
-          error={null}
-          loading={null}
-        />
-        <SuspenseBoundary
-          content={<ConfigAccountValidatorInfoCard />}
-          error={null}
-          loading={null}
-        />
-        <SuspenseBoundary
-          content={<ConfigAccountStakeConfigCard />}
           error={null}
           loading={null}
         />
@@ -52,12 +76,25 @@ function Address() {
           loading={null}
         />
         <SuspenseBoundary
-          content={<NonceAccountCard />}
+          content={<SPLTokenMultisig />}
+          error={null}
+          loading={null}
+        />
+
+
+        {/* Config & Sys Accounts */}
+        <SuspenseBoundary
+          content={<ConfigAccountValidatorInfoCard />}         
+          error={null}
+          loading={null}          
+        />
+        <SuspenseBoundary
+          content={<ConfigAccountStakeConfigCard />}
           error={null}
           loading={null}
         />
         <SuspenseBoundary
-          content={<AccountOverviewCard />}
+          content={<NonceAccountCard />}
           error={null}
           loading={null}
         />
@@ -71,13 +108,10 @@ function Address() {
           error={null}
           loading={null}
         />
+
+        {/* All Accounts */}
         <SuspenseBoundary
-          content={<WalletGallery />}
-          error={null}
-          loading={null}
-        />
-        <SuspenseBoundary
-          content={<TokenAccounts />}
+          content={<RawAccountData />}
           error={null}
           loading={null}
         />
@@ -86,13 +120,8 @@ function Address() {
           title="Transactions"
           content={<Transactions />}
         />
-        <SuspenseBoundary
-          content={<RawAccountData />}
-          error={null}
-          loading={null}
-        />
-      </Stack>
-    </Container>
+      </ContentContainer>
+    </>
   );
 }
 

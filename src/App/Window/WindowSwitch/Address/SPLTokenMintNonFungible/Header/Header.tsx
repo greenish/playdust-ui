@@ -3,8 +3,7 @@ import { Box, Grid, Typography } from '@mui/material'
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import Image from './Image';
-import Tools from './Tools';
-import nftDetailsAtom from './_atoms/nftDetailsAtom';
+import nftDetailsAtom from '../_atoms/nftDetailsAtom';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import ShareIcon from '@mui/icons-material/Share';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred'

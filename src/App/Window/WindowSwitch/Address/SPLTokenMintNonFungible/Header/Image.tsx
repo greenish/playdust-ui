@@ -4,8 +4,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useRecoilValue } from 'recoil';
-import nftDetailsAtom from './_atoms/nftDetailsAtom';
-import StatusEnumType from './_types/StatusEnumType';
+import nftDetailsAtom from '../_atoms/nftDetailsAtom';
+import StatusEnumType from '../_types/StatusEnumType';
 
 const BlurImage = styled.img`
   filter: blur(1.5rem);
@@ -22,8 +22,8 @@ const VisibilityContainer = styled.div`
   z-index: 10;
 `
 
-const Image = () => {
-
+function Image() {
+  const [status, setStatus] = useState(StatusEnumType.None)
   const nftDetails = useRecoilValue(nftDetailsAtom);
 
   if (!nftDetails.data.offChainData) {
