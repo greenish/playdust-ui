@@ -2,12 +2,13 @@ import { selector } from 'recoil';
 import { is } from 'superstruct';
 import searchQueryActiveNodeAtom from '../../_atoms/searchQueryActiveNodeAtom';
 import searchQueryNewAtom from '../../_atoms/searchQueryAtom';
+import searchQueryParentIdMapAtom from '../../_atoms/searchQueryParentIdMapAtom';
 import GroupNodeType from '../../_types/GroupNodeType';
 import SearchQueryActiveNodeType from '../../_types/SearchQueryActiveNodeType';
+import SearchQueryParentIdMapType from '../../_types/SearchQueryParentIdMapType';
 import type SearchQueryType from '../../_types/SearchQueryType';
 import GroupRenderNodeType from '../_types/GroupRenderNodeType';
 import GroupRenderOperatorNodeType from '../_types/GroupRenderOperatorNodeType';
-import QueryRenderNodeStateType from '../_types/QueryRenderNodeStateType';
 import QueryRenderNodeType from '../_types/QueryRenderNodeType';
 
 type RenderMap = (
@@ -16,44 +17,56 @@ type RenderMap = (
   | GroupRenderOperatorNodeType
 )[];
 
+type GroupedRenderMap = RenderMap[];
+
 const makeRenderMap = (
   nodes: SearchQueryType['nodes'],
   rootId: string,
-  activeNode: SearchQueryActiveNodeType | null
+  activeNode: SearchQueryActiveNodeType | null,
+  parentIdMap: SearchQueryParentIdMapType
 ): RenderMap => {
   const renderMap: RenderMap = [];
   const activeSearchQueryNode = activeNode?.nodeId
     ? nodes[activeNode?.nodeId] ?? null
     : null;
+  const activeNodeParents: string[] = [];
+
+  if (activeSearchQueryNode) {
+    let currentId: string | null = activeSearchQueryNode.id;
+    while (currentId !== null) {
+      activeNodeParents.push(currentId);
+      currentId = parentIdMap[currentId];
+    }
+  }
 
   function traverse(
-    state: QueryRenderNodeStateType,
     id: string,
-    parent?: GroupNodeType,
-    secondParent?: GroupNodeType
+    activeDistance: number | null,
+    inActiveBranch: boolean,
+    parent?: GroupNodeType
   ): void {
     const node = nodes[id];
 
-    const newState = { ...state };
-    newState.isActive = node.id === activeNode?.nodeId;
-
-    if (is(activeSearchQueryNode, GroupNodeType)) {
-      newState.is2BelowActive =
-        newState.isBelowActive || secondParent?.id === activeSearchQueryNode.id;
-      newState.isBelowActive =
-        newState.isBelowActive || parent?.id === activeSearchQueryNode.id;
+    let newActiveDistance = activeDistance;
+    let newInActiveBranch = false;
+    if (newActiveDistance !== null) {
+      if (activeNodeParents.includes(id)) {
+        newInActiveBranch = true;
+      } else if (newActiveDistance > 0) {
+        newInActiveBranch = inActiveBranch;
+      }
+      if (activeNodeParents.includes(id) || newActiveDistance >= 0) {
+        newActiveDistance += 1;
+      }
     }
 
     if (is(node, GroupNodeType)) {
-      newState.isAboveActive =
-        newState.isAboveActive ||
-        node.children.includes(activeNode?.nodeId ?? '');
-
       renderMap.push({
         type: 'groupStart',
         parent: parent ?? null,
         node,
-        nodeState: newState,
+        inActiveBranch: newInActiveBranch,
+        activeDistance,
       });
       node.children.forEach((childId, index) => {
         renderMap.push({
@@ -61,47 +74,64 @@ const makeRenderMap = (
           parent: parent ?? null,
           node,
           index,
-          nodeState: newState,
+          inActiveBranch: newInActiveBranch,
+          activeDistance,
         });
 
-        traverse(newState, childId, node, parent);
+        traverse(childId, newActiveDistance, newInActiveBranch, node);
       });
       renderMap.push({
         type: 'groupEnd',
         parent: parent ?? null,
         node,
-        nodeState: newState,
+        inActiveBranch: newInActiveBranch,
+        activeDistance,
       });
     } else if (parent) {
       renderMap.push({
         type: 'query',
         parent: parent ?? null,
         node,
-        nodeState: newState,
+        inActiveBranch: newInActiveBranch,
+        activeDistance,
       });
     }
   }
 
   traverse(
-    {
-      isActive: false,
-      isBelowActive: false,
-      is2BelowActive: false,
-      isAboveActive: false,
-    },
-    rootId
+    rootId,
+    activeNodeParents.length > 0 ? -(activeNodeParents.length - 1) : null,
+    false
   );
 
   return renderMap;
 };
 
-const searchQueryRenderMapAtom = selector<RenderMap>({
+const searchQueryRenderMapAtom = selector<GroupedRenderMap>({
   key: 'searchQueryRenderMapAtom',
   get: ({ get }) => {
     const { rootId, nodes } = get(searchQueryNewAtom);
     const activeNode = get(searchQueryActiveNodeAtom);
+    const parentIdMap = get(searchQueryParentIdMapAtom);
 
-    return makeRenderMap(nodes, rootId, activeNode);
+    const renderMap = makeRenderMap(nodes, rootId, activeNode, parentIdMap);
+
+    // group query to controll line-wraps (always before operators)
+    const groupedRenderMap: GroupedRenderMap = [];
+    let currentGroup: RenderMap = [];
+    renderMap.forEach((node, i) => {
+      if (
+        node.type === 'groupOperator' &&
+        renderMap[i - 1].type !== 'groupStart'
+      ) {
+        groupedRenderMap.push(currentGroup);
+        currentGroup = [];
+      }
+      currentGroup.push(node);
+    });
+    groupedRenderMap.push(currentGroup);
+
+    return groupedRenderMap;
   },
 });
 

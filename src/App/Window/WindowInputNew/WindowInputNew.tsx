@@ -16,7 +16,7 @@ const RootContainer = styled(Box)`
   flex-direction: row;
   align-items: stretch;
   flex-wrap: wrap;
-  padding: 12px 16px;
+  padding: 4px 8px;
   margin: 8px 24px;
   font-size: 80%;
   background: none;

@@ -1,17 +1,15 @@
 import { selector } from 'recoil';
 import { is } from 'superstruct';
 import GroupNodeType from '../_types/GroupNodeType';
+import SearchQueryParentIdMapType from '../_types/SearchQueryParentIdMapType';
 import type SearchQueryType from '../_types/SearchQueryType';
 import searchQueryNewAtom from './searchQueryAtom';
 
-type SearchQueryParentIdMap = {
-  [nodeId: string]: string | null;
-};
 const makeParentIdMap = (
   nodes: SearchQueryType['nodes'],
   rootId: string
-): SearchQueryParentIdMap => {
-  const parentMap: SearchQueryParentIdMap = {};
+): SearchQueryParentIdMapType => {
+  const parentMap: SearchQueryParentIdMapType = {};
 
   function getParentIds(id: string, parentId?: string): void {
     const node = nodes[id];
@@ -28,7 +26,7 @@ const makeParentIdMap = (
   return parentMap;
 };
 
-const searchQueryParentIdMapAtom = selector<SearchQueryParentIdMap>({
+const searchQueryParentIdMapAtom = selector<SearchQueryParentIdMapType>({
   key: 'searchQueryParentIdMapAtom',
   get: ({ get }) => {
     const { rootId, nodes } = get(searchQueryNewAtom);
