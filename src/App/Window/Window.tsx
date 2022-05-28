@@ -24,12 +24,14 @@ const SearchInputContainer = styled.div`
   margin-bottom: 16px;
   position: sticky;
   width: 100%;
+  z-index: 1;
 `;
 
 const ContentContainer = styled.div`
   overflow: auto;
   height: 100%;
   width: 100%;
+  z-index: 0;
 `;
 
 const SpinnerContainer = styled.div`

@@ -1,4 +1,9 @@
-const getAttributeAggQuery = (aggSize = 20, aggOptionSize = 50) => ({
+import { SearchRequest } from '@opensearch-project/opensearch/api/types';
+
+const getAttributeAggQuery = (
+  aggSize = 20,
+  aggOptionSize = 50
+): SearchRequest['body'] => ({
   size: 0,
   aggs: {
     name: {

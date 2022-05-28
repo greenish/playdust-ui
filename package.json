@@ -40,6 +40,7 @@
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.7.0",
     "@mui/x-data-grid": "^5.5.1",
+    "@opensearch-project/opensearch": "^1.1.0",
     "@react-hook/debounce": "^4.0.0",
     "@solana/buffer-layout": "^4.0.0",
     "@solana/spl-token": "^0.2.0",

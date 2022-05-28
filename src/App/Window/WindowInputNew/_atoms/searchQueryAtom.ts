@@ -4,72 +4,89 @@ import GroupNodeType from '../_types/GroupNodeType';
 import type SearchQueryType from '../_types/SearchQueryType';
 
 const defaultQuery: SearchQueryType = {
-  rootId: 'root',
+  rootId: 'group-root',
   nodes: {
-    root: {
-      id: 'root',
+    'group-root': {
+      type: 'group',
+      id: 'group-root',
       operator: 'or',
       children: ['dape-and', 'degod-and'],
     },
     'dape-and': {
+      type: 'group',
       id: 'dape-and',
       operator: 'and',
-      children: ['dape-id', 'nested-dape-or', 'background-blue'],
+      children: ['dape-id', 'nested-dape-or', 'background-dape'],
     },
     'dape-id': {
       id: 'dape-id',
       field: 'collection',
       value: '5c50fbae-d7ff-456f-8f9a-f79cc9396743',
     },
+    'background-dape': {
+      type: 'group',
+      id: 'background-dape',
+      operator: 'or',
+      children: ['background-blue', 'background-green'],
+    },
     'background-blue': {
       id: 'background-blue',
       field: 'attribute',
-      trait: 'background',
-      value: ['blue'],
+      trait: 'Background',
+      value: ['Blue'],
+    },
+    'background-green': {
+      id: 'background-green',
+      field: 'attribute',
+      trait: 'Background',
+      value: ['Green'],
     },
     'degod-and': {
       id: 'degod-and',
+      type: 'group',
       operator: 'and',
-      children: ['degod-id', 'background-green'],
+      children: ['degod-id', 'background-alaska'],
     },
     'degod-id': {
       id: 'degod-id',
       field: 'collection',
       value: '3f96def7-9b95-4af8-886c-dcea80dd37bd',
     },
-    'background-green': {
-      id: 'background-green',
+    'background-alaska': {
+      id: 'background-alaska',
       field: 'attribute',
       trait: 'background',
-      value: ['green'],
+      value: ['Alaska'],
     },
     'nested-dape-or': {
       id: 'nested-dape-or',
-      operator: 'or',
+      operator: 'and',
+      type: 'group',
       children: ['head-spacehelmet', 'deeply-nested-and'],
     },
     'head-spacehelmet': {
       id: 'head-spacehelmet',
       field: 'attribute',
-      trait: 'head',
-      value: ['space helmet'],
+      trait: 'Head',
+      value: ["Musketeer's Hat"],
     },
     'deeply-nested-and': {
+      type: 'group',
       id: 'deeply-nested-and',
-      operator: 'and',
+      operator: 'or',
       children: ['eyes-sunglasses', 'teeth-golden'],
     },
     'eyes-sunglasses': {
       id: 'eyes-sunglasses',
       field: 'attribute',
       trait: 'eyes',
-      value: ['sunglasses'],
+      value: ['Ape Vipers'],
     },
     'teeth-golden': {
       id: 'teeth-golden',
       field: 'attribute',
-      trait: 'teeth',
-      value: ['golden'],
+      trait: 'Teeth',
+      value: ['Gold Tooth'],
     },
   },
 };

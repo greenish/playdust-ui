@@ -1,6 +1,8 @@
+import { Infer, union } from 'superstruct';
 import QueryNodeType from '../../../../_types/QueryNodeType';
-import type GroupNodeType from './GroupNodeType';
+import GroupNodeType from './GroupNodeType';
 
-type SearchQueryNodeType = GroupNodeType | QueryNodeType;
+type SearchQueryNodeType = Infer<typeof SearchQueryNodeType>;
+const SearchQueryNodeType = union([GroupNodeType, QueryNodeType]);
 
 export default SearchQueryNodeType;

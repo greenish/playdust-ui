@@ -1,3 +1,4 @@
+import type { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import type QueryNodeType from '../../_types/QueryNodeType';
 import type SearchFilterUnionType from '../../_types/SearchFilterUnionType';
 
@@ -17,7 +18,7 @@ const getRangeField = (field: SearchFilterUnionType) => {
   }
 };
 
-const createSingleNFTQuery = (child: QueryNodeType) => {
+const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
   switch (child.field) {
     case 'attribute': {
       const { trait, value } = child;
@@ -28,22 +29,25 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
           query: {
             bool: {
               must: [
-                trait !== '' && {
-                  match: {
-                    'offChainData.attributes.trait_type.keyword': trait,
-                  },
-                },
-                value &&
-                  value.length > 0 && {
-                    bool: {
-                      should: value.map((entry) => ({
-                        match: {
-                          'offChainData.attributes.value.keyword': entry,
-                        },
-                      })),
-                    },
-                  },
-              ].filter(Boolean),
+                trait !== ''
+                  ? {
+                      match: {
+                        'offChainData.attributes.trait_type.keyword': trait,
+                      },
+                    }
+                  : {},
+                value?.length > 0
+                  ? {
+                      bool: {
+                        should: value.map((entry) => ({
+                          match: {
+                            'offChainData.attributes.value.keyword': entry,
+                          },
+                        })),
+                      },
+                    }
+                  : {},
+              ],
             },
           },
         },
@@ -77,28 +81,39 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
     case 'range': {
       const rangeField = getRangeField(child.value);
 
-      return {
-        bool: {
-          must: [
-            {
-              range: {
-                [rangeField]: {
-                  gte: child.min,
-                  lte: child.max,
+      const mustBase = [
+        {
+          range: {
+            [rangeField]: {
+              gte: child.min,
+              lte: child.max,
+            },
+          },
+        },
+      ];
+
+      const must =
+        rangeField === 'lastListPrice'
+          ? [
+              ...mustBase,
+              {
+                term: {
+                  listed: true,
                 },
               },
-            },
-            rangeField === 'lastListPrice' && {
-              term: {
-                listed: true,
-              },
-            },
-          ].filter(Boolean),
+            ]
+          : mustBase;
+
+      return {
+        bool: {
+          must,
         },
       };
     }
     default: {
-      return false;
+      const n: never = child;
+
+      return n;
     }
   }
 };
