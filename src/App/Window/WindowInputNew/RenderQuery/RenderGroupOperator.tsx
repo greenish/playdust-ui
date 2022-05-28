@@ -1,28 +1,21 @@
-import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
+import QueryPartContainer from './_sharedComponents/QueryPartContainer';
+import QueryPartDecorator from './_sharedComponents/QueryPartDecorator';
 import GroupRenderOperatorNodeType from './_types/GroupRenderOperatorNodeType';
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 0px 4px;
-`;
-
-const belowActiveOperatorStyles = {
-  borderTop: '7px solid rgb(180,180,180)',
-  marginTop: '-11px',
-  paddingTop: '4px',
-};
-const aboveActiveOperatorStyles = {
-  borderBottom: '7px solid rgb(200,200,200)',
-  marginBottom: '-11px',
-  paddingBottom: '4px',
+const operatorContainerStyles = {
+  width: '36px',
 };
 
 const activeBackground = {
   background: 'rgb(255,0,0, 0.08)',
+};
+
+const secondaryHighlight = {
+  color: 'rgb(180,180,180)',
+  fontWeight: 'bold',
 };
 
 const activeOperatorStyles = {
@@ -37,16 +30,34 @@ function RenderGroupOperator({
 }) {
   const [activeNode, setActiveNode] = useRecoilState(searchQueryActiveNodeAtom);
 
-  const { isBelowActive, isAboveActive, is2BelowActive, isActive } =
-    renderNode.nodeState;
+  const isAboveActive =
+    renderNode.activeDistance !== null && renderNode.activeDistance >= 0;
+  const isBelowActive =
+    renderNode.activeDistance !== null &&
+    renderNode.inActiveBranch &&
+    renderNode.activeDistance >= 1;
+  const is2BelowActive =
+    renderNode.activeDistance !== null &&
+    renderNode.inActiveBranch &&
+    renderNode.activeDistance >= 2;
+  const isActive =
+    renderNode.activeDistance !== null &&
+    renderNode.inActiveBranch &&
+    renderNode.activeDistance === 0;
+
+  const isBelowOperator =
+    renderNode.activeDistance !== null &&
+    renderNode.inActiveBranch &&
+    renderNode.activeDistance === 1;
+  const isAboveOperator =
+    renderNode.activeDistance !== null &&
+    renderNode.inActiveBranch &&
+    renderNode.activeDistance === -1;
 
   const activeNodeIndex = activeNode?.type === 'group' ? activeNode.index : -1;
   const operator = renderNode.node.operator === 'and' ? 'AND' : 'OR';
 
-  const renderIsAboveActive =
-    isAboveActive &&
-    !renderNode.node.children.includes(activeNode?.nodeId ?? '');
-
+  // first operator in a group is hidden unless input is placed there.
   if (renderNode.index === 0) {
     if (activeNodeIndex !== 0 || !isActive) {
       return null;
@@ -54,7 +65,7 @@ function RenderGroupOperator({
   }
 
   return (
-    <Container
+    <QueryPartContainer
       onClick={(evt) => {
         setActiveNode({
           type: 'group',
@@ -64,14 +75,17 @@ function RenderGroupOperator({
         evt.stopPropagation();
       }}
       style={{
-        ...(renderIsAboveActive ? aboveActiveOperatorStyles : {}),
-        ...(is2BelowActive ? belowActiveOperatorStyles : {}),
+        ...operatorContainerStyles,
         ...(isBelowActive ? activeBackground : {}),
         ...(isActive ? activeOperatorStyles : {}),
+        ...(isBelowOperator ? secondaryHighlight : {}),
+        ...(isAboveOperator ? secondaryHighlight : {}),
       }}
     >
       {operator}
-    </Container>
+      {isAboveActive && <QueryPartDecorator position="below" />}
+      {is2BelowActive && <QueryPartDecorator position="above" />}
+    </QueryPartContainer>
   );
 }
 
