@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import searchAggregationsAtom from '../../../../../_atoms/searchAggregationsAtom';
+import searchAggregationsLiveAtom from '../../../../../_atoms/searchAggregationsLiveAtom';
 import useUpdateAttributeQueryNode from '../../../../../_hooks/useUpdateAttributeQueryNode';
 import searchQueryAttributeAtom from './_atoms/searchQueryAttributeAtom';
 
@@ -21,7 +21,7 @@ function AttributeNode(props: AttributeNodeProps) {
   const data =
     useRecoilValue(searchQueryAttributeAtom(props.id)) || defaultValue;
   const updateAttributeQueryNode = useUpdateAttributeQueryNode('memory');
-  const { attributes } = useRecoilValue(searchAggregationsAtom);
+  const { attributes } = useRecoilValue(searchAggregationsLiveAtom);
 
   const options = useMemo(() => {
     const base =

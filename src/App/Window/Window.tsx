@@ -3,12 +3,12 @@ import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
+import activeWindowAtom from '../_atoms/activeWindowAtom';
+import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
 import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import activeWindowAtom from '../_atoms/activeWindowAtom';
-import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import type WindowProps from './_types/WindowPropsType';
 
 const RootContainer = styled.div`
@@ -67,8 +67,6 @@ function Window() {
   if (!activeTab || !activeWindow) {
     return null;
   }
-
-  console.log(activeWindow);
 
   return (
     <RecoilRoot key={`${activeTab.id}`}>

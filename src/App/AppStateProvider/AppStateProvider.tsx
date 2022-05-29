@@ -1,15 +1,15 @@
 import { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-use';
+import { LocationSensorState } from 'react-use/lib/useLocation';
 import { useRecoilValue } from 'recoil';
-import activeWindowAtom from '../_atoms/activeWindowAtom';
-import useAddTab from './_hooks/useAddTab';
-import useReplaceWindowHash from './_hooks/useReplaceWindowHash';
-import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
-import useSetSelectedTab from './_hooks/useSetSelectedTab';
 import activeTabAtom from '../_atoms/activeTabAtom';
+import activeWindowAtom from '../_atoms/activeWindowAtom';
 import appStateAtom from '../_atoms/appStateAtom';
 import decodeWindowHash from '../_helpers/decodeWindowHash';
-import { LocationSensorState } from 'react-use/lib/useLocation';
+import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
+import useAddTab from './_hooks/useAddTab';
+import useReplaceWindowHash from './_hooks/useReplaceWindowHash';
+import useSetSelectedTab from './_hooks/useSetSelectedTab';
 
 function AppStateProvider() {
   const { tabs } = useRecoilValue(appStateAtom);
@@ -41,14 +41,14 @@ function AppStateProvider() {
             });
             break;
           }
-  
+
           // Add new tab from URL, i.e. shared link
           if (!foundInCache) {
             const { id } = addTab(windowState);
             replaceWindowHash(windowState, { tabOverride: id });
             break;
           }
-  
+
           // Loading tab from URL
           setSelectedTab(foundInCache.id);
           break;
@@ -60,26 +60,26 @@ function AppStateProvider() {
             setCurrentWindowState(windowState, tab);
             break;
           }
-  
+
           // Navigating to an existing tab
           if (foundInCache && foundURLTab) {
             setSelectedTab(tab);
             break;
           }
-  
+
           // Adding back deleted tab
           if (!foundURLTab) {
             addTab(windowState, tab);
             break;
           }
-  
+
           // Navigating to next new state in tab
           setCurrentWindowState(windowState, foundURLTab.id);
           break;
         }
         default:
       }
-      },
+    },
     [
       activeTab.id,
       activeWindow,

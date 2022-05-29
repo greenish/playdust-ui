@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { Divider } from '@mui/material';
 import React from 'react';
-import AttributeFilters from './AttributeFilters';
+import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import SkeletonRows from '../../_sharedComponents/SkeletonRows';
+import AttributeFilters from './AttributeFilters/AttributeFilters';
 import OnlyListedSwitch from './OnlyListedSwitch/OnlyListedSwitch';
 import RangeFilters from './RangeFilters/RangeFilters';
 import SortFields from './SortFields/SortFields';
@@ -23,7 +25,11 @@ function SearchSideBar() {
       <br />
       <Divider />
       <br />
-      <AttributeFilters />
+      <SuspenseBoundary
+        error={null}
+        loading={<SkeletonRows rows={50} />}
+        content={<AttributeFilters />}
+      />
     </RootContainer>
   );
 }

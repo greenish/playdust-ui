@@ -6,15 +6,15 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  Skeleton,
 } from '@mui/material';
-import React, { useState } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import type AttributeQueryNodeType from '../../../../../_types/AttributeQueryNodeType';
-import searchAggregationsAtom from '../../../_atoms/searchAggregationsAtom';
-import searchQueryAttributesAtom from '../../../_atoms/searchQueryAttributesAtom';
-import useAddAttributeQueryNode from '../../../_hooks/useAddAttributeQueryNode';
-import useUpdateAttributeQueryNode from '../../../_hooks/useUpdateAttributeQueryNode';
+import safePromise from '../../../../../_helpers/safePromise';
+import searchQueryAttributesAtom from '../../../../_atoms/searchQueryAttributesAtom';
+import useAddAttributeQueryNode from '../../../../_hooks/useAddAttributeQueryNode';
+import useSearchAggregations from './_hooks/useSearchAggregations';
+import useUpdateAttributeQueryNode from '../../../../_hooks/useUpdateAttributeQueryNode';
 
 const RootContainer = styled.div`
   display: flex;
@@ -51,32 +51,20 @@ const normalizeOptions = (
   return normalized.filter((entry) => entry.checked);
 };
 
-function AttributeFiltersSkeleton() {
-  const count = 50;
-
-  return (
-    <>
-      {[...Array(count).keys()].map((entry) => (
-        <Button key={`attribute-skeleton-${entry}`}>
-          <Skeleton sx={{ width: '100%' }} />
-        </Button>
-      ))}
-    </>
-  );
-}
-
 function AttributeFilters() {
-  const loadable = useRecoilValueLoadable(searchAggregationsAtom);
   const queries = useRecoilValue(searchQueryAttributesAtom);
   const addAttributeQueryNode = useAddAttributeQueryNode();
   const updateAttributeNode = useUpdateAttributeQueryNode();
   const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({});
 
-  if (loadable.state !== 'hasValue') {
-    return <AttributeFiltersSkeleton />;
-  }
+  const [searchAggregations, updateSearchAggregations] =
+    useSearchAggregations();
 
-  const { attributes } = loadable.contents;
+  useEffect(() => {
+    safePromise(updateSearchAggregations());
+  }, [queries, updateSearchAggregations]);
+
+  const { attributes } = searchAggregations;
 
   return (
     <RootContainer>

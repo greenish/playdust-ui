@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
-import activeTab from './activeTabAtom';
 import type { WindowType } from '../_types/WindowType';
+import activeTab from './activeTabAtom';
 
 const activeWindowAtom = selector<WindowType>({
   key: 'activeWindowAtom',
