@@ -1,16 +1,15 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-use';
 import { useSetRecoilState } from 'recoil';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import decodeWindowHash from '../_helpers/decodeWindowHash';
-import currentStateAtom from './_atoms/currentStateAtom';
 
 function WindowStateProvider() {
   const location = useLocation();
-  const setCurrentState = useSetRecoilState(currentStateAtom);
+  const setCurrentState = useSetRecoilState(windowStateAtom);
 
   useEffect(() => {
-    const { windowState } = decodeWindowHash(location);
-    setCurrentState(windowState);
+    setCurrentState(decodeWindowHash(location));
   }, [location, setCurrentState]);
   return null;
 }

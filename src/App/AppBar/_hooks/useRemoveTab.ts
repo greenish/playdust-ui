@@ -51,7 +51,10 @@ const useRemoveTab = () => {
     if (activeTab) {
       const activeWindow = activeTab.windows[activeTab.selectedWindowIdx];
 
-      pushWindowHash(activeWindow, { tabOverride: activeTab.id });
+      pushWindowHash({
+        ...activeWindow,
+        tabId: activeTab.id,
+      });
     }
   };
 };

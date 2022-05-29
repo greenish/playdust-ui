@@ -7,7 +7,10 @@ const useGoToTab = () => {
   return (tab: TabType) => {
     const activeWindow = tab.windows[tab.selectedWindowIdx];
 
-    pushWindowHash(activeWindow, { tabOverride: tab.id });
+    pushWindowHash({
+      ...activeWindow,
+      tabId: tab.id,
+    });
   };
 };
 

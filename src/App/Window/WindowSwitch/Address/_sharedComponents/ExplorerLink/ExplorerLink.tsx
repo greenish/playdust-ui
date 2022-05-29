@@ -1,4 +1,6 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import windowStateAtom from '../../../../../_atoms/windowStateAtom';
 import ellipsisify from '../../../../../_helpers/ellipsisify';
 import encodeWindowHash from '../../../../../_helpers/encodeWindowHash';
 import Link from '../../../_sharedComponents/Link';
@@ -13,6 +15,7 @@ function ExplorerLink({
   ellipsis,
   type,
 }: ExplorerLinkProps) {
+  const windowState = useRecoilValue(windowStateAtom);
   const toString = safePubkeyString(to);
   const fullLabel = label ?? toString;
   const shortLabel = ellipsis
@@ -25,7 +28,11 @@ function ExplorerLink({
     : fullLabel;
   const isShortened = fullLabel.length > shortLabel.length;
   const display = isShortened ? shortLabel : fullLabel;
-  const href = encodeWindowHash({ type, state: toString });
+  const href = encodeWindowHash({
+    type,
+    state: toString,
+    tabId: windowState.tabId,
+  });
   return (
     <>
       {allowCopy && <CopyButton value={toString} />}

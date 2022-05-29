@@ -1,16 +1,16 @@
 import { useSetRecoilState } from 'recoil';
 import appState from '../_atoms/appStateAtom';
-import type { WindowType } from '../_types/WindowType';
+import type { WindowStateType } from '../_types/WindowStateType';
 
 const useSetCurrentWindowState = () => {
   const setter = useSetRecoilState(appState);
 
-  return (windowState: WindowType, selectedTabId: string) => {
+  return (windowState: WindowStateType) => {
     setter((curr) => ({
       ...curr,
-      selectedTabId,
+      selectedTabId: windowState.tabId,
       tabs: curr.tabs.map((tab) => {
-        if (tab.id === selectedTabId) {
+        if (tab.id === windowState.tabId) {
           const changed = {
             ...tab,
             windows: tab.windows.map((window, idx) => {

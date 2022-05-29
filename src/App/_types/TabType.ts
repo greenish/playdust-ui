@@ -1,9 +1,9 @@
 import { array, Infer, number, object, string } from 'superstruct';
-import { WindowType } from './WindowType';
+import { WindowStateType } from './WindowStateType';
 
 export type TabType = Infer<typeof TabType>;
 export const TabType = object({
   id: string(),
-  windows: array(WindowType),
+  windows: array(WindowStateType),
   selectedWindowIdx: number(),
 });

@@ -1,12 +1,12 @@
 import { nanoid } from 'nanoid';
 import { useRecoilState } from 'recoil';
 import appState from '../../_atoms/appStateAtom';
-import type { WindowType } from '../../_types/WindowType';
+import type { WindowStateType } from '../../_types/WindowStateType';
 
 const useAddTab = () => {
   const [state, setter] = useRecoilState(appState);
 
-  return (newState: WindowType, id?: string, addAtCurrIdx?: boolean) => {
+  return (newState: WindowStateType, id?: string, addAtCurrIdx?: boolean) => {
     const newTab = {
       id: id || nanoid(),
       windows: [newState],

@@ -2,13 +2,12 @@ import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
-import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
 import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import WindowSwitch from './WindowSwitch/WindowSwitch';
 import WindowInput from './WindowInput/WindowInput';
 import WindowStateProvider from './WindowStateProvider';
-import WindowSwitch from './WindowSwitch/WindowSwitch';
 import WindowContext from './_sharedComponents/WindowContext';
 import WindowContextType from './_types/WindowContextType';
 
@@ -39,7 +38,6 @@ const SpinnerContainer = styled.div`
 `;
 
 function Window() {
-  const activeTab = useRecoilValue(activeTabAtom);
   const activeWindow = useRecoilValue(activeWindowAtom);
   const setCurrentWindowState = useSetCurrentWindowState();
 
@@ -51,25 +49,22 @@ function Window() {
         const shouldUpdate = activeImages !== nextImages;
 
         if (shouldUpdate) {
-          setCurrentWindowState(
-            {
-              ...activeWindow,
-              images,
-            },
-            activeTab.id
-          );
+          setCurrentWindowState({
+            ...activeWindow,
+            images,
+          });
         }
       },
     }),
-    [activeTab.id, activeWindow, setCurrentWindowState]
+    [activeWindow, setCurrentWindowState]
   );
 
-  if (!activeTab || !activeWindow) {
+  if (!activeWindow) {
     return null;
   }
 
   return (
-    <RecoilRoot key={`${activeTab.id}`}>
+    <RecoilRoot key={`${activeWindow.tabId}`}>
       <WindowStateProvider />
       <WindowContext.Provider value={windowContextValue}>
         <RootContainer>

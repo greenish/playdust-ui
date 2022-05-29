@@ -23,9 +23,9 @@ function AppStateProvider() {
 
   const handleLocationChange = useCallback(
     (location: LocationSensorState) => {
-      const { windowState, tab } = decodeWindowHash(location);
+      const windowState = decodeWindowHash(location);
       const isEmptyUrlState = windowState.state === '';
-      const foundURLTab = tabs.find((entry) => entry.id === tab);
+      const foundURLTab = tabs.find((entry) => entry.id === windowState.tabId);
       const foundInCache = tabs.find((entry) => {
         const { state, type } = entry.windows[0] || [];
 
@@ -36,8 +36,9 @@ function AppStateProvider() {
         case 'load': {
           // Load active tab from cache when going to root (/)
           if (isEmptyUrlState) {
-            replaceWindowHash(activeWindow, {
-              tabOverride: activeTab.id,
+            replaceWindowHash({
+              ...activeWindow,
+              tabId: activeTab.id,
             });
             break;
           }
@@ -45,7 +46,10 @@ function AppStateProvider() {
           // Add new tab from URL, i.e. shared link
           if (!foundInCache) {
             const { id } = addTab(windowState);
-            replaceWindowHash(windowState, { tabOverride: id });
+            replaceWindowHash({
+              ...windowState,
+              tabId: id,
+            });
             break;
           }
 
@@ -57,24 +61,27 @@ function AppStateProvider() {
         case 'pushstate': {
           // Going home on the current tab
           if (isEmptyUrlState && foundURLTab) {
-            setCurrentWindowState(windowState, tab);
+            setCurrentWindowState(windowState);
             break;
           }
 
           // Navigating to an existing tab
           if (foundInCache && foundURLTab) {
-            setSelectedTab(tab);
+            setSelectedTab(windowState.tabId);
             break;
           }
 
           // Adding back deleted tab
           if (!foundURLTab) {
-            addTab(windowState, tab);
+            addTab(windowState);
             break;
           }
 
           // Navigating to next new state in tab
-          setCurrentWindowState(windowState, foundURLTab.id);
+          setCurrentWindowState({
+            ...windowState,
+            tabId: foundURLTab.id,
+          });
           break;
         }
         default:

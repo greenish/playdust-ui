@@ -1,13 +1,13 @@
 import { selector } from 'recoil';
+import windowState from '../../_atoms/windowStateAtom';
 import parseSearch from '../_helpers/parseSearch';
 import sortOptions from '../_helpers/sortOptions';
 import type SearchStateType from '../_types/SearchStateType';
-import currentState from './currentStateAtom';
 
 const searchStateAtom = selector<SearchStateType>({
   key: 'searchStateAtom',
   get: ({ get }) => {
-    const current = get(currentState);
+    const current = get(windowState);
 
     if (!current || current.type !== 'search' || current.state === '') {
       return {
