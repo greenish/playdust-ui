@@ -9,12 +9,12 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import type AttributeQueryNodeType from '../../../../../_types/AttributeQueryNodeType';
+import AttributeQueryNodeType from '../../../../../../_types/AttributeQueryNodeType';
 import safePromise from '../../../../../_helpers/safePromise';
 import searchQueryAttributesAtom from '../../../../_atoms/searchQueryAttributesAtom';
 import useAddAttributeQueryNode from '../../../../_hooks/useAddAttributeQueryNode';
-import useSearchAggregations from './_hooks/useSearchAggregations';
 import useUpdateAttributeQueryNode from '../../../../_hooks/useUpdateAttributeQueryNode';
+import useSearchAggregations from './_hooks/useSearchAggregations';
 
 const RootContainer = styled.div`
   display: flex;
@@ -37,11 +37,10 @@ const normalizeOptions = (
       checked: !!(found && found.value.includes(option)),
     }))
     .sort((a, b) => {
-      if (a.checked === b.checked) {
+      if (a.option === b.option) {
         return 0;
       }
-
-      return a.checked ? -1 : 1;
+      return a.option < b.option ? -1 : 1;
     });
 
   if (isExpanded) {
@@ -64,7 +63,12 @@ function AttributeFilters() {
     safePromise(updateSearchAggregations());
   }, [queries, updateSearchAggregations]);
 
-  const { attributes } = searchAggregations;
+  const attributes = [...searchAggregations.attributes].sort((a, b) => {
+    if (a.trait === b.trait) {
+      return 0;
+    }
+    return a.trait < b.trait ? -1 : 1;
+  });
 
   return (
     <RootContainer>

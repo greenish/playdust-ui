@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import SearchAggregationResponseType from '../../../_types/SearchAggregationResponseType';
+import SearchAggregationResponseType from '../../../../../../../_types/SearchAggregationResponseType';
 import searchAggregationsAtom from '../../../../../_atoms/searchAggregationsAtom';
 import searchStateSerializedAtom from '../../../../../_atoms/searchStateSerializedAtom';
 import frontendApi from '../../../../../_helpers/frontendApi';
