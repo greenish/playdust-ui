@@ -61,7 +61,7 @@ function AttributeFilters() {
 
   useEffect(() => {
     safePromise(updateSearchAggregations());
-  }, [queries, updateSearchAggregations]);
+  }, [updateSearchAggregations]);
 
   const attributes = [...searchAggregations.attributes].sort((a, b) => {
     if (a.trait === b.trait) {

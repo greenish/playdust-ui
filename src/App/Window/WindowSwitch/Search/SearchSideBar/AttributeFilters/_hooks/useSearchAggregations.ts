@@ -27,7 +27,9 @@ function useSearchAggregations(): [
     );
 
     setSearchAggregation(data);
-  }, [parsed, setSearchAggregation]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serialized]);
 
   return [searchAggregation, updateSearchAggregations];
 }
