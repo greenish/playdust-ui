@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import windowStateAtom from '../../../../../_atoms/windowStateAtom';
+import windowStateAtom from '../../../../_atoms/windowStateAtom';
 import ellipsisify from '../../../../../_helpers/ellipsisify';
 import encodeWindowHash from '../../../../../_helpers/encodeWindowHash';
 import Link from '../../../_sharedComponents/Link';

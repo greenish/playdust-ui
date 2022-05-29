@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import windowStateAtom from '../../../../_atoms/windowStateAtom';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
 import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
 import getCDNUrl from '../../../../_helpers/getCDNUrl';
 import humanizeSolana from '../../_helpers/humanizeSolana';

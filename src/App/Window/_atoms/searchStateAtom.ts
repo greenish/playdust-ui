@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import windowState from '../../_atoms/windowStateAtom';
+import windowState from './windowStateAtom';
 import parseSearch from '../_helpers/parseSearch';
 import sortOptions from '../_helpers/sortOptions';
 import type SearchStateType from '../_types/SearchStateType';

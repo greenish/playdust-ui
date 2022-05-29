@@ -5,10 +5,9 @@ import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
 import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import WindowSwitch from './WindowSwitch/WindowSwitch';
 import WindowInput from './WindowInput/WindowInput';
-import WindowStateProvider from './WindowStateProvider';
-import WindowContext from './_sharedComponents/WindowContext';
+import WindowStateProvider from './WindowStateProvider/WindowStateProvider';
+import WindowSwitch from './WindowSwitch/WindowSwitch';
 import WindowContextType from './_types/WindowContextType';
 
 const RootContainer = styled.div`
@@ -41,7 +40,7 @@ function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
   const setCurrentWindowState = useSetCurrentWindowState();
 
-  const windowContextValue = useMemo<WindowContextType>(
+  const windowContext = useMemo<WindowContextType>(
     () => ({
       setWindowImages: (images: string[]) => {
         const activeImages = (activeWindow.images || []).join(',');
@@ -65,8 +64,7 @@ function Window() {
 
   return (
     <RecoilRoot key={`${activeWindow.tabId}`}>
-      <WindowStateProvider />
-      <WindowContext.Provider value={windowContextValue}>
+      <WindowStateProvider context={windowContext}>
         <RootContainer>
           <SearchInputContainer>
             <SuspenseBoundary
@@ -87,7 +85,7 @@ function Window() {
             />
           </ContentContainer>
         </RootContainer>
-      </WindowContext.Provider>
+      </WindowStateProvider>
     </RecoilRoot>
   );
 }

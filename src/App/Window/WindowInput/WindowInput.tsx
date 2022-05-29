@@ -13,7 +13,7 @@ import {
 import { useDebounceCallback } from '@react-hook/debounce';
 import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import windowStateAtom from '../../_atoms/windowStateAtom';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import useGoHome from '../../_hooks/useGoHome';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import searchQueryValidAtom from '../_atoms/searchQueryValidAtom';

@@ -1,10 +1,6 @@
-import { atom, selector } from 'recoil';
-import { WindowStateType } from '../_types/WindowStateType';
-
-const windowStateStorageAtom = atom<WindowStateType | null>({
-  key: 'windowStateStorageAtom',
-  default: null,
-});
+import { selector } from 'recoil';
+import { WindowStateType } from '../../_types/WindowStateType';
+import windowStateStorageAtom from './windowStateStorageAtom';
 
 const windowStateAtom = selector<WindowStateType>({
   key: 'windowStateAtom',

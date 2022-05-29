@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import windowStateAtom from '../../_atoms/windowStateAtom';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import Address from './Address/Address';
 import Home from './Home/Home';
 import Search from './Search/Search';

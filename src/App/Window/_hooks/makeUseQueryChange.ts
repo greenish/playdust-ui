@@ -1,6 +1,6 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import ComposedQueryType from '../../../_types/ComposedQueryType';
-import windowStateAtom from '../../_atoms/windowStateAtom';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import encodeWindowHash from '../../_helpers/encodeWindowHash';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import type { WindowStateType } from '../../_types/WindowStateType';
