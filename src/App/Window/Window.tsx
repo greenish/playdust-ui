@@ -6,10 +6,11 @@ import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
 import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import WindowContext from './_sharedComponents/WindowContext';
 import WindowInput from './WindowInput/WindowInput';
+import WindowContextType from './_types/WindowContextType';
 import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import type WindowProps from './_types/WindowPropsType';
 
 const RootContainer = styled.div`
   display: flex;
@@ -42,9 +43,8 @@ function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
   const setCurrentWindowState = useSetCurrentWindowState();
 
-  const windowProps = useMemo<WindowProps>(
+  const windowContextValue = useMemo<WindowContextType>(
     () => ({
-      ...activeWindow,
       setWindowImages: (images: string[]) => {
         const activeImages = (activeWindow.images || []).join(',');
         const nextImages = images.join(',');
@@ -71,26 +71,28 @@ function Window() {
   return (
     <RecoilRoot key={`${activeTab.id}`}>
       <WindowStateProvider />
-      <RootContainer>
-        <SearchInputContainer>
-          <SuspenseBoundary
-            loading={null}
-            error={null}
-            content={<WindowInput {...windowProps} />}
-          />
-        </SearchInputContainer>
-        <ContentContainer>
-          <SuspenseBoundary
-            loading={
-              <SpinnerContainer>
-                <CircularProgress />
-              </SpinnerContainer>
-            }
-            error={null}
-            content={<WindowSwitch {...windowProps} />}
-          />
-        </ContentContainer>
-      </RootContainer>
+      <WindowContext.Provider value={windowContextValue}>
+        <RootContainer>
+          <SearchInputContainer>
+            <SuspenseBoundary
+              loading={null}
+              error={null}
+              content={<WindowInput />}
+            />
+          </SearchInputContainer>
+          <ContentContainer>
+            <SuspenseBoundary
+              loading={
+                <SpinnerContainer>
+                  <CircularProgress />
+                </SpinnerContainer>
+              }
+              error={null}
+              content={<WindowSwitch />}
+            />
+          </ContentContainer>
+        </RootContainer>
+      </WindowContext.Provider>
     </RecoilRoot>
   );
 }

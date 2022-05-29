@@ -1,15 +1,18 @@
 import React from 'react';
-import WindowProps from '../_types/WindowPropsType';
+import { useRecoilValue } from 'recoil';
+import currentStateAtom from '../_atoms/currentStateAtom';
 import Address from './Address/Address';
 import Home from './Home/Home';
 import Search from './Search/Search';
 
-function WindowSwitch(props: WindowProps) {
-  switch (props.type) {
+function WindowSwitch() {
+  const windowState = useRecoilValue(currentStateAtom);
+
+  switch (windowState?.type) {
     case 'home':
       return <Home />;
     case 'search':
-      return <Search {...props} />;
+      return <Search />;
     case 'address':
       return <Address />;
     case 'block':
