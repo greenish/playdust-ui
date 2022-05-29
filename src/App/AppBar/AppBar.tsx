@@ -36,7 +36,7 @@ const RootContainer = styled.div`
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  padding: 16px 0px;
+  padding: 4px 0px 16px 0px;
   width: ${appBarWidth}px;
 `;
 
