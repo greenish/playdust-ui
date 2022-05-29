@@ -18,11 +18,8 @@ function WindowSwitch(props: WindowProps) {
       return null;
     case 'epoch':
       return null;
-    default: {
-      const n: never = props.type;
-
-      return n;
-    }
+    default:
+      return null;
   }
 }
 

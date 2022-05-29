@@ -7,7 +7,7 @@ import queryValidationPredicate from './queryValidationPredicate';
 
 const parseQuery = (
   nextState: ComposedQueryType
-): ComposedQueryType | never => {
+): ComposedQueryType => {
   const isValid = nextState.flat().every(queryValidationPredicate);
   const query = nextState;
   const cleaned = query.map((parent) =>

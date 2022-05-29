@@ -26,11 +26,8 @@ function SearchValueNode(props: SearchValueNodeProps) {
       return <SearchTextNode id={props.id} />;
     case 'range':
       return <RangeNode id={props.id} />;
-    default: {
-      const n: never = data;
-
-      return n;
-    }
+    default: 
+      return null;
   }
 }
 

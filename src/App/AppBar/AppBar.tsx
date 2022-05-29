@@ -152,11 +152,8 @@ const getWindowTab = (window: WindowType): ReactNode | undefined => {
       return <Typography>A</Typography>;
     case 'epoch':
       return <Typography>E</Typography>;
-    default: {
-      const n: never = window.type;
-
-      return n;
-    }
+    default: 
+      return null;
   }
 };
 
