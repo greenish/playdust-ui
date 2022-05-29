@@ -1,26 +1,32 @@
 import React from 'react';
-import nftDetailsAtom from './_atoms/nftDetailsAtom'
-import Header from './Header/Header';
+import { useRecoilValue } from 'recoil';
+import ContentContainer from '../_sharedComponents/ContentContainer';
 import Attributes from './Attributes';
 import Creators from './Creators';
-import { useRecoilValue } from 'recoil'
-import ContentContainer from '../ContentContainer';
+import Header from './Header/Header';
+import RawMetaplexOffChainMetadata from './RawMetaplexOffChainMetadata';
+import RawMetaplexOnChainMetadata from './RawMetaplexOnChainMetadata';
+import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 
 // 5fzi7TauBFdac94hvm8DcTVN7jrCwYmf6PLuT2TJA7oe
 function SPLTokenMintNonFungible() {
-  const nftDetails = useRecoilValue(nftDetailsAtom);
+  const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
-  if (!nftDetails.data.offChainData) {
+  if (!playdustNftData) {
     return null;
   }
 
   return (
-    <ContentContainer >
+    <>
       <Header />
-      <Attributes />
-      <Creators />
-    </ContentContainer>
-  )
+      <ContentContainer>
+        <Attributes />
+        <Creators />
+        <RawMetaplexOnChainMetadata />
+        <RawMetaplexOffChainMetadata />
+      </ContentContainer>
+    </>
+  );
 }
 
 export default SPLTokenMintNonFungible;

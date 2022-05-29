@@ -3,7 +3,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import TokenCard from '../../_sharedComponents/TokenCard/TokenCard';
 import useIsWallet from '../_hooks/useIsWallet';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion/ExplorerAccordion';
 import PaginatedList from '../_sharedComponents/PaginatedList';
 import nftsForAddressAtom from './_atoms/nftsForAddressAtom';
 

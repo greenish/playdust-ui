@@ -1,70 +1,69 @@
-import React from 'react';
-import CheckIcon from '@mui/icons-material/Check'
-import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred'
+import CheckIcon from '@mui/icons-material/Check';
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import {
-    Stack,
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-} from '@mui/material'
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion/ExplorerAccordion';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import nftDetailsAtom from './_atoms/nftDetailsAtom';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 
 interface CreatorInfo {
-    address: string
-    verified: boolean
-    share: number
+  address: string;
+  verified: boolean;
+  share: number;
 }
 
 function Creators() {
+  const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
-    const nftDetails = useRecoilValue(nftDetailsAtom);
+  if (!playdustNftData || !playdustNftData.metaplexOnChainData) {
+    return null;
+  }
 
-    if (!nftDetails.data.offChainData) {
-        return null;
-    }
+  const details = playdustNftData.metaplexOnChainData;
 
-    const details = nftDetails.data;
-
-    return (
-        <ExplorerAccordion
-            title="NFT Creators"
-            expanded={true}
-            content={
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Creator Address</TableCell>
-                            <TableCell>Royalty</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {(details?.data?.creators || []).map((creator: CreatorInfo) => (
-                            <TableRow key={creator.address}>
-                                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                                    <Stack direction="row" alignItems="center" gap={1}>
-                                        {creator.verified ? (
-                                            <CheckIcon />
-                                        ) : (
-                                            <ReportGmailerrorredIcon />
-                                        )}{' '}
-                                        <LabeledAddressLink to={creator.address} />
-                                    </Stack>
-                                </TableCell>
-                                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                                    {creator.share}%
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            }
-        />
-    );
+  return (
+    <ExplorerAccordion
+      title="NFT Creators"
+      expanded={true}
+      content={
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Creator Address</TableCell>
+              <TableCell>Royalty</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {(details.creators ?? []).map((creator: CreatorInfo) => (
+              <TableRow key={creator.address}>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    {creator.verified ? (
+                      <CheckIcon />
+                    ) : (
+                      <ReportGmailerrorredIcon />
+                    )}{' '}
+                    <LabeledAddressLink to={creator.address} />
+                  </Stack>
+                </TableCell>
+                <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                  {creator.share}%
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      }
+    />
+  );
 }
 
 export default Creators;

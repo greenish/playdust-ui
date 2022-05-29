@@ -1,79 +1,71 @@
+import styled from '@emotion/styled';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import React, { useState } from 'react';
-import styled from '@emotion/styled'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import { useWallet } from '@solana/wallet-adapter-react'
 import { useRecoilValue } from 'recoil';
-import nftDetailsAtom from '../_atoms/nftDetailsAtom';
-import StatusEnumType from '../_types/StatusEnumType';
+import playdustNftDataAtom from '../_atoms/playdustNftDataAtom';
 
 const BlurImage = styled.img`
   filter: blur(1.5rem);
-`
+`;
 
 const BlurImageContainer = styled.div`
   overflow: hidden;
-`
+`;
 
 const VisibilityContainer = styled.div`
   cursor: pointer;
   padding: 5px 8px;
   position: absolute;
   z-index: 10;
-`
+`;
 
 function Image() {
-  const [status, setStatus] = useState(StatusEnumType.None)
-  const nftDetails = useRecoilValue(nftDetailsAtom);
+  const playdustNftData = useRecoilValue(playdustNftDataAtom);
+  const [visible, setVisible] = useState(false);
 
-  if (!nftDetails.data.offChainData) {
+  if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
     return null;
   }
 
-  const details = nftDetails.data;
+  const offChainData = playdustNftData.metaplexOffChainData;
 
-  // const [open, setOpen] = useState(false)
-  // const [censorState, setCensorState] = useState(StatusEnumType.None)
-  const [visible, setVisible] = useState(false)
-
-  const { publicKey } = useWallet()
+  const isNSFW = false;
 
   return (
     <div>
-      {status === StatusEnumType.Censored || status === StatusEnumType.NSFW ? (
+      {isNSFW ? (
         <BlurImageContainer>
-          {status === StatusEnumType.NSFW ? (
-            <VisibilityContainer>
-              {visible ? (
-                <VisibilityOffIcon onClick={() => setVisible(false)} />
-              ) : (
-                <VisibilityIcon onClick={() => setVisible(true)} />
-              )}
-            </VisibilityContainer>
-          ) : null}
+          <VisibilityContainer>
+            {visible ? (
+              <VisibilityOffIcon onClick={() => setVisible(false)} />
+            ) : (
+              <VisibilityIcon onClick={() => setVisible(true)} />
+            )}
+          </VisibilityContainer>
           {visible ? (
             <img
-              alt={details.data.name || ''}
-              src={details.offChainData.image}
+              alt={offChainData.name || ''}
+              src={offChainData.image}
               height={500}
             />
           ) : (
             <BlurImage
-              alt={details.data.name || ''}
-              src={details.offChainData.image}
+              alt={offChainData.name || ''}
+              src={offChainData.image}
               height={500}
             />
           )}
         </BlurImageContainer>
       ) : (
         <img
-          alt={details.data.name || ''}
-          src={details.offChainData.image}
+          alt={offChainData.name || ''}
+          src={offChainData.image}
           height={500}
         />
       )}
     </div>
-  )
+  );
 }
 
-export default Image
+export default Image;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion/ExplorerAccordion';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';

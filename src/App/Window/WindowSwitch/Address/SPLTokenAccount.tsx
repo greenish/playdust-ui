@@ -3,7 +3,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
 import tokenRegistryAtom from './_atoms/tokenRegistryAtom';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion/ExplorerAccordion';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
@@ -55,9 +55,9 @@ function SPLTokenAccount() {
           {info.rentExemptReserve && (
             <ExplorerGridRow
               label="Rent-exempt reserve (SOL)"
-              value={new BigNumber(info.rentExemptReserve.uiAmountString).toFormat(
-                9
-              )}
+              value={new BigNumber(
+                info.rentExemptReserve.uiAmountString
+              ).toFormat(9)}
             />
           )}
         </ExplorerGrid>

@@ -19,8 +19,8 @@ function SPLTokenMintFungibleHeader() {
 
   const tokenInfo = tokenRegistry.get(safePubkeyString(addressState.pubkey));
 
-  if(!tokenInfo) {
-    return null; 
+  if (!tokenInfo) {
+    return null;
   }
 
   const icon =

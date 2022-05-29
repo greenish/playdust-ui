@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 import addressStateAtom from '../_atoms/addressStateAtom';
 import parsedTokenAccountAtom from '../_atoms/parsedTokenAccountAtom';
 import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion/ExplorerAccordion';
 import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
@@ -57,10 +57,12 @@ function SPLTokenMint() {
             label="Current Supply"
             value={normalizeTokenAmount(info.supply, info.decimals)}
           />
-          {website && <ExplorerGridRow
-            label="Website"
-            value={<ExternalLink url={website} />}
-          />}
+          {website && (
+            <ExplorerGridRow
+              label="Website"
+              value={<ExternalLink url={website} />}
+            />
+          )}
           {info.isInitialized && (
             <ExplorerGridRow label="Status" value="Uninitialized" />
           )}
@@ -76,14 +78,15 @@ function SPLTokenMint() {
             <ExplorerGridRow
               label="Freeze Authority"
               value={
-                <LabeledAddressLink to={info.freezeAuthority} allowCopy={true} />
+                <LabeledAddressLink
+                  to={info.freezeAuthority}
+                  allowCopy={true}
+                />
               }
             />
           )}
           <ExplorerGridRow label="Decimals" value={info.decimals} />
-          {tags.length > 0 && (
-            <ExplorerGridRow label="Tags" value={tagChips} />
-          )}
+          {tags.length > 0 && <ExplorerGridRow label="Tags" value={tagChips} />}
         </ExplorerGrid>
       }
     />

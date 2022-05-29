@@ -3,7 +3,6 @@ import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/Suspen
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
 import ConfigAccountStakeConfigCard from './ConfigAccountStakeConfigCard';
 import ConfigAccountValidatorInfoCard from './ConfigAccountValidatorInfoCard';
-import ContentContainer from './ContentContainer';
 import NonceAccountCard from './NonceAccountCard/NonceAccountCard';
 import RawAccountData from './RawAccountData';
 import SPLTokenAccount from './SPLTokenAccount';
@@ -17,12 +16,12 @@ import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
 import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import WalletGallery from './WalletGallery/WalletGallery';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
+import ContentContainer from './_sharedComponents/ContentContainer';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion/ExplorerAccordion';
 
 function Address() {
   return (
     <>
-
       {/* Special Account Views */}
 
       <SuspenseBoundary
@@ -38,7 +37,7 @@ function Address() {
       />
 
       {/* User Wallet Accounts */}
-      <ContentContainer  sx={{ backgroundColor: 'ghostwhite' }}>
+      <ContentContainer>
         <SuspenseBoundary
           content={<WalletGallery />}
           error={null}
@@ -50,8 +49,7 @@ function Address() {
           error={null}
           loading={null}
         />
-      </ContentContainer>
-      <ContentContainer sx={{ backgroundColor: 'lightgrey', padding: "16px 0px" }}>
+
         {/* All Accounts */}
         <SuspenseBoundary
           content={<AccountOverviewCard />}
@@ -65,7 +63,7 @@ function Address() {
           error={null}
           loading={null}
         />
-          <SuspenseBoundary
+        <SuspenseBoundary
           content={<SPLTokenMint />}
           error={null}
           loading={null}
@@ -81,12 +79,11 @@ function Address() {
           loading={null}
         />
 
-
         {/* Config & Sys Accounts */}
         <SuspenseBoundary
-          content={<ConfigAccountValidatorInfoCard />}         
+          content={<ConfigAccountValidatorInfoCard />}
           error={null}
-          loading={null}          
+          loading={null}
         />
         <SuspenseBoundary
           content={<ConfigAccountStakeConfigCard />}
