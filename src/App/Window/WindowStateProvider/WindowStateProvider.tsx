@@ -1,11 +1,11 @@
 import React, { ReactNode, useEffect } from 'react';
 import { useLocation } from 'react-use';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import windowStateAtom from '../_atoms/windowStateAtom';
-import windowStateAvailableAtom from './_atoms/windowStateAvailableAtom';
 import decodeWindowHash from '../../_helpers/decodeWindowHash';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import WindowContext from '../_sharedComponents/WindowContext';
 import WindowContextType from '../_types/WindowContextType';
+import windowStateAvailableAtom from './_atoms/windowStateAvailableAtom';
 
 function WindowStateListener() {
   const location = useLocation();

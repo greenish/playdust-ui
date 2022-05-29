@@ -1,8 +1,8 @@
 import { selector } from 'recoil';
-import windowState from './windowStateAtom';
 import parseSearch from '../_helpers/parseSearch';
 import sortOptions from '../_helpers/sortOptions';
 import type SearchStateType from '../_types/SearchStateType';
+import windowState from './windowStateAtom';
 
 const searchStateAtom = selector<SearchStateType>({
   key: 'searchStateAtom',

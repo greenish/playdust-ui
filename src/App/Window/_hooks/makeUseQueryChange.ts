@@ -1,10 +1,10 @@
 import { useRecoilState, useRecoilValue } from 'recoil';
 import ComposedQueryType from '../../../_types/ComposedQueryType';
-import windowStateAtom from '../_atoms/windowStateAtom';
 import encodeWindowHash from '../../_helpers/encodeWindowHash';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import type { WindowStateType } from '../../_types/WindowStateType';
 import searchStateUncommitted from '../_atoms/searchStateUncommittedAtom';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import serializeSearch from '../_helpers/serializeSearch';
 import type SearchStateType from '../_types/SearchStateType';
 

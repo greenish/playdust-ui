@@ -13,12 +13,12 @@ import {
 import { useDebounceCallback } from '@react-hook/debounce';
 import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import windowStateAtom from '../_atoms/windowStateAtom';
 import useGoHome from '../../_hooks/useGoHome';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import searchQueryValidAtom from '../_atoms/searchQueryValidAtom';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
 import searchStateUncommittedAtom from '../_atoms/searchStateUncommittedAtom';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import serializeSearch from '../_helpers/serializeSearch';
 import useAddAttributeQueryNode from '../_hooks/useAddAttributeQueryNode';
 import usePrependCollectionQueryNode from '../_hooks/usePrependCollectionQueryNode';

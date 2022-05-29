@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import windowStateAtom from '../../../_atoms/windowStateAtom';
 import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
 import getCDNUrl from '../../../../_helpers/getCDNUrl';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import Link from '../Link';
 import ImageCard from './ImageCard/ImageCard';
