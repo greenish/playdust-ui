@@ -3,6 +3,7 @@ import { Paper, styled as muiStyled } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import AppBar from './AppBar/AppBar';
+import AppStateProvider from './AppStateProvider/AppStateProvider';
 import Notifications from './Notifications/Notifications';
 import Provider from './Provider/Provider';
 import Window from './Window/Window';
@@ -43,6 +44,7 @@ function App() {
 
   return (
     <Provider>
+      <AppStateProvider />
       <AppBarContainer>
         <SuspenseBoundary loading={null} error={null} content={<AppBar />} />
       </AppBarContainer>

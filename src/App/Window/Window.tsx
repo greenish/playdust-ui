@@ -5,11 +5,10 @@ import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
+import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import activeWindowAtom from './_atoms/activeWindowAtom';
-import currentStateString from './_atoms/currentStateStringAtom';
-import useRouteApp from './_hooks/useRouteApp';
-import useSetCurrentWindowState from './_hooks/useSetCurrentWindowState';
+import activeWindowAtom from '../_atoms/activeWindowAtom';
+import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import type WindowProps from './_types/WindowPropsType';
 
 const RootContainer = styled.div`
@@ -65,19 +64,15 @@ function Window() {
     [activeTab.id, activeWindow, setCurrentWindowState]
   );
 
-  const { didMount } = useRouteApp();
-
-  if (!didMount) {
+  if (!activeTab || !activeWindow) {
     return null;
   }
 
+  console.log(activeWindow);
+
   return (
-    <RecoilRoot
-      key={`${activeTab.id}:${windowProps.state}`}
-      initializeState={({ set }) => {
-        set(currentStateString, JSON.stringify(activeWindow));
-      }}
-    >
+    <RecoilRoot key={`${activeTab.id}`}>
+      <WindowStateProvider />
       <RootContainer>
         <SearchInputContainer>
           <SuspenseBoundary

@@ -18,11 +18,15 @@ async function fetchCoinGecko(coin: string) {
   return resp.data;
 }
 
-const coinGeckoAtom = selector<CoinFullInfoType | undefined>({
+const coinGeckoAtom = selector<CoinFullInfoType | null>({
   key: 'coinGecko',
   get: async ({ get }) => {
     const addressState = get(addressStateAtom);
     const tokenRegistry = get(tokenRegistryAtom);
+
+    if (!addressState) {
+      return null;
+    }
 
     const { pubkey } = addressState;
 
@@ -32,7 +36,7 @@ const coinGeckoAtom = selector<CoinFullInfoType | undefined>({
       return fetchCoinGecko(tokenInfo.extensions.coingeckoId);
     }
 
-    return undefined;
+    return null;
   },
 });
 

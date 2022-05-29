@@ -12,6 +12,9 @@ const accountInfoAtom = selector<AccountInfoType | null>({
     const addressState = get(addressStateAtom);
     const solanaCluster = get(solanaClusterAtom);
 
+    if (!addressState) {
+      return null;
+    }
     const connection = new Connection(solanaCluster.endpoint, 'confirmed');
     const accountInfoResult = await connection.getParsedAccountInfo(
       safePubkey(addressState.pubkey)

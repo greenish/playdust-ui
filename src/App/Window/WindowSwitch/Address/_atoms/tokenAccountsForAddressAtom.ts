@@ -10,6 +10,10 @@ const tokenAccountsForAddressAtom = selector<TokenAccountsType[]>({
     const addressState = get(addressStateAtom);
     const cluster = get(solanaClusterAtom);
 
+    if (!addressState) {
+      return [];
+    }
+
     const tokenAccounts = await fetchTokenAccountsForAddress(
       cluster,
       addressState.pubkey

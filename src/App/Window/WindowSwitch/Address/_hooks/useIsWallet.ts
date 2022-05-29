@@ -6,7 +6,9 @@ import addressStateAtom from '../_atoms/addressStateAtom';
 function useIsWallet(): boolean {
   const addressState = useRecoilValue(addressStateAtom);
   const accountInfo = useRecoilValue(accountInfoAtom);
-
+  if (!addressState) {
+    return false;
+  }
   return !!(
     addressState.hasPrivateKey &&
     accountInfo?.owner.equals(new PublicKey('11111111111111111111111111111111'))

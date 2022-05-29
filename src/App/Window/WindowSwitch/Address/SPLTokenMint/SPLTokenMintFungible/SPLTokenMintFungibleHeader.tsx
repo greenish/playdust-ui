@@ -13,7 +13,11 @@ function SPLTokenMintFungibleHeader() {
   const parsedTokenAccount = useRecoilValue(parsedTokenAccountAtom);
   const tokenRegistry = useRecoilValue(tokenRegistryAtom);
 
-  if (!parsedTokenAccount || parsedTokenAccount.type !== 'mint') {
+  if (
+    !addressState ||
+    !parsedTokenAccount ||
+    parsedTokenAccount.type !== 'mint'
+  ) {
     return null;
   }
 
