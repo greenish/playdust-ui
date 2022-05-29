@@ -160,7 +160,7 @@ function WindowInput() {
                   operation: 'and',
                 })
               );
-            default: 
+            default:
               return null;
           }
         }}

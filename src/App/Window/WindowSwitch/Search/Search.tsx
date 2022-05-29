@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import React, { useContext, useEffect } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import WindowContext from '../../_sharedComponents/WindowContext';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
+import WindowContext from '../../_sharedComponents/WindowContext';
 import SearchOverview from './SearchOverview/SearchOverview';
 import SearchResults from './SearchResults/SearchResults';
 import SearchSideBar from './SearchSideBar/SearchSideBar';

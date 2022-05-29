@@ -6,11 +6,11 @@ import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
 import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import WindowContext from './_sharedComponents/WindowContext';
 import WindowInput from './WindowInput/WindowInput';
-import WindowContextType from './_types/WindowContextType';
 import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
+import WindowContext from './_sharedComponents/WindowContext';
+import WindowContextType from './_types/WindowContextType';
 
 const RootContainer = styled.div`
   display: flex;

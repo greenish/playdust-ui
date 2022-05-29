@@ -64,8 +64,8 @@ const getChipLabel = (child: QueryNodeType) => {
       return `${capitalize(child.value)}: ${child.min}-${child.max} ${
         child.value !== 'rarity-score' ? 'SOL' : ''
       }`;
-    default: 
-      return "";
+    default:
+      return '';
   }
 };
 
