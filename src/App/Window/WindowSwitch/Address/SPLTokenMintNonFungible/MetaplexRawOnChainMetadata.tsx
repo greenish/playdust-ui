@@ -9,7 +9,7 @@ const DynamicReactJson = dynamic(import('react-json-view'), {
   ssr: false,
 });
 
-function RawMetaplexOnChainMetadata() {
+function MetaplexRawOnChainMetadata() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
   if (!playdustNftData || !playdustNftData.metaplexOnChainData) {
@@ -31,4 +31,4 @@ function RawMetaplexOnChainMetadata() {
   );
 }
 
-export default RawMetaplexOnChainMetadata;
+export default MetaplexRawOnChainMetadata;
