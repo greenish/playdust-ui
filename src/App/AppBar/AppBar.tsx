@@ -36,7 +36,7 @@ const RootContainer = styled.div`
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  padding: 16px 0px;
+  padding: 4px 0px 16px 0px;
   width: ${appBarWidth}px;
 `;
 
@@ -152,11 +152,8 @@ const getWindowTab = (window: WindowType): ReactNode | undefined => {
       return <Typography>A</Typography>;
     case 'epoch':
       return <Typography>E</Typography>;
-    default: {
-      const n: never = window.type;
-
-      return n;
-    }
+    default:
+      return null;
   }
 };
 

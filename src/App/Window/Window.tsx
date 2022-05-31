@@ -3,14 +3,14 @@ import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
+import activeWindowAtom from '../_atoms/activeWindowAtom';
+import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
+import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import activeWindowAtom from './_atoms/activeWindowAtom';
-import currentStateString from './_atoms/currentStateStringAtom';
-import useRouteApp from './_hooks/useRouteApp';
-import useSetCurrentWindowState from './_hooks/useSetCurrentWindowState';
-import type WindowProps from './_types/WindowPropsType';
+import WindowContext from './_sharedComponents/WindowContext';
+import WindowContextType from './_types/WindowContextType';
 
 const RootContainer = styled.div`
   display: flex;
@@ -43,9 +43,8 @@ function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
   const setCurrentWindowState = useSetCurrentWindowState();
 
-  const windowProps = useMemo<WindowProps>(
+  const windowContextValue = useMemo<WindowContextType>(
     () => ({
-      ...activeWindow,
       setWindowImages: (images: string[]) => {
         const activeImages = (activeWindow.images || []).join(',');
         const nextImages = images.join(',');
@@ -65,39 +64,35 @@ function Window() {
     [activeTab.id, activeWindow, setCurrentWindowState]
   );
 
-  const { didMount } = useRouteApp();
-
-  if (!didMount) {
+  if (!activeTab || !activeWindow) {
     return null;
   }
 
   return (
-    <RecoilRoot
-      key={`${activeTab.id}:${windowProps.state}`}
-      initializeState={({ set }) => {
-        set(currentStateString, JSON.stringify(activeWindow));
-      }}
-    >
-      <RootContainer>
-        <SearchInputContainer>
-          <SuspenseBoundary
-            loading={null}
-            error={null}
-            content={<WindowInput {...windowProps} />}
-          />
-        </SearchInputContainer>
-        <ContentContainer>
-          <SuspenseBoundary
-            loading={
-              <SpinnerContainer>
-                <CircularProgress />
-              </SpinnerContainer>
-            }
-            error={null}
-            content={<WindowSwitch {...windowProps} />}
-          />
-        </ContentContainer>
-      </RootContainer>
+    <RecoilRoot key={`${activeTab.id}`}>
+      <WindowStateProvider />
+      <WindowContext.Provider value={windowContextValue}>
+        <RootContainer>
+          <SearchInputContainer>
+            <SuspenseBoundary
+              loading={null}
+              error={null}
+              content={<WindowInput />}
+            />
+          </SearchInputContainer>
+          <ContentContainer>
+            <SuspenseBoundary
+              loading={
+                <SpinnerContainer>
+                  <CircularProgress />
+                </SpinnerContainer>
+              }
+              error={null}
+              content={<WindowSwitch />}
+            />
+          </ContentContainer>
+        </RootContainer>
+      </WindowContext.Provider>
     </RecoilRoot>
   );
 }

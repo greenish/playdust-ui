@@ -9,7 +9,9 @@ const defaultAddressTransactionsAtom = selector<TransactionType[]>({
   get: async ({ get }) => {
     const addressState = get(addressStateAtom);
     const custer = get(solanaClusterAtom);
-
+    if (!addressState) {
+      return [];
+    }
     return fetchTransactionsForAddress(custer, addressState.pubkey, 10);
   },
 });

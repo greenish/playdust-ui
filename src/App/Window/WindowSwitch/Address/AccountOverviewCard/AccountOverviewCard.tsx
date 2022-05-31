@@ -11,6 +11,10 @@ import AccountInfoRows from './AccountInfoRows';
 function AccountOverviewCard() {
   const addressState = useRecoilValue(addressStateAtom);
 
+  if (!addressState) {
+    return null;
+  }
+
   return (
     <ExplorerGrid>
       <ExplorerGridRow

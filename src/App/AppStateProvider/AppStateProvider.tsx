@@ -1,29 +1,29 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-use';
+import { LocationSensorState } from 'react-use/lib/useLocation';
 import { useRecoilValue } from 'recoil';
-import activeTabAtom from '../../_atoms/activeTabAtom';
-import appStateAtom from '../../_atoms/appStateAtom';
-import decodeWindowHash from '../../_helpers/decodeWindowHash';
+import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
-import useAddTab from './useAddTab';
-import useReplaceWindowHash from './useReplaceWindowHash';
-import useSetCurrentWindowState from './useSetCurrentWindowState';
-import useSetSelectedTab from './useSetSelectedTab';
+import appStateAtom from '../_atoms/appStateAtom';
+import decodeWindowHash from '../_helpers/decodeWindowHash';
+import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
+import useAddTab from './_hooks/useAddTab';
+import useReplaceWindowHash from './_hooks/useReplaceWindowHash';
+import useSetSelectedTab from './_hooks/useSetSelectedTab';
 
-const useRouteApp = () => {
-  const [didMount, setDidMount] = useState(false);
+function AppStateProvider() {
   const { tabs } = useRecoilValue(appStateAtom);
   const setCurrentWindowState = useSetCurrentWindowState();
   const addTab = useAddTab();
   const activeTab = useRecoilValue(activeTabAtom);
   const activeWindow = useRecoilValue(activeWindowAtom);
   const setSelectedTab = useSetSelectedTab();
-  const location = useLocation();
   const replaceWindowHash = useReplaceWindowHash();
+  const newLocation = useLocation();
 
   const handleLocationChange = useCallback(
-    (trigger: string) => {
-      const { windowState, tab } = decodeWindowHash();
+    (location: LocationSensorState) => {
+      const { windowState, tab } = decodeWindowHash(location);
       const isEmptyUrlState = windowState.state === '';
       const foundURLTab = tabs.find((entry) => entry.id === tab);
       const foundInCache = tabs.find((entry) => {
@@ -32,48 +32,52 @@ const useRouteApp = () => {
         return state === windowState.state && type === windowState.type;
       });
 
-      switch (trigger) {
+      switch (location?.trigger) {
         case 'load': {
-          setDidMount(true);
-
           // Load active tab from cache when going to root (/)
           if (isEmptyUrlState) {
-            return replaceWindowHash(activeWindow, {
+            replaceWindowHash(activeWindow, {
               tabOverride: activeTab.id,
             });
+            break;
           }
 
           // Add new tab from URL, i.e. shared link
           if (!foundInCache) {
             const { id } = addTab(windowState);
-            return replaceWindowHash(windowState, { tabOverride: id });
+            replaceWindowHash(windowState, { tabOverride: id });
+            break;
           }
 
           // Loading tab from URL
-          return setSelectedTab(foundInCache.id);
+          setSelectedTab(foundInCache.id);
+          break;
         }
         case 'popstate':
         case 'pushstate': {
           // Going home on the current tab
           if (isEmptyUrlState && foundURLTab) {
-            return setCurrentWindowState(windowState, tab);
+            setCurrentWindowState(windowState, tab);
+            break;
           }
 
           // Navigating to an existing tab
           if (foundInCache && foundURLTab) {
-            return setSelectedTab(tab);
+            setSelectedTab(tab);
+            break;
           }
 
           // Adding back deleted tab
           if (!foundURLTab) {
-            return addTab(windowState, tab);
+            addTab(windowState, tab);
+            break;
           }
 
           // Navigating to next new state in tab
-          return setCurrentWindowState(windowState, foundURLTab.id);
+          setCurrentWindowState(windowState, foundURLTab.id);
+          break;
         }
         default:
-          return undefined;
       }
     },
     [
@@ -88,10 +92,10 @@ const useRouteApp = () => {
   );
 
   useEffect(() => {
-    handleLocationChange(location.trigger);
-  }, [location]); // eslint-disable-line
+    handleLocationChange(newLocation);
+  }, [newLocation]); // eslint-disable-line
 
-  return { didMount };
-};
+  return null;
+}
 
-export default useRouteApp;
+export default AppStateProvider;

@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import addressStateAtom from '../_atoms/addressStateAtom';
 import parsedTokenAccountAtom from '../_atoms/parsedTokenAccountAtom';
 import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
+import safePubkeyString from '../_helpers/safePubkeyString';
 import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
@@ -23,11 +24,15 @@ function SPLTokenMint() {
   const parsedTokenAccount = useRecoilValue(parsedTokenAccountAtom);
   const tokenRegistry = useRecoilValue(tokenRegistryAtom);
 
-  if (!parsedTokenAccount || parsedTokenAccount.type !== 'mint') {
+  if (
+    !addressState ||
+    !parsedTokenAccount ||
+    parsedTokenAccount.type !== 'mint'
+  ) {
     return null;
   }
 
-  const tokenInfo = tokenRegistry.get(addressState.pubkey.toBase58());
+  const tokenInfo = tokenRegistry.get(safePubkeyString(addressState.pubkey));
 
   const { info } = parsedTokenAccount;
 

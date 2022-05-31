@@ -5,9 +5,7 @@ import SearchSortType from '../../../_types/SearchSortUnionType';
 import type SearchStateType from '../_types/SearchStateType';
 import queryValidationPredicate from './queryValidationPredicate';
 
-const parseQuery = (
-  nextState: ComposedQueryType
-): ComposedQueryType | never => {
+const parseQuery = (nextState: ComposedQueryType): ComposedQueryType => {
   const isValid = nextState.flat().every(queryValidationPredicate);
   const query = nextState;
   const cleaned = query.map((parent) =>

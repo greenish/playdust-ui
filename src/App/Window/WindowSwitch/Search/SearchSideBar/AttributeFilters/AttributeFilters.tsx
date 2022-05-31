@@ -6,15 +6,15 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  Skeleton,
 } from '@mui/material';
-import React, { useState } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import type AttributeQueryNodeType from '../../../../../_types/AttributeQueryNodeType';
-import searchAggregationsAtom from '../../../_atoms/searchAggregationsAtom';
-import searchQueryAttributesAtom from '../../../_atoms/searchQueryAttributesAtom';
-import useAddAttributeQueryNode from '../../../_hooks/useAddAttributeQueryNode';
-import useUpdateAttributeQueryNode from '../../../_hooks/useUpdateAttributeQueryNode';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import AttributeQueryNodeType from '../../../../../../_types/AttributeQueryNodeType';
+import safePromise from '../../../../../_helpers/safePromise';
+import searchQueryAttributesAtom from '../../../../_atoms/searchQueryAttributesAtom';
+import useAddAttributeQueryNode from '../../../../_hooks/useAddAttributeQueryNode';
+import useUpdateAttributeQueryNode from '../../../../_hooks/useUpdateAttributeQueryNode';
+import useSearchAggregations from './_hooks/useSearchAggregations';
 
 const RootContainer = styled.div`
   display: flex;
@@ -37,11 +37,10 @@ const normalizeOptions = (
       checked: !!(found && found.value.includes(option)),
     }))
     .sort((a, b) => {
-      if (a.checked === b.checked) {
+      if (a.option === b.option) {
         return 0;
       }
-
-      return a.checked ? -1 : 1;
+      return a.option < b.option ? -1 : 1;
     });
 
   if (isExpanded) {
@@ -51,32 +50,25 @@ const normalizeOptions = (
   return normalized.filter((entry) => entry.checked);
 };
 
-function AttributeFiltersSkeleton() {
-  const count = 50;
-
-  return (
-    <>
-      {[...Array(count).keys()].map((entry) => (
-        <Button key={`attribute-skeleton-${entry}`}>
-          <Skeleton sx={{ width: '100%' }} />
-        </Button>
-      ))}
-    </>
-  );
-}
-
 function AttributeFilters() {
-  const loadable = useRecoilValueLoadable(searchAggregationsAtom);
   const queries = useRecoilValue(searchQueryAttributesAtom);
   const addAttributeQueryNode = useAddAttributeQueryNode();
   const updateAttributeNode = useUpdateAttributeQueryNode();
   const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({});
 
-  if (loadable.state !== 'hasValue') {
-    return <AttributeFiltersSkeleton />;
-  }
+  const [searchAggregations, updateSearchAggregations] =
+    useSearchAggregations();
 
-  const { attributes } = loadable.contents;
+  useEffect(() => {
+    safePromise(updateSearchAggregations());
+  }, [updateSearchAggregations]);
+
+  const attributes = [...searchAggregations.attributes].sort((a, b) => {
+    if (a.trait === b.trait) {
+      return 0;
+    }
+    return a.trait < b.trait ? -1 : 1;
+  });
 
   return (
     <RootContainer>

@@ -6,19 +6,19 @@ import addressLabel from '../_helpers/addressLabel';
 import AddressExplorerType from '../_types/AddressExplorerType';
 import tokenRegistryAtom from './tokenRegistryAtom';
 
-const addressStateAtom = selector<AddressExplorerType>({
+const addressStateAtom = selector<AddressExplorerType | null>({
   key: 'addressStateAtom',
   get: ({ get }) => {
     const currentState = get(currentStateAtom);
 
     if (!currentState) {
-      throw new Error('Current state is required');
+      return null;
     }
 
     const { type, state } = currentState;
 
     if (type !== 'address') {
-      throw new Error(`Invalid type ${type}`);
+      return null;
     }
 
     const pubkey = new PublicKey(state);

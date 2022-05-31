@@ -1,6 +1,6 @@
 import { useSetRecoilState } from 'recoil';
-import appState from '../../_atoms/appStateAtom';
-import type { WindowType } from '../../_types/WindowType';
+import appState from '../_atoms/appStateAtom';
+import type { WindowType } from '../_types/WindowType';
 
 const useSetCurrentWindowState = () => {
   const setter = useSetRecoilState(appState);

@@ -5,7 +5,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import TableSkeleton from './TableSkeleton/TableSkeleton';
+import SkeletonRows from '../../_sharedComponents/SkeletonRows';
 
 type ExplorerAccordionPropTypes = {
   id: string;
@@ -55,7 +55,7 @@ function ExplorerAccordion({
       <AccordionDetails aria-labelledby={`${id}-header`} id={`${id}-content`}>
         <SuspenseBoundary
           content={content}
-          loading={<TableSkeleton />}
+          loading={<SkeletonRows />}
           error={null}
           shouldRender={accordionState.wasExpanded}
         />
