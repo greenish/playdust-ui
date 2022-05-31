@@ -6,7 +6,7 @@ import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 
 const MAX_SLASH_PENALTY = 2 ** 8;
 
-function StakeConfigAccountCard() {
+function ConfigAccountStakeConfigCard() {
   const parsedConfigAccount = useRecoilValue(parsedConfigAccountAtom);
 
   if (!parsedConfigAccount || parsedConfigAccount.type !== 'stakeConfig') {
@@ -36,4 +36,4 @@ function StakeConfigAccountCard() {
   );
 }
 
-export default StakeConfigAccountCard;
+export default ConfigAccountStakeConfigCard;
