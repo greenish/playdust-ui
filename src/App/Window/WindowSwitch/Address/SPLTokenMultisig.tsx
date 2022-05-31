@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
@@ -16,20 +17,26 @@ function SPLTokenMultisig() {
   const { info } = parsedTokenAccount;
 
   return (
-    <ExplorerGrid>
-      <ExplorerGridRow
-        label="Required Signers"
-        value={info.numRequiredSigners}
-      />
-      <ExplorerGridRow label="Valid Signers" value={info.numValidSigners} />
-      {info.signers.map((signer: string, idx) => (
-        <ExplorerGridRow
-          key={signer}
-          label={`Signer ${idx + 1}`}
-          value={<LabeledAddressLink to={signer} allowCopy={true} />}
-        />
-      ))}
-    </ExplorerGrid>
+    <ExplorerAccordion
+      title="SPL Token Multisig Account Info"
+      expanded={true}
+      content={
+        <ExplorerGrid>
+          <ExplorerGridRow
+            label="Required Signers"
+            value={info.numRequiredSigners}
+          />
+          <ExplorerGridRow label="Valid Signers" value={info.numValidSigners} />
+          {info.signers.map((signer: string, idx) => (
+            <ExplorerGridRow
+              key={signer}
+              label={`Signer ${idx + 1}`}
+              value={<LabeledAddressLink to={signer} allowCopy={true} />}
+            />
+          ))}
+        </ExplorerGrid>
+      }
+    />
   );
 }
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import SuspenseBoundary from '../../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import SkeletonRows from '../../../_sharedComponents/SkeletonRows';
+import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import SPLTokenMintFungibleHeader from './SPLTokenMintFungibleHeader';
 import SPLTokenMintFungibleStats from './SPLTokenMintFungibleStats/SPLTokenMintFungibleStats';
 
@@ -11,12 +10,12 @@ function SPLTokenMintFungible() {
       <SuspenseBoundary
         content={<SPLTokenMintFungibleHeader />}
         error={null}
-        loading={<SkeletonRows />}
+        loading={null}
       />
       <SuspenseBoundary
         content={<SPLTokenMintFungibleStats />}
         error={null}
-        loading={<SkeletonRows />}
+        loading={null}
       />
     </>
   );

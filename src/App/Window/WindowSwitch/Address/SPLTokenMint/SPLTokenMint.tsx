@@ -5,11 +5,11 @@ import addressStateAtom from '../_atoms/addressStateAtom';
 import parsedTokenAccountAtom from '../_atoms/parsedTokenAccountAtom';
 import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
 import safePubkeyString from '../_helpers/safePubkeyString';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import ExternalLink from './ExternalLink';
-import SPLTokenMintFungible from './SPLTokenMintFungible/SPLTokenMintFungible';
 
 function normalizeTokenAmount(raw: string | number, decimals: number): number {
   let rawTokens: number;
@@ -49,40 +49,48 @@ function SPLTokenMint() {
   );
 
   return (
-    <>
-      <SPLTokenMintFungible />
-      <ExplorerGrid>
-        <ExplorerGridRow
-          label="Current Supply"
-          value={normalizeTokenAmount(info.supply, info.decimals)}
-        />
-        <ExplorerGridRow
-          label="Website"
-          value={<ExternalLink url={website} />}
-        />
-        {info.isInitialized && (
-          <ExplorerGridRow label="Status" value="Uninitialized" />
-        )}
-        {info.mintAuthority && (
+    <ExplorerAccordion
+      title="SPL Token Mint Account Info"
+      expanded={true}
+      content={
+        <ExplorerGrid>
           <ExplorerGridRow
-            label="Mint Authority"
-            value={
-              <LabeledAddressLink to={info.mintAuthority} allowCopy={true} />
-            }
+            label="Current Supply"
+            value={normalizeTokenAmount(info.supply, info.decimals)}
           />
-        )}
-        {info.freezeAuthority && (
-          <ExplorerGridRow
-            label="Freeze Authority"
-            value={
-              <LabeledAddressLink to={info.freezeAuthority} allowCopy={true} />
-            }
-          />
-        )}
-        <ExplorerGridRow label="Decimals" value={info.decimals} />
-        <ExplorerGridRow label="Tags" value={tagChips} />
-      </ExplorerGrid>
-    </>
+          {website && (
+            <ExplorerGridRow
+              label="Website"
+              value={<ExternalLink url={website} />}
+            />
+          )}
+          {info.isInitialized && (
+            <ExplorerGridRow label="Status" value="Uninitialized" />
+          )}
+          {info.mintAuthority && (
+            <ExplorerGridRow
+              label="Mint Authority"
+              value={
+                <LabeledAddressLink to={info.mintAuthority} allowCopy={true} />
+              }
+            />
+          )}
+          {info.freezeAuthority && (
+            <ExplorerGridRow
+              label="Freeze Authority"
+              value={
+                <LabeledAddressLink
+                  to={info.freezeAuthority}
+                  allowCopy={true}
+                />
+              }
+            />
+          )}
+          <ExplorerGridRow label="Decimals" value={info.decimals} />
+          {tags.length > 0 && <ExplorerGridRow label="Tags" value={tagChips} />}
+        </ExplorerGrid>
+      }
+    />
   );
 }
 
