@@ -2,7 +2,6 @@ import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import addressStateAtom from '../_atoms/addressStateAtom';
-// import parsedTokenAccountAtom from '../../_atoms/parsedTokenAccountAtom';
 import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
 import safePubkeyString from '../_helpers/safePubkeyString';
 

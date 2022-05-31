@@ -17,7 +17,7 @@ import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import WalletGallery from './WalletGallery/WalletGallery';
 import ContentContainer from './_sharedComponents/ContentContainer';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion/ExplorerAccordion';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 
 function Address() {
   return (

@@ -8,6 +8,10 @@ const stakeActivationAtom = selector<StakeActivationData>({
   get: async ({ get }) => {
     const addressState = get(addressStateAtom);
 
+    if (!addressState) {
+      throw new Error('addressState unavailable');
+    }
+
     const { pubkey } = addressState;
 
     const { endpoint } = get(solanaClusterAtom);
