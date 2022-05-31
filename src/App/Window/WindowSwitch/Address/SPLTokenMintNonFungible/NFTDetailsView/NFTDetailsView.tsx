@@ -3,9 +3,9 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ContentContainer from '../../_sharedComponents/ContentContainer';
 import playdustNftDataAtom from '../_atoms/playdustNftDataAtom';
-import Image from './Image';
+import NFTDetailsRenderMedia from './NFTDetailsRenderMedia';
 
-function Header() {
+function NFTDetailsView() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
   if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
@@ -24,7 +24,7 @@ function Header() {
       <Box>
         <Grid container={true} spacing={0}>
           <Grid item={true} xs={6}>
-            <Image />
+            <NFTDetailsRenderMedia />
           </Grid>
           <Grid item={true} xs={6}>
             <Stack>
@@ -75,4 +75,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default NFTDetailsView;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ContentContainer from '../_sharedComponents/ContentContainer';
-import Attributes from './Attributes';
-import Creators from './Creators';
-import Header from './Header/Header';
+import MetaplexCreators from './MetaplexCreators';
+import MetaplexNFTAttributes from './MetaplexNFTAttributes';
+import NFTDetailsView from './NFTDetailsView/NFTDetailsView';
 import RawMetaplexOffChainMetadata from './RawMetaplexOffChainMetadata';
 import RawMetaplexOnChainMetadata from './RawMetaplexOnChainMetadata';
 import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
@@ -18,10 +18,10 @@ function SPLTokenMintNonFungible() {
 
   return (
     <>
-      <Header />
+      <NFTDetailsView />
       <ContentContainer>
-        <Attributes />
-        <Creators />
+        <MetaplexNFTAttributes />
+        <MetaplexCreators />
         <RawMetaplexOnChainMetadata />
         <RawMetaplexOffChainMetadata />
       </ContentContainer>

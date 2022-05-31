@@ -10,7 +10,7 @@ const Item = styled(Paper)`
   padding: 8px 8px 8px 16px;
 `;
 
-function Attributes() {
+function MetaplexNFTAttributes() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
   if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
@@ -55,4 +55,4 @@ function Attributes() {
   );
 }
 
-export default Attributes;
+export default MetaplexNFTAttributes;

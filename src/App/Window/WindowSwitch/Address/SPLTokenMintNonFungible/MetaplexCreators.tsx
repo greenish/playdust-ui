@@ -20,7 +20,7 @@ interface CreatorInfo {
   share: number;
 }
 
-function Creators() {
+function MetaplexCreators() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
   if (!playdustNftData || !playdustNftData.metaplexOnChainData) {
@@ -66,4 +66,4 @@ function Creators() {
   );
 }
 
-export default Creators;
+export default MetaplexCreators;

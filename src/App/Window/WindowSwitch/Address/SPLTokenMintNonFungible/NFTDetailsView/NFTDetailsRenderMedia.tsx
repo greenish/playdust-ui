@@ -20,7 +20,7 @@ const VisibilityContainer = styled.div`
   z-index: 10;
 `;
 
-function Image() {
+function NFTDetailsRenderMedia() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
   const [visible, setVisible] = useState(false);
 
@@ -68,4 +68,4 @@ function Image() {
   );
 }
 
-export default Image;
+export default NFTDetailsRenderMedia;

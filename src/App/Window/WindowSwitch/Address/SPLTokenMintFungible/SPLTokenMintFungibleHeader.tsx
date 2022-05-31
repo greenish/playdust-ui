@@ -10,12 +10,7 @@ const IDENTICON_WIDTH = 64;
 
 function SPLTokenMintFungibleHeader() {
   const addressState = useRecoilValue(addressStateAtom);
-  // const parsedTokenAccount = useRecoilValue(parsedTokenAccountAtom);
   const tokenRegistry = useRecoilValue(tokenRegistryAtom);
-
-  // if (!parsedTokenAccount || parsedTokenAccount.type !== 'mint') {
-  //   return null;
-  // }
 
   const tokenInfo = tokenRegistry.get(safePubkeyString(addressState.pubkey));
 
@@ -38,7 +33,7 @@ function SPLTokenMintFungibleHeader() {
         <Grid item={true}>{icon}</Grid>
         <Grid item={true}>
           <Typography variant="h5" component="h2" gutterBottom={true}>
-            {tokenInfo?.name || 'Unknown Token'}
+            {tokenInfo.name}
           </Typography>
         </Grid>
       </Grid>
