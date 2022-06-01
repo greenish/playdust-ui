@@ -40,21 +40,19 @@ function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
   const setCurrentWindowState = useSetCurrentWindowState();
 
-  const windowContext = useMemo<WindowContextType>(
-    () => ({
-      setWindowImages: (images: string[]) => {
-        const activeImages = (activeWindow.images || []).join(',');
-        const nextImages = images.join(',');
-        const shouldUpdate = activeImages !== nextImages;
+  const setWindowImages = useMemo<WindowContextType>(
+    () => (images: string[]) => {
+      const activeImages = (activeWindow.images || []).join(',');
+      const nextImages = images.join(',');
+      const shouldUpdate = activeImages !== nextImages;
 
-        if (shouldUpdate) {
-          setCurrentWindowState({
-            ...activeWindow,
-            images,
-          });
-        }
-      },
-    }),
+      if (shouldUpdate) {
+        setCurrentWindowState({
+          ...activeWindow,
+          images,
+        });
+      }
+    },
     [activeWindow, setCurrentWindowState]
   );
 
@@ -64,7 +62,10 @@ function Window() {
 
   return (
     <RecoilRoot key={`${activeWindow.tabId}`}>
-      <WindowStateProvider context={windowContext}>
+      <WindowStateProvider
+        setWindowImages={setWindowImages}
+        windowState={activeWindow}
+      >
         <RootContainer>
           <SearchInputContainer>
             <SuspenseBoundary

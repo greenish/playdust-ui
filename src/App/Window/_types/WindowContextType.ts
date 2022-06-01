@@ -1,5 +1,3 @@
-type WindowContextType = {
-  setWindowImages: (images: string[]) => void;
-};
+type WindowContextType = (images: string[]) => void;
 
 export default WindowContextType;

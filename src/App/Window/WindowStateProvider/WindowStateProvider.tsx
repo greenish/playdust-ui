@@ -1,38 +1,44 @@
-import React, { ReactNode, useEffect } from 'react';
-import { useLocation } from 'react-use';
+import React, { ReactNode, useContext, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import decodeWindowHash from '../../_helpers/decodeWindowHash';
+import { WindowStateType } from '../../_types/WindowStateType';
 import windowStateAtom from '../_atoms/windowStateAtom';
-import WindowContext from '../_sharedComponents/WindowContext';
-import WindowContextType from '../_types/WindowContextType';
+import WindowSetImagesContext from '../_sharedComponents/WindowSetImagesContext';
+import WindowStateContext from './WindowStateContext';
 import windowStateAvailableAtom from './_atoms/windowStateAvailableAtom';
 
 function WindowStateListener() {
-  const location = useLocation();
+  const windowState = useContext(WindowStateContext);
   const setCurrentState = useSetRecoilState(windowStateAtom);
 
   useEffect(() => {
-    setCurrentState(decodeWindowHash(location));
-  }, [location, setCurrentState]);
+    if (windowState) {
+      setCurrentState(windowState);
+    }
+  }, [windowState, setCurrentState]);
 
   return null;
 }
 
 type WindowStateProviderProps = {
-  context: WindowContextType;
+  setWindowImages: (images: string[]) => void;
+  windowState: WindowStateType;
   children: ReactNode;
 };
 
-function WindowStateProvider({ context, children }: WindowStateProviderProps) {
+function WindowStateProvider({
+  setWindowImages,
+  windowState,
+  children,
+}: WindowStateProviderProps) {
   const windowStateAvailable = useRecoilValue(windowStateAvailableAtom);
 
   return (
-    <>
+    <WindowStateContext.Provider value={windowState}>
       <WindowStateListener />
-      <WindowContext.Provider value={context}>
+      <WindowSetImagesContext.Provider value={setWindowImages}>
         {windowStateAvailable && children}
-      </WindowContext.Provider>
-    </>
+      </WindowSetImagesContext.Provider>
+    </WindowStateContext.Provider>
   );
 }
 

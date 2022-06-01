@@ -7,12 +7,16 @@ import safePubkey from '../_helpers/safePubkey';
 import AddressExplorerType from '../_types/AddressExplorerType';
 import tokenRegistryAtom from './tokenRegistryAtom';
 
-const addressStateAtom = selector<AddressExplorerType>({
+const addressStateAtom = selector<AddressExplorerType | null>({
   key: 'addressStateAtom',
   get: ({ get }) => {
     const windowState = get(windowStateAtom);
 
     const { type, state } = windowState;
+
+    if (type !== 'address') {
+      return null;
+    }
 
     const pubkey = safePubkey(state);
 

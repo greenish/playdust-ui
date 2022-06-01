@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, { useContext, useEffect } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
-import WindowContext from '../../_sharedComponents/WindowContext';
+import WindowSetImagesContext from '../../_sharedComponents/WindowSetImagesContext';
 import SearchOverview from './SearchOverview/SearchOverview';
 import SearchResults from './SearchResults/SearchResults';
 import SearchSideBar from './SearchSideBar/SearchSideBar';
@@ -33,7 +33,7 @@ const TokenContainer = styled.div`
 
 function Search() {
   const searchResults = useRecoilValueLoadable(searchResultsAtom);
-  const windowContext = useContext(WindowContext);
+  const setWindowImages = useContext(WindowSetImagesContext);
 
   useEffect(() => {
     if (
@@ -46,10 +46,10 @@ function Search() {
         .map((nft) => nft?.offChainData?.image);
 
       if (filtered.length) {
-        windowContext.setWindowImages(filtered);
+        setWindowImages(filtered);
       }
     }
-  }, [searchResults, windowContext]);
+  }, [searchResults, setWindowImages]);
 
   return (
     <RootContainer>
