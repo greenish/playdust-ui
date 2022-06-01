@@ -11,6 +11,8 @@ const nextConfig = {
     config.plugins.push(
       new webpack.DefinePlugin({
         'process.env.VERCEL_ENV': JSON.stringify(process.env.VERCEL_ENV),
+        'process.env.RPC_NODE_CLUSTER': JSON.stringify(process.env.RPC_NODE_CLUSTER),
+        'process.env.RPC_NODE_URL': JSON.stringify(process.env.RPC_NODE_URL),
       })
     );
     return config;
