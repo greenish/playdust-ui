@@ -15,6 +15,7 @@ import SysvarAccountSlotHashesCard from './SysvarAccountSlotHashesCard';
 import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
 import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
+import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
 import WalletGallery from './WalletGallery/WalletGallery';
 import ContentContainer from './_sharedComponents/ContentContainer';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
@@ -102,6 +103,11 @@ function Address() {
         />
         <SuspenseBoundary
           content={<SysvarAccountStakeHistoryCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<VoteAccountCard />}
           error={null}
           loading={null}
         />
