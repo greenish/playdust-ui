@@ -1,5 +1,5 @@
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
-import type { TabType } from '../../_types/TabType';
+import TabType from '../../_types/AppTabType';
 
 const useGoToTab = () => {
   const pushWindowHash = usePushWindowHash();
@@ -7,7 +7,10 @@ const useGoToTab = () => {
   return (tab: TabType) => {
     const activeWindow = tab.windows[tab.selectedWindowIdx];
 
-    pushWindowHash(activeWindow, { tabOverride: tab.id });
+    pushWindowHash({
+      ...activeWindow,
+      tabId: tab.id,
+    });
   };
 };
 

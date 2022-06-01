@@ -4,13 +4,12 @@ import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
-import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
+import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
-import WindowStateProvider from './WindowStateProvider';
+import WindowStateProvider from './WindowStateProvider/WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import WindowContext from './_sharedComponents/WindowContext';
-import WindowContextType from './_types/WindowContextType';
+import WindowSetImagesType from './_types/WindowSetImagesType';
 
 const RootContainer = styled.div`
   display: flex;
@@ -39,39 +38,39 @@ const SpinnerContainer = styled.div`
 `;
 
 function Window() {
-  const activeTab = useRecoilValue(activeTabAtom);
   const activeWindow = useRecoilValue(activeWindowAtom);
-  const setCurrentWindowState = useSetCurrentWindowState();
+  const activeTab = useRecoilValue(activeTabAtom);
+  const setAppWindowState = useSetAppWindowState();
+  const activeImages = (
+    activeTab.windows[activeTab.selectedWindowIdx]?.images ?? []
+  ).join(',');
 
-  const windowContextValue = useMemo<WindowContextType>(
-    () => ({
-      setWindowImages: (images: string[]) => {
-        const activeImages = (activeWindow.images || []).join(',');
-        const nextImages = images.join(',');
-        const shouldUpdate = activeImages !== nextImages;
+  const setWindowImages = useMemo<WindowSetImagesType>(
+    () => (images: string[]) => {
+      const nextImages = images.join(',');
+      const shouldUpdate = activeImages !== nextImages;
 
-        if (shouldUpdate) {
-          setCurrentWindowState(
-            {
-              ...activeWindow,
-              images,
-            },
-            activeTab.id
-          );
+      if (shouldUpdate) {
+        if (images.length === 0) {
+          setAppWindowState({ images: undefined }, activeWindow.tabId);
+        } else {
+          setAppWindowState({ images }, activeWindow.tabId);
         }
-      },
-    }),
-    [activeTab.id, activeWindow, setCurrentWindowState]
+      }
+    },
+    [activeImages, activeWindow.tabId, setAppWindowState]
   );
 
-  if (!activeTab || !activeWindow) {
+  if (!activeWindow) {
     return null;
   }
 
   return (
-    <RecoilRoot key={`${activeTab.id}`}>
-      <WindowStateProvider />
-      <WindowContext.Provider value={windowContextValue}>
+    <RecoilRoot key={`${activeWindow.tabId}`}>
+      <WindowStateProvider
+        setWindowImages={setWindowImages}
+        windowState={activeWindow}
+      >
         <RootContainer>
           <SearchInputContainer>
             <SuspenseBoundary
@@ -92,7 +91,7 @@ function Window() {
             />
           </ContentContainer>
         </RootContainer>
-      </WindowContext.Provider>
+      </WindowStateProvider>
     </RecoilRoot>
   );
 }

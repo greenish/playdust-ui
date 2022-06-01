@@ -1,94 +1,88 @@
+import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-use';
 import { LocationSensorState } from 'react-use/lib/useLocation';
 import { useRecoilValue } from 'recoil';
-import activeTabAtom from '../_atoms/activeTabAtom';
-import activeWindowAtom from '../_atoms/activeWindowAtom';
 import appStateAtom from '../_atoms/appStateAtom';
-import decodeWindowHash from '../_helpers/decodeWindowHash';
-import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
+import useSetAppWindowState from '../_hooks/useSetAppWindowState';
+import decodeWindowHash from './_helpers/decodeWindowHash';
 import useAddTab from './_hooks/useAddTab';
 import useReplaceWindowHash from './_hooks/useReplaceWindowHash';
 import useSetSelectedTab from './_hooks/useSetSelectedTab';
 
 function AppStateProvider() {
   const { tabs } = useRecoilValue(appStateAtom);
-  const setCurrentWindowState = useSetCurrentWindowState();
+  const setAppWindowState = useSetAppWindowState();
   const addTab = useAddTab();
-  const activeTab = useRecoilValue(activeTabAtom);
-  const activeWindow = useRecoilValue(activeWindowAtom);
   const setSelectedTab = useSetSelectedTab();
   const replaceWindowHash = useReplaceWindowHash();
   const newLocation = useLocation();
 
   const handleLocationChange = useCallback(
     (location: LocationSensorState) => {
-      const { windowState, tab } = decodeWindowHash(location);
-      const isEmptyUrlState = windowState.state === '';
-      const foundURLTab = tabs.find((entry) => entry.id === tab);
+      const windowHash = decodeWindowHash(location);
+      const foundURLTab = tabs.find((entry) => entry.id === windowHash.tabId);
       const foundInCache = tabs.find((entry) => {
-        const { state, type } = entry.windows[0] || [];
+        const { state, type } = entry.windows[0] || {};
+        const tabId = entry.id;
 
-        return state === windowState.state && type === windowState.type;
+        return (
+          state === windowHash.state &&
+          type === windowHash.type &&
+          tabId === windowHash.tabId
+        );
       });
+
+      const windowState = {
+        type: windowHash.type,
+        state: windowHash.state ?? '',
+        tabId: windowHash.tabId ?? nanoid(),
+      };
 
       switch (location?.trigger) {
         case 'load': {
-          // Load active tab from cache when going to root (/)
-          if (isEmptyUrlState) {
-            replaceWindowHash(activeWindow, {
-              tabOverride: activeTab.id,
-            });
+          // Loading tab from URL
+          if (foundInCache) {
+            setSelectedTab(foundInCache.id);
             break;
           }
 
           // Add new tab from URL, i.e. shared link
-          if (!foundInCache) {
-            const { id } = addTab(windowState);
-            replaceWindowHash(windowState, { tabOverride: id });
-            break;
+          if (windowHash.tabId) {
+            addTab(windowState);
           }
 
-          // Loading tab from URL
-          setSelectedTab(foundInCache.id);
+          replaceWindowHash(windowState);
           break;
         }
         case 'popstate':
         case 'pushstate': {
-          // Going home on the current tab
-          if (isEmptyUrlState && foundURLTab) {
-            setCurrentWindowState(windowState, tab);
-            break;
-          }
-
           // Navigating to an existing tab
-          if (foundInCache && foundURLTab) {
-            setSelectedTab(tab);
+          if (foundInCache) {
+            setSelectedTab(windowState.tabId);
             break;
           }
 
-          // Adding back deleted tab
+          // Adding new tab
           if (!foundURLTab) {
-            addTab(windowState, tab);
+            addTab(windowState);
             break;
           }
 
           // Navigating to next new state in tab
-          setCurrentWindowState(windowState, foundURLTab.id);
+          setAppWindowState(
+            {
+              type: windowState.type,
+              state: windowState.state,
+            },
+            windowState.tabId
+          );
           break;
         }
         default:
       }
     },
-    [
-      activeTab.id,
-      activeWindow,
-      addTab,
-      replaceWindowHash,
-      setCurrentWindowState,
-      setSelectedTab,
-      tabs,
-    ]
+    [addTab, replaceWindowHash, setAppWindowState, setSelectedTab, tabs]
   );
 
   useEffect(() => {

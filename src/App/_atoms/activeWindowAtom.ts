@@ -1,14 +1,18 @@
 import { selector } from 'recoil';
-import type { WindowType } from '../_types/WindowType';
+import type { WindowStateType } from '../_types/WindowStateType';
 import activeTab from './activeTabAtom';
 
-const activeWindowAtom = selector<WindowType>({
+const activeWindowAtom = selector<WindowStateType>({
   key: 'activeWindowAtom',
   get: ({ get }) => {
     const active = get(activeTab);
     const result = active.windows[active.selectedWindowIdx];
 
-    return result;
+    return {
+      type: result.type,
+      state: result.state,
+      tabId: active.id,
+    };
   },
 });
 
