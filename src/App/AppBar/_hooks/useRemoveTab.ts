@@ -11,7 +11,6 @@ const useRemoveTab = () => {
   const getNextValue = () => {
     const { tabs, selectedTabId, ...rest } = curr;
 
-
     // If last tab is deleted set it to home instead
     if (tabs.length === 1) {
       return getDefaultAppState(tabs[0].id);
