@@ -4,8 +4,8 @@ import React from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import QueryNodeType from '../../../../_types/QueryNodeType';
 import collectionByIdAtom from '../../_atoms/collectionByIdAtom';
-import attributeNodeUncommittedAtom from './_atoms/attributeNodeUncommittedAtom';
 import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
+import attributeNodeUncommittedAtom from './_atoms/attributeNodeUncommittedAtom';
 
 const QueryNodeChipContainer = styled.div`
   display: flex;

@@ -1,12 +1,12 @@
 import { matchSorter } from 'match-sorter';
 import { selector } from 'recoil';
 import SearchAggResponseType from '../../../../../_types/SearchAggResponseType';
-import type SearchQueryNodeType from '../../_types/SearchQueryNodeType';
-import SearchSuggestionNewType from '../_types/SearchSuggestionNewType';
-import searchAggsByNodeAtom from './searchAggsByNodeAtom';
 import searchQueryActiveNodeAtom from '../../_atoms/searchQueryActiveNodeAtom';
 import searchQueryAtom from '../../_atoms/searchQueryAtom';
 import searchQueryTermAtom from '../../_atoms/searchQueryTermAtom';
+import type SearchQueryNodeType from '../../_types/SearchQueryNodeType';
+import SearchSuggestionNewType from '../_types/SearchSuggestionNewType';
+import searchAggsByNodeAtom from './searchAggsByNodeAtom';
 
 const getClientSuggestions = (
   term: string,
