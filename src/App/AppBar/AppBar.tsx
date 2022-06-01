@@ -18,7 +18,7 @@ import appBarWidth from '../_helpers/appBarWidth';
 import getCDNUrl from '../_helpers/getCDNUrl';
 import safePromise from '../_helpers/safePromise';
 import useGoHome from '../_hooks/useGoHome';
-import type { WindowStateType } from '../_types/WindowStateType';
+import AppWindowType from '../_types/AppWindowType';
 import Playdust from './PlaydustIcon';
 import WalletButton from './WalletButton/WalletButton';
 import useGoToNewTab from './_hooks/useGoToNewTab';
@@ -138,7 +138,7 @@ function SizedButton({
   );
 }
 
-const getWindowTab = (window: WindowStateType): ReactNode | undefined => {
+const getWindowTab = (window: AppWindowType): ReactNode | undefined => {
   switch (window.type) {
     case 'home':
       return <Home />;

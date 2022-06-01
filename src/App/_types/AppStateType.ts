@@ -1,8 +1,8 @@
 import { array, Infer, object, string } from 'superstruct';
-import { TabType } from './TabType';
+import AppTabType from './AppTabType';
 
 export type AppStateType = Infer<typeof AppStateType>;
 export const AppStateType = object({
-  tabs: array(TabType),
+  tabs: array(AppTabType),
   selectedTabId: string(),
 });

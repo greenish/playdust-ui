@@ -3,6 +3,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { WindowStateType } from '../../_types/WindowStateType';
 import windowStateAtom from '../_atoms/windowStateAtom';
 import WindowSetImagesContext from '../_sharedComponents/WindowSetImagesContext';
+import WindowSetImagesType from '../_types/WindowSetImagesType';
 import WindowStateContext from './WindowStateContext';
 import windowStateAvailableAtom from './_atoms/windowStateAvailableAtom';
 
@@ -14,13 +15,14 @@ function WindowStateListener() {
     if (windowState) {
       setCurrentState(windowState);
     }
-  }, [windowState, setCurrentState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(windowState), setCurrentState]);
 
   return null;
 }
 
 type WindowStateProviderProps = {
-  setWindowImages: (images: string[]) => void;
+  setWindowImages: WindowSetImagesType;
   windowState: WindowStateType;
   children: ReactNode;
 };

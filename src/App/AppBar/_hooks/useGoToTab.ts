@@ -1,5 +1,5 @@
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
-import type { TabType } from '../../_types/TabType';
+import TabType from '../../_types/AppTabType';
 
 const useGoToTab = () => {
   const pushWindowHash = usePushWindowHash();

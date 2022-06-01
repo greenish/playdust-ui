@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import type { TabType } from '../_types/TabType';
+import TabType from '../_types/AppTabType';
 import appState from './appStateAtom';
 
 const activeTabAtom = selector<TabType>({

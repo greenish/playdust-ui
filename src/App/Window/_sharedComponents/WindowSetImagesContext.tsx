@@ -1,9 +1,9 @@
 import React from 'react';
-import WindowContextType from '../_types/WindowContextType';
+import WindowSetImagesType from '../_types/WindowSetImagesType';
 
-const defaultWindowSetImages: WindowContextType = () => {};
+const defaultWindowSetImages: WindowSetImagesType = () => {};
 
-const WindowSetImagesContext = React.createContext<WindowContextType>(
+const WindowSetImagesContext = React.createContext<WindowSetImagesType>(
   defaultWindowSetImages
 );
 

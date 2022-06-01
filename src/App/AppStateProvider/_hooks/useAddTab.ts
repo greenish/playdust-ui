@@ -1,14 +1,20 @@
 import { useRecoilState } from 'recoil';
 import appState from '../../_atoms/appStateAtom';
+import AppTabType from '../../_types/AppTabType';
 import type { WindowStateType } from '../../_types/WindowStateType';
 
 const useAddTab = () => {
   const [state, setter] = useRecoilState(appState);
 
-  return (newState: WindowStateType, addAtCurrIdx?: boolean): void => {
-    const newTab = {
-      id: newState.tabId,
-      windows: [newState],
+  return (windowState: WindowStateType, addAtCurrIdx?: boolean): void => {
+    const newTab: AppTabType = {
+      id: windowState.tabId,
+      windows: [
+        {
+          state: windowState.state,
+          type: windowState.type,
+        },
+      ],
       selectedWindowIdx: 0,
     };
 

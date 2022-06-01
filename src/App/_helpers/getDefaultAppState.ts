@@ -1,27 +1,25 @@
 import { nanoid } from 'nanoid';
 import type { AppStateType } from '../_types/AppStateType';
-import type { WindowStateType } from '../_types/WindowStateType';
+import AppWindowType from '../_types/AppWindowType';
 
-const newHomeWindow: () => WindowStateType = () => ({
+const newHomeWindow: () => AppWindowType = () => ({
   type: 'home',
   state: '',
-  tabId: nanoid(),
 });
 
 const getDefaultAppState = (tabId?: string): AppStateType => {
   const homeWindow = newHomeWindow();
-
-  homeWindow.tabId = tabId ?? homeWindow.tabId;
+  const newTabId = tabId ?? nanoid();
 
   return {
     tabs: [
       {
-        id: homeWindow.tabId,
+        id: newTabId,
         windows: [homeWindow],
         selectedWindowIdx: 0,
       },
     ],
-    selectedTabId: homeWindow.tabId,
+    selectedTabId: newTabId,
   };
 };
 

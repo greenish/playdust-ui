@@ -4,7 +4,7 @@ import { useLocation } from 'react-use';
 import { LocationSensorState } from 'react-use/lib/useLocation';
 import { useRecoilValue } from 'recoil';
 import appStateAtom from '../_atoms/appStateAtom';
-import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
+import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import decodeWindowHash from './_helpers/decodeWindowHash';
 import useAddTab from './_hooks/useAddTab';
 import useReplaceWindowHash from './_hooks/useReplaceWindowHash';
@@ -12,7 +12,7 @@ import useSetSelectedTab from './_hooks/useSetSelectedTab';
 
 function AppStateProvider() {
   const { tabs } = useRecoilValue(appStateAtom);
-  const setCurrentWindowState = useSetCurrentWindowState();
+  const setAppWindowState = useSetAppWindowState();
   const addTab = useAddTab();
   const setSelectedTab = useSetSelectedTab();
   const replaceWindowHash = useReplaceWindowHash();
@@ -23,7 +23,8 @@ function AppStateProvider() {
       const windowHash = decodeWindowHash(location);
       const foundURLTab = tabs.find((entry) => entry.id === windowHash.tabId);
       const foundInCache = tabs.find((entry) => {
-        const { state, type, tabId } = entry.windows[0] || {};
+        const { state, type } = entry.windows[0] || {};
+        const tabId = entry.id;
 
         return (
           state === windowHash.state &&
@@ -69,13 +70,19 @@ function AppStateProvider() {
           }
 
           // Navigating to next new state in tab
-          setCurrentWindowState(windowState);
+          setAppWindowState(
+            {
+              type: windowState.type,
+              state: windowState.state,
+            },
+            windowState.tabId
+          );
           break;
         }
         default:
       }
     },
-    [addTab, replaceWindowHash, setCurrentWindowState, setSelectedTab, tabs]
+    [addTab, replaceWindowHash, setAppWindowState, setSelectedTab, tabs]
   );
 
   useEffect(() => {

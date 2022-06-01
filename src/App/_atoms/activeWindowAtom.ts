@@ -8,7 +8,11 @@ const activeWindowAtom = selector<WindowStateType>({
     const active = get(activeTab);
     const result = active.windows[active.selectedWindowIdx];
 
-    return result;
+    return {
+      type: result.type,
+      state: result.state,
+      tabId: active.id,
+    };
   },
 });
 

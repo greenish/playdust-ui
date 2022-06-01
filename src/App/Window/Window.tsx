@@ -2,13 +2,14 @@ import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
+import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
-import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
+import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
 import WindowStateProvider from './WindowStateProvider/WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import WindowContextType from './_types/WindowContextType';
+import WindowSetImagesType from './_types/WindowSetImagesType';
 
 const RootContainer = styled.div`
   display: flex;
@@ -38,22 +39,26 @@ const SpinnerContainer = styled.div`
 
 function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
-  const setCurrentWindowState = useSetCurrentWindowState();
+  const activeTab = useRecoilValue(activeTabAtom);
+  const setAppWindowState = useSetAppWindowState();
+  const activeImages = (
+    activeTab.windows[activeTab.selectedWindowIdx]?.images ?? []
+  ).join(',');
 
-  const setWindowImages = useMemo<WindowContextType>(
+  const setWindowImages = useMemo<WindowSetImagesType>(
     () => (images: string[]) => {
-      const activeImages = (activeWindow.images || []).join(',');
       const nextImages = images.join(',');
       const shouldUpdate = activeImages !== nextImages;
 
       if (shouldUpdate) {
-        setCurrentWindowState({
-          ...activeWindow,
-          images,
-        });
+        if (images.length === 0) {
+          setAppWindowState({ images: undefined }, activeWindow.tabId);
+        } else {
+          setAppWindowState({ images }, activeWindow.tabId);
+        }
       }
     },
-    [activeWindow, setCurrentWindowState]
+    [activeImages, activeWindow.tabId, setAppWindowState]
   );
 
   if (!activeWindow) {
