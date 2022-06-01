@@ -38,7 +38,6 @@ function AppStateProvider() {
         tabId: windowHash.tabId ?? nanoid()
       };
       
-      console.log(location.trigger, windowState);
       switch (location?.trigger) {
         case 'load': {
           // Loading tab from URL
