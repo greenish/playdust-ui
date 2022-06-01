@@ -4,6 +4,7 @@ import currentStateAtom from '../_atoms/currentStateAtom';
 import Address from './Address/Address';
 import Home from './Home/Home';
 import Search from './Search/Search';
+import Transaction from './Transaction/Transaction';
 
 function WindowSwitch() {
   const windowState = useRecoilValue(currentStateAtom);
@@ -18,7 +19,7 @@ function WindowSwitch() {
     case 'block':
       return null;
     case 'tx':
-      return null;
+      return <Transaction />;
     case 'epoch':
       return null;
     default:
