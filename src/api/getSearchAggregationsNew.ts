@@ -104,6 +104,9 @@ const getSearchAggregationsNew = nextApiHandler(async (req) => {
   const { query, activeNodeId } = create(req.body, SearchSuggestionInputType);
   const pathToSuggestion = makeGetPathFromRoot(query)([], activeNodeId);
   const suggestionNFTQuery = buildSuggestionQuery(query, pathToSuggestion);
+  const activeNode = query.nodes[activeNodeId];
+  const isAttributeNode =
+    activeNode.type !== 'group' && activeNode.field === 'attribute';
 
   const aggQuery = getAttributeAggQuery();
   const aggRequest: SearchRequest['body'] = {
@@ -124,6 +127,10 @@ const getSearchAggregationsNew = nextApiHandler(async (req) => {
       count: bucketValue.doc_count,
     })),
   }));
+
+  if (isAttributeNode) {
+    return payload.filter((entry) => entry.key === activeNode.trait);
+  }
 
   return payload;
 });

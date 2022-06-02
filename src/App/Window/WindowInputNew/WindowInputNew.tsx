@@ -3,33 +3,39 @@ import { Box, useTheme } from '@mui/material';
 import React, { useCallback, useEffect, useRef } from 'react';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import QueryNodeChip from './QueryNodeChip';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import QueryNodeChip from './QueryNodeChip/QueryNodeChip';
 import RenderQuery from './RenderQuery/RenderQuery';
+import SuggestionOverlay from './SuggestionOverlay/SuggestionOverlay';
+import attributeNodeDeltaAtom from './_atoms/attributeNodeDeltaAtom';
 import searchQueryActiveNodeAtom from './_atoms/searchQueryActiveNodeAtom';
 import searchQueryRootNodeAtom from './_atoms/searchQueryRootNodeAtom';
 import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
 import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
 
-const RootContainer = styled(Box)`
+const RootContainer = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const InputContainer = styled(Box)`
   display: flex;
   flex-direction: row;
   align-items: stretch;
   flex-wrap: wrap;
-  padding: 4px 8px;
-  margin: 8px 24px;
+  padding: 0 8px;
   font-size: 80%;
   background: none;
 `;
 
 function WindowInputNew() {
-  const [activeNodeId, setActiveNode] = useRecoilState(
-    searchQueryActiveNodeAtom
-  );
+  const [activeNode, setActiveNode] = useRecoilState(searchQueryActiveNodeAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const [term, setTerm] = useRecoilState(searchQueryTermAtom);
+  const delta = useRecoilValue(attributeNodeDeltaAtom);
+  const deltaResetter = useResetRecoilState(attributeNodeDeltaAtom);
   const theme = useTheme();
-  const isActive = !!activeNodeId;
+  const isActive = !!activeNode;
   const borderColor = isActive
     ? theme.palette.primary.main
     : theme.palette.grey[400];
@@ -45,63 +51,77 @@ function WindowInputNew() {
     setActiveNode(null);
   });
 
-  useWindowInputKeyEvent();
+  useEffect(() => {
+    if (delta.length > 0) {
+      // This is temporary, this should trigger a URL change instead of the reset
+      deltaResetter();
+    }
+  }, [activeNode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setActiveNode({
-      type: 'group',
-      nodeId: rootNode.id,
-      index: rootNode.children.length,
-    });
     inputRef?.current?.focus();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [delta]);
+
+  useWindowInputKeyEvent();
+
+  const textInput = (
+    <AutosizeInput
+      inputStyle={{
+        fontFamily: 'inherit',
+        border: 'none',
+        outline: 'none',
+        background: 'inherit',
+      }}
+      inputRef={setInputRef}
+      value={term}
+      onChange={(evt) => setTerm(evt.target.value)}
+      autoFocus={true}
+      onClick={(e) => e.stopPropagation()}
+    />
+  );
 
   return (
-    <RootContainer
-      sx={{
-        border: 'solid',
-        borderColor,
-        borderWidth,
-        '&:hover': {
-          borderColor: theme.palette.primary.main,
-        },
-      }}
-      ref={containerRef}
-      onClick={() => {
-        setActiveNode({
-          type: 'group',
-          nodeId: rootNode.id,
-          index: rootNode.children.length,
-        });
-        inputRef?.current?.focus();
-      }}
-    >
-      <RenderQuery
-        renderQueryNode={(queryNode) => (
-          <QueryNodeChip
-            onClick={(evt) => {
-              setActiveNode({ nodeId: queryNode.id, type: 'query' });
-              evt.stopPropagation();
-            }}
-            node={queryNode}
-          />
-        )}
-        renderTextInput={() => (
-          <AutosizeInput
-            inputStyle={{
-              fontFamily: 'inherit',
-              border: 'none',
-              outline: 'none',
-              background: 'inherit',
-            }}
-            inputRef={setInputRef}
-            value={term}
-            onChange={(evt) => setTerm(evt.target.value)}
-            autoFocus={true}
-            onClick={(e) => e.stopPropagation()}
-          />
-        )}
-      />
+    <RootContainer ref={containerRef}>
+      <InputContainer
+        sx={{
+          border: 'solid',
+          borderColor,
+          borderWidth,
+          '&:hover': {
+            borderColor: theme.palette.primary.main,
+          },
+        }}
+        onClick={() => {
+          setActiveNode({
+            type: 'group',
+            nodeId: rootNode.id,
+            index: rootNode.children.length,
+          });
+          inputRef?.current?.focus();
+        }}
+      >
+        <RenderQuery
+          renderQueryNode={(queryNode) => (
+            <QueryNodeChip
+              onClick={(evt) => {
+                setActiveNode({ nodeId: queryNode.id, type: 'query' });
+                evt.stopPropagation();
+              }}
+              node={queryNode}
+              textInput={textInput}
+            />
+          )}
+          renderTextInput={() => (
+            <QueryNodeChip
+              onClick={(evt) => {
+                evt.stopPropagation();
+              }}
+              textInput={textInput}
+            />
+          )}
+        />
+      </InputContainer>
+      {activeNode && <SuggestionOverlay />}
     </RootContainer>
   );
 }

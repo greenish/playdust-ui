@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import QueryNodeType from '../../../../_types/QueryNodeType';
 import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
@@ -33,14 +33,16 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
   return (
     <>
       {groupedRenderMap.map((renderMap) => (
-        <QueryGroup>
+        <QueryGroup key={renderMap.map((entry) => entry.node.id).join(':')}>
           {renderMap.map((renderNode) => {
+            const key = `${renderNode.type}:${renderNode.node.id}`;
+
             switch (renderNode.type) {
               case 'groupStart':
-                return <RenderGroupEnds renderNode={renderNode} />;
+                return <RenderGroupEnds key={key} renderNode={renderNode} />;
               case 'groupEnd':
                 return (
-                  <>
+                  <Fragment key={key}>
                     {activeNode?.type === 'group' &&
                       activeNode?.nodeId === renderNode.node.id &&
                       activeNode?.index === renderNode.node.children.length && (
@@ -50,11 +52,11 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
                         />
                       )}
                     <RenderGroupEnds renderNode={renderNode} />
-                  </>
+                  </Fragment>
                 );
               case 'groupOperator': {
                 return (
-                  <>
+                  <Fragment key={key}>
                     {activeNode?.type === 'group' &&
                       activeNode?.nodeId === renderNode.node.id &&
                       activeNode?.index === renderNode.index && (
@@ -64,12 +66,12 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
                         />
                       )}
                     <RenderGroupOperator renderNode={renderNode} />
-                  </>
+                  </Fragment>
                 );
               }
               case 'query':
                 return (
-                  <RenderQueryNode renderNode={renderNode}>
+                  <RenderQueryNode key={key} renderNode={renderNode}>
                     {renderQueryNode(renderNode.node, renderNode.parent)}
                   </RenderQueryNode>
                 );

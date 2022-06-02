@@ -79,7 +79,7 @@ const defaultQuery: SearchQueryType = {
     'eyes-sunglasses': {
       id: 'eyes-sunglasses',
       field: 'attribute',
-      trait: 'eyes',
+      trait: 'Eyewear',
       value: ['Ape Vipers'],
     },
     'teeth-golden': {
