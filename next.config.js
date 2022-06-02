@@ -7,6 +7,16 @@ const { PLAYDUST_API_HOST } = process.env
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env.PD_ENV': JSON.stringify(process.env.PD_ENV),
+        'process.env.RPC_NODE_CLUSTER': JSON.stringify(process.env.RPC_NODE_CLUSTER),
+        'process.env.RPC_NODE_URL': JSON.stringify(process.env.RPC_NODE_URL),
+      })
+    );
+    return config;
+  },
   rewrites: async () => [
     {
       source: '/cdn/:path*',

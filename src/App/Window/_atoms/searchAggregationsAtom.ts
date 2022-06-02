@@ -1,26 +1,10 @@
-import { selector } from 'recoil';
+import { atom } from 'recoil';
 import type SearchAggregationResponseType from '../../../_types/SearchAggregationResponseType';
-import frontendApi from '../_helpers/frontendApi';
-import parseSearch from '../_helpers/parseSearch';
-import searchStateSerializedAtom from './searchStateSerializedAtom';
+import searchAggregationsLiveAtom from './searchAggregationsLiveAtom';
 
-const searchAggregationsAtom = selector<SearchAggregationResponseType>({
+const searchAggregationsAtom = atom<SearchAggregationResponseType>({
   key: 'searchAggregationsAtom',
-  get: async ({ get }) => {
-    const serialized = get(searchStateSerializedAtom);
-    const parsed = parseSearch(serialized);
-
-    if (!parsed) {
-      return { attributes: [] };
-    }
-
-    const { data } = await frontendApi.post<SearchAggregationResponseType>(
-      '/search-aggregations',
-      parsed
-    );
-
-    return data;
-  },
+  default: searchAggregationsLiveAtom,
 });
 
 export default searchAggregationsAtom;

@@ -3,15 +3,14 @@ import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
+import activeWindowAtom from '../_atoms/activeWindowAtom';
+import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
 import WindowInputNew from './WindowInputNew/WindowInputNew';
+import WindowStateProvider from './WindowStateProvider/WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import activeWindowAtom from './_atoms/activeWindowAtom';
-import currentStateString from './_atoms/currentStateStringAtom';
-import useRouteApp from './_hooks/useRouteApp';
-import useSetCurrentWindowState from './_hooks/useSetCurrentWindowState';
-import type WindowProps from './_types/WindowPropsType';
+import WindowSetImagesType from './_types/WindowSetImagesType';
 
 const RootContainer = styled.div`
   display: flex;
@@ -42,68 +41,67 @@ const SpinnerContainer = styled.div`
 `;
 
 function Window() {
-  const activeTab = useRecoilValue(activeTabAtom);
   const activeWindow = useRecoilValue(activeWindowAtom);
-  const setCurrentWindowState = useSetCurrentWindowState();
+  const activeTab = useRecoilValue(activeTabAtom);
+  const setAppWindowState = useSetAppWindowState();
+  const activeImages = (
+    activeTab.windows[activeTab.selectedWindowIdx]?.images ?? []
+  ).join(',');
 
-  const windowProps = useMemo<WindowProps>(
-    () => ({
-      ...activeWindow,
-      setWindowImages: (images: string[]) => {
-        const activeImages = (activeWindow.images || []).join(',');
-        const nextImages = images.join(',');
-        const shouldUpdate = activeImages !== nextImages;
+  const setWindowImages = useMemo<WindowSetImagesType>(
+    () => (images: string[]) => {
+      const nextImages = images.join(',');
+      const shouldUpdate = activeImages !== nextImages;
 
-        if (shouldUpdate) {
-          setCurrentWindowState(
-            {
-              ...activeWindow,
-              images,
-            },
-            activeTab.id
-          );
+      if (shouldUpdate) {
+        if (images.length === 0) {
+          setAppWindowState({ images: undefined }, activeWindow.tabId);
+        } else {
+          setAppWindowState({ images }, activeWindow.tabId);
         }
-      },
-    }),
-    [activeTab.id, activeWindow, setCurrentWindowState]
+      }
+    },
+    [activeImages, activeWindow.tabId, setAppWindowState]
   );
 
-  const { didMount } = useRouteApp();
-
-  if (!didMount) {
+  if (!activeWindow) {
     return null;
   }
 
   return (
-    <RecoilRoot
-      key={`${activeTab.id}:${windowProps.state}`}
-      initializeState={({ set }) => {
-        set(currentStateString, JSON.stringify(activeWindow));
-      }}
-    >
-      <RootContainer>
-        <SearchInputContainer>
-          <SuspenseBoundary
-            loading={null}
-            error={null}
-            content={<WindowInput {...windowProps} />}
-          />
-        </SearchInputContainer>
-        <SearchInputContainer>
-          <WindowInputNew />
-        </SearchInputContainer>
-        <ContentContainer>
-          <SuspenseBoundary
-            loading={
-              <SpinnerContainer>
-                <CircularProgress />
-              </SpinnerContainer>
-            }
-            error={null}
-            content={<WindowSwitch {...windowProps} />}
-          />
-        </ContentContainer>
-      </RootContainer>
+    <RecoilRoot key={`${activeWindow.tabId}`}>
+      <WindowStateProvider
+        setWindowImages={setWindowImages}
+        windowState={activeWindow}
+      >
+        <RootContainer>
+          <SearchInputContainer>
+            <SuspenseBoundary
+              loading={null}
+              error={null}
+              content={<WindowInput />}
+            />
+          </SearchInputContainer>
+          <SearchInputContainer>
+            <SuspenseBoundary
+              loading={null}
+              error={null}
+              content={<WindowInputNew />}
+            />
+          </SearchInputContainer>
+          <ContentContainer>
+            <SuspenseBoundary
+              loading={
+                <SpinnerContainer>
+                  <CircularProgress />
+                </SpinnerContainer>
+              }
+              error={null}
+              content={<WindowSwitch />}
+            />
+          </ContentContainer>
+        </RootContainer>
+      </WindowStateProvider>
     </RecoilRoot>
   );
 }

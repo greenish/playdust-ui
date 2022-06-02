@@ -18,10 +18,10 @@ import usePushWindowHash from '../../_hooks/usePushWindowHash';
 import searchQueryValidAtom from '../_atoms/searchQueryValidAtom';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
 import searchStateUncommittedAtom from '../_atoms/searchStateUncommittedAtom';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import serializeSearch from '../_helpers/serializeSearch';
 import useAddAttributeQueryNode from '../_hooks/useAddAttributeQueryNode';
 import usePrependCollectionQueryNode from '../_hooks/usePrependCollectionQueryNode';
-import WindowProps from '../_types/WindowPropsType';
 import SearchChips from './SearchChips';
 import SearchGraph from './SearchGraph/SearchGraph';
 import SuggestionResult from './SuggestionResult';
@@ -37,19 +37,19 @@ const RootContainer = styled.div`
   width: 100%;
 `;
 
-function WindowInput({ state, type }: WindowProps) {
-  const [open, setOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+function WindowInput() {
+  const windowState = useRecoilValue(windowStateAtom);
   const isQueryValid = useRecoilValue(isSearchQueryValidAtom);
   const searchQueryValid = useRecoilValue(searchQueryValidAtom);
   const uncommitted = useRecoilValue(searchStateUncommittedAtom);
   const loadable = useRecoilValueLoadable(searchResultsAtom);
-  const isSearchable = type === 'search' || type === 'home';
   const addTextQueryNode = useAddTextQueryNode();
   const addAttributeQueryNode = useAddAttributeQueryNode();
   const prependCollectionQueryNode = usePrependCollectionQueryNode();
   const pushWindowHash = usePushWindowHash();
   const goHome = useGoHome();
+  const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const [suggestionTerm, setSuggestionTerm] = useRecoilState(
     searchSuggestionTermAtom
@@ -59,8 +59,12 @@ function WindowInput({ state, type }: WindowProps) {
     500
   );
   const { suggestions, loading: suggestionsLoading } = useRecoilValue(
-    searchSuggestionsAtom(state)
+    searchSuggestionsAtom(windowState?.state ?? '')
   );
+
+  const { state, type } = windowState;
+  const isSearchable = type === 'search' || type === 'home';
+
   const filterOnServer = state === '';
 
   const height = window.innerHeight * 0.8;
@@ -71,6 +75,7 @@ function WindowInput({ state, type }: WindowProps) {
     }
 
     pushWindowHash({
+      tabId: windowState.tabId,
       type: 'search',
       state: serializeSearch(uncommitted),
     });
@@ -106,6 +111,7 @@ function WindowInput({ state, type }: WindowProps) {
 
             if (windowType !== 'search') {
               return pushWindowHash({
+                tabId: windowState.tabId,
                 type: windowType,
                 state: value,
               });
@@ -121,6 +127,7 @@ function WindowInput({ state, type }: WindowProps) {
               return addTextQueryNode(suggestionTerm);
             case 'Explorer':
               return pushWindowHash({
+                tabId: windowState.tabId,
                 type: value.type,
                 state: suggestionTerm,
               });
@@ -152,10 +159,8 @@ function WindowInput({ state, type }: WindowProps) {
                   operation: 'and',
                 })
               );
-            default: {
-              const n: never = value.group;
-              return n;
-            }
+            default:
+              return null;
           }
         }}
         freeSolo={true}

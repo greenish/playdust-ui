@@ -18,7 +18,7 @@ import appBarWidth from '../_helpers/appBarWidth';
 import getCDNUrl from '../_helpers/getCDNUrl';
 import safePromise from '../_helpers/safePromise';
 import useGoHome from '../_hooks/useGoHome';
-import type { WindowType } from '../_types/WindowType';
+import AppWindowType from '../_types/AppWindowType';
 import Playdust from './PlaydustIcon';
 import WalletButton from './WalletButton/WalletButton';
 import useGoToNewTab from './_hooks/useGoToNewTab';
@@ -36,7 +36,7 @@ const RootContainer = styled.div`
   justify-content: space-between;
   height: 100%;
   width: 100%;
-  padding: 16px 0px;
+  padding: 4px 0px 16px 0px;
   width: ${appBarWidth}px;
 `;
 
@@ -138,7 +138,7 @@ function SizedButton({
   );
 }
 
-const getWindowTab = (window: WindowType): ReactNode | undefined => {
+const getWindowTab = (window: AppWindowType): ReactNode | undefined => {
   switch (window.type) {
     case 'home':
       return <Home />;
@@ -152,11 +152,8 @@ const getWindowTab = (window: WindowType): ReactNode | undefined => {
       return <Typography>A</Typography>;
     case 'epoch':
       return <Typography>E</Typography>;
-    default: {
-      const n: never = window.type;
-
-      return n;
-    }
+    default:
+      return null;
   }
 };
 

@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import getPDEnv from '../src/App/_helpers/getPDEnv';
 import '../styles/globals.css';
 
 function App({ Component, pageProps }: AppProps) {
@@ -43,6 +44,16 @@ function App({ Component, pageProps }: AppProps) {
         />
       </Head>
       <Component {...pageProps} />
+      {/* Hubspot Embed Code */}
+      {getPDEnv() === 'production' && (
+        <script
+          type="text/javascript"
+          id="hs-script-loader"
+          async={true}
+          defer={true}
+          src="//js.hs-scripts.com/21785114.js"
+        />
+      )}
     </>
   );
 }

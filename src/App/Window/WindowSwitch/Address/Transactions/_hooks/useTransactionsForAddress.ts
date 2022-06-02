@@ -16,6 +16,10 @@ function useTransactionsForAddress(): [TransactionType[], () => Promise<void>] {
   const fetchMoreTransactionsForAddress = useCallback(async () => {
     const lastSignature = addressTransactions.at(-1)?.signature;
 
+    if (!addressState) {
+      return;
+    }
+
     const newTransactions = await fetchTransactionsForAddress(
       cluster,
       addressState.pubkey,

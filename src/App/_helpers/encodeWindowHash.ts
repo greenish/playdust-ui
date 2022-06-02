@@ -1,39 +1,13 @@
-import { nanoid } from 'nanoid';
-import type EncodeHashOptionsType from '../_types/EncodeHashOptionsType';
-import type { WindowType } from '../_types/WindowType';
-import decodeWindowHash from './decodeWindowHash';
+import type { WindowStateType } from '../_types/WindowStateType';
 
-const getTabId = (options?: EncodeHashOptionsType) => {
-  const { tabOverride, newTab } = options || {};
-
-  if (tabOverride) {
-    return tabOverride;
-  }
-
-  if (newTab) {
-    return nanoid();
-  }
-
-  return decodeWindowHash().tab;
-};
-
-const encodeWindowHash = (
-  input: WindowType,
-  options?: EncodeHashOptionsType
-): string => {
-  const tab = getTabId(options);
-
+const encodeWindowHash = (input: WindowStateType): string => {
   if (input.type === 'home') {
-    return `/#tab=${tab}`;
+    return `/#tab=${input.tabId}`;
   }
 
   const base = `/#${input.type}=${encodeURIComponent(input.state)}`;
 
-  if (!tab) {
-    return base;
-  }
-
-  return `${base}&tab=${tab}`;
+  return `${base}&tab=${input.tabId}`;
 };
 
 export default encodeWindowHash;

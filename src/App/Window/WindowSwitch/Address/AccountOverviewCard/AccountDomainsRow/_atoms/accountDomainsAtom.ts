@@ -10,7 +10,9 @@ const accountDomainsAtom = selector<AccountDomainsType>({
   get: async ({ get }) => {
     const addressState = get(addressStateAtom);
     const solanaCluster = get(solanaClusterAtom);
-
+    if (!addressState) {
+      return [];
+    }
     return fetchUserDomains(solanaCluster, addressState.pubkey);
   },
 });

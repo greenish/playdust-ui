@@ -1,4 +1,5 @@
 import { MetadataDataData } from '@metaplex-foundation/mpl-token-metadata';
+import MetaplexOffChainDataType from './MetaplexOffChainDataType';
 
 interface OpenSearchNFTSourceType {
   mint: string;
@@ -6,25 +7,14 @@ interface OpenSearchNFTSourceType {
   updateAuthority?: string;
   primarySaleHappened?: boolean;
   key?: number;
-  offChainData: {
-    name: string;
-    symbol: string;
-    external_url: string;
-    description: string;
-    seller_fee_basis_points: number;
-    image: string;
-    attributes?: {
-      trait_type: string;
-      value: string;
-    }[];
-    collection?: {
-      name: string;
-      family: string;
-    };
-  };
+  offChainData: MetaplexOffChainDataType;
   heuristicCollectionId?: string;
   lastListPrice?: number;
   listed?: boolean;
+  normalizedRarityScore?: number;
+  normalizedStatisticalRarity?: number;
+  rarityScore?: number;
+  statisticalRarity?: number;
 }
 
 export default OpenSearchNFTSourceType;

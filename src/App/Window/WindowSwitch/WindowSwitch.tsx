@@ -1,15 +1,18 @@
 import React from 'react';
-import WindowProps from '../_types/WindowPropsType';
+import { useRecoilValue } from 'recoil';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import Address from './Address/Address';
 import Home from './Home/Home';
 import Search from './Search/Search';
 
-function WindowSwitch(props: WindowProps) {
-  switch (props.type) {
+function WindowSwitch() {
+  const windowState = useRecoilValue(windowStateAtom);
+
+  switch (windowState?.type) {
     case 'home':
       return <Home />;
     case 'search':
-      return <Search {...props} />;
+      return <Search />;
     case 'address':
       return <Address />;
     case 'block':
@@ -18,11 +21,8 @@ function WindowSwitch(props: WindowProps) {
       return null;
     case 'epoch':
       return null;
-    default: {
-      const n: never = props.type;
-
-      return n;
-    }
+    default:
+      return null;
   }
 }
 

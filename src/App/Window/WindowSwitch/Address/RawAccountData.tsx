@@ -40,7 +40,7 @@ function RawAccountData() {
   return (
     <ExplorerAccordion
       id="accountData"
-      title="Account Data"
+      title="Raw Account Data"
       content={<RenderRawAccountData />}
     />
   );
