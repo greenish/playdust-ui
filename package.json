@@ -21,7 +21,7 @@
     "fix:all": "yarn lint:fix && yarn tsc:check && yarn prettier:write &&  yarn guidelines:write"
   },
   "lint-staged": {
-    "**/*.(xts|xtsx)": [
+    "**/*.(ts|tsx)": [
       "eslint --fix",
       "prettier --write",
       "yarn guidelines:check"
