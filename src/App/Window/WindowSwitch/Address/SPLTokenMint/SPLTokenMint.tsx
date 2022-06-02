@@ -3,12 +3,12 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import addressStateAtom from '../_atoms/addressStateAtom';
 import parsedTokenAccountAtom from '../_atoms/parsedTokenAccountAtom';
-import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
-import safePubkeyString from '../_helpers/safePubkeyString';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
-import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import tokenRegistryAtom from '../../_atoms/tokenRegistryAtom';
+import safePubkeyString from '../../_helpers/safePubkeyString';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
+import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import ExternalLink from './ExternalLink';
 
 function normalizeTokenAmount(raw: string | number, decimals: number): number {

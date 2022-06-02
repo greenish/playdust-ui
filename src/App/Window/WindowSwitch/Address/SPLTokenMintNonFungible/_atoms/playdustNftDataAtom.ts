@@ -4,7 +4,7 @@ import MetaplexOffChainDataType from '../../../../../../_types/MetaplexOffChainD
 import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType';
 import frontendApi from '../../../../_helpers/frontendApi';
 import addressStateAtom from '../../_atoms/addressStateAtom';
-import safePubkeyString from '../../_helpers/safePubkeyString';
+import safePubkeyString from '../../../_helpers/safePubkeyString';
 
 type PlaydustNftData = {
   metaplexOffChainData: MetaplexOffChainDataType;

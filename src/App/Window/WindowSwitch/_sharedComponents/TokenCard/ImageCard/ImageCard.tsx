@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Box, Card, Skeleton } from '@mui/material';
 import React, { useState } from 'react';
-import Link from '../../Link';
+import Link from '../../_sharedComponents/Link';
 import TokenCardContentContainer from '../_sharedComponents/TokenCardContentContainer';
 import LazyImage from './LazyImage';
 

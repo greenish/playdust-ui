@@ -1,4 +1,3 @@
-import { TokenInfoMap } from '@solana/spl-token-registry';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
   BPF_LOADER_DEPRECATED_PROGRAM_ID,
@@ -6,23 +5,26 @@ import {
   Secp256k1Program,
   StakeProgram,
   SystemProgram,
-  SYSVAR_CLOCK_PUBKEY,
-  SYSVAR_RENT_PUBKEY,
-  SYSVAR_REWARDS_PUBKEY,
-  SYSVAR_STAKE_HISTORY_PUBKEY,
   VOTE_PROGRAM_ID,
 } from '@solana/web3.js';
 import ClusterType from '../_types/ClusterType';
-import serumMarketRegistry from './serumMarketRegistry';
+import getAllClusters from './getAllClusters';
+import getLiveClusters from './getLiveClusters';
+import getMainnetOnly from './getMainnetOnly';
+import getWalletAdapterNetworkToClusterMap from './getWalletAdapterNetworkToClusterMap';
 
-const walletAdapterNetworkToClusterMap: Record<
-  WalletAdapterNetwork,
-  ClusterType
-> = {
-  [WalletAdapterNetwork.Mainnet]: ClusterType.MainnetBeta,
-  [WalletAdapterNetwork.Testnet]: ClusterType.Testnet,
-  [WalletAdapterNetwork.Devnet]: ClusterType.Devnet,
-};
+const ALL_CLUSTERS = getAllClusters();
+const LIVE_CLUSTERS = getLiveClusters();
+const MAINNET_ONLY = getMainnetOnly();
+const walletAdapterNetworkToClusterMap = getWalletAdapterNetworkToClusterMap();
+
+const LOADER_IDS = {
+  MoveLdr111111111111111111111111111111111111: 'Move Loader',
+  NativeLoader1111111111111111111111111111111: 'Native Loader',
+  [BPF_LOADER_DEPRECATED_PROGRAM_ID.toBase58()]: 'BPF Loader',
+  [BPF_LOADER_PROGRAM_ID.toBase58()]: 'BPF Loader 2',
+  BPFLoaderUpgradeab1e11111111111111111111111: 'BPF Upgradeable Loader',
+} as const;
 
 enum ProgramNames {
   // native built-ins
@@ -87,20 +89,6 @@ enum ProgramNames {
   SWITCHBOARD = 'Switchboard Oracle Program',
   WORMHOLE = 'Wormhole',
 }
-
-const ALL_CLUSTERS = [
-  ClusterType.Custom,
-  ClusterType.Devnet,
-  ClusterType.Testnet,
-  ClusterType.MainnetBeta,
-];
-
-const LIVE_CLUSTERS = [
-  ClusterType.Devnet,
-  ClusterType.Testnet,
-  ClusterType.MainnetBeta,
-];
-const MAINNET_ONLY = [ClusterType.MainnetBeta];
 
 const PROGRAM_DEPLOYMENTS = {
   // native built-ins
@@ -239,32 +227,6 @@ const PROGRAM_NAME_BY_ID = {
   WormT3McKhFJ2RkiGpdw9GKvNCrB2aB54gb2uV9MfQC: ProgramNames.WORMHOLE,
 } as const;
 
-const LOADER_IDS = {
-  MoveLdr111111111111111111111111111111111111: 'Move Loader',
-  NativeLoader1111111111111111111111111111111: 'Native Loader',
-  [BPF_LOADER_DEPRECATED_PROGRAM_ID.toBase58()]: 'BPF Loader',
-  [BPF_LOADER_PROGRAM_ID.toBase58()]: 'BPF Loader 2',
-  BPFLoaderUpgradeab1e11111111111111111111111: 'BPF Upgradeable Loader',
-} as const;
-
-const SPECIAL_IDS: { [key: string]: string } = {
-  '1nc1nerator11111111111111111111111111111111': 'Incinerator',
-  Sysvar1111111111111111111111111111111111111: 'SYSVAR',
-};
-
-const SYSVAR_IDS = {
-  [SYSVAR_CLOCK_PUBKEY.toBase58()]: 'Sysvar: Clock',
-  SysvarEpochSchedu1e111111111111111111111111: 'Sysvar: Epoch Schedule',
-  SysvarFees111111111111111111111111111111111: 'Sysvar: Fees',
-  SysvarRecentB1ockHashes11111111111111111111: 'Sysvar: Recent Blockhashes',
-  [SYSVAR_RENT_PUBKEY.toBase58()]: 'Sysvar: Rent',
-  [SYSVAR_REWARDS_PUBKEY.toBase58()]: 'Sysvar: Rewards',
-  SysvarS1otHashes111111111111111111111111111: 'Sysvar: Slot Hashes',
-  SysvarS1otHistory11111111111111111111111111: 'Sysvar: Slot History',
-  [SYSVAR_STAKE_HISTORY_PUBKEY.toBase58()]: 'Sysvar: Stake History',
-  Sysvar1nstructions1111111111111111111111111: 'Sysvar: Instructions',
-};
-
 function programLabel(
   address: string,
   walletAdapterNetwork: WalletAdapterNetwork
@@ -278,32 +240,4 @@ function programLabel(
   return LOADER_IDS[address];
 }
 
-function tokenLabel(
-  address: string,
-  tokenRegistry?: TokenInfoMap
-): string | undefined {
-  if (!tokenRegistry) return;
-  const tokenInfo = tokenRegistry.get(address);
-  if (!tokenInfo) return;
-  if (tokenInfo.name === tokenInfo.symbol) {
-    return tokenInfo.name;
-  }
-  return `${tokenInfo.symbol} - ${tokenInfo.name}`;
-}
-
-function addressLabel(
-  address: string,
-  walletAdapterNetwork: WalletAdapterNetwork,
-  tokenRegistry?: TokenInfoMap
-): string | undefined {
-  const cluster = walletAdapterNetworkToClusterMap[walletAdapterNetwork];
-  return (
-    programLabel(address, walletAdapterNetwork) ||
-    SYSVAR_IDS[address] ||
-    SPECIAL_IDS[address] ||
-    tokenLabel(address, tokenRegistry) ||
-    serumMarketRegistry(address, cluster)
-  );
-}
-
-export default addressLabel;
+export default programLabel;

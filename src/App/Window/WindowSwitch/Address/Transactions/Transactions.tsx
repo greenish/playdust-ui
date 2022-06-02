@@ -13,8 +13,8 @@ import {
 import { DateTime } from 'luxon';
 import React, { useCallback, useState } from 'react';
 import safePromise from '../../../../_helpers/safePromise';
-import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
-import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
+import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
+import SolBalance from '../../_sharedComponents/SolBalance/SolBalance';
 import useTransactionsForAddress from './_hooks/useTransactionsForAddress';
 import TransactionType from './_types/TransactionType';
 

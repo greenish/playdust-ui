@@ -2,12 +2,12 @@ import { Chip } from '@mui/material';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../Address/_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from '../Address/_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from '../Address/_sharedComponents/ExplorerGridRow';
-import ExplorerLink from '../Address/_sharedComponents/ExplorerLink/ExplorerLink';
-import SolBalance from '../Address/_sharedComponents/SolBalance/SolBalance';
-import rawTransactionInfoAtom from './_atoms/rawTransactionInfoAtom';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
+import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
+import SolBalance from '../../_sharedComponents/SolBalance/SolBalance';
+import rawTransactionInfoAtom from '../_atoms/rawTransactionInfoAtom';
 import signatureStatusAtom from './_atoms/signatureStatusAtom';
 
 function TransactionOverview() {

@@ -1,7 +1,7 @@
 import { Connection, SignatureStatus } from '@solana/web3.js';
 import { selector } from 'recoil';
-import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
-import txStateAtom from './txStateAtom';
+import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
+import txStateAtom from '../../_atoms/txStateAtom';
 
 const signatureStatusAtom = selector<SignatureStatus | null>({
   key: 'signatureStatusAtom',

@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js';
-import safePubkeyString from './safePubkeyString';
+import safePubkeyString from '../../_helpers/safePubkeyString';
 
 // In dev, recoil freezes all values returned by atoms/selectors
 // However, toBase58() - in certain circumstances, namely for the System Program pubkey

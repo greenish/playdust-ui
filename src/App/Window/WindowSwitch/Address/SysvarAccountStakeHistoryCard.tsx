@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedSysvarAccountAtom from './_atoms/parsedSysvarAccountAtom';
-import ExplorerLink from './_sharedComponents/ExplorerLink/ExplorerLink';
+import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import PaginatedList from './_sharedComponents/PaginatedList';
 
 // SysvarStakeHistory1111111111111111111111111
