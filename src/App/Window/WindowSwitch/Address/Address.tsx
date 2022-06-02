@@ -15,6 +15,7 @@ import SysvarAccountSlotHashesCard from './SysvarAccountSlotHashesCard';
 import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
 import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
+import UserProfileCard from './UserProfileCard/UserProfileCard';
 import WalletGallery from './WalletGallery/WalletGallery';
 import ContentContainer from './_sharedComponents/ContentContainer';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
@@ -38,6 +39,12 @@ function Address() {
 
       {/* User Wallet Accounts */}
       <ContentContainer>
+        <SuspenseBoundary
+          content={<UserProfileCard />}
+          error={null}
+          loading={null}
+        />
+
         <SuspenseBoundary
           content={<WalletGallery />}
           error={null}
