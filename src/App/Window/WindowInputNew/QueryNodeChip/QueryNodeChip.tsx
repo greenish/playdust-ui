@@ -77,9 +77,7 @@ function ChipLabel({ node, isActive }: ChipLabelProps) {
         </>
       );
     default: {
-      const n: never = node;
-
-      return n;
+      return null;
     }
   }
 }
