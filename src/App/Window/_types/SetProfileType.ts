@@ -1,6 +1,5 @@
-import { SetterOrUpdater } from 'recoil';
 import PlaydustProfileType from './PlaydustProfileType';
 
-type SetProfileType = SetterOrUpdater<PlaydustProfileType | null>;
+type SetProfileType = (profile: PlaydustProfileType | null) => void;
 
 export default SetProfileType;

@@ -17,7 +17,7 @@ import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import UserProfileCard from './UserProfileCard/UserProfileCard';
 import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
-import WalletGallery from './WalletGallery/WalletGallery';
+import WalletGallery from './WalletGallery';
 import ContentContainer from './_sharedComponents/ContentContainer';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 

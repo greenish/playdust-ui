@@ -1,9 +1,9 @@
 import { Avatar, AvatarProps, Box, ButtonBase, ImageList } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import getCDNUrl from '../../../../_helpers/getCDNUrl';
-import CardImageContainer from '../../_sharedComponents/TokenCard/ImageCard/CardImageContainer';
-import nftsForAddressAtom from '../WalletGallery/_atoms/nftsForAddressAtom';
+import getCDNUrl from '../../../../../_helpers/getCDNUrl';
+import CardImageContainer from '../../../_sharedComponents/CardImageContainer/CardImageContainer';
+import nftsForAddressAtom from '../../_atoms/nftsForAddressAtom';
 
 const imageSize = 100;
 const maxRows = 4;

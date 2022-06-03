@@ -2,8 +2,8 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import base58 from 'bs58';
 import Cookies from 'js-cookie';
 import { create, Infer, object, string } from 'superstruct';
-import authenticationApi from '../AppBar/WalletButton/_helpers/authenticationApi';
-import fetchNonce from '../AppBar/WalletButton/_helpers/fetchNonce';
+import authenticationApi from '../../../../../_helpers/authenticationApi';
+import fetchNonce from '../../../../../_helpers/fetchNonce';
 
 type LoginResponseType = Infer<typeof LoginResponseType>;
 const LoginResponseType = object({

@@ -7,18 +7,18 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import shortenPublicKey from '../../../../AppBar/WalletButton/_helpers/shortenPublicKey';
-import safePromise from '../../../../_helpers/safePromise';
-import useAuth from '../../../../_hooks/useAuth';
-import useConnectedWallet from '../../../../_hooks/useConnectedWallet';
-import useIsCurrentUser from '../../../_hooks/useIsCurrentUser';
-import useProfileState from '../../../_hooks/useProfileState';
-import PlaydustProfileType from '../../../_types/PlaydustProfileType';
-import addressStateAtom from '../_atoms/addressStateAtom';
-import UserProfileAvatar from './UserProfileAvatar';
-import publicProfileAtom from './_atoms/publicProfileAtom';
-import userProfileEditAtom from './_atoms/userProfileEditAtom';
-import profileApi from './_helpers/profileApi';
+import safePromise from '../../../../../_helpers/safePromise';
+import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
+import useProfileState from '../../../../_hooks/useProfileState';
+import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
+import addressStateAtom from '../../_atoms/addressStateAtom';
+import publicProfileAtom from '../_atoms/publicProfileAtom';
+import userProfileEditAtom from '../_atoms/userProfileEditAtom';
+import profileApi from '../_helpers/profileApi';
+import useAuth from '../_hooks/useAuth';
+import useConnectedWallet from '../_hooks/useConnectedWallet';
+import UserProfileAvatar from '../_sharedComponents/UserProfileAvatar';
+import useIsCurrentUser from './_hooks/useIsCurrentUser';
 
 function UserProfileContent() {
   const auth = useAuth();

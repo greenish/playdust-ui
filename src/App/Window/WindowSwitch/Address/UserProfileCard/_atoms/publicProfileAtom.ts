@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
-import PublicProfileType from '../../../../_types/PublicProfileType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 import profileApi from '../_helpers/profileApi';
+import PublicProfileType from '../_types/PublicProfileType';
 
 const publicProfileAtom = selector<PublicProfileType | null>({
   key: 'publicProfileAtom',

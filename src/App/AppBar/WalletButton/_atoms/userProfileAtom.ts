@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import UserProfileType from '../../../_types/UserProfileType';
+import UserProfileType from '../_types/UserProfileType';
 
 // type UserProfileType = {
 //   username: string;
