@@ -23,6 +23,9 @@ const parsedStakeAccountAtom = selector<StakeAccountAtomType | null>({
     // This is because the underlying connection.getStakeActivation will throw an Error
     // if the pubkey passed to it is not of data.program 'stake'
     const stakeActivation = get(stakeActivationAtom);
+    if (!stakeActivation) {
+      return null;
+    }
 
     return {
       parsed: accountInfo.data.parsed,

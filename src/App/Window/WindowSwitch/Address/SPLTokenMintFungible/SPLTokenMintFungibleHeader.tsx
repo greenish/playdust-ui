@@ -11,6 +11,10 @@ function SPLTokenMintFungibleHeader() {
   const addressState = useRecoilValue(addressStateAtom);
   const tokenRegistry = useRecoilValue(tokenRegistryAtom);
 
+  if (!addressState) {
+    return null;
+  }
+
   const tokenInfo = tokenRegistry.get(safePubkeyString(addressState.pubkey));
 
   if (!tokenInfo) {

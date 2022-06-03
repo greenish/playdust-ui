@@ -7,6 +7,11 @@ const signatureStatusAtom = selector<SignatureStatus | null>({
   key: 'signatureStatusAtom',
   get: async ({ get }) => {
     const txState = get(txStateAtom);
+
+    if (!txState) {
+      return null;
+    }
+
     const solanaCluster = get(solanaClusterAtom);
 
     const { state: signature } = txState;

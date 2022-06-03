@@ -15,10 +15,10 @@ import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import useGoHome from '../../_hooks/useGoHome';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
-import currentStateAtom from '../_atoms/currentStateAtom';
 import searchQueryValidAtom from '../_atoms/searchQueryValidAtom';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
 import searchStateUncommittedAtom from '../_atoms/searchStateUncommittedAtom';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import serializeSearch from '../_helpers/serializeSearch';
 import useAddAttributeQueryNode from '../_hooks/useAddAttributeQueryNode';
 import usePrependCollectionQueryNode from '../_hooks/usePrependCollectionQueryNode';
@@ -38,7 +38,7 @@ const RootContainer = styled.div`
 `;
 
 function WindowInput() {
-  const windowState = useRecoilValue(currentStateAtom);
+  const windowState = useRecoilValue(windowStateAtom);
   const isQueryValid = useRecoilValue(isSearchQueryValidAtom);
   const searchQueryValid = useRecoilValue(searchQueryValidAtom);
   const uncommitted = useRecoilValue(searchStateUncommittedAtom);
@@ -62,10 +62,6 @@ function WindowInput() {
     searchSuggestionsAtom(windowState?.state ?? '')
   );
 
-  if (!windowState) {
-    return null;
-  }
-
   const { state, type } = windowState;
   const isSearchable = type === 'search' || type === 'home';
 
@@ -79,6 +75,7 @@ function WindowInput() {
     }
 
     pushWindowHash({
+      tabId: windowState.tabId,
       type: 'search',
       state: serializeSearch(uncommitted),
     });
@@ -114,6 +111,7 @@ function WindowInput() {
 
             if (windowType !== 'search') {
               return pushWindowHash({
+                tabId: windowState.tabId,
                 type: windowType,
                 state: value,
               });
@@ -129,6 +127,7 @@ function WindowInput() {
               return addTextQueryNode(suggestionTerm);
             case 'Explorer':
               return pushWindowHash({
+                tabId: windowState.tabId,
                 type: value.type,
                 state: suggestionTerm,
               });

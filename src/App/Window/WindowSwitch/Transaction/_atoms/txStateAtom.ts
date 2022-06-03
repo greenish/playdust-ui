@@ -1,17 +1,17 @@
 import { selector } from 'recoil';
-import currentStateAtom from '../../../_atoms/currentStateAtom';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
 import TxExplorerType from '../_types/TxExplorerType';
 
-const txStateAtom = selector<TxExplorerType>({
+const txStateAtom = selector<TxExplorerType | null>({
   key: 'txStateAtom',
   get: ({ get }) => {
-    const currentState = get(currentStateAtom);
+    const windowState = get(windowStateAtom);
 
-    if (currentState?.type !== 'tx') {
-      throw new Error('txState unavailable');
+    if (windowState?.type !== 'tx') {
+      return null;
     }
 
-    const { type, state } = currentState;
+    const { type, state } = windowState;
 
     return {
       type,

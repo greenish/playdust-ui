@@ -45,7 +45,7 @@ function ProgramLogsCard({ message, logs }: ProgramLogsCardProps) {
           }
           const programLogs: InstructionLogsType | undefined = logs[ixIdx];
 
-          let badgeColor;
+          let badgeColor: 'warning' | 'success' | undefined;
           if (programLogs) {
             badgeColor = programLogs.failed ? 'warning' : 'success';
           }

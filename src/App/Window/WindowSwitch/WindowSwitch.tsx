@@ -1,13 +1,13 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import currentStateAtom from '../_atoms/currentStateAtom';
+import windowStateAtom from '../_atoms/windowStateAtom';
 import Address from './Address/Address';
 import Home from './Home/Home';
 import Search from './Search/Search';
 import Transaction from './Transaction/Transaction';
 
 function WindowSwitch() {
-  const windowState = useRecoilValue(currentStateAtom);
+  const windowState = useRecoilValue(windowStateAtom);
 
   switch (windowState?.type) {
     case 'home':

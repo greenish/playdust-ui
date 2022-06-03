@@ -1,16 +1,18 @@
 import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
-import useSetCurrentWindowState from '../_hooks/useSetCurrentWindowState';
+import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
 import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
-import WindowContext from './_sharedComponents/WindowContext';
-import WindowContextType from './_types/WindowContextType';
+import appProfileAtom from './_atoms/appProfileAtom';
+import windowStateAvailableAtom from './_atoms/windowStateAvailableAtom';
+import ProfileStorageType from './_types/ProfileStorageType';
+import WindowSetImagesType from './_types/WindowSetImagesType';
 
 const RootContainer = styled.div`
   display: flex;
@@ -38,61 +40,76 @@ const SpinnerContainer = styled.div`
   margin-top: 24px;
 `;
 
-function Window() {
-  const activeTab = useRecoilValue(activeTabAtom);
-  const activeWindow = useRecoilValue(activeWindowAtom);
-  const setCurrentWindowState = useSetCurrentWindowState();
-
-  const windowContextValue = useMemo<WindowContextType>(
-    () => ({
-      setWindowImages: (images: string[]) => {
-        const activeImages = (activeWindow.images || []).join(',');
-        const nextImages = images.join(',');
-        const shouldUpdate = activeImages !== nextImages;
-
-        if (shouldUpdate) {
-          setCurrentWindowState(
-            {
-              ...activeWindow,
-              images,
-            },
-            activeTab.id
-          );
-        }
-      },
-    }),
-    [activeTab.id, activeWindow, setCurrentWindowState]
-  );
-
-  if (!activeTab || !activeWindow) {
+const WindowContentRenderer = React.memo(() => {
+  const windowStateAvailable = useRecoilValue(windowStateAvailableAtom);
+  if (!windowStateAvailable) {
     return null;
   }
-
   return (
-    <RecoilRoot key={`${activeTab.id}`}>
-      <WindowStateProvider />
-      <WindowContext.Provider value={windowContextValue}>
-        <RootContainer>
-          <SearchInputContainer>
-            <SuspenseBoundary
-              loading={null}
-              error={null}
-              content={<WindowInput />}
-            />
-          </SearchInputContainer>
-          <ContentContainer>
-            <SuspenseBoundary
-              loading={
-                <SpinnerContainer>
-                  <CircularProgress />
-                </SpinnerContainer>
-              }
-              error={null}
-              content={<WindowSwitch />}
-            />
-          </ContentContainer>
-        </RootContainer>
-      </WindowContext.Provider>
+    <RootContainer>
+      <SearchInputContainer>
+        <SuspenseBoundary
+          loading={null}
+          error={null}
+          content={<WindowInput />}
+        />
+      </SearchInputContainer>
+      <ContentContainer>
+        <SuspenseBoundary
+          loading={
+            <SpinnerContainer>
+              <CircularProgress />
+            </SpinnerContainer>
+          }
+          error={null}
+          content={<WindowSwitch />}
+        />
+      </ContentContainer>
+    </RootContainer>
+  );
+});
+
+function Window() {
+  const activeWindow = useRecoilValue(activeWindowAtom);
+  const activeTab = useRecoilValue(activeTabAtom);
+  const [appProfile, setAppProfile] = useRecoilState(appProfileAtom);
+  const setAppWindowState = useSetAppWindowState();
+  const activeImages = (
+    activeTab.windows[activeTab.selectedWindowIdx]?.images ?? []
+  ).join(',');
+
+  const setWindowImages = useMemo<WindowSetImagesType>(
+    () => (images: string[]) => {
+      const nextImages = images.join(',');
+      const shouldUpdate = activeImages !== nextImages;
+
+      if (shouldUpdate) {
+        if (images.length === 0) {
+          setAppWindowState({ images: undefined }, activeWindow.tabId);
+        } else {
+          setAppWindowState({ images }, activeWindow.tabId);
+        }
+      }
+    },
+    [activeImages, activeWindow.tabId, setAppWindowState]
+  );
+
+  const profileState = useMemo<ProfileStorageType>(
+    () => ({ value: appProfile, setValue: setAppProfile }),
+    [appProfile, setAppProfile]
+  );
+
+  if (!activeWindow) {
+    return null;
+  }
+  return (
+    <RecoilRoot key={`${activeWindow.tabId}`}>
+      <WindowStateProvider
+        profileState={profileState}
+        setWindowImages={setWindowImages}
+        windowState={activeWindow}
+      />
+      <WindowContentRenderer />
     </RecoilRoot>
   );
 }

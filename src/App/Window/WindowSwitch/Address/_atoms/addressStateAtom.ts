@@ -1,22 +1,22 @@
 import { PublicKey } from '@solana/web3.js';
 import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
-import currentStateAtom from '../../../_atoms/currentStateAtom';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
 import tokenRegistryAtom from '../../_atoms/tokenRegistryAtom';
 import addressLabel from '../../_helpers/addressLabel';
 import safePubkey from '../_helpers/safePubkey';
 import AddressExplorerType from '../_types/AddressExplorerType';
 
-const addressStateAtom = selector<AddressExplorerType>({
+const addressStateAtom = selector<AddressExplorerType | null>({
   key: 'addressStateAtom',
   get: ({ get }) => {
-    const currentState = get(currentStateAtom);
+    const windowState = get(windowStateAtom);
 
-    if (currentState?.type !== 'address') {
-      throw new Error('addressState unavailable');
+    const { type, state } = windowState;
+
+    if (type !== 'address') {
+      return null;
     }
-
-    const { type, state } = currentState;
 
     const pubkey = safePubkey(state);
 

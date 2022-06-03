@@ -1,5 +1,7 @@
+import getPDEnv from './getPDEnv';
+
 function logger(msg: string, error: Error, componentStack?: string) {
-  if (process.env.VERCEL_ENV === 'production') {
+  if (getPDEnv() === 'production') {
     ineum('reportError', error, {
       componentStack,
       meta: {

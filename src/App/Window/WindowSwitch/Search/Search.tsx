@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import React, { useContext, useEffect } from 'react';
-import { useRecoilValueLoadable } from 'recoil';
+import React, { useEffect } from 'react';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
-import WindowContext from '../../_sharedComponents/WindowContext';
+import setWindowImagesAtom from '../../_atoms/setWindowImagesAtom';
 import SearchOverview from './SearchOverview/SearchOverview';
 import SearchResults from './SearchResults/SearchResults';
 import SearchSideBar from './SearchSideBar/SearchSideBar';
@@ -33,10 +33,11 @@ const TokenContainer = styled.div`
 
 function Search() {
   const searchResults = useRecoilValueLoadable(searchResultsAtom);
-  const windowContext = useContext(WindowContext);
+  const setWindowImages = useRecoilValue(setWindowImagesAtom);
 
   useEffect(() => {
     if (
+      setWindowImages &&
       searchResults.state === 'hasValue' &&
       searchResults.contents.total > 0
     ) {
@@ -46,10 +47,10 @@ function Search() {
         .map((nft) => nft?.offChainData?.image);
 
       if (filtered.length) {
-        windowContext.setWindowImages(filtered);
+        setWindowImages(filtered);
       }
     }
-  }, [searchResults, windowContext]);
+  }, [searchResults, setWindowImages]);
 
   return (
     <RootContainer>

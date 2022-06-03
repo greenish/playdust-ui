@@ -20,6 +20,10 @@ const playdustNftDataAtom = selector<PlaydustNftData | null>({
   get: async ({ get }) => {
     const addressState = get(addressStateAtom);
 
+    if (!addressState) {
+      return null;
+    }
+
     const { data } = await frontendApi.post<OpenSearchNFTSourceType>(
       `/mint?address=${safePubkeyString(addressState.pubkey)}`
     );

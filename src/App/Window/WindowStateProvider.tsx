@@ -1,17 +1,44 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-use';
 import { useSetRecoilState } from 'recoil';
-import decodeWindowHash from '../_helpers/decodeWindowHash';
-import currentStateAtom from './_atoms/currentStateAtom';
+import { WindowStateType } from '../_types/WindowStateType';
+import setWindowImagesAtom from './_atoms/setWindowImagesAtom';
+import windowStateAtom from './_atoms/windowStateAtom';
+import useProfileState from './_hooks/useProfileState';
+import ProfileStorageType from './_types/ProfileStorageType';
+import WindowSetImagesType from './_types/WindowSetImagesType';
 
-function WindowStateProvider() {
-  const location = useLocation();
-  const setCurrentState = useSetRecoilState(currentStateAtom);
+type WindowStateProviderProps = {
+  setWindowImages: WindowSetImagesType;
+  windowState: WindowStateType;
+  profileState: ProfileStorageType;
+};
+
+function WindowStateProvider({
+  setWindowImages,
+  profileState,
+  windowState,
+}: WindowStateProviderProps) {
+  const setCurrentState = useSetRecoilState(windowStateAtom);
+  const setSetWindowImages = useSetRecoilState(setWindowImagesAtom);
+  const [, , syncProfile] = useProfileState();
 
   useEffect(() => {
-    const { windowState } = decodeWindowHash(location);
-    setCurrentState(windowState);
-  }, [location, setCurrentState]);
+    if (windowState) {
+      setCurrentState(windowState);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(windowState)]);
+
+  useEffect(() => {
+    syncProfile(profileState);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profileState]);
+
+  useEffect(() => {
+    setSetWindowImages(() => setWindowImages);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setWindowImages]);
+
   return null;
 }
 

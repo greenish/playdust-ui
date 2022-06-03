@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
 import getCDNUrl from '../../../../_helpers/getCDNUrl';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import Link from '../_sharedComponents/Link';
 import ImageCard from './ImageCard/ImageCard';
@@ -49,10 +51,12 @@ function TokenCard({
   skeleton,
   disableQuickFilter = false,
 }: TokenCardProps) {
+  const windowState = useRecoilValue(windowStateAtom);
   const { image, name } = metadata?.offChainData || {};
   const href = encodeWindowHash({
     type: 'address',
     state: metadata?.mint || '',
+    tabId: windowState.tabId,
   });
   const { lastListPrice, listed } = metadata || {};
 

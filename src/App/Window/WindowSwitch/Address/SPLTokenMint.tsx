@@ -1,15 +1,15 @@
 import { Chip } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import tokenRegistryAtom from '../../_atoms/tokenRegistryAtom';
-import safePubkeyString from '../../_helpers/safePubkeyString';
-import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
-import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import addressStateAtom from '../_atoms/addressStateAtom';
-import parsedTokenAccountAtom from '../_atoms/parsedTokenAccountAtom';
-import ExternalLink from './ExternalLink';
+import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
+import safePubkeyString from '../_helpers/safePubkeyString';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
+import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import addressStateAtom from './_atoms/addressStateAtom';
+import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
+import ExternalLink from './_sharedComponents/ExternalLink';
 
 function normalizeTokenAmount(raw: string | number, decimals: number): number {
   let rawTokens: number;
