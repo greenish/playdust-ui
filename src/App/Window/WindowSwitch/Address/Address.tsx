@@ -1,12 +1,15 @@
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
+import BPFUpgradeableLoaderAccountBuffer from './BPFUpgradeableLoaderAccountBuffer';
+import BPFUpgradeableLoaderAccountProgram from './BPFUpgradeableLoaderAccountProgram/BPFUpgradeableLoaderAccountProgram';
+import BPFUpgradeableLoaderAccountProgramData from './BPFUpgradeableLoaderAccountProgramData';
 import ConfigAccountStakeConfigCard from './ConfigAccountStakeConfigCard';
 import ConfigAccountValidatorInfoCard from './ConfigAccountValidatorInfoCard';
 import NonceAccountCard from './NonceAccountCard/NonceAccountCard';
 import RawAccountData from './RawAccountData';
 import SPLTokenAccount from './SPLTokenAccount';
-import SPLTokenMint from './SPLTokenMint/SPLTokenMint';
+import SPLTokenMint from './SPLTokenMint';
 import SPLTokenMintFungible from './SPLTokenMintFungible/SPLTokenMintFungible';
 import SPLTokenMintNonFungible from './SPLTokenMintNonFungible/SPLTokenMintNonFungible';
 import SPLTokenMultisig from './SPLTokenMultisig';
@@ -70,11 +73,6 @@ function Address() {
           loading={null}
         />
         <SuspenseBoundary
-          content={<StakeAccount />}
-          error={null}
-          loading={null}
-        />
-        <SuspenseBoundary
           content={<SPLTokenMultisig />}
           error={null}
           loading={null}
@@ -88,6 +86,26 @@ function Address() {
         />
         <SuspenseBoundary
           content={<ConfigAccountStakeConfigCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<StakeAccount />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<BPFUpgradeableLoaderAccountBuffer />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<BPFUpgradeableLoaderAccountProgram />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<BPFUpgradeableLoaderAccountProgramData />}
           error={null}
           loading={null}
         />
