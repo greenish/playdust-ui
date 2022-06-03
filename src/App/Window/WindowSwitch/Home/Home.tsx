@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
-import React, { useContext, useEffect, useMemo } from 'react';
-import { useRecoilValueLoadable } from 'recoil';
-import WindowSetImagesContext from '../../_sharedComponents/WindowSetImagesContext';
+import React, { useEffect, useMemo } from 'react';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import setWindowImagesAtom from '../../_atoms/setWindowImagesAtom';
 import humanizeCollection from '../_helpers/humanizeCollection';
 import humanizeSolana from '../_helpers/humanizeSolana';
 import useInitCollectionQuery from '../_hooks/useInitCollectionQuery';
@@ -20,11 +20,11 @@ function Home() {
   const topCollectionsLoadable = useRecoilValueLoadable(topCollectionsAtom);
   const fetchMore = useFetchMoreTopCollections();
   const initCollectionQuery = useInitCollectionQuery('href');
-  const setWindowImages = useContext(WindowSetImagesContext);
   const hasValue = topCollectionsLoadable.state === 'hasValue';
+  const setWindowImages = useRecoilValue(setWindowImagesAtom);
 
   useEffect(() => {
-    setWindowImages([]);
+    if (setWindowImages) setWindowImages([]);
   }, [setWindowImages]);
 
   const grouped = useMemo(() => {
