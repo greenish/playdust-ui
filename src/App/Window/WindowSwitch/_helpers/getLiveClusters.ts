@@ -1,9 +1,9 @@
 import ClusterType from '../_types/ClusterType';
 
-const getLiveClusters = () => ([
+const getLiveClusters = () => [
   ClusterType.Devnet,
   ClusterType.Testnet,
   ClusterType.MainnetBeta,
-]);
+];
 
 export default getLiveClusters;

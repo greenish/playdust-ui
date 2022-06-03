@@ -1,8 +1,8 @@
 import React from 'react';
 import ellipsisify from '../../../../_helpers/ellipsisify';
 import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
-import Link from '../_sharedComponents/Link';
 import safePubkeyString from '../../_helpers/safePubkeyString';
+import Link from '../_sharedComponents/Link';
 import ExplorerLinkProps from '../_types/ExplorerLinkProps';
 import CopyButton from './CopyButton';
 

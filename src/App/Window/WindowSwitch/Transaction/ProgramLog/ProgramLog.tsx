@@ -5,10 +5,9 @@ import { useRecoilValue } from 'recoil';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
 import programLabel from '../../_helpers/programLabel';
 import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
-import rawTransactionInfoAtom from '../_atoms/rawTransactionInfoAtom';
+import rawTransactionAtom from '../_atoms/rawTransactionAtom';
 import prettyProgramLogs from './_helpers/prettyProgramLogs';
 import InstructionLogsType from './_types/InstructionLogsType';
-import LogMessageType from './_types/LogMessageType';
 
 interface ProgramNameProps {
   programId: PublicKey;
@@ -17,15 +16,10 @@ interface ProgramNameProps {
 function ProgramName({ programId }: ProgramNameProps) {
   const { network } = useRecoilValue(solanaClusterAtom);
 
-  let programName;
+  const programName =
+    programLabel(programId.toBase58(), network) || 'Unknown Program';
 
-  try {
-    programName = programLabel(programId.toBase58(), network);
-  } catch (err) {}
-
-  programName = programName || 'Unknown Program';
-
-  return <>{programName}</>;
+  return <span>{programName}</span>;
 }
 
 interface ProgramLogsCardProps {
@@ -37,7 +31,7 @@ function ProgramLogsCard({ message, logs }: ProgramLogsCardProps) {
   return (
     <Table>
       <TableBody>
-        {message.instructions.map((ix, index) => {
+        {message.instructions.map((ix, ixIdx) => {
           let programId;
           if ('programIdIndex' in ix) {
             const programAccount = message.accountKeys[ix.programIdIndex];
@@ -49,32 +43,34 @@ function ProgramLogsCard({ message, logs }: ProgramLogsCardProps) {
           } else {
             programId = ix.programId;
           }
-          const programLogs: InstructionLogsType | undefined = logs[index];
+          const programLogs: InstructionLogsType | undefined = logs[ixIdx];
 
-          let badgeColor = 'white';
+          let badgeColor;
           if (programLogs) {
             badgeColor = programLogs.failed ? 'warning' : 'success';
           }
 
           return (
-            <TableRow key={index}>
+            // eslint-disable-next-line react/no-array-index-key
+            <TableRow key={ixIdx}>
               <TableCell>
                 <div>
-                  <Chip label={`#${index + 1}`} color="success" size="small" />{' '}
+                  <Chip
+                    label={`#${ixIdx + 1}`}
+                    color={badgeColor}
+                    size="small"
+                  />{' '}
                   <ProgramName programId={programId} /> Instruction
                 </div>
                 {programLogs && (
                   <div>
-                    {programLogs.logs.map((log: LogMessageType, key: number) => {
-                      return (
-                        <div key={key}>
-                          <span className="text-muted">{log.prefix}</span>
-                          <span className={`text-${log.style}`}>
-                            {log.text}
-                          </span>
-                        </div>
-                      );
-                    })}
+                    {programLogs.logs.map((log, logIdx) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <div key={logIdx}>
+                        <span className="text-muted">{log.prefix}</span>
+                        <span className={`text-${log.style}`}>{log.text}</span>
+                      </div>
+                    ))}
                   </div>
                 )}
               </TableCell>
@@ -88,7 +84,7 @@ function ProgramLogsCard({ message, logs }: ProgramLogsCardProps) {
 
 function ProgramLog() {
   const { network } = useRecoilValue(solanaClusterAtom);
-  const tx = useRecoilValue(rawTransactionInfoAtom);
+  const tx = useRecoilValue(rawTransactionAtom);
 
   if (!tx) {
     return <div>No data available</div>;

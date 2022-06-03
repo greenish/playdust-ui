@@ -1,11 +1,11 @@
 import { Connection, ParsedConfirmedTransaction } from '@solana/web3.js';
 import { selector } from 'recoil';
-import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import txStateAtom from '../../_atoms/txStateAtom';
+import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import txStateAtom from './txStateAtom';
 
-const parsedConfirmedTransactionInfoAtom =
+const parsedConfirmedTransactionAtom =
   selector<ParsedConfirmedTransaction | null>({
-    key: 'parsedConfirmedTransactionInfo',
+    key: 'parsedConfirmedTransaction',
     get: async ({ get }) => {
       const txState = get(txStateAtom);
       const solanaCluster = get(solanaClusterAtom);
@@ -22,4 +22,4 @@ const parsedConfirmedTransactionInfoAtom =
     },
   });
 
-export default parsedConfirmedTransactionInfoAtom;
+export default parsedConfirmedTransactionAtom;

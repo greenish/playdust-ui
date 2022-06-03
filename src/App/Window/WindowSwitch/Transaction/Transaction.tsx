@@ -1,7 +1,7 @@
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import AccountInputs from './AccountInputs/AccountInputs';
-import InstructionDetails from './InstructionDetails';
+import AccountInputs from './AccountInputs';
+import InstructionDetails from './InstructionDetails/InstructionDetails';
 import ProgramLog from './ProgramLog/ProgramLog';
 import TransactionOverview from './TransactionOverview/TransactionOverview';
 

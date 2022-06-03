@@ -1,8 +1,8 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import accountInfoAtom from './_atoms/accountInfoAtom';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import accountInfoAtom from './_atoms/accountInfoAtom';
 
 // react-json-view can only be client render since it uses window
 const DynamicReactJson = dynamic(import('react-json-view'), {

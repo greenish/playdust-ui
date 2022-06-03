@@ -3,8 +3,8 @@ import { selector } from 'recoil';
 import MetaplexOffChainDataType from '../../../../../../_types/MetaplexOffChainDataType';
 import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType';
 import frontendApi from '../../../../_helpers/frontendApi';
-import addressStateAtom from '../../_atoms/addressStateAtom';
 import safePubkeyString from '../../../_helpers/safePubkeyString';
+import addressStateAtom from '../../_atoms/addressStateAtom';
 
 type PlaydustNftData = {
   metaplexOffChainData: MetaplexOffChainDataType;

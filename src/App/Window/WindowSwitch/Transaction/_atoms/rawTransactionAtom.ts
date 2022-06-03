@@ -3,8 +3,8 @@ import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
 import txStateAtom from './txStateAtom';
 
-const rawTransactionInfoAtom = selector<TransactionResponse | null>({
-  key: 'rawTransactionInfo',
+const rawTransactionAtom = selector<TransactionResponse | null>({
+  key: 'rawTransaction',
   get: async ({ get }) => {
     const txState = get(txStateAtom);
     const solanaCluster = get(solanaClusterAtom);
@@ -21,4 +21,4 @@ const rawTransactionInfoAtom = selector<TransactionResponse | null>({
   },
 });
 
-export default rawTransactionInfoAtom;
+export default rawTransactionAtom;

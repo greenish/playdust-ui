@@ -1,6 +1,8 @@
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { TransactionError } from '@solana/web3.js';
 import programLabel from '../../../_helpers/programLabel';
+import InstructionErrorType from '../../_types/InstructionErrorType';
+import TransactionErrorDetailsType from '../../_types/TransactionErrorDetailsType';
 import InstructionLogsType from '../_types/InstructionLogsType';
 
 const instructionErrorMessage: Map<string, string> = new Map([
@@ -103,26 +105,7 @@ type ProgramError = {
   message: string;
 };
 
-function getTransactionInstructionError(
-  error?: TransactionError | null
-): ProgramError | undefined {
-  if (!error) {
-    return;
-  }
-
-  if (typeof error === 'object' && 'InstructionError' in error) {
-    const innerError = error['InstructionError'];
-    const index = innerError[0] as number;
-    const instructionError = innerError[1];
-
-    return {
-      index,
-      message: getInstructionError(instructionError),
-    };
-  }
-}
-
-function getInstructionError(error: any): string {
+function getInstructionError(error: InstructionErrorType) {
   let out;
   let value;
 
@@ -133,10 +116,10 @@ function getInstructionError(error: any): string {
     }
   } else if ('Custom' in error) {
     out = instructionErrorMessage.get('Custom');
-    value = error['Custom'];
+    value = error.Custom;
   } else if ('BorshIoError' in error) {
     out = instructionErrorMessage.get('BorshIoError');
-    value = error['BorshIoError'];
+    value = error.BorshIoError;
   }
 
   if (out && value) {
@@ -146,16 +129,36 @@ function getInstructionError(error: any): string {
   return 'Unknown instruction error';
 }
 
+function getTransactionInstructionError(
+  error?: TransactionError | null
+): ProgramError | undefined {
+  if (!error) {
+    return;
+  }
+
+  if (typeof error === 'object' && 'InstructionError' in error) {
+    const innerError = (error as TransactionErrorDetailsType).InstructionError;
+    const index = innerError[0];
+    const instructionError = innerError[1];
+
+    return {
+      index,
+      message: getInstructionError(instructionError),
+    };
+  }
+}
+
 function prettyProgramLogs(
   logs: string[],
   error: TransactionError | null,
   walletAdapterNetwork: WalletAdapterNetwork
 ): InstructionLogsType[] {
   let depth = 0;
-  let prettyLogs: InstructionLogsType[] = [];
-  const prefixBuilder = (depth: number) => {
-    const prefix = new Array(depth - 1).fill('\u00A0\u00A0').join('');
-    return prefix + '> ';
+
+  const prettyLogs: InstructionLogsType[] = [];
+  const prefixBuilder = (prefixDepth: number) => {
+    const prefix = new Array(prefixDepth - 1).fill('\u00A0\u00A0').join('');
+    return `${prefix}> `;
   };
 
   let prettyError;
@@ -193,14 +196,14 @@ function prettyProgramLogs(
           });
         }
 
-        depth++;
+        depth += 1;
       } else if (log.includes('success')) {
         prettyLogs[prettyLogs.length - 1].logs.push({
           prefix: prefixBuilder(depth),
           style: 'success',
           text: `Program returned success`,
         });
-        depth--;
+        depth -= 1;
       } else if (log.includes('failed')) {
         const instructionLog = prettyLogs[prettyLogs.length - 1];
         if (!instructionLog.failed) {
@@ -211,14 +214,14 @@ function prettyProgramLogs(
             text: `Program returned error: ${log.slice(log.indexOf(': ') + 2)}`,
           });
         }
-        depth--;
+        depth -= 1;
       } else {
         if (depth === 0) {
           prettyLogs.push({
             logs: [],
             failed: false,
           });
-          depth++;
+          depth += 1;
         }
         // system transactions don't start with "Program log:"
         prettyLogs[prettyLogs.length - 1].logs.push({

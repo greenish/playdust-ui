@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import parsedConfigAccountAtom from './_atoms/parsedConfigAccountAtom';
 import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
+import parsedConfigAccountAtom from './_atoms/parsedConfigAccountAtom';
 
 const MAX_SLASH_PENALTY = 2 ** 8;
 

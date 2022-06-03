@@ -1,9 +1,9 @@
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import addressStateAtom from '../_atoms/addressStateAtom';
 import tokenRegistryAtom from '../../_atoms/tokenRegistryAtom';
 import safePubkeyString from '../../_helpers/safePubkeyString';
+import addressStateAtom from '../_atoms/addressStateAtom';
 
 const IDENTICON_WIDTH = 64;
 

@@ -11,24 +11,24 @@ import {
 import { ParsedMessageAccount } from '@solana/web3.js';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
-import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import SolBalance from '../../_sharedComponents/SolBalance/SolBalance';
-import parsedConfirmedTransactionInfoAtom from './_atoms/parsedConfirmedTransactionInfoAtom';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
+import parsedConfirmedTransactionAtom from './_atoms/parsedConfirmedTransactionAtom';
 
 function AccountInputs() {
-  const parsedConfirmedTransactionInfo = useRecoilValue(
-    parsedConfirmedTransactionInfoAtom
+  const parsedConfirmedTransaction = useRecoilValue(
+    parsedConfirmedTransactionAtom
   );
 
-  if (!parsedConfirmedTransactionInfo) {
+  if (!parsedConfirmedTransaction) {
     return <div>No data available</div>;
   }
 
   const {
     meta,
     transaction: { message },
-  } = parsedConfirmedTransactionInfo;
+  } = parsedConfirmedTransaction;
 
   const { postBalances, preBalances } = meta || {};
 
@@ -63,6 +63,7 @@ function AccountInputs() {
 
                   return (
                     <TableRow
+                      // eslint-disable-next-line react/no-array-index-key
                       key={idx}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >

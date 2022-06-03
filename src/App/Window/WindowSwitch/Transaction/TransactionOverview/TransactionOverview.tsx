@@ -7,14 +7,14 @@ import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
 import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
 import SolBalance from '../../_sharedComponents/SolBalance/SolBalance';
-import rawTransactionInfoAtom from '../_atoms/rawTransactionInfoAtom';
+import rawTransactionAtom from '../_atoms/rawTransactionAtom';
 import signatureStatusAtom from './_atoms/signatureStatusAtom';
 
 function TransactionOverview() {
-  const rawTransactionInfo = useRecoilValue(rawTransactionInfoAtom);
+  const rawTransaction = useRecoilValue(rawTransactionAtom);
   const signatureStatus = useRecoilValue(signatureStatusAtom);
 
-  if (!rawTransactionInfo) {
+  if (!rawTransaction) {
     return <div>No data available</div>;
   }
 
@@ -26,7 +26,7 @@ function TransactionOverview() {
       message: { recentBlockhash },
       signatures,
     },
-  } = rawTransactionInfo;
+  } = rawTransaction;
 
   const { err, fee = 0 } = meta || {};
 
