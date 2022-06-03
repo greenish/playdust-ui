@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import windowStateStorageAtom from '../../_atoms/windowStateStorageAtom';
+import windowStateStorageAtom from './windowStateStorageAtom';
 
 const windowStateAvailableAtom = selector<boolean>({
   key: 'windowStateAvailableAtom',

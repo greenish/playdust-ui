@@ -1,5 +1,7 @@
+import { Button } from '@mui/material';
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import useProfileState from '../../_hooks/useProfileState';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
 import ConfigAccountStakeConfigCard from './ConfigAccountStakeConfigCard';
 import ConfigAccountValidatorInfoCard from './ConfigAccountValidatorInfoCard';
@@ -16,15 +18,27 @@ import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
 import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import UserProfileCard from './UserProfileCard/UserProfileCard';
+import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
 import WalletGallery from './WalletGallery/WalletGallery';
 import ContentContainer from './_sharedComponents/ContentContainer';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 
 function Address() {
+  const [profile, setProfile] = useProfileState();
+
+  const testProfileSetting = () => {
+    setProfile({
+      name: 'test',
+      email: `tested${Math.random()}`,
+    });
+  };
+
   return (
     <>
+      <Button onClick={testProfileSetting}>{`profile: ${JSON.stringify(
+        profile
+      )}`}</Button>
       {/* Special Account Views */}
-
       <SuspenseBoundary
         content={<SPLTokenMintNonFungible />}
         error={null}
@@ -109,6 +123,11 @@ function Address() {
         />
         <SuspenseBoundary
           content={<SysvarAccountStakeHistoryCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<VoteAccountCard />}
           error={null}
           loading={null}
         />

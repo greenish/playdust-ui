@@ -1,20 +1,11 @@
 import { Person } from '@mui/icons-material';
-import {
-  Fab,
-  FormControl,
-  InputLabel,
-  Menu,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import { Fab, Menu, MenuItem } from '@mui/material';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import solanaClustersAtom from '../../_atoms/solanaClustersAtom';
 import safePromise from '../../_helpers/safePromise';
 import connectedWalletAtom from './_atoms/connectedWalletAtom';
-import isAdminAtom from './_atoms/isAdminAtom';
 import isLoggedInAtom from './_atoms/isLoggedInAtom';
 import shortenPublicKey from './_helpers/shortenPublicKey';
 import useGoToProfile from './_hooks/useGoToProfile';
@@ -33,12 +24,9 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
   const open = !!anchorEl;
   const logout = useLogout();
   const signAuthMessage = useSignAuthMessage();
-  const [solanaClusters, setSolanaClusters] =
-    useRecoilState(solanaClustersAtom);
   const goToProfile = useGoToProfile();
   const [connectedWallet, setConnectedWallet] =
     useRecoilState(connectedWalletAtom);
-  const isAdmin = useRecoilValue(isAdminAtom);
   const isLoggedIn = useRecoilValue(isLoggedInAtom);
 
   useEffect(() => {
@@ -99,31 +87,6 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
         >
           {isLoggedIn ? 'Logout' : 'Disconnect'}
         </MenuItem>
-        {isAdmin && (
-          <MenuItem>
-            <FormControl fullWidth={true}>
-              <InputLabel>Network</InputLabel>
-              <Select
-                value={solanaClusters.selectedIndex}
-                onChange={(evt) => {
-                  const nextIndex = evt.target.value;
-                  if (typeof nextIndex === 'number') {
-                    setSolanaClusters((curr) => ({
-                      ...curr,
-                      selectedIndex: nextIndex,
-                    }));
-                  }
-                }}
-              >
-                {solanaClusters.clusters.map((cluster, idx) => (
-                  <MenuItem value={idx} key={cluster.network}>
-                    {cluster.network}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </MenuItem>
-        )}
       </Menu>
     </>
   );
