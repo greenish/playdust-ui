@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import profileApi from '../_helpers/profileApi';
 import safePromise from '../../../../../_helpers/safePromise';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
 import useProfileState from '../../../../_hooks/useProfileState';
@@ -14,7 +15,6 @@ import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 import publicProfileAtom from '../_atoms/publicProfileAtom';
 import userProfileEditAtom from '../_atoms/userProfileEditAtom';
-import profileApi from '../_helpers/profileApi';
 import useAuth from '../_hooks/useAuth';
 import useConnectedWallet from '../_hooks/useConnectedWallet';
 import UserProfileAvatar from '../_sharedComponents/UserProfileAvatar';
@@ -52,7 +52,13 @@ function UserProfileContent() {
   return (
     <Box sx={{ display: 'flex' }}>
       <UserProfileAvatar value={profile?.profilePictureMintAddress} />
-      <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+      <CardContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
         <Typography sx={{ fontWeight: 'bold', fontSize: 20 }}>
           {profile?.username}
         </Typography>

@@ -1,4 +1,4 @@
-import authenticationAPi from './authenticationApi';
+import authenticationAPi from '../../../../../_helpers/authenticationApi';
 
 const fetchNonce = async (publicKey: string) => {
   const { data } = await authenticationAPi.post<{ nonce: string }>('/nonce', {

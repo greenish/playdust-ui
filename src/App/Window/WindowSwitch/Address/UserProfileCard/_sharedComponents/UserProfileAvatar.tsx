@@ -40,6 +40,7 @@ function UserProfileAvatar({
         minWidth: 215,
         maxWidth: 215,
         p: 2,
+        pr: 0,
       }}
     >
       {!edit ?? disabled ? (

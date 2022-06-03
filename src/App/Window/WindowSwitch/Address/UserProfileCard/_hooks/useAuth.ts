@@ -3,7 +3,7 @@ import base58 from 'bs58';
 import Cookies from 'js-cookie';
 import { create, Infer, object, string } from 'superstruct';
 import authenticationApi from '../../../../../_helpers/authenticationApi';
-import fetchNonce from '../../../../../_helpers/fetchNonce';
+import fetchNonce from '../_helpers/fetchNonce';
 
 type LoginResponseType = Infer<typeof LoginResponseType>;
 const LoginResponseType = object({
