@@ -24,23 +24,26 @@ type FormFieldProps = Omit<TextFieldProps, 'name'> & {
   validate?: (value: string) => boolean;
 };
 
+const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+const twitterRegex = /(?<!\w)@[\w+]{1,15}\b/;
+
 const formFields: FormFieldProps[] = [
   {
     name: 'username',
     placeholder: 'Username',
-    validate: (value) => !!value,
+    required: true,
+  },
+  {
+    name: 'email',
+    placeholder: 'Email',
+    required: true,
+    Icon: Mail,
+    validate: (value) => emailRegex.test(value),
   },
   {
     name: 'bio',
     placeholder: 'Bio',
     multiline: true,
-  },
-  {
-    name: 'email',
-    placeholder: 'Email',
-    Icon: Mail,
-    validate: (value) =>
-      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value),
   },
   {
     name: 'discordUsername',
@@ -51,7 +54,7 @@ const formFields: FormFieldProps[] = [
     name: 'twitterUsername',
     placeholder: 'Twitter',
     Icon: Twitter,
-    validate: (value) => !value || /(?<!\w)@[\w+]{1,15}\b/.test(value),
+    validate: (value) => !value || twitterRegex.test(value),
   },
 ];
 
@@ -82,64 +85,78 @@ function UserProfileForm() {
   };
 
   const handleSave = () => {
-    if (
-      formFields.some(
-        ({ name }) =>
-          name in userProfileForm.state &&
-          userProfileForm.state[name] !== userProfile[name]
-      )
-    ) {
+    const keys: FormFieldProps['name'][] = [
+      ...formFields.map(({ name }) => name),
+      'profilePictureMintAddress',
+    ];
+    const hasChanges = keys.some(
+      (key) => userProfileForm.state[key] !== userProfile[key]
+    );
+
+    if (hasChanges) {
       // call api
       setUserProfile((prev) => ({ ...prev, ...userProfileForm.state }));
     }
     resetUserProfileForm();
   };
 
-  const formErrors = formFields
-    .filter((formField) => formField.validate)
-    .reduce<Partial<UserProfileType>>(
-      (prev, { name, validate, placeholder = '' }) =>
-        validate?.((userProfileForm.state && userProfileForm.state[name]) ?? '')
-          ? prev
-          : {
-              ...prev,
-              [name]: `${placeholder} is invalid`,
-            },
-      {}
-    );
+  const invalidFields = formFields
+    .filter(({ name, required, validate }) => {
+      if (required && !userProfileForm.state[name]) {
+        return true;
+      }
+
+      if (validate && !validate(userProfileForm.state[name] ?? '')) {
+        return true;
+      }
+
+      return false;
+    })
+    .map(({ name }) => name);
 
   return (
     <>
-      <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+      <CardContent>
         {formFields.map(
-          ({ Icon, validate, ...props }: FormFieldProps, index) => (
-            <TextField
-              {...props}
-              key={props.name}
-              error={!!formErrors[props.name]}
-              helperText={formErrors[props.name]}
-              size="small"
-              sx={{ mt: 2 * +!!index }}
-              label={props.placeholder}
-              value={
-                (userProfileForm.state && userProfileForm.state[props.name]) ??
-                ''
-              }
-              onChange={handleChange}
-              InputProps={{
-                startAdornment: Icon && (
-                  <InputAdornment sx={{ mt: -0.5 }} position="start">
-                    <Icon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )
+          ({ Icon, validate, ...props }: FormFieldProps, index) => {
+            const value = userProfileForm.state[props.name] ?? '';
+            const errorText = invalidFields.includes(props.name)
+              ? `${props.placeholder || props.name} is ${
+                  props.required && !value ? 'required' : 'invalid'
+                }`
+              : '';
+
+            return (
+              <TextField
+                {...props}
+                key={props.name}
+                sx={{
+                  ...props.sx,
+                  mt: 1,
+                  mb: 1,
+                }}
+                fullWidth={true}
+                error={!!errorText}
+                helperText={errorText}
+                size="small"
+                label={props.placeholder}
+                value={value}
+                onChange={handleChange}
+                InputProps={{
+                  startAdornment: Icon && (
+                    <InputAdornment sx={{ mt: -0.5 }} position="start">
+                      <Icon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            );
+          }
         )}
       </CardContent>
       <CardActions sx={{ ml: 1 }}>
         <Button
-          disabled={!!Object.keys(formErrors).length}
+          disabled={!!invalidFields.length}
           variant="contained"
           onClick={handleSave}
         >

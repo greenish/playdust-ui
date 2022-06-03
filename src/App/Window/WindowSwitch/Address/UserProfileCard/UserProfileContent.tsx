@@ -3,24 +3,17 @@ import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import profileApi from '../../../../AppBar/WalletButton/_helpers/profileApi';
 import safePromise from '../../../../_helpers/safePromise';
+import useAuth from '../../../../_hooks/useAuth';
 import useConnectedWallet from '../../../../_hooks/useConnectedWallet';
-import useToken from '../../../../_hooks/useToken';
 import UserProfileType from '../../../../_types/UserProfileType';
 import addressStateAtom from '../_atoms/addressStateAtom';
-import useIsWallet from '../_hooks/useIsWallet';
 import userProfileForAddressAtom from './_atoms/userProfileForAddressAtom';
 import userProfileFormAtom from './_atoms/userProfileFormAtom';
 
 function UserProfileContent() {
-  const token = useToken();
-  const isWallet = useIsWallet();
-  const addressState = useRecoilValue(addressStateAtom);
-  const publicKeyString = addressState?.pubkey.toString();
+  const auth = useAuth();
   const connectedWallet = useConnectedWallet();
-  // const isCurrentUser =
-  //   isWallet &&
-  //   publicKeyString === connectedWallet;
-  const isCurrentUser = true;
+  const addressState = useRecoilValue(addressStateAtom);
   const userProfile = useRecoilValue(userProfileForAddressAtom);
   const [userProfileForm, setUserProfileForm] =
     useRecoilState(userProfileFormAtom);
@@ -29,23 +22,31 @@ function UserProfileContent() {
     return null;
   }
 
-  const handleEdit = async () => {
-    const authToken = await token.get();
+  const publicKeyString = addressState?.pubkey.toString();
+  // const isCurrentUser = publicKeyString === connectedWallet;
+  const isCurrentUser = true;
 
-    if (authToken) {
+  const handleEdit = async () => {
+    const tokens = await auth.getTokens();
+
+    if (tokens) {
       try {
         const { data } = await profileApi.get<UserProfileType>('/read', {
           params: {
             walletAddress: connectedWallet,
           },
           headers: {
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${tokens.accessToken}`,
           },
         });
-        setUserProfileForm({ edit: true, state: data });
+        setUserProfileForm((prev) => ({ ...prev, edit: true, state: data }));
       } catch (e) {
         console.error(e);
-        setUserProfileForm({ edit: true, state: userProfile });
+        setUserProfileForm((prev) => ({
+          ...prev,
+          edit: true,
+          state: userProfile,
+        }));
       }
     }
   };

@@ -10,10 +10,12 @@ import UserProfileForm from './UserProfileForm';
 
 function UserProfileCard() {
   const isWallet = useIsWallet();
-  const addressState = useRecoilValue(addressStateAtom);
-  const publicKeyString = addressState?.pubkey.toString();
   const connectedWallet = useConnectedWallet();
-  const isCurrentUser = isWallet && publicKeyString === connectedWallet;
+  const addressState = useRecoilValue(addressStateAtom);
+
+  const publicKeyString = addressState?.pubkey.toString();
+  // const isCurrentUser = publicKeyString === connectedWallet;
+  const isCurrentUser = true;
 
   // TODO: return null if user is not current user and does not exist
   if (!isWallet && !isCurrentUser) {
@@ -27,15 +29,17 @@ function UserProfileCard() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          m: 2,
-          mr: 0,
+          alignItems: 'center',
+          ml: 2,
+          minWidth: '215px',
+          maxWidth: '215px',
         }}
       >
         <UserProfileAvatar />
       </Box>
       <Box sx={{ width: '100%' }}>
         <UserProfileContent />
-        <UserProfileForm />
+        {isCurrentUser && <UserProfileForm />}
       </Box>
     </Card>
   );

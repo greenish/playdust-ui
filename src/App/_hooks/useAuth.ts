@@ -50,19 +50,22 @@ const cookieApi = {
   remove: () => Cookies.remove(cookieKey),
 };
 
-function useToken() {
+function useAuth() {
   const wallet = useWallet();
 
   return {
-    get: async () => {
+    getTokens: async () => {
       const cookieString = cookieApi.get();
       const tokens = validateAuthToken(cookieString);
-      const { refreshToken, accessToken } = tokens || {};
+      const { accessToken } = tokens || {};
       const isAccessTokenValid = !isJWTExpired(accessToken);
-      const isRefreshTokenValid = !isJWTExpired(refreshToken);
       const connectedWallet = wallet.publicKey?.toString();
 
-      if (!isAccessTokenValid && wallet.signMessage && connectedWallet) {
+      if (isAccessTokenValid) {
+        return tokens;
+      }
+
+      if (wallet.signMessage && connectedWallet) {
         const nonce = await fetchNonce(connectedWallet);
         const nonceMessage = new TextEncoder().encode(nonce);
         const messageArray = await wallet.signMessage(nonceMessage);
@@ -79,11 +82,7 @@ function useToken() {
 
         cookieApi.set(data);
 
-        return data.accessToken;
-      }
-
-      if (isAccessTokenValid) {
-        return tokens?.accessToken;
+        return data;
       }
 
       return null;
@@ -91,4 +90,4 @@ function useToken() {
   };
 }
 
-export default useToken;
+export default useAuth;

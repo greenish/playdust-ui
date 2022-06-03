@@ -1,5 +1,5 @@
 import { Avatar, AvatarProps, ButtonBase, ImageList } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import getCDNUrl from '../../../../_helpers/getCDNUrl';
 import CardImageContainer from '../../_sharedComponents/TokenCard/ImageCard/CardImageContainer';
@@ -7,13 +7,12 @@ import nftsForAddressAtom from '../WalletGallery/_atoms/nftsForAddressAtom';
 import userProfileForAddressAtom from './_atoms/userProfileForAddressAtom';
 import userProfileFormAtom from './_atoms/userProfileFormAtom';
 
-const imageSize = 150;
+const imageSize = 100;
 
 function UserProfileAvatar(props: AvatarProps) {
   const userProfile = useRecoilValue(userProfileForAddressAtom);
   const [userProfileForm, setUserProfileForm] =
     useRecoilState(userProfileFormAtom);
-  const [showImageList, setShowImageList] = useState(false);
   const nfts = useRecoilValue(nftsForAddressAtom).filter(
     (nft) => nft.offChainData
   );
@@ -26,29 +25,27 @@ function UserProfileAvatar(props: AvatarProps) {
   const currentImage = currentNft?.offChainData.image;
   const canEdit = userProfileForm.edit && !!nfts.length;
 
-  useEffect(() => {
-    if (!canEdit) {
-      setShowImageList(false);
-    }
-  }, [canEdit]);
+  const toggleEditor = () =>
+    canEdit &&
+    setUserProfileForm((prev) => ({ ...prev, editPicture: !prev.editPicture }));
 
-  return !showImageList ? (
+  return !userProfileForm.editPicture ? (
     <Avatar
       {...props}
       sx={{
-        width: imageSize,
-        height: imageSize,
+        width: imageSize * 1.5,
+        height: imageSize * 1.5,
         cursor: canEdit ? 'pointer' : 'default',
         ...props.sx,
       }}
       src={currentImage && getCDNUrl(currentImage)}
-      onClick={() => canEdit && setShowImageList(true)}
+      onClick={() => canEdit && toggleEditor()}
     />
   ) : (
     <ImageList
-      sx={{ width: '100%', height: imageSize * 3 }}
+      sx={{ width: '100%', height: imageSize * 5 }}
       gap={0}
-      cols={1}
+      cols={2}
       rowHeight={imageSize}
     >
       {nfts.map((nft) => {
@@ -65,7 +62,7 @@ function UserProfileAvatar(props: AvatarProps) {
                   profilePictureMintAddress: nft.mint,
                 },
               }));
-              setShowImageList(false);
+              toggleEditor();
             }}
           >
             <CardImageContainer
