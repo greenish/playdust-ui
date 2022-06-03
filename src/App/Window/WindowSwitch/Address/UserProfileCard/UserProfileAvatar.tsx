@@ -1,5 +1,4 @@
-import styled from '@emotion/styled';
-import { Avatar, AvatarProps, ButtonBase, ImageList } from '@mui/material';
+import { Avatar, AvatarProps, Box, ButtonBase, ImageList } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import getCDNUrl from '../../../../_helpers/getCDNUrl';
@@ -7,16 +6,7 @@ import CardImageContainer from '../../_sharedComponents/TokenCard/ImageCard/Card
 import nftsForAddressAtom from '../WalletGallery/_atoms/nftsForAddressAtom';
 
 const imageSize = 100;
-
-const AvatarContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-left: 16px;
-  min-width: 215px;
-  max-width: 215px;
-`;
+const maxRows = 4;
 
 interface UserProfileAvatarProps extends Omit<AvatarProps, 'onChange'> {
   value?: string;
@@ -41,7 +31,17 @@ function UserProfileAvatar({
   const disabled = !onChange || !nfts.length;
 
   return (
-    <AvatarContainer>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minWidth: 215,
+        maxWidth: 215,
+        p: 2,
+      }}
+    >
       {!edit ?? disabled ? (
         <Avatar
           {...avatarProps}
@@ -56,7 +56,7 @@ function UserProfileAvatar({
         />
       ) : (
         <ImageList
-          sx={{ width: '100%', height: imageSize * 5 }}
+          sx={{ width: '100%', maxHeight: imageSize * maxRows }}
           gap={0}
           cols={2}
           rowHeight={imageSize}
@@ -77,7 +77,7 @@ function UserProfileAvatar({
           ))}
         </ImageList>
       )}
-    </AvatarContainer>
+    </Box>
   );
 }
 

@@ -1,8 +1,8 @@
 import {
   AccountCircle,
+  AlternateEmail,
   Mail,
   SvgIconComponent,
-  Twitter,
 } from '@mui/icons-material';
 import {
   Box,
@@ -31,7 +31,7 @@ type FormFieldProps = Omit<TextFieldProps, 'name'> & {
 };
 
 const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-const twitterRegex = /(?<!\w)@[\w+]{1,15}\b/;
+const twitterRegex = /^[a-zA-Z0-9_]{1,15}$/;
 
 const formFields: FormFieldProps[] = [
   {
@@ -59,7 +59,7 @@ const formFields: FormFieldProps[] = [
   {
     name: 'twitterUsername',
     placeholder: 'Twitter',
-    Icon: Twitter,
+    Icon: AlternateEmail,
     validate: (value) => !value || twitterRegex.test(value),
   },
 ];
