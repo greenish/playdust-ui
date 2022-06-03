@@ -1,48 +1,24 @@
-import { Box, Card } from '@mui/material';
+import { Card } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import useConnectedWallet from '../../../../_hooks/useConnectedWallet';
-import addressStateAtom from '../_atoms/addressStateAtom';
+import useIsCurrentUser from '../../../_hooks/useIsCurrentUser';
 import useIsWallet from '../_hooks/useIsWallet';
-import UserProfileAvatar from './UserProfileAvatar';
 import UserProfileContent from './UserProfileContent';
 import UserProfileForm from './UserProfileForm';
+import publicProfileAtom from './_atoms/publicProfileAtom';
+import userProfileEditAtom from './_atoms/userProfileEditAtom';
 
 function UserProfileCard() {
   const isWallet = useIsWallet();
-  const connectedWallet = useConnectedWallet();
-  const addressState = useRecoilValue(addressStateAtom);
+  const isCurrentUser = useIsCurrentUser();
+  const publicProfile = useRecoilValue(publicProfileAtom);
+  const edit = useRecoilValue(userProfileEditAtom);
 
-  const publicKeyString = addressState?.pubkey.toString();
-  // const isCurrentUser = publicKeyString === connectedWallet;
-  const isCurrentUser = true;
-
-  // TODO: return null if user is not current user and does not exist
-  if (!isWallet && !isCurrentUser) {
+  if (!isWallet && !isCurrentUser && !publicProfile) {
     return null;
   }
 
-  return (
-    <Card sx={{ display: 'flex' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          ml: 2,
-          minWidth: '215px',
-          maxWidth: '215px',
-        }}
-      >
-        <UserProfileAvatar />
-      </Box>
-      <Box sx={{ width: '100%' }}>
-        <UserProfileContent />
-        {isCurrentUser && <UserProfileForm />}
-      </Box>
-    </Card>
-  );
+  return <Card>{!edit ? <UserProfileContent /> : <UserProfileForm />}</Card>;
 }
 
 export default UserProfileCard;

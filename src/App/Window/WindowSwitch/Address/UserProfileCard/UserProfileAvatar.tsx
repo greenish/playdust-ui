@@ -1,73 +1,83 @@
+import styled from '@emotion/styled';
 import { Avatar, AvatarProps, ButtonBase, ImageList } from '@mui/material';
-import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React, { useMemo, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 import getCDNUrl from '../../../../_helpers/getCDNUrl';
 import CardImageContainer from '../../_sharedComponents/TokenCard/ImageCard/CardImageContainer';
 import nftsForAddressAtom from '../WalletGallery/_atoms/nftsForAddressAtom';
-import userProfileAtom from './_atoms/userProfileAtom';
-import userProfileFormAtom from './_atoms/userProfileFormAtom';
 
 const imageSize = 100;
 
-function UserProfileAvatar(props: AvatarProps) {
-  const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
-  const [userProfileForm, setUserProfileForm] =
-    useRecoilState(userProfileFormAtom);
+const AvatarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 16px;
+  min-width: 215px;
+  max-width: 215px;
+`;
+
+interface UserProfileAvatarProps extends Omit<AvatarProps, 'onChange'> {
+  value?: string;
+  onChange?: (value: string) => void;
+}
+
+function UserProfileAvatar({
+  value = '',
+  onChange,
+  ...avatarProps
+}: UserProfileAvatarProps) {
+  const [edit, setEdit] = useState(false);
   const nfts = useRecoilValue(nftsForAddressAtom).filter(
     (nft) => nft.offChainData
   );
 
-  const mintAddress = userProfile.profilePictureMintAddress;
+  const currentImage = useMemo(() => {
+    const currentNft = nfts.find((nft) => nft.mint === value);
+    return currentNft?.offChainData.image;
+  }, [value, nfts]);
 
-  const currentNft = nfts.find((nft) => nft.mint === mintAddress);
-  const currentImage = currentNft?.offChainData.image;
-  const canEdit = userProfileForm.edit && !!nfts.length;
+  const disabled = !onChange || !nfts.length;
 
-  const toggleEditor = () =>
-    canEdit &&
-    setUserProfileForm((prev) => ({ ...prev, editPicture: !prev.editPicture }));
-
-  return !userProfileForm.editPicture ? (
-    <Avatar
-      {...props}
-      sx={{
-        width: imageSize * 1.5,
-        height: imageSize * 1.5,
-        cursor: canEdit ? 'pointer' : 'default',
-        ...props.sx,
-      }}
-      src={currentImage && getCDNUrl(currentImage)}
-      onClick={() => canEdit && toggleEditor()}
-    />
-  ) : (
-    <ImageList
-      sx={{ width: '100%', height: imageSize * 5 }}
-      gap={0}
-      cols={2}
-      rowHeight={imageSize}
-    >
-      {nfts.map((nft) => {
-        const { image } = nft?.offChainData || {};
-
-        return (
-          <ButtonBase
-            key={nft.mint}
-            onClick={() => {
-              setUserProfile((prev) => ({
-                ...prev,
-                profilePictureMintAddress: nft.mint,
-              }));
-              toggleEditor();
-            }}
-          >
-            <CardImageContainer
-              imageSize={imageSize}
-              src={image && getCDNUrl(image)}
-            />
-          </ButtonBase>
-        );
-      })}
-    </ImageList>
+  return (
+    <AvatarContainer>
+      {!edit ?? disabled ? (
+        <Avatar
+          {...avatarProps}
+          sx={{
+            width: imageSize * 1.5,
+            height: imageSize * 1.5,
+            cursor: !disabled ? 'pointer' : 'default',
+            ...avatarProps.sx,
+          }}
+          src={currentImage && getCDNUrl(currentImage)}
+          onClick={() => !disabled && setEdit(true)}
+        />
+      ) : (
+        <ImageList
+          sx={{ width: '100%', height: imageSize * 5 }}
+          gap={0}
+          cols={2}
+          rowHeight={imageSize}
+        >
+          {nfts.map(({ mint, offChainData: { image } }) => (
+            <ButtonBase
+              key={mint}
+              onClick={() => {
+                onChange?.(mint);
+                setEdit(false);
+              }}
+            >
+              <CardImageContainer
+                imageSize={imageSize}
+                src={image && getCDNUrl(image)}
+              />
+            </ButtonBase>
+          ))}
+        </ImageList>
+      )}
+    </AvatarContainer>
   );
 }
 

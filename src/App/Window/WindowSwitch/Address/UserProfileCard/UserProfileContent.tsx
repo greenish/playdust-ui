@@ -1,69 +1,77 @@
-import { Button, CardActions, CardContent, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  CardActions,
+  CardContent,
+  Typography,
+} from '@mui/material';
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import shortenPublicKey from '../../../../AppBar/WalletButton/_helpers/shortenPublicKey';
 import safePromise from '../../../../_helpers/safePromise';
 import useAuth from '../../../../_hooks/useAuth';
 import useConnectedWallet from '../../../../_hooks/useConnectedWallet';
-import UserProfileType from '../../../../_types/UserProfileType';
+import useIsCurrentUser from '../../../_hooks/useIsCurrentUser';
+import useProfileState from '../../../_hooks/useProfileState';
+import PlaydustProfileType from '../../../_types/PlaydustProfileType';
 import addressStateAtom from '../_atoms/addressStateAtom';
-import userProfileAtom from './_atoms/userProfileAtom';
-import userProfileFormAtom from './_atoms/userProfileFormAtom';
+import UserProfileAvatar from './UserProfileAvatar';
+import publicProfileAtom from './_atoms/publicProfileAtom';
+import userProfileEditAtom from './_atoms/userProfileEditAtom';
 import profileApi from './_helpers/profileApi';
 
 function UserProfileContent() {
   const auth = useAuth();
+  const isCurrentUser = useIsCurrentUser();
   const connectedWallet = useConnectedWallet();
   const addressState = useRecoilValue(addressStateAtom);
-  const userProfile = useRecoilValue(userProfileAtom);
-  const [userProfileForm, setUserProfileForm] =
-    useRecoilState(userProfileFormAtom);
-
-  if (userProfileForm.edit) {
-    return null;
-  }
-
-  const publicKeyString = addressState?.pubkey.toString();
-  // const isCurrentUser = publicKeyString === connectedWallet;
-  const isCurrentUser = true;
+  const setEdit = useSetRecoilState(userProfileEditAtom);
+  const publicProfile = useRecoilValue(publicProfileAtom);
+  const [userProfile, setUserProfile] = useProfileState();
 
   const handleEdit = async () => {
     const tokens = await auth.getTokens();
 
-    if (tokens) {
-      try {
-        const { data } = await profileApi.get<UserProfileType>('/read', {
-          params: {
-            walletAddress: connectedWallet,
-          },
-          headers: {
-            Authorization: `Bearer ${tokens.accessToken}`,
-          },
-        });
-      } catch (e) {
-        console.error(e);
-      } finally {
-        setUserProfileForm((prev) => ({ ...prev, edit: true }));
-      }
+    if (tokens && !userProfile) {
+      const { data } = await profileApi.get<PlaydustProfileType>('/read', {
+        params: {
+          walletAddress: connectedWallet,
+        },
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      });
+      setUserProfile(data);
     }
+
+    setEdit(true);
   };
 
+  const profile = userProfile || publicProfile;
+
   return (
-    <>
+    <Box sx={{ display: 'flex' }}>
+      <UserProfileAvatar value={profile?.profilePictureMintAddress} />
       <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
         <Typography sx={{ fontWeight: 'bold', fontSize: 20 }}>
-          {userProfile.username}
+          {profile?.username}
         </Typography>
-        <Typography sx={{ fontSize: 14, mt: 2 }}>{publicKeyString}</Typography>
-        <Typography sx={{ fontSize: 14, mt: 2 }}>{userProfile.bio}</Typography>
+        <Typography sx={{ fontSize: 14, mt: 2 }}>
+          {addressState && shortenPublicKey(addressState.pubkey)}
+        </Typography>
+        <Typography sx={{ fontSize: 14, mt: 2 }}>{profile?.bio}</Typography>
+        {isCurrentUser && (
+          <CardActions sx={{ p: 0, mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => safePromise(handleEdit())}
+            >
+              Edit
+            </Button>
+          </CardActions>
+        )}
       </CardContent>
-      {isCurrentUser && (
-        <CardActions sx={{ ml: 1 }}>
-          <Button variant="contained" onClick={() => safePromise(handleEdit())}>
-            Edit
-          </Button>
-        </CardActions>
-      )}
-    </>
+    </Box>
   );
 }
 

@@ -5,6 +5,7 @@ import {
   Twitter,
 } from '@mui/icons-material';
 import {
+  Box,
   Button,
   CardActions,
   CardContent,
@@ -12,14 +13,19 @@ import {
   TextField,
   TextFieldProps,
 } from '@mui/material';
-import React from 'react';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import UserProfileType from '../../../../_types/UserProfileType';
-import userProfileAtom from './_atoms/userProfileAtom';
-import userProfileFormAtom from './_atoms/userProfileFormAtom';
+import React, { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import safePromise from '../../../../_helpers/safePromise';
+import useAuth from '../../../../_hooks/useAuth';
+import useConnectedWallet from '../../../../_hooks/useConnectedWallet';
+import useProfileState from '../../../_hooks/useProfileState';
+import PlaydustProfileType from '../../../_types/PlaydustProfileType';
+import UserProfileAvatar from './UserProfileAvatar';
+import userProfileEditAtom from './_atoms/userProfileEditAtom';
+import profileApi from './_helpers/profileApi';
 
 type FormFieldProps = Omit<TextFieldProps, 'name'> & {
-  name: keyof UserProfileType;
+  name: keyof PlaydustProfileType;
   Icon?: SvgIconComponent;
   validate?: (value: string) => boolean;
 };
@@ -59,50 +65,64 @@ const formFields: FormFieldProps[] = [
 ];
 
 function UserProfileForm() {
-  const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
-  const userProfileForm = useRecoilValue(userProfileFormAtom);
-  const resetUserProfileForm = useResetRecoilState(userProfileFormAtom);
+  const auth = useAuth();
+  const connectedWallet = useConnectedWallet();
+  const setEdit = useSetRecoilState(userProfileEditAtom);
+  const [userProfile, setUserProfile] = useProfileState();
 
-  if (!userProfileForm.edit) {
+  const [formState, setFormState] = useState<PlaydustProfileType | null>(
+    userProfile
+  );
+
+  if (!formState || !userProfile) {
     return null;
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setUserProfile((prev) => ({
-      ...prev,
-      [name]:
-        name === 'twitterUsername' && !!value && !value.startsWith('@')
-          ? `@${value}`
-          : value,
-    }));
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setFormState(
+      (prev) =>
+        prev && {
+          ...prev,
+          [event.target.name]: event.target.value,
+        }
+    );
+
+  const handleCancel = () => {
+    setEdit(false);
+    setFormState(null);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const keys: FormFieldProps['name'][] = [
       ...formFields.map(({ name }) => name),
       'profilePictureMintAddress',
     ];
-    // const hasChanges = keys.some(
-    //   (key) => userProfile[key] !== userProfile[key]
-    // );
-    const hasChanges = true;
+    const hasChanges = keys.some((key) => formState[key] !== userProfile[key]);
 
-    if (hasChanges) {
-      // call api
-      // update appProfile
+    if (!hasChanges) {
+      return handleCancel();
     }
-    // maybe reset userProfileAtom
-    resetUserProfileForm();
+
+    const tokens = await auth.getTokens();
+
+    if (tokens && connectedWallet) {
+      await profileApi.post(`/update/${connectedWallet}`, formState, {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      });
+      setUserProfile(formState);
+      handleCancel();
+    }
   };
 
   const invalidFields = formFields
     .filter(({ name, required, validate }) => {
-      if (required && !userProfile[name]) {
+      if (required && !formState[name]) {
         return true;
       }
 
-      if (validate && !validate(userProfile[name] ?? '')) {
+      if (validate && !validate(formState[name] ?? '')) {
         return true;
       }
 
@@ -111,10 +131,16 @@ function UserProfileForm() {
     .map(({ name }) => name);
 
   return (
-    <>
+    <Box sx={{ display: 'flex' }}>
+      <UserProfileAvatar
+        value={formState.profilePictureMintAddress}
+        onChange={(profilePictureMintAddress) =>
+          setFormState((prev) => prev && { ...prev, profilePictureMintAddress })
+        }
+      />
       <CardContent>
         {formFields.map(({ Icon, validate, ...props }: FormFieldProps) => {
-          const value = userProfile[props.name] ?? '';
+          const value = formState[props.name] ?? '';
           const errorText = invalidFields.includes(props.name)
             ? `${props.placeholder || props.name} is ${
                 props.required && !value ? 'required' : 'invalid'
@@ -143,20 +169,20 @@ function UserProfileForm() {
             />
           );
         })}
+        <CardActions sx={{ p: 0, mt: 2 }}>
+          <Button
+            disabled={!!invalidFields.length}
+            variant="contained"
+            onClick={() => safePromise(handleSave())}
+          >
+            Save
+          </Button>
+          <Button variant="contained" onClick={handleCancel}>
+            Cancel
+          </Button>
+        </CardActions>
       </CardContent>
-      <CardActions sx={{ ml: 1 }}>
-        <Button
-          disabled={!!invalidFields.length}
-          variant="contained"
-          onClick={handleSave}
-        >
-          Save
-        </Button>
-        <Button variant="contained" onClick={resetUserProfileForm}>
-          Cancel
-        </Button>
-      </CardActions>
-    </>
+    </Box>
   );
 }
 

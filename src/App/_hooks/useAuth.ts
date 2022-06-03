@@ -8,7 +8,6 @@ import fetchNonce from '../AppBar/WalletButton/_helpers/fetchNonce';
 type LoginResponseType = Infer<typeof LoginResponseType>;
 const LoginResponseType = object({
   accessToken: string(),
-  refreshToken: string(),
 });
 
 const validateAuthToken = (input: string | undefined) => {
