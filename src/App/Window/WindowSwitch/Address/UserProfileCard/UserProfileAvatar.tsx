@@ -4,22 +4,20 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import getCDNUrl from '../../../../_helpers/getCDNUrl';
 import CardImageContainer from '../../_sharedComponents/TokenCard/ImageCard/CardImageContainer';
 import nftsForAddressAtom from '../WalletGallery/_atoms/nftsForAddressAtom';
-import userProfileForAddressAtom from './_atoms/userProfileForAddressAtom';
+import userProfileAtom from './_atoms/userProfileAtom';
 import userProfileFormAtom from './_atoms/userProfileFormAtom';
 
 const imageSize = 100;
 
 function UserProfileAvatar(props: AvatarProps) {
-  const userProfile = useRecoilValue(userProfileForAddressAtom);
+  const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
   const [userProfileForm, setUserProfileForm] =
     useRecoilState(userProfileFormAtom);
   const nfts = useRecoilValue(nftsForAddressAtom).filter(
     (nft) => nft.offChainData
   );
 
-  const mintAddress =
-    userProfileForm.state.profilePictureMintAddress ??
-    userProfile.profilePictureMintAddress;
+  const mintAddress = userProfile.profilePictureMintAddress;
 
   const currentNft = nfts.find((nft) => nft.mint === mintAddress);
   const currentImage = currentNft?.offChainData.image;
@@ -55,12 +53,9 @@ function UserProfileAvatar(props: AvatarProps) {
           <ButtonBase
             key={nft.mint}
             onClick={() => {
-              setUserProfileForm((prev) => ({
+              setUserProfile((prev) => ({
                 ...prev,
-                state: {
-                  ...prev.state,
-                  profilePictureMintAddress: nft.mint,
-                },
+                profilePictureMintAddress: nft.mint,
               }));
               toggleEditor();
             }}

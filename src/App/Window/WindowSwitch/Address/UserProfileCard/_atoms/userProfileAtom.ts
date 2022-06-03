@@ -1,15 +1,15 @@
 import { atom, selector } from 'recoil';
-import profileApi from '../../../../../AppBar/WalletButton/_helpers/profileApi';
 import UserProfileType from '../../../../../_types/UserProfileType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
+import profileApi from '../_helpers/profileApi';
 
 const username = 'stoned_ape';
 const bio = `Our mission here at the academy is simple: Take 10,000 of the smoothest brained apes, put them all in one location and let the mayhem ensue. The academy was founded on the principles of friendship making, crayon eating and absolute, unregulated, deplorable, degenerate behaviour. Welcome fellow apes, to the Degenerate Ape Academy.`;
 
-const userProfileForAddressAtom = atom<UserProfileType>({
-  key: 'userProfileForAddressAtom',
+const userProfileAtom = atom<UserProfileType>({
+  key: 'userProfileAtom',
   default: selector({
-    key: 'userProfileForAddress/default',
+    key: 'userProfile/default',
     get: async ({ get }) => {
       const addressState = get(addressStateAtom);
 
@@ -42,4 +42,4 @@ const userProfileForAddressAtom = atom<UserProfileType>({
   }),
 });
 
-export default userProfileForAddressAtom;
+export default userProfileAtom;

@@ -13,9 +13,9 @@ import {
   TextFieldProps,
 } from '@mui/material';
 import React from 'react';
-import { useRecoilState, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import UserProfileType from '../../../../_types/UserProfileType';
-import userProfileForAddressAtom from './_atoms/userProfileForAddressAtom';
+import userProfileAtom from './_atoms/userProfileAtom';
 import userProfileFormAtom from './_atoms/userProfileFormAtom';
 
 type FormFieldProps = Omit<TextFieldProps, 'name'> & {
@@ -59,11 +59,8 @@ const formFields: FormFieldProps[] = [
 ];
 
 function UserProfileForm() {
-  const [userProfile, setUserProfile] = useRecoilState(
-    userProfileForAddressAtom
-  );
-  const [userProfileForm, setUserProfileForm] =
-    useRecoilState(userProfileFormAtom);
+  const [userProfile, setUserProfile] = useRecoilState(userProfileAtom);
+  const userProfileForm = useRecoilValue(userProfileFormAtom);
   const resetUserProfileForm = useResetRecoilState(userProfileFormAtom);
 
   if (!userProfileForm.edit) {
@@ -72,15 +69,12 @@ function UserProfileForm() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setUserProfileForm((prev) => ({
+    setUserProfile((prev) => ({
       ...prev,
-      state: {
-        ...prev.state,
-        [name]:
-          name === 'twitterUsername' && !!value && !value.startsWith('@')
-            ? `@${value}`
-            : value,
-      },
+      [name]:
+        name === 'twitterUsername' && !!value && !value.startsWith('@')
+          ? `@${value}`
+          : value,
     }));
   };
 
@@ -89,24 +83,26 @@ function UserProfileForm() {
       ...formFields.map(({ name }) => name),
       'profilePictureMintAddress',
     ];
-    const hasChanges = keys.some(
-      (key) => userProfileForm.state[key] !== userProfile[key]
-    );
+    // const hasChanges = keys.some(
+    //   (key) => userProfile[key] !== userProfile[key]
+    // );
+    const hasChanges = true;
 
     if (hasChanges) {
       // call api
-      setUserProfile((prev) => ({ ...prev, ...userProfileForm.state }));
+      // update appProfile
     }
+    // maybe reset userProfileAtom
     resetUserProfileForm();
   };
 
   const invalidFields = formFields
     .filter(({ name, required, validate }) => {
-      if (required && !userProfileForm.state[name]) {
+      if (required && !userProfile[name]) {
         return true;
       }
 
-      if (validate && !validate(userProfileForm.state[name] ?? '')) {
+      if (validate && !validate(userProfile[name] ?? '')) {
         return true;
       }
 
@@ -117,42 +113,36 @@ function UserProfileForm() {
   return (
     <>
       <CardContent>
-        {formFields.map(
-          ({ Icon, validate, ...props }: FormFieldProps, index) => {
-            const value = userProfileForm.state[props.name] ?? '';
-            const errorText = invalidFields.includes(props.name)
-              ? `${props.placeholder || props.name} is ${
-                  props.required && !value ? 'required' : 'invalid'
-                }`
-              : '';
+        {formFields.map(({ Icon, validate, ...props }: FormFieldProps) => {
+          const value = userProfile[props.name] ?? '';
+          const errorText = invalidFields.includes(props.name)
+            ? `${props.placeholder || props.name} is ${
+                props.required && !value ? 'required' : 'invalid'
+              }`
+            : '';
 
-            return (
-              <TextField
-                {...props}
-                key={props.name}
-                sx={{
-                  ...props.sx,
-                  mt: 1,
-                  mb: 1,
-                }}
-                fullWidth={true}
-                error={!!errorText}
-                helperText={errorText}
-                size="small"
-                label={props.placeholder}
-                value={value}
-                onChange={handleChange}
-                InputProps={{
-                  startAdornment: Icon && (
-                    <InputAdornment sx={{ mt: -0.5 }} position="start">
-                      <Icon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            );
-          }
-        )}
+          return (
+            <TextField
+              {...props}
+              key={props.name}
+              sx={{ ...props.sx, mt: 1, mb: 1 }}
+              fullWidth={true}
+              error={!!errorText}
+              helperText={errorText}
+              size="small"
+              label={props.placeholder}
+              value={value}
+              onChange={handleChange}
+              InputProps={{
+                startAdornment: Icon && (
+                  <InputAdornment sx={{ mt: -0.5 }} position="start">
+                    <Icon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          );
+        })}
       </CardContent>
       <CardActions sx={{ ml: 1 }}>
         <Button

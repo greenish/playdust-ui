@@ -1,20 +1,20 @@
 import { Button, CardActions, CardContent, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import profileApi from '../../../../AppBar/WalletButton/_helpers/profileApi';
 import safePromise from '../../../../_helpers/safePromise';
 import useAuth from '../../../../_hooks/useAuth';
 import useConnectedWallet from '../../../../_hooks/useConnectedWallet';
 import UserProfileType from '../../../../_types/UserProfileType';
 import addressStateAtom from '../_atoms/addressStateAtom';
-import userProfileForAddressAtom from './_atoms/userProfileForAddressAtom';
+import userProfileAtom from './_atoms/userProfileAtom';
 import userProfileFormAtom from './_atoms/userProfileFormAtom';
+import profileApi from './_helpers/profileApi';
 
 function UserProfileContent() {
   const auth = useAuth();
   const connectedWallet = useConnectedWallet();
   const addressState = useRecoilValue(addressStateAtom);
-  const userProfile = useRecoilValue(userProfileForAddressAtom);
+  const userProfile = useRecoilValue(userProfileAtom);
   const [userProfileForm, setUserProfileForm] =
     useRecoilState(userProfileFormAtom);
 
@@ -39,14 +39,10 @@ function UserProfileContent() {
             Authorization: `Bearer ${tokens.accessToken}`,
           },
         });
-        setUserProfileForm((prev) => ({ ...prev, edit: true, state: data }));
       } catch (e) {
         console.error(e);
-        setUserProfileForm((prev) => ({
-          ...prev,
-          edit: true,
-          state: userProfile,
-        }));
+      } finally {
+        setUserProfileForm((prev) => ({ ...prev, edit: true }));
       }
     }
   };

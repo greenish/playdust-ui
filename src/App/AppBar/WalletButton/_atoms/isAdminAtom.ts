@@ -6,11 +6,11 @@ const isAdminAtom = selector<boolean>({
   get: ({ get }) => {
     const profile = get(noWait(userProfileAtom));
 
+    return false;
+
     if (profile.state === 'hasValue') {
       return !!profile.contents?.roles.includes('admin');
     }
-
-    return false;
   },
 });
 

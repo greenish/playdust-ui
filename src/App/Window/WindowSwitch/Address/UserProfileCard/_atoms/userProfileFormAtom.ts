@@ -1,10 +1,8 @@
 import { atom } from 'recoil';
-import UserProfileType from '../../../../../_types/UserProfileType';
 
 type UserProfileForm = {
   edit: boolean;
   editPicture: boolean;
-  state: Partial<UserProfileType>;
 };
 
 const userProfileFormAtom = atom<UserProfileForm>({
@@ -12,7 +10,6 @@ const userProfileFormAtom = atom<UserProfileForm>({
   default: {
     edit: false,
     editPicture: false,
-    state: {},
   },
 });
 
