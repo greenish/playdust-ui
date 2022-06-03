@@ -3,10 +3,10 @@ import { Fab, Menu, MenuItem } from '@mui/material';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React, { useState } from 'react';
-import useAuth from '../../_hooks/useAuth';
-import useConnectedWallet from '../../_hooks/useConnectedWallet';
 import safePromise from '../../_helpers/safePromise';
 import shortenPublicKey from '../../_helpers/shortenPublicKey';
+import useAuth from '../../_hooks/useAuth';
+import useConnectedWallet from '../../_hooks/useConnectedWallet';
 import useGoToProfile from './_hooks/useGoToProfile';
 
 interface WalletButtonProps {

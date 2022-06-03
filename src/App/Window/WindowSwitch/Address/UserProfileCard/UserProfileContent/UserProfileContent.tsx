@@ -7,16 +7,16 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import profileApi from '../_helpers/profileApi';
 import safePromise from '../../../../../_helpers/safePromise';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
+import useAuth from '../../../../../_hooks/useAuth';
+import useConnectedWallet from '../../../../../_hooks/useConnectedWallet';
 import useProfileState from '../../../../_hooks/useProfileState';
 import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 import publicProfileAtom from '../_atoms/publicProfileAtom';
 import userProfileEditAtom from '../_atoms/userProfileEditAtom';
-import useAuth from '../../../../../_hooks/useAuth';
-import useConnectedWallet from '../../../../../_hooks/useConnectedWallet';
+import profileApi from '../_helpers/profileApi';
 import UserProfileAvatar from '../_sharedComponents/UserProfileAvatar';
 import useIsCurrentUser from './_hooks/useIsCurrentUser';
 
