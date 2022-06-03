@@ -4,14 +4,14 @@ import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
-import appProfileAtom from './_atoms/appProfileAtom';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
 import WindowStateProvider from './WindowStateProvider';
+import WindowSwitch from './WindowSwitch/WindowSwitch';
+import appProfileAtom from './_atoms/appProfileAtom';
 import windowStateAvailableAtom from './_atoms/windowStateAvailableAtom';
 import ProfileStorageType from './_types/ProfileStorageType';
-import WindowSwitch from './WindowSwitch/WindowSwitch';
 import WindowSetImagesType from './_types/WindowSetImagesType';
 
 const RootContainer = styled.div`

@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { WindowStateType } from '../_types/WindowStateType';
-import windowStateAtom from './_atoms/windowStateAtom';
-import WindowSetImagesType from './_types/WindowSetImagesType';
 import setWindowImagesAtom from './_atoms/setWindowImagesAtom';
+import windowStateAtom from './_atoms/windowStateAtom';
 import useProfileState from './_hooks/useProfileState';
 import ProfileStorageType from './_types/ProfileStorageType';
+import WindowSetImagesType from './_types/WindowSetImagesType';
 
 type WindowStateProviderProps = {
   setWindowImages: WindowSetImagesType;
