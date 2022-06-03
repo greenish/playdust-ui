@@ -15,8 +15,8 @@ import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 import publicProfileAtom from '../_atoms/publicProfileAtom';
 import userProfileEditAtom from '../_atoms/userProfileEditAtom';
-import useAuth from '../_hooks/useAuth';
-import useConnectedWallet from '../_hooks/useConnectedWallet';
+import useAuth from '../../../../../_hooks/useAuth';
+import useConnectedWallet from '../../../../../_hooks/useConnectedWallet';
 import UserProfileAvatar from '../_sharedComponents/UserProfileAvatar';
 import useIsCurrentUser from './_hooks/useIsCurrentUser';
 

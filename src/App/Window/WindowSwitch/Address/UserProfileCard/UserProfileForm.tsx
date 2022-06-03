@@ -20,8 +20,8 @@ import useProfileState from '../../../_hooks/useProfileState';
 import PlaydustProfileType from '../../../_types/PlaydustProfileType';
 import userProfileEditAtom from './_atoms/userProfileEditAtom';
 import profileApi from './_helpers/profileApi';
-import useAuth from './_hooks/useAuth';
-import useConnectedWallet from './_hooks/useConnectedWallet';
+import useAuth from '../../../../_hooks/useAuth';
+import useConnectedWallet from '../../../../_hooks/useConnectedWallet';
 import UserProfileAvatar from './_sharedComponents/UserProfileAvatar';
 
 type FormFieldProps = Omit<TextFieldProps, 'name'> & {

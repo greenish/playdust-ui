@@ -2,13 +2,12 @@ import { Person } from '@mui/icons-material';
 import { Fab, Menu, MenuItem } from '@mui/material';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
-import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import React, { useState } from 'react';
+import useAuth from '../../_hooks/useAuth';
+import useConnectedWallet from '../../_hooks/useConnectedWallet';
 import safePromise from '../../_helpers/safePromise';
 import shortenPublicKey from '../../_helpers/shortenPublicKey';
-import connectedWalletAtom from './_atoms/connectedWalletAtom';
 import useGoToProfile from './_hooks/useGoToProfile';
-import useLogout from './_hooks/useLogout';
 
 interface WalletButtonProps {
   backgroundColor: string;
@@ -20,18 +19,9 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
   const walletModal = useWalletModal();
   const wallet = useWallet();
   const open = !!anchorEl;
-  const logout = useLogout();
+  const auth = useAuth();
   const goToProfile = useGoToProfile();
-  const [connectedWallet, setConnectedWallet] =
-    useRecoilState(connectedWalletAtom);
-
-  useEffect(() => {
-    if (wallet.connected && wallet.publicKey) {
-      const publicKeyString = wallet.publicKey.toString();
-
-      setConnectedWallet(publicKeyString);
-    }
-  }, [setConnectedWallet, wallet.connected, wallet.publicKey]);
+  const connectedWallet = useConnectedWallet();
 
   const buttonProps = connectedWallet
     ? {
@@ -67,7 +57,9 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
         <MenuItem onClick={() => goToProfile()}>
           Wallet: {wallet.publicKey && shortenPublicKey(wallet.publicKey)}
         </MenuItem>
-        <MenuItem onClick={() => safePromise(logout())}>Disconnect</MenuItem>
+        <MenuItem onClick={() => safePromise(auth.logout())}>
+          Disconnect
+        </MenuItem>
       </Menu>
     </>
   );

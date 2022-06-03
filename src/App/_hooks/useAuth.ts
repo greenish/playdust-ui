@@ -1,8 +1,9 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import base58 from 'bs58';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 import { create, Infer, object, string } from 'superstruct';
-import authenticationApi from '../../../../../_helpers/authenticationApi';
+import authenticationApi from '../_helpers/authenticationApi';
 import fetchNonce from '../_helpers/fetchNonce';
 
 type LoginResponseType = Infer<typeof LoginResponseType>;
@@ -51,6 +52,7 @@ const cookieApi = {
 
 function useAuth() {
   const wallet = useWallet();
+  const router = useRouter();
 
   return {
     getTokens: async () => {
@@ -85,6 +87,17 @@ function useAuth() {
       }
 
       return null;
+    },
+    logout: async () => {
+      const cookieString = cookieApi.get();
+      const tokens = validateAuthToken(cookieString);
+
+      await wallet.disconnect();
+
+      if (tokens) {
+        cookieApi.remove();
+        router.reload();
+      }
     },
   };
 }
