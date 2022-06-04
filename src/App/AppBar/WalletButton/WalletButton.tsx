@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import safePromise from '../../_helpers/safePromise';
 import shortenPublicKey from '../../_helpers/shortenPublicKey';
 import useAuth from '../../_hooks/useAuth';
-import useConnectedWallet from '../../_hooks/useConnectedWallet';
 import useGoToProfile from './_hooks/useGoToProfile';
 
 interface WalletButtonProps {
@@ -21,11 +20,10 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
   const open = !!anchorEl;
   const auth = useAuth();
   const goToProfile = useGoToProfile();
-  const connectedWallet = useConnectedWallet();
 
-  const buttonProps = connectedWallet
+  const buttonProps = auth.connectedWallet
     ? {
-        children: shortenPublicKey(connectedWallet),
+        children: shortenPublicKey(auth.connectedWallet),
         onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
           setAnchorEl(event.currentTarget),
       }

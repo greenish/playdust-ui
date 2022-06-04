@@ -2,10 +2,12 @@ import { Avatar, AvatarProps, Box, ButtonBase, ImageList } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import getCDNUrl from '../../../../../_helpers/getCDNUrl';
+import setWindowImagesAtom from '../../../../_atoms/setWindowImagesAtom';
 import CardImageContainer from '../../../_sharedComponents/CardImageContainer/CardImageContainer';
 import nftsForAddressAtom from '../../_atoms/nftsForAddressAtom';
 
 const imageSize = 100;
+const columns = 2;
 const maxRows = 4;
 
 interface UserProfileAvatarProps extends Omit<AvatarProps, 'onChange'> {
@@ -22,11 +24,22 @@ function UserProfileAvatar({
   const nfts = useRecoilValue(nftsForAddressAtom).filter(
     (nft) => nft.offChainData
   );
+  const setWindowImages = useRecoilValue(setWindowImagesAtom);
 
   const currentImage = useMemo(() => {
+    if (!value || !nfts.length) {
+      return;
+    }
+
     const currentNft = nfts.find((nft) => nft.mint === value);
-    return currentNft?.offChainData.image;
-  }, [value, nfts]);
+    const image = currentNft?.offChainData.image;
+
+    if (setWindowImages) {
+      setWindowImages(image ? [image] : []);
+    }
+
+    return image;
+  }, [value, nfts, setWindowImages]);
 
   const disabled = !onChange || !nfts.length;
 
@@ -47,8 +60,8 @@ function UserProfileAvatar({
         <Avatar
           {...avatarProps}
           sx={{
-            width: imageSize * 1.5,
-            height: imageSize * 1.5,
+            width: 150,
+            height: 150,
             cursor: !disabled ? 'pointer' : 'default',
             ...avatarProps.sx,
           }}
@@ -57,9 +70,13 @@ function UserProfileAvatar({
         />
       ) : (
         <ImageList
-          sx={{ width: '100%', maxHeight: imageSize * maxRows }}
+          sx={{
+            width: '100%',
+            maxHeight: imageSize * maxRows,
+            overflow: 'hidden',
+          }}
           gap={0}
-          cols={2}
+          cols={columns}
           rowHeight={imageSize}
         >
           {nfts.map(({ mint, offChainData: { image } }) => (

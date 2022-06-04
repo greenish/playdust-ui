@@ -1,6 +1,6 @@
 import {
-  Box,
   Button,
+  Card,
   CardActions,
   CardContent,
   Typography,
@@ -10,7 +10,6 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import safePromise from '../../../../../_helpers/safePromise';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
 import useAuth from '../../../../../_hooks/useAuth';
-import useConnectedWallet from '../../../../../_hooks/useConnectedWallet';
 import useProfileState from '../../../../_hooks/useProfileState';
 import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
@@ -20,22 +19,21 @@ import profileApi from '../_helpers/profileApi';
 import UserProfileAvatar from '../_sharedComponents/UserProfileAvatar';
 import useIsCurrentUser from './_hooks/useIsCurrentUser';
 
-function UserProfileContent() {
+function UserProfileView() {
   const auth = useAuth();
   const isCurrentUser = useIsCurrentUser();
-  const connectedWallet = useConnectedWallet();
   const addressState = useRecoilValue(addressStateAtom);
   const setEdit = useSetRecoilState(userProfileEditAtom);
   const publicProfile = useRecoilValue(publicProfileAtom);
   const [userProfile, setUserProfile] = useProfileState();
 
   const handleEdit = async () => {
-    const tokens = await auth.getTokens();
+    const tokens = await auth.login();
 
     if (tokens && !userProfile) {
       const { data } = await profileApi.get<PlaydustProfileType>('/read', {
         params: {
-          walletAddress: connectedWallet,
+          walletAddress: auth.connectedWallet,
         },
         headers: {
           Authorization: `Bearer ${tokens.accessToken}`,
@@ -50,7 +48,7 @@ function UserProfileContent() {
   const profile = userProfile || publicProfile;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Card sx={{ display: 'flex' }}>
       <UserProfileAvatar value={profile?.profilePictureMintAddress} />
       <CardContent
         sx={{
@@ -77,8 +75,8 @@ function UserProfileContent() {
           </CardActions>
         )}
       </CardContent>
-    </Box>
+    </Card>
   );
 }
 
-export default UserProfileContent;
+export default UserProfileView;

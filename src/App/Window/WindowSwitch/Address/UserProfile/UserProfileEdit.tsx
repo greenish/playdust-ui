@@ -5,8 +5,8 @@ import {
   SvgIconComponent,
 } from '@mui/icons-material';
 import {
-  Box,
   Button,
+  Card,
   CardActions,
   CardContent,
   InputAdornment,
@@ -17,7 +17,6 @@ import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import safePromise from '../../../../_helpers/safePromise';
 import useAuth from '../../../../_hooks/useAuth';
-import useConnectedWallet from '../../../../_hooks/useConnectedWallet';
 import useProfileState from '../../../_hooks/useProfileState';
 import PlaydustProfileType from '../../../_types/PlaydustProfileType';
 import userProfileEditAtom from './_atoms/userProfileEditAtom';
@@ -60,13 +59,12 @@ const formFields: FormFieldProps[] = [
     name: 'twitterUsername',
     placeholder: 'Twitter',
     Icon: AlternateEmail,
-    validate: (value) => !value || twitterRegex.test(value),
+    validate: (value) => twitterRegex.test(value),
   },
 ];
 
-function UserProfileForm() {
+function UserProfileEdit() {
   const auth = useAuth();
-  const connectedWallet = useConnectedWallet();
   const setEdit = useSetRecoilState(userProfileEditAtom);
   const [userProfile, setUserProfile] = useProfileState();
 
@@ -87,10 +85,7 @@ function UserProfileForm() {
         }
     );
 
-  const handleCancel = () => {
-    setEdit(false);
-    setFormState(null);
-  };
+  const handleClose = () => setEdit(false);
 
   const handleSave = async () => {
     const keys: FormFieldProps['name'][] = [
@@ -100,29 +95,31 @@ function UserProfileForm() {
     const hasChanges = keys.some((key) => formState[key] !== userProfile[key]);
 
     if (!hasChanges) {
-      return handleCancel();
+      return handleClose();
     }
 
-    const tokens = await auth.getTokens();
+    const tokens = await auth.login();
 
-    if (tokens && connectedWallet) {
-      await profileApi.post(`/update/${connectedWallet}`, formState, {
+    if (tokens && auth.connectedWallet) {
+      await profileApi.post(`/update/${auth.connectedWallet}`, formState, {
         headers: {
           Authorization: `Bearer ${tokens.accessToken}`,
         },
       });
       setUserProfile(formState);
-      handleCancel();
+      handleClose();
     }
   };
 
   const invalidFields = formFields
     .filter(({ name, required, validate }) => {
-      if (required && !formState[name]) {
+      const value = formState[name] ?? '';
+
+      if (required && !value) {
         return true;
       }
 
-      if (validate && !validate(formState[name] ?? '')) {
+      if (value && validate && !validate(value)) {
         return true;
       }
 
@@ -131,7 +128,7 @@ function UserProfileForm() {
     .map(({ name }) => name);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Card sx={{ display: 'flex' }}>
       <UserProfileAvatar
         value={formState.profilePictureMintAddress}
         onChange={(profilePictureMintAddress) =>
@@ -177,13 +174,13 @@ function UserProfileForm() {
           >
             Save
           </Button>
-          <Button variant="contained" onClick={handleCancel}>
+          <Button variant="contained" onClick={handleClose}>
             Cancel
           </Button>
         </CardActions>
       </CardContent>
-    </Box>
+    </Card>
   );
 }
 
-export default UserProfileForm;
+export default UserProfileEdit;

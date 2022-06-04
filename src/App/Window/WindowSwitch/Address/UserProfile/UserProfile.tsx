@@ -1,12 +1,11 @@
-import { Card } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import UserProfileContent from './UserProfileContent/UserProfileContent';
-import UserProfileForm from './UserProfileForm';
+import UserProfileEdit from './UserProfileEdit';
+import UserProfileView from './UserProfileView/UserProfileView';
 import publicProfileAtom from './_atoms/publicProfileAtom';
 import userProfileEditAtom from './_atoms/userProfileEditAtom';
 
-function UserProfileCard() {
+function UserProfile() {
   const publicProfile = useRecoilValue(publicProfileAtom);
   const edit = useRecoilValue(userProfileEditAtom);
 
@@ -14,7 +13,7 @@ function UserProfileCard() {
     return null;
   }
 
-  return <Card>{!edit ? <UserProfileContent /> : <UserProfileForm />}</Card>;
+  return !edit ? <UserProfileView /> : <UserProfileEdit />;
 }
 
-export default UserProfileCard;
+export default UserProfile;

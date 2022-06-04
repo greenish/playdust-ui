@@ -55,7 +55,9 @@ function useAuth() {
   const router = useRouter();
 
   return {
-    getTokens: async () => {
+    connectedWallet: wallet.publicKey?.toString(),
+
+    login: async () => {
       const cookieString = cookieApi.get();
       const tokens = validateAuthToken(cookieString);
       const { accessToken } = tokens || {};
@@ -88,6 +90,7 @@ function useAuth() {
 
       return null;
     },
+
     logout: async () => {
       const cookieString = cookieApi.get();
       const tokens = validateAuthToken(cookieString);
