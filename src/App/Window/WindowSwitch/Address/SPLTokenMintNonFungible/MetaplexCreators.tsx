@@ -42,7 +42,7 @@ function MetaplexCreators() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(details.creators ?? []).map((creator: CreatorInfo) => (
+            {(details.data?.creators ?? []).map((creator: CreatorInfo) => (
               <TableRow key={creator.address}>
                 <TableCell sx={{ whiteSpace: 'nowrap' }}>
                   <Stack direction="row" alignItems="center" gap={1}>

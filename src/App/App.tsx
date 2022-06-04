@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import AppBar from './AppBar/AppBar';
 import AppStateProvider from './AppStateProvider/AppStateProvider';
-import Notifications from './Notifications/Notifications';
+import Notifications from './_sharedComponents/Notifications';
 import Provider from './Provider/Provider';
 import Window from './Window/Window';
 import appBarWidth from './_helpers/appBarWidth';

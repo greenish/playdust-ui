@@ -20,10 +20,6 @@ function SPLTokenMintNonFungible() {
     }
   }, [setWindowImages, playdustNftData]);
 
-  if (!playdustNftData) {
-    return null;
-  }
-
   return (
     <>
       <NFTDetailsView />

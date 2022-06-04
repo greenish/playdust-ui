@@ -8,6 +8,7 @@ import BPFUpgradeableLoaderAccountProgram from './BPFUpgradeableLoaderAccountPro
 import BPFUpgradeableLoaderAccountProgramData from './BPFUpgradeableLoaderAccountProgramData';
 import ConfigAccountStakeConfigCard from './ConfigAccountStakeConfigCard';
 import ConfigAccountValidatorInfoCard from './ConfigAccountValidatorInfoCard';
+import NFTTradingModule from './NFTTradingModule/NFTTradingModule';
 import NonceAccountCard from './NonceAccountCard/NonceAccountCard';
 import RawAccountData from './RawAccountData';
 import SPLTokenAccount from './SPLTokenAccount';
@@ -40,7 +41,14 @@ function Address() {
       <Button onClick={testProfileSetting}>{`profile: ${JSON.stringify(
         profile
       )}`}</Button>
+      
       {/* Special Account Views */}
+      <SuspenseBoundary
+        content={<NFTTradingModule />}
+        error={null}
+        loading={null}
+      />
+
       <SuspenseBoundary
         content={<SPLTokenMintNonFungible />}
         error={null}
