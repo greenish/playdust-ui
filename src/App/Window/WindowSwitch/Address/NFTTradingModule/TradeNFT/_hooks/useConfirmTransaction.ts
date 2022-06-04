@@ -1,6 +1,6 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Transaction } from '@solana/web3.js';
-import playdustAPI from '../_helpers/playdustApi';
+import executeNFTSale from '../_helpers/executeNFTSale';
 import useTriggerNotfication from './useTriggerNotification';
 
 const useConfirmTransaction = () => {
@@ -21,7 +21,7 @@ const useConfirmTransaction = () => {
         await signTransaction(transaction);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { txHash } = await playdustAPI.executeNFTSale(data, [
+        const { txHash } = await executeNFTSale(data, [
           ...new Uint8Array(transaction.serialize()),
         ]);
 

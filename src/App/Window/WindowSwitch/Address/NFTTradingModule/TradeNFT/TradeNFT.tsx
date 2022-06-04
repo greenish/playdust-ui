@@ -6,12 +6,12 @@ import { useRecoilValue, useResetRecoilState } from 'recoil';
 import safePromise from '../../../../../_helpers/safePromise';
 import safePubkeyString from '../../_helpers/safePubkeyString';
 import tokenAccountsForWalletAtom from './_atoms/tokenAccountsForWalletAtom';
-import playdustAPI from './_helpers/playdustApi';
+import cancelNFTListing from './_helpers/cancelNFTListing';
+import getOrdersForMint from './_helpers/getOrdersForMint';
+import makeNFTBid from './_helpers/makeNFTBid';
+import makeNFTListing from './_helpers/makeNFTListing';
 import useConfirmTransaction from './_hooks/useConfirmTransaction';
 import OrderType from './_types/OrderType';
-
-const { cancelNFTListing, GetAllOrders, makeNFTBid, makeNFTListing } =
-  playdustAPI;
 
 const ItemsContainer = styled.div`
   display: flex;
@@ -70,7 +70,7 @@ function TradeNFT({ mint, publicKey }: TradeNFTProps) {
   useEffect(() => {
     // resetOwnership();
     safePromise(
-      GetAllOrders(mint).then((data) => {
+      getOrdersForMint(mint).then((data) => {
         if (data.asks) {
           setAsk(data.asks.find((order) => order.wallet === publicKey) ?? null);
         }
