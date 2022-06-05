@@ -12,6 +12,7 @@ import cancelNFTListing from './_helpers/cancelNFTListing';
 import makeNFTBid from '../_helpers/makeNFTBid';
 import makeNFTListing from '../_helpers/makeNFTListing';
 import useConfirmTransaction from '../_hooks/useConfirmTransaction';
+import currentOwnerForMintAtom from '../_atoms/currentOwnerForMintAtom';
 
 interface TradeNFTProps {
   mint: string;
@@ -21,6 +22,7 @@ interface TradeNFTProps {
 
 function TradeButtons({ mint, publicKey, setExpanded }: TradeNFTProps) {
   const isOwner = useRecoilValue(isWalletMintOwnerAtom);
+  const ownerWalletAddress = useRecoilValue(currentOwnerForMintAtom);
   const orders = useRecoilValue(ordersForMintAtom);
   const walletModal = useWalletModal();
   const confirmTransaction = useConfirmTransaction();
@@ -41,7 +43,7 @@ function TradeButtons({ mint, publicKey, setExpanded }: TradeNFTProps) {
   const highestBid =
     orders?.bids.find((order) => order.wallet !== publicKey) ?? null;
   const lowestAsk =
-    orders?.asks.find((order) => order.wallet !== publicKey) ?? null;
+    orders?.asks.find((order) => order.wallet === ownerWalletAddress) ?? null;
 
   return (
     <>

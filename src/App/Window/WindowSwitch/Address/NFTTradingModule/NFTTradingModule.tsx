@@ -17,6 +17,7 @@ import safePubkeyString from '../_helpers/safePubkeyString';
 import ContentContainer from '../_sharedComponents/ContentContainer';
 import CreateOfferListing from './CreateOfferListing';
 import TradeButtons from './TradeButtons/TradeButtons';
+import currentOwnerForMintAtom from './_atoms/currentOwnerForMintAtom';
 
 const ButtonContainer = styled.div`
   display: flex;
