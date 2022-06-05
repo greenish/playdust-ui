@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
-import profileApi from '../_helpers/profileApi';
 import connectedWalletAtom from '../../../_atoms/connectedWalletAtom';
+import profileApi from '../_helpers/profileApi';
 import tokensAtom from './tokensAtom';
 
 type UserProfileType = {

@@ -41,7 +41,7 @@ function Address() {
       <Button onClick={testProfileSetting}>{`profile: ${JSON.stringify(
         profile
       )}`}</Button>
-      
+
       {/* Special Account Views */}
       <SuspenseBoundary
         content={<NFTTradingModule />}

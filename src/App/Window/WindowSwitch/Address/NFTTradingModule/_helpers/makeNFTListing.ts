@@ -1,4 +1,4 @@
-import TransactionBuffer from '../_types/TransactionBuffer';
+import TransactionBuffer from '../_types/TransactionBufferType';
 import tradeApiInstance from './tradeApiInstance';
 
 const makeNFTListing = async (
@@ -17,4 +17,3 @@ const makeNFTListing = async (
 };
 
 export default makeNFTListing;
-

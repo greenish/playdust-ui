@@ -1,5 +1,5 @@
-import TransactionBuffer from '../_types/TransactionBuffer';
-import tradeApiInstance from './tradeApiInstance';
+import TransactionBuffer from '../../_types/TransactionBufferType';
+import tradeApiInstance from '../../_helpers/tradeApiInstance';
 
 const cancelNFTListing = async (
   wallet: string,
@@ -20,4 +20,3 @@ const cancelNFTListing = async (
 };
 
 export default cancelNFTListing;
-

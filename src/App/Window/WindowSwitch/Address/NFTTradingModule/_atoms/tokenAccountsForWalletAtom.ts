@@ -1,9 +1,9 @@
 import { selector } from 'recoil';
-import connectedWalletAtom from '../../../../../../_atoms/connectedWalletAtom';
-import solanaClusterAtom from '../../../../../../_atoms/solanaClusterAtom';
-import fetchTokenAccountsForAddress from '../../../_helpers/fetchTokenAccountsForAddress';
-import safePubkey from '../../../_helpers/safePubkey';
-import TokenAccountsType from '../../../_types/TokenAccountsType';
+import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
+import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
+import fetchTokenAccountsForAddress from '../../_helpers/fetchTokenAccountsForAddress';
+import safePubkey from '../../_helpers/safePubkey';
+import TokenAccountsType from '../../_types/TokenAccountsType';
 
 const tokenAccountsForWalletAtom = selector<TokenAccountsType[]>({
   key: 'tokenAccountsForWalletAtom',
@@ -28,7 +28,6 @@ const tokenAccountsForWalletAtom = selector<TokenAccountsType[]>({
 
     return tokenAccounts;
   },
-  set: () => {},
 });
 
 export default tokenAccountsForWalletAtom;
