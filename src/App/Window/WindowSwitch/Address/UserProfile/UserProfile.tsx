@@ -1,12 +1,13 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import useIsWallet from '../_hooks/useIsWallet';
 import PrivateUserProfile from './PrivateUserProfile/PrivateUserProfile';
 import PublicUserProfile from './PublicUserProfile';
-import useIsCurrentUser from './_hooks/useIsCurrentUser';
+import isCurrentUserAtom from './_atoms/isCurrentUserAtom';
 
 function UserProfile() {
   const isWallet = useIsWallet();
-  const isCurrentUser = useIsCurrentUser();
+  const isCurrentUser = useRecoilValue(isCurrentUserAtom);
 
   if (!isWallet) {
     return null;
