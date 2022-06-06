@@ -1,7 +1,7 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/router';
 import { useRecoilCallback } from 'recoil';
-import connectedWalletAtom from '../_atoms/connectedWalletAtom';
+import connectedWalletAtom from '../../../_atoms/connectedWalletAtom';
 import signedAuthMesssageAtom from '../_atoms/signedAuthMesssageAtom';
 import tokensAtom from '../_atoms/tokensAtom';
 import authenticationApi from '../_helpers/authenticationApi';

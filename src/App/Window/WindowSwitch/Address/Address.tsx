@@ -8,6 +8,7 @@ import BPFUpgradeableLoaderAccountProgram from './BPFUpgradeableLoaderAccountPro
 import BPFUpgradeableLoaderAccountProgramData from './BPFUpgradeableLoaderAccountProgramData';
 import ConfigAccountStakeConfigCard from './ConfigAccountStakeConfigCard';
 import ConfigAccountValidatorInfoCard from './ConfigAccountValidatorInfoCard';
+import NFTTradingModule from './NFTTradingModule/NFTTradingModule';
 import NonceAccountCard from './NonceAccountCard/NonceAccountCard';
 import RawAccountData from './RawAccountData';
 import SPLTokenAccount from './SPLTokenAccount';
@@ -18,10 +19,10 @@ import SPLTokenMultisig from './SPLTokenMultisig';
 import StakeAccount from './StakeAccount/StakeAccount';
 import SysvarAccountSlotHashesCard from './SysvarAccountSlotHashesCard';
 import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
-import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
 import WalletGallery from './WalletGallery/WalletGallery';
+import WalletTokenAccounts from './WalletTokenAccounts/WalletTokenAccounts';
 import ContentContainer from './_sharedComponents/ContentContainer';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 
@@ -40,7 +41,14 @@ function Address() {
       <Button onClick={testProfileSetting}>{`profile: ${JSON.stringify(
         profile
       )}`}</Button>
+
       {/* Special Account Views */}
+      <SuspenseBoundary
+        content={<NFTTradingModule />}
+        error={null}
+        loading={null}
+      />
+
       <SuspenseBoundary
         content={<SPLTokenMintNonFungible />}
         error={null}
@@ -62,7 +70,7 @@ function Address() {
         />
 
         <SuspenseBoundary
-          content={<TokenAccounts />}
+          content={<WalletTokenAccounts />}
           error={null}
           loading={null}
         />

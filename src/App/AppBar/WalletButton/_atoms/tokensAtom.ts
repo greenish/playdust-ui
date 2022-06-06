@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
 import { selector } from 'recoil';
 import { create, Infer, object, string } from 'superstruct';
+import connectedWalletAtom from '../../../_atoms/connectedWalletAtom';
 import authenticationApi from '../_helpers/authenticationApi';
-import connectedWalletAtom from './connectedWalletAtom';
 import signedAuthMesssageAtom from './signedAuthMesssageAtom';
 
 type LoginResponseType = Infer<typeof LoginResponseType>;

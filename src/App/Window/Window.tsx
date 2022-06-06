@@ -4,7 +4,9 @@ import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
+import connectedWalletAtom from '../_atoms/connectedWalletAtom';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
+import Notifications from '../_sharedComponents/Notifications/Notifications';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
 import WindowStateProvider from './WindowStateProvider';
@@ -71,6 +73,7 @@ const WindowContentRenderer = React.memo(() => {
 
 function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
+  const connectedWallet = useRecoilValue(connectedWalletAtom);
   const activeTab = useRecoilValue(activeTabAtom);
   const [appProfile, setAppProfile] = useRecoilState(appProfileAtom);
   const setAppWindowState = useSetAppWindowState();
@@ -108,8 +111,10 @@ function Window() {
         profileState={profileState}
         setWindowImages={setWindowImages}
         windowState={activeWindow}
+        connectedWallet={connectedWallet}
       />
       <WindowContentRenderer />
+      <Notifications />
     </RecoilRoot>
   );
 }

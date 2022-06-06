@@ -1,12 +1,15 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
+import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
 import ContentContainer from '../../_sharedComponents/ContentContainer';
 import playdustNftDataAtom from '../_atoms/playdustNftDataAtom';
 import NFTDetailsRenderMedia from './NFTDetailsRenderMedia';
 
 function NFTDetailsView() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
+  const ownerWalletAddress = useRecoilValue(currentOwnerForMintAtom);
 
   if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
     return null;
@@ -42,6 +45,17 @@ function NFTDetailsView() {
               >
                 {offChainData.description}
               </Typography>
+              {ownerWalletAddress && (
+                <Typography
+                  sx={{
+                    fontWeight: '400',
+                    fontSize: '14px',
+                    lineHeight: '168%',
+                  }}
+                >
+                  {`Owner: ${shortenPublicKey(ownerWalletAddress)}`}
+                </Typography>
+              )}
               <Box sx={{ backgroundColor: 'rgba(255, 255, 255, 0.08);' }}>
                 <Grid container={true} spacing={0}>
                   <Grid item={true} xs={12}>

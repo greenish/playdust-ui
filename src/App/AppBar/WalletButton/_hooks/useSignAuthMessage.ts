@@ -1,7 +1,7 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import base58 from 'bs58';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import connectedWalletAtom from '../_atoms/connectedWalletAtom';
+import connectedWalletAtom from '../../../_atoms/connectedWalletAtom';
 import signedAuthMesssageAtom from '../_atoms/signedAuthMesssageAtom';
 import fetchNonce from '../_helpers/fetchNonce';
 
