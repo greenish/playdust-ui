@@ -1,12 +1,12 @@
 import { Connection } from '@solana/web3.js';
 import { selector } from 'recoil';
-import { create, is } from 'superstruct';
-import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import addressStateAtom from '../../_atoms/addressStateAtom';
-import parsedTokenAccountAtom from '../../_atoms/parsedTokenAccountAtom';
-import safePubkey from '../../_helpers/safePubkey';
-import { AccountInfoType } from '../../_types/AccountInfoType';
-import { ParsedTokenAccountType } from '../../_types/ParsedTokenAccountType';
+import { is } from 'superstruct';
+import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import safePubkey from '../_helpers/safePubkey';
+import { AccountInfoType } from '../_types/AccountInfoType';
+import { ParsedTokenAccountType } from '../_types/ParsedTokenAccountType';
+import addressStateAtom from './addressStateAtom';
+import parsedTokenAccountAtom from './parsedTokenAccountAtom';
 
 const currentOwnerForMintAtom = selector<string | null>({
   key: 'currentOwnerForMintAtom',
@@ -24,7 +24,9 @@ const currentOwnerForMintAtom = selector<string | null>({
       safePubkey(addressState.pubkey)
     );
 
-    const ownerTokenAccount = tokenAccounts.find((account) => (account.uiAmount || 0) > 0);
+    const ownerTokenAccount = tokenAccounts.find(
+      (account) => (account.uiAmount || 0) > 0
+    );
 
     if (!ownerTokenAccount) {
       return null;
@@ -35,10 +37,10 @@ const currentOwnerForMintAtom = selector<string | null>({
     );
 
     if (
-      !is(tokenAccountInfo, AccountInfoType) 
-      || Buffer.isBuffer(tokenAccountInfo.data) 
-      || !is(tokenAccountInfo.data.parsed, ParsedTokenAccountType)
-      || tokenAccountInfo.data.parsed.type !== 'account'
+      !is(tokenAccountInfo, AccountInfoType) ||
+      Buffer.isBuffer(tokenAccountInfo.data) ||
+      !is(tokenAccountInfo.data.parsed, ParsedTokenAccountType) ||
+      tokenAccountInfo.data.parsed.type !== 'account'
     ) {
       return null;
     }

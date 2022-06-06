@@ -1,7 +1,7 @@
 import { Alert, Snackbar } from '@mui/material';
 import React from 'react';
 import { useRecoilValue, useResetRecoilState } from 'recoil';
-import notificationAtom from '../_atoms/notificationAtom';
+import notificationAtom from './_atoms/notificationAtom';
 
 function Notifications() {
   const { open, message, severity } = useRecoilValue(notificationAtom);

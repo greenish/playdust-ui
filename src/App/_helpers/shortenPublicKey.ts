@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js';
-import ellipsisify from '../../../_helpers/ellipsisify';
+import ellipsisify from './ellipsisify';
 
 const shortenPublicKey = (pk: PublicKey | string) =>
   ellipsisify(pk.toString(), 4, 4);

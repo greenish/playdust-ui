@@ -1,5 +1,5 @@
-import TransactionBufferType from '../../_types/TransactionBufferType';
 import tradeApiInstance from '../../_helpers/tradeApiInstance';
+import TransactionBufferType from '../../_types/TransactionBufferType';
 
 const cancelNFTBid = async (
   wallet: string,

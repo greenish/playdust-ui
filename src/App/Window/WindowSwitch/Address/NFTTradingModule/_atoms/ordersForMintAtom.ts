@@ -18,8 +18,8 @@ const ordersForMintAtom = selector<AllOrdersType | null>({
     const mint = safePubkeyString(addressState.pubkey);
     const orders = await getOrdersForMint(mint);
 
-    orders.bids.sort((a, b) => a.price - b.price);
-    orders.asks.sort((a, b) => b.price - a.price);
+    orders.asks.sort((a, b) => a.price - b.price);
+    orders.bids.sort((a, b) => b.price - a.price);
 
     return orders;
   },

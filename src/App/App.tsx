@@ -7,7 +7,7 @@ import AppStateProvider from './AppStateProvider/AppStateProvider';
 import Provider from './Provider/Provider';
 import Window from './Window/Window';
 import appBarWidth from './_helpers/appBarWidth';
-import Notifications from './_sharedComponents/Notifications';
+import Notifications from './_sharedComponents/Notifications/Notifications';
 import SuspenseBoundary from './_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 
 const AppBarContainer = muiStyled(Paper)(

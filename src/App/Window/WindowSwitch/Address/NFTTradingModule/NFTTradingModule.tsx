@@ -9,15 +9,13 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import connectedWalletAtom from '../../../../_atoms/connectedWalletAtom';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import addressStateAtom from '../_atoms/addressStateAtom';
 import parsedTokenAccountAtom from '../_atoms/parsedTokenAccountAtom';
-import safePubkeyString from '../_helpers/safePubkeyString';
 import ContentContainer from '../_sharedComponents/ContentContainer';
-import CreateOfferListing from './CreateOfferListing';
-import TradeButtons from './TradeButtons/TradeButtons';
-import currentOwnerForMintAtom from './_atoms/currentOwnerForMintAtom';
+import NFTOrderBook from './NFTOrderBook/NFTOrderBook';
+import NFTTradingDialog from './NFTTradingDialog/NFTTradingDialog';
+import TradeButtons from './TradeButtons';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -30,7 +28,6 @@ const ButtonContainer = styled.div`
 function NFTTradingModule() {
   const [expanded, setExpanded] = useState(false);
   const addressState = useRecoilValue(addressStateAtom);
-  const connectedWallet = useRecoilValue(connectedWalletAtom);
   const parsedTokenAccount = useRecoilValue(parsedTokenAccountAtom);
 
   if (
@@ -53,18 +50,14 @@ function NFTTradingModule() {
             <Button
               variant={expanded ? 'contained' : 'outlined'}
               size="medium"
-              onClick={() => setExpanded(!expanded)}
+              onClick={() => {
+                setExpanded(!expanded);
+              }}
             >
               <ListAltSharpIcon />
             </Button>
             <SuspenseBoundary
-              content={
-                <TradeButtons
-                  mint={safePubkeyString(addressState.pubkey)}
-                  publicKey={connectedWallet}
-                  setExpanded={setExpanded}
-                />
-              }
+              content={<TradeButtons />}
               loading={
                 <Button variant="outlined" disabled={true}>
                   <CircularProgress
@@ -72,7 +65,7 @@ function NFTTradingModule() {
                     color="inherit"
                     sx={{ marginRight: '8px' }}
                   />{' '}
-                  Loading Trading Module
+                  Loading
                 </Button>
               }
               error={null}
@@ -83,13 +76,14 @@ function NFTTradingModule() {
           aria-labelledby="trading-module"
           id="trading-module-content"
         >
-          <CreateOfferListing
-            mint={safePubkeyString(addressState.pubkey)}
-            publicKey={connectedWallet}
-            setExpanded={setExpanded}
+          <SuspenseBoundary
+            content={<NFTOrderBook />}
+            error={null}
+            loading={null}
           />
         </AccordionDetails>
       </Accordion>
+      <NFTTradingDialog />
     </ContentContainer>
   );
 }
