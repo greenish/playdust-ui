@@ -2,7 +2,9 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import base58 from 'bs58';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil';
 import { create, Infer, object, string } from 'superstruct';
+import connectedWalletAtom from '../_atoms/connectedWalletAtom';
 import authenticationApi from '../_helpers/authenticationApi';
 import fetchNonce from '../_helpers/fetchNonce';
 
@@ -53,11 +55,9 @@ const cookieApi = {
 function useAuth() {
   const wallet = useWallet();
   const router = useRouter();
-  const connectedWallet = wallet.publicKey?.toString();
+  const connectedWallet = useRecoilValue(connectedWalletAtom);
 
   return {
-    connectedWallet,
-
     login: async () => {
       const cookieString = cookieApi.get();
       const tokens = validateAuthToken(cookieString);

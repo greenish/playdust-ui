@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
+import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
 import safePromise from '../../../../../_helpers/safePromise';
 import useAuth from '../../../../../_hooks/useAuth';
 import useProfileState from '../../../../_hooks/useProfileState';
@@ -70,6 +71,7 @@ const profileKeys: FormFieldProps['name'][] = [
 
 function UserProfileEdit({ toggleEdit }: UserProfileEditorProps) {
   const auth = useAuth();
+  const connectedWallet = useRecoilValue(connectedWalletAtom);
   const setPublicProfile = useSetRecoilState(publicProfileAtom);
   const profilePicture = useRecoilValue(profilePictureAtom);
   const resetProfilePicture = useResetRecoilState(profilePictureAtom);
@@ -104,9 +106,9 @@ function UserProfileEdit({ toggleEdit }: UserProfileEditorProps) {
 
     const tokens = await auth.login();
 
-    if (tokens && auth.connectedWallet) {
+    if (tokens && connectedWallet) {
       const { profilePictureImage, ...data } = newValue;
-      await profileApi.post(`/update/${auth.connectedWallet}`, data, {
+      await profileApi.post(`/update/${connectedWallet}`, data, {
         headers: {
           Authorization: `Bearer ${tokens.accessToken}`,
         },

@@ -2,6 +2,7 @@ import { Button, CardActions } from '@mui/material';
 import { AxiosError } from 'axios';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
 import safePromise from '../../../../../_helpers/safePromise';
 import useAuth from '../../../../../_hooks/useAuth';
 import useProfileState from '../../../../_hooks/useProfileState';
@@ -22,6 +23,7 @@ const defaultProfile: PlaydustProfileType = {
 
 function UserProfileView({ toggleEdit }: UserProfileEditorProps) {
   const auth = useAuth();
+  const connectedWallet = useRecoilValue(connectedWalletAtom);
   const publicProfile = useRecoilValue(publicProfileAtom);
   const [appProfile, setAppProfile] = useProfileState();
 
@@ -32,7 +34,7 @@ function UserProfileView({ toggleEdit }: UserProfileEditorProps) {
       try {
         const { data } = await profileApi.get<PlaydustProfileType>('/read', {
           params: {
-            walletAddress: auth.connectedWallet,
+            walletAddress: connectedWallet,
           },
           headers: {
             Authorization: `Bearer ${tokens.accessToken}`,

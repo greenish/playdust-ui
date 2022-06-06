@@ -2,7 +2,9 @@ import { Person } from '@mui/icons-material';
 import { Fab, Menu, MenuItem } from '@mui/material';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import connectedWalletAtom from '../../_atoms/connectedWalletAtom';
 import safePromise from '../../_helpers/safePromise';
 import shortenPublicKey from '../../_helpers/shortenPublicKey';
 import useAuth from '../../_hooks/useAuth';
@@ -19,11 +21,29 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
   const wallet = useWallet();
   const open = !!anchorEl;
   const auth = useAuth();
+  const [connectedWallet, setConnectedWallet] =
+    useRecoilState(connectedWalletAtom);
+  const resetConnectedWallet = useResetRecoilState(connectedWalletAtom);
   const goToProfile = useGoToProfile();
 
-  const buttonProps = auth.connectedWallet
+  useEffect(() => {
+    if (wallet.connected && wallet.publicKey) {
+      const publicKeyString = wallet.publicKey.toString();
+
+      setConnectedWallet(publicKeyString);
+    } else {
+      resetConnectedWallet();
+    }
+  }, [
+    setConnectedWallet,
+    resetConnectedWallet,
+    wallet.connected,
+    wallet.publicKey,
+  ]);
+
+  const buttonProps = connectedWallet
     ? {
-        children: shortenPublicKey(auth.connectedWallet),
+        children: shortenPublicKey(connectedWallet),
         onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
           setAnchorEl(event.currentTarget),
       }
