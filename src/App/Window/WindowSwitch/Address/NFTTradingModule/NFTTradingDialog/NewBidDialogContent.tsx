@@ -22,7 +22,7 @@ const TextFieldContainer = styled(TextField)`
 const solanaInputProps = {
   type: 'number',
   InputProps: {
-    endAdornment: <InputAdornment position="end">SOL</InputAdornment>,
+    endAdornment: <InputAdornment position="end">◎</InputAdornment>,
   },
   inputProps: {
     step: '0.01',
@@ -37,12 +37,16 @@ function NewBidDialogContent({
 }: TradingDialogContentProps<TradingDialogType & { type: 'newBid' }>) {
   const { wallet, mintAddress } = action;
   const confirmTransaction = useConfirmTransaction();
-  const [userPrice, setUserPrice] = useState(0);
+  const [userPrice, setUserPrice] = useState<number|"">("");
 
   const handleClick = () => {
+    if(Number(userPrice) <= 0) {
+      return;
+    }
+
     execute(() =>
       confirmTransaction(
-        makeNFTBid(wallet, mintAddress, userPrice),
+        makeNFTBid(wallet, mintAddress, Number(userPrice)),
         'Bid placed successfully!',
         'Failed to place bid!'
       )
@@ -73,7 +77,7 @@ function NewBidDialogContent({
           variant="contained"
           size="large"
           color="success"
-          disabled={userPrice <= 0}
+          disabled={Number(userPrice) <= 0}
           onClick={handleClick}
         >
           Sign: Place Bid

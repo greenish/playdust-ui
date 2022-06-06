@@ -6,6 +6,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import React from 'react';
+import humanizeSolana from '../../../../_helpers/humanizeSolana';
 import TradingDialogType from '../../_types/TradingDialogType';
 import useConfirmTransaction from '../_hooks/useConfirmTransaction';
 import TradingDialogContentProps from '../_types/TradingDialogContentProps';
@@ -34,7 +35,7 @@ function CancelAskDialogContent({
       <DialogTitle>Cancel Listing</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          {`Do you want to cancel this listing (◎${ask.price})?`}
+          {`Do you want to cancel this listing (${humanizeSolana(ask.price)})?`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

@@ -6,6 +6,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import React from 'react';
+import humanizeSolana from '../../../_helpers/humanizeSolana';
 import TradingDialogType from '../_types/TradingDialogType';
 import makeNFTListing from './_helpers/makeNFTListing';
 import useConfirmTransaction from './_hooks/useConfirmTransaction';
@@ -34,7 +35,7 @@ function AcceptBidDialogContent({
       <DialogTitle>Sell NFT</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-slide-description">
-          {`Do you want to sell your NFT for ◎${bid.price}?`}
+          {`Do you want to sell your NFT for ${humanizeSolana(bid.price)}?`}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

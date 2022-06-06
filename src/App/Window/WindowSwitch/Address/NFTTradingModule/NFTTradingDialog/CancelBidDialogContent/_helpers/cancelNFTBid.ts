@@ -1,4 +1,4 @@
-import tradeApiInstance from '../../_helpers/tradeApiInstance';
+import tradeApi from '../../_helpers/tradeApi';
 import TransactionBufferType from '../../_types/TransactionBufferType';
 
 const cancelNFTBid = async (
@@ -6,7 +6,7 @@ const cancelNFTBid = async (
   mint: string,
   buyPrice: number
 ): Promise<TransactionBufferType> => {
-  const { data } = await tradeApiInstance.post<TransactionBufferType>(
+  const { data } = await tradeApi.post<TransactionBufferType>(
     `/cancel-bid`,
     {
       wallet,

@@ -1,6 +1,6 @@
 import TransactionBuffer from '../_types/TransactionBufferType';
 import TransactionHash from '../_types/TransactionHashType';
-import tradeApiInstance from './tradeApiInstance';
+import tradeApiInstance from './tradeApi';
 
 const executeNFTSale = async (
   requestData: TransactionBuffer,
