@@ -6,15 +6,12 @@ const cancelNFTBid = async (
   mint: string,
   buyPrice: number
 ): Promise<TransactionBufferType> => {
-  const { data } = await tradeApi.post<TransactionBufferType>(
-    `/cancel-bid`,
-    {
-      wallet,
-      mint,
-      buyPrice,
-      tokenSize: 1,
-    }
-  );
+  const { data } = await tradeApi.post<TransactionBufferType>(`/cancel-bid`, {
+    wallet,
+    mint,
+    buyPrice,
+    tokenSize: 1,
+  });
 
   return data;
 };

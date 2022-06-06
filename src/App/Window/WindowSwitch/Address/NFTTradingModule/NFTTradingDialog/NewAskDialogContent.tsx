@@ -37,10 +37,10 @@ function NewAskDialogContent({
 }: TradingDialogContentProps<TradingDialogType & { type: 'newAsk' }>) {
   const { wallet, mintAddress } = action;
   const confirmTransaction = useConfirmTransaction();
-  const [userPrice, setUserPrice] = useState<number|"">("");
+  const [userPrice, setUserPrice] = useState<number | ''>('');
 
   const handleClick = () => {
-    if(Number(userPrice) <= 0) {
+    if (Number(userPrice) <= 0) {
       return;
     }
     execute(() =>

@@ -6,15 +6,12 @@ const cancelNFTListing = async (
   mint: string,
   buyPrice: number
 ): Promise<TransactionBuffer> => {
-  const { data } = await tradeApi.post<TransactionBuffer>(
-    `/cancel-ask`,
-    {
-      wallet,
-      mint,
-      buyPrice,
-      tokenSize: 1,
-    }
-  );
+  const { data } = await tradeApi.post<TransactionBuffer>(`/cancel-ask`, {
+    wallet,
+    mint,
+    buyPrice,
+    tokenSize: 1,
+  });
 
   return data;
 };
