@@ -1,5 +1,5 @@
 import React from 'react';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 import AuthoritiesCard from './AuthoritiesCard';
 import DelegationCard from './DelegationCard';
 import LockupCard from './LockupCard';

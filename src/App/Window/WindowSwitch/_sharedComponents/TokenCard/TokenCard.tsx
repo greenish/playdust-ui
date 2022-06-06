@@ -5,7 +5,7 @@ import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
 import getCDNUrl from '../../../../_helpers/getCDNUrl';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
 import humanizeSolana from '../../_helpers/humanizeSolana';
-import Link from '../Link';
+import Link from '../_sharedComponents/Link';
 import ImageCard from './ImageCard/ImageCard';
 import SkeletonImageCard from './SkeletonImageCard';
 import TokenCardFilter from './TokenCardFilter';

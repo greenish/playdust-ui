@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
+import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import parsedBPFUpgradeableLoaderAccountAtom from './_atoms/parsedBPFUpgradeableLoaderAccountAtom';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from './_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
-import ExplorerLink from './_sharedComponents/ExplorerLink/ExplorerLink';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 
 // 72xbspJP8vtJ91Lp7k6mqJXFiPSvpad5BBRrixfAWh8m

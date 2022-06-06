@@ -2,6 +2,7 @@ import { Button } from '@mui/material';
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import useProfileState from '../../_hooks/useProfileState';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
 import BPFUpgradeableLoaderAccountBuffer from './BPFUpgradeableLoaderAccountBuffer';
 import BPFUpgradeableLoaderAccountProgram from './BPFUpgradeableLoaderAccountProgram/BPFUpgradeableLoaderAccountProgram';
@@ -23,7 +24,6 @@ import Transactions from './Transactions/Transactions';
 import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
 import WalletGallery from './WalletGallery/WalletGallery';
 import ContentContainer from './_sharedComponents/ContentContainer';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 
 function Address() {
   const [profile, setProfile] = useProfileState();
