@@ -1,4 +1,4 @@
-import { Infer, object, string } from 'superstruct';
+import { Infer, object, optional, string } from 'superstruct';
 
 type PlaydustProfileType = Infer<typeof PlaydustProfileType>;
 const PlaydustProfileType = object({
@@ -8,6 +8,7 @@ const PlaydustProfileType = object({
   discordUsername: string(),
   twitterUsername: string(),
   profilePictureMintAddress: string(),
+  profilePictureImage: optional(string()),
 });
 
 export default PlaydustProfileType;

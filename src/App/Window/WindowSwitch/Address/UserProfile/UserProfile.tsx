@@ -1,19 +1,18 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import UserProfileEdit from './UserProfileEdit';
-import UserProfileView from './UserProfileView/UserProfileView';
-import publicProfileAtom from './_atoms/publicProfileAtom';
-import userProfileEditAtom from './_atoms/userProfileEditAtom';
+import useIsWallet from '../_hooks/useIsWallet';
+import PrivateUserProfile from './PrivateUserProfile/PrivateUserProfile';
+import PublicUserProfile from './PublicUserProfile';
+import useIsCurrentUser from './_hooks/useIsCurrentUser';
 
 function UserProfile() {
-  const publicProfile = useRecoilValue(publicProfileAtom);
-  const edit = useRecoilValue(userProfileEditAtom);
+  const isWallet = useIsWallet();
+  const isCurrentUser = useIsCurrentUser();
 
-  if (!publicProfile) {
+  if (!isWallet) {
     return null;
   }
 
-  return !edit ? <UserProfileView /> : <UserProfileEdit />;
+  return isCurrentUser ? <PrivateUserProfile /> : <PublicUserProfile />;
 }
 
 export default UserProfile;

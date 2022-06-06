@@ -53,16 +53,16 @@ const cookieApi = {
 function useAuth() {
   const wallet = useWallet();
   const router = useRouter();
+  const connectedWallet = wallet.publicKey?.toString();
 
   return {
-    connectedWallet: wallet.publicKey?.toString(),
+    connectedWallet,
 
     login: async () => {
       const cookieString = cookieApi.get();
       const tokens = validateAuthToken(cookieString);
       const { accessToken } = tokens || {};
       const isAccessTokenValid = !isJWTExpired(accessToken);
-      const connectedWallet = wallet.publicKey?.toString();
 
       if (isAccessTokenValid) {
         return tokens;

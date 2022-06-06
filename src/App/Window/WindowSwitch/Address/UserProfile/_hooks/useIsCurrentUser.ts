@@ -1,6 +1,6 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useRecoilValue } from 'recoil';
-import addressStateAtom from '../../../_atoms/addressStateAtom';
+import addressStateAtom from '../../_atoms/addressStateAtom';
 
 function useIsCurrentUser() {
   const wallet = useWallet();
