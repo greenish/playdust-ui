@@ -26,7 +26,7 @@ function RawTransactionData() {
       content={
         <DynamicReactJson
           name={null}
-          src={{ a: 0, b: 1 }}
+          src={parsedConfirmedTransaction}
           collapsed={3}
           groupArraysAfterLength={20}
         />

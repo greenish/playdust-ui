@@ -3,11 +3,10 @@ import {
   ParsedTransaction,
   PartiallyDecodedInstruction,
   SignatureResult,
-  TransactionInstruction,
 } from '@solana/web3.js';
 
 interface InstructionCardPropsType {
-  ix: ParsedInstruction | PartiallyDecodedInstruction | TransactionInstruction;
+  ix: ParsedInstruction | PartiallyDecodedInstruction;
   tx: ParsedTransaction;
   result: SignatureResult;
   index: number;

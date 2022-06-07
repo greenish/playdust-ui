@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import {
   ParsedInnerInstruction,
   ParsedInstruction,
@@ -19,7 +19,7 @@ function InstructionDetails() {
   const status = useRecoilValue(transactionStatusAtom);
 
   if (!parsedConfirmedTransaction || !status?.info) {
-    return <div>No data available</div>;
+    return <Box>No data available</Box>;
   }
 
   const { transaction, meta } = parsedConfirmedTransaction;
@@ -29,7 +29,7 @@ function InstructionDetails() {
   } = transaction;
 
   if (transaction.message.instructions.length === 0) {
-    return <div>No instructions found</div>;
+    return <Box>No instructions found</Box>;
   }
 
   const innerInstructions: {

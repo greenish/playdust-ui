@@ -1,3 +1,10 @@
+import {
+  ParsedInstruction,
+  ParsedTransaction,
+  PartiallyDecodedInstruction,
+  TransactionInstruction,
+} from '@solana/web3.js';
+import bs58 from 'bs58';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
@@ -6,8 +13,43 @@ import safePubkeyString from '../../../_helpers/safePubkeyString';
 import BasicInstructionCard from './BasicInstructionCard/BasicInstructionCard';
 import InstructionCardPropsType from './_types/InstructionCardPropsType';
 
+function intoTransactionInstruction(
+  tx: ParsedTransaction,
+  instruction: ParsedInstruction | PartiallyDecodedInstruction
+): TransactionInstruction | undefined {
+  const { message } = tx;
+  if ('parsed' in instruction) return;
+
+  const keys = [];
+
+  // We use try/catch/Error here to break out of array iteration
+  // This is because our lint rule no-restricted-syntax which enforces the following:
+  // iterators/generators require regenerator-runtime, which is too heavyweight for this guide to allow them. Separately, loops should be avoided in favor of array iterations
+  try {
+    instruction.accounts.forEach((account) => {
+      const accountKey = message.accountKeys.find(({ pubkey }) =>
+        pubkey.equals(account)
+      );
+      if (!accountKey) throw new Error();
+      keys.push({
+        pubkey: accountKey.pubkey,
+        isSigner: accountKey.signer,
+        isWritable: accountKey.writable,
+      });
+    });
+  } catch (err) {
+    return;
+  }
+
+  return new TransactionInstruction({
+    data: bs58.decode(instruction.data),
+    keys,
+    programId: instruction.programId,
+  });
+}
+
 function UnknownInstructionDetailsCard(props: InstructionCardPropsType) {
-  const { ix } = props;
+  const { tx, ix } = props;
 
   const { network } = useRecoilValue(solanaClusterAtom);
 
@@ -16,7 +58,14 @@ function UnknownInstructionDetailsCard(props: InstructionCardPropsType) {
 
   const title = `${programName}: Unknown Instruction`;
 
-  return <BasicInstructionCard {...props} title={title} defaultRaw={true} />;
+  const txix = 'parsed' in ix ? ix : intoTransactionInstruction(tx, ix);
+
+  const newProps = {
+    ...props,
+    ix: txix,
+  };
+
+  return <BasicInstructionCard {...newProps} title={title} defaultRaw={true} />;
 }
 
 export default UnknownInstructionDetailsCard;

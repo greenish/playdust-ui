@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Chip,
   Table,
   TableBody,
@@ -9,8 +8,12 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { SignatureResult } from '@solana/web3.js';
-import React, { PropsWithChildren, useState } from 'react';
+import {
+  ParsedInstruction,
+  SignatureResult,
+  TransactionInstruction,
+} from '@solana/web3.js';
+import React, { PropsWithChildren } from 'react';
 import { useRecoilValue } from 'recoil';
 import LabeledAddressLink from '../../../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import TransactionErrorDetailsType from '../../../_types/TransactionErrorDetailsType';
@@ -41,30 +44,17 @@ function ixResult(
   return ['error'];
 }
 
-type BasicInstructionCardProps = InstructionCardPropsType & {
+type BasicInstructionCardProps = Omit<InstructionCardPropsType, 'ix'> & {
+  ix: ParsedInstruction | TransactionInstruction | undefined;
   title: string;
-  defaultRaw?: boolean;
 };
 
 function BasicInstructionCard(
   props: PropsWithChildren<BasicInstructionCardProps>
 ) {
-  const {
-    title,
-    defaultRaw,
-    ix,
-    result,
-    index,
-    innerCards,
-    childIndex,
-    children,
-  } = props;
+  const { title, ix, result, index, innerCards, childIndex } = props;
 
   const rawPopulatedTransaction = useRecoilValue(rawPopulatedTransactionAtom);
-
-  const [showRaw, setShowRaw] = useState(defaultRaw || false);
-
-  const rawClickHandler = () => setShowRaw((r) => !r);
 
   const [resultColor] = ixResult(result, index);
 
@@ -77,6 +67,10 @@ function BasicInstructionCard(
     childIndex !== undefined ? `.${childIndex + 1}` : ''
   }`;
 
+  if (!ix) {
+    return <Box>Could not display this instruction</Box>;
+  }
+
   let rawDetails;
 
   if ('parsed' in ix) {
@@ -85,8 +79,6 @@ function BasicInstructionCard(
         {raw ? <RawDetails ix={raw} /> : null}
       </RawParsedDetails>
     );
-  } else if ('data' in ix) {
-    rawDetails = <>ok</>;
   } else {
     rawDetails = <RawDetails ix={ix} />;
   }
@@ -95,27 +87,19 @@ function BasicInstructionCard(
     <Box>
       <Typography variant="h6">
         <Chip label={label} color={resultColor} size="small" /> {title}
-        <Button disabled={defaultRaw} onClick={rawClickHandler}>
-          Raw
-        </Button>
       </Typography>
       <TableContainer>
         <Table>
           <TableBody>
-            {showRaw ? (
-              <>
-                <TableRow>
-                  <TableCell>Program</TableCell>
-                  <TableCell>
-                    <LabeledAddressLink to={ix.programId} allowCopy={true} />
-                  </TableCell>
-                </TableRow>
-                {rawDetails}
-              </>
-            ) : (
-              children
-            )}
-
+            <>
+              <TableRow>
+                <TableCell>Program</TableCell>
+                <TableCell>
+                  <LabeledAddressLink to={ix.programId} allowCopy={true} />
+                </TableCell>
+              </TableRow>
+              {rawDetails}
+            </>
             {innerCards && innerCards.length > 0 && (
               <TableRow>
                 <TableCell colSpan={2}>
