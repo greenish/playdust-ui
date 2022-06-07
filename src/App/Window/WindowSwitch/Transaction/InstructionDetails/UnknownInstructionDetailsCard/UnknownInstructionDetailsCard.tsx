@@ -66,7 +66,7 @@ function UnknownInstructionDetailsCard(props: InstructionCardPropsType) {
     ix: txix,
   };
 
-  return <BasicInstructionCard {...newProps} title={title} defaultRaw={true} />;
+  return <BasicInstructionCard {...newProps} title={title} />;
 }
 
 export default UnknownInstructionDetailsCard;
