@@ -1,4 +1,5 @@
 import {
+  AccountMeta,
   ParsedInstruction,
   ParsedTransaction,
   PartiallyDecodedInstruction,
@@ -20,7 +21,7 @@ function intoTransactionInstruction(
   const { message } = tx;
   if ('parsed' in instruction) return;
 
-  const keys = [];
+  const keys: Array<AccountMeta> = [];
 
   // We use try/catch/Error here to break out of array iteration
   // This is because our lint rule no-restricted-syntax which enforces the following:
