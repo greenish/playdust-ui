@@ -8,6 +8,7 @@ import { createTheme } from '@mui/material/styles';
 import React, { PropsWithChildren } from 'react';
 
 const greyBackground = '#F6F6F6';
+const border = '1px solid #e2e2e2';
 
 const baseTheme = createTheme({
   typography: {
@@ -173,6 +174,26 @@ const themeOverrides = createTheme({
     MuiAutocomplete: {
       defaultProps: {
         PaperComponent: (props) => <Paper {...props} elevation={1} />,
+      },
+    },
+    MuiAccordion: {
+      defaultProps: {
+        square: true,
+        disableGutters: true,
+      },
+      styleOverrides: {
+        root: {
+          border,
+          borderBottom: 0,
+          '.MuiAccordionSummary-root': {
+            background: greyBackground,
+            borderBottom: border,
+          },
+          '.MuiAccordionDetails-root': {
+            padding: 16,
+            borderBottom: border,
+          },
+        },
       },
     },
   },
