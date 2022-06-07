@@ -1,14 +1,19 @@
 import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
-import { RecoilRoot, useRecoilValue } from 'recoil';
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
+import connectedWalletAtom from '../_atoms/connectedWalletAtom';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
+import Notifications from '../_sharedComponents/Notifications/Notifications';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
-import WindowStateProvider from './WindowStateProvider/WindowStateProvider';
+import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
+import appProfileAtom from './_atoms/appProfileAtom';
+import windowStateAvailableAtom from './_atoms/windowStateAvailableAtom';
+import ProfileStorageType from './_types/ProfileStorageType';
 import WindowSetImagesType from './_types/WindowSetImagesType';
 
 const RootContainer = styled.div`
@@ -39,9 +44,40 @@ const SpinnerContainer = styled.div`
   margin-top: 24px;
 `;
 
+const WindowContentRenderer = React.memo(() => {
+  const windowStateAvailable = useRecoilValue(windowStateAvailableAtom);
+  if (!windowStateAvailable) {
+    return null;
+  }
+  return (
+    <RootContainer>
+      <SearchInputContainer>
+        <SuspenseBoundary
+          loading={null}
+          error={null}
+          content={<WindowInput />}
+        />
+      </SearchInputContainer>
+      <ContentContainer>
+        <SuspenseBoundary
+          loading={
+            <SpinnerContainer>
+              <CircularProgress />
+            </SpinnerContainer>
+          }
+          error={null}
+          content={<WindowSwitch />}
+        />
+      </ContentContainer>
+    </RootContainer>
+  );
+});
+
 function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
+  const connectedWallet = useRecoilValue(connectedWalletAtom);
   const activeTab = useRecoilValue(activeTabAtom);
+  const [appProfile, setAppProfile] = useRecoilState(appProfileAtom);
   const setAppWindowState = useSetAppWindowState();
   const activeImages = (
     activeTab.windows[activeTab.selectedWindowIdx]?.images ?? []
@@ -63,37 +99,24 @@ function Window() {
     [activeImages, activeWindow.tabId, setAppWindowState]
   );
 
+  const profileState = useMemo<ProfileStorageType>(
+    () => ({ value: appProfile, setValue: setAppProfile }),
+    [appProfile, setAppProfile]
+  );
+
   if (!activeWindow) {
     return null;
   }
-
   return (
     <RecoilRoot key={`${activeWindow.tabId}`}>
       <WindowStateProvider
+        profileState={profileState}
         setWindowImages={setWindowImages}
         windowState={activeWindow}
-      >
-        <RootContainer>
-          <SearchInputContainer>
-            <SuspenseBoundary
-              loading={null}
-              error={null}
-              content={<WindowInput />}
-            />
-          </SearchInputContainer>
-          <ContentContainer>
-            <SuspenseBoundary
-              loading={
-                <SpinnerContainer>
-                  <CircularProgress />
-                </SpinnerContainer>
-              }
-              error={null}
-              content={<WindowSwitch />}
-            />
-          </ContentContainer>
-        </RootContainer>
-      </WindowStateProvider>
+        connectedWallet={connectedWallet}
+      />
+      <WindowContentRenderer />
+      <Notifications />
     </RecoilRoot>
   );
 }

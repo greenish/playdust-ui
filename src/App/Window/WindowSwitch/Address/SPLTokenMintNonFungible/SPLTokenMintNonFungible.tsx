@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
+import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
 import ContentContainer from '../_sharedComponents/ContentContainer';
 import MetaplexCreators from './MetaplexCreators';
 import MetaplexNFTAttributes from './MetaplexNFTAttributes';
@@ -11,10 +12,13 @@ import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 // 5fzi7TauBFdac94hvm8DcTVN7jrCwYmf6PLuT2TJA7oe
 function SPLTokenMintNonFungible() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
+  const setWindowImages = useRecoilValue(setWindowImagesAtom);
 
-  if (!playdustNftData) {
-    return null;
-  }
+  useEffect(() => {
+    if (setWindowImages && playdustNftData) {
+      setWindowImages([playdustNftData.metaplexOffChainData.image]);
+    }
+  }, [setWindowImages, playdustNftData]);
 
   return (
     <>
