@@ -22,7 +22,7 @@ function BPFUpgradeableLoaderAccountProgram() {
     return null;
   }
 
-  const { parsed, parsedProgramAccount, verifiableBuild } =
+  const { parsed, parsedProgramAccount } =
     parsedBPFUpgradeableLoaderAccountProgram;
 
   const { programData } = parsed;

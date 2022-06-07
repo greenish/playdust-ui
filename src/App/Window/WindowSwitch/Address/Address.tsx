@@ -1,7 +1,5 @@
-import { Button } from '@mui/material';
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import useProfileState from '../../_hooks/useProfileState';
 import ContentContainer from '../_sharedComponents/ContentContainer';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
@@ -10,6 +8,7 @@ import BPFUpgradeableLoaderAccountProgram from './BPFUpgradeableLoaderAccountPro
 import BPFUpgradeableLoaderAccountProgramData from './BPFUpgradeableLoaderAccountProgramData';
 import ConfigAccountStakeConfigCard from './ConfigAccountStakeConfigCard';
 import ConfigAccountValidatorInfoCard from './ConfigAccountValidatorInfoCard';
+import NFTTradingModule from './NFTTradingModule/NFTTradingModule';
 import NonceAccountCard from './NonceAccountCard/NonceAccountCard';
 import RawAccountData from './RawAccountData';
 import SPLTokenAccount from './SPLTokenAccount';
@@ -20,27 +19,22 @@ import SPLTokenMultisig from './SPLTokenMultisig';
 import StakeAccount from './StakeAccount/StakeAccount';
 import SysvarAccountSlotHashesCard from './SysvarAccountSlotHashesCard';
 import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
-import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
+import UserProfile from './UserProfile/UserProfile';
 import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
-import WalletGallery from './WalletGallery/WalletGallery';
+import WalletGallery from './WalletGallery';
+import WalletTokenAccounts from './WalletTokenAccounts/WalletTokenAccounts';
 
 function Address() {
-  const [profile, setProfile] = useProfileState();
-
-  const testProfileSetting = () => {
-    setProfile({
-      name: 'test',
-      email: `tested${Math.random()}`,
-    });
-  };
-
   return (
     <>
-      <Button onClick={testProfileSetting}>{`profile: ${JSON.stringify(
-        profile
-      )}`}</Button>
       {/* Special Account Views */}
+      <SuspenseBoundary
+        content={<NFTTradingModule />}
+        error={null}
+        loading={null}
+      />
+
       <SuspenseBoundary
         content={<SPLTokenMintNonFungible />}
         error={null}
@@ -56,13 +50,19 @@ function Address() {
       {/* User Wallet Accounts */}
       <ContentContainer>
         <SuspenseBoundary
+          content={<UserProfile />}
+          error={null}
+          loading={null}
+        />
+
+        <SuspenseBoundary
           content={<WalletGallery />}
           error={null}
           loading={null}
         />
 
         <SuspenseBoundary
-          content={<TokenAccounts />}
+          content={<WalletTokenAccounts />}
           error={null}
           loading={null}
         />

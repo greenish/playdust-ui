@@ -1,5 +1,4 @@
 import {
-  any,
   Infer,
   literal,
   nullable,
@@ -10,12 +9,6 @@ import {
 } from 'superstruct';
 import ProgramAccountType from './ProgramAccountType';
 import ProgramDataAccountType from './ProgramDataAccountType';
-
-type ParsedInfo = Infer<typeof ParsedInfo>;
-const ParsedInfo = type({
-  type: string(),
-  info: any(),
-});
 
 type ProgramBufferAccountInfo = Infer<typeof ProgramBufferAccountInfo>;
 const ProgramBufferAccountInfo = type({
