@@ -1,7 +1,7 @@
 import { matchSorter } from 'match-sorter';
 import { selector } from 'recoil';
-import searchQueryActiveNodeAtom from '../../_atoms/searchQueryActiveNodeAtom';
-import searchQueryTermAtom from '../../_atoms/searchQueryTermAtom';
+import searchQueryActiveNodeAtom from './searchQueryActiveNodeAtom';
+import searchQueryTermAtom from './searchQueryTermAtom';
 import type SearchAggResponseType from '../_types/SearchAggResponseType';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import hasCollectionDependencyAtom from './hasCollectionDependencyAtom';

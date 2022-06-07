@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { is } from 'superstruct';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
-import searchQueryTermAtom from '../../_atoms/searchQueryTermAtom';
+import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
 import searchStateAtom from '../../_atoms/searchStateAtom';
 import GroupNodeType from '../../_types/GroupNodeType';
 import SearchQueryNodeType from '../../_types/SearchQueryNodeType';

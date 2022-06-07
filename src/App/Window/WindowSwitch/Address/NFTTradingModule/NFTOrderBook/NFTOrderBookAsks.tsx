@@ -1,6 +1,5 @@
 import { Cancel, CheckCircle } from '@mui/icons-material';
 import {
-  Box,
   IconButton,
   Table,
   TableBody,
@@ -59,9 +58,11 @@ function NFTOrderBookAsks() {
         </TableHead>
         <TableBody>
           {filteredAsks.length <= 0 && (
-            <Box sx={{ textAlign: 'left', padding: '16px' }}>
-              <b>No active bids found!</b>
-            </Box>
+            <TableRow sx={{ textAlign: 'left', padding: '16px' }}>
+              <TableCell>
+                <b>No active bids found!</b>
+              </TableCell>
+            </TableRow>
           )}
           {filteredAsks.length > 0 &&
             filteredAsks.map((order) => (

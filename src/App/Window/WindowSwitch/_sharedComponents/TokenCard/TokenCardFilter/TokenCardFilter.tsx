@@ -7,8 +7,13 @@ import {
   IconButton,
   Popover,
 } from '@mui/material';
+import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
-import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
+import { useRecoilValue } from 'recoil';
+import useRemoveQueryNode from '../../../../_hooks/useRemoveQueryNode';
+import findTopLevelSearchQueryAttributeAtom from './_atoms/findTopLevelSearchQueryAttributeAtom';
+import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
+import useAddTopLevelQueryNode from './_hooks/useAddTopLevelQueryNode';
 
 interface TokenCardFilterProps {
   metadata: OpenSearchNFTSourceType;
@@ -17,6 +22,9 @@ interface TokenCardFilterProps {
 function TokenCardFilter({ metadata }: TokenCardFilterProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const attributes = metadata.offChainData.attributes || [];
+  const findAttribute = useRecoilValue(findTopLevelSearchQueryAttributeAtom);
+  const removeQueryNode = useRemoveQueryNode();
+  const addTopLevelQueryNode = useAddTopLevelQueryNode();
 
   return (
     <>
@@ -33,22 +41,11 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
       >
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormGroup>
-            {/* {!isCollectionQuery && heuristicCollectionId && (
-              <Button
-                onClick={() =>
-                  prependCollectionQueryNode(heuristicCollectionId)
-                }
-              >
-                Search in Collection
-              </Button>
-            )} */}
             {attributes.map((attribute) => {
-              // const found = exactAttributes.find(
-              //   (entry) =>
-              //     entry.trait === attribute.trait_type &&
-              //     entry.value?.includes(attribute.value)
-              // );
-              const found = undefined;
+              const found = findAttribute(
+                attribute.trait_type,
+                attribute.value
+              );
 
               return (
                 <FormControlLabel
@@ -57,25 +54,16 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
                     <Checkbox
                       checked={!!found}
                       onChange={() => {
-                        if (!found) {
-                          //   addAttributeQueryNode({
-                          //     value: [attribute.value],
-                          //     trait: attribute.trait_type,
-                          //     operation: 'and',
-                          //   });
-                          // } else {
-                          //   updateAtrributeQueryNode({
-                          //     id: found.id,
-                          //     update: {
-                          //       value: found.value.filter(
-                          //         (entry) => entry !== attribute.value
-                          //       ),
-                          //     },
-                          //     clearOnEmpty: true,
-                          //   });
-                        }
-
                         setAnchorEl(null);
+                        return found
+                          ? removeQueryNode(found.id)
+                          : addTopLevelQueryNode({
+                              id: nanoid(),
+                              type: 'query',
+                              field: 'attribute',
+                              key: attribute.trait_type,
+                              value: attribute.value,
+                            });
                       }}
                     />
                   }

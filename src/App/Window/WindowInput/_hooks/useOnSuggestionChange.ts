@@ -1,7 +1,7 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import usePushWindowHash from '../../../_hooks/usePushWindowHash';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
-import searchQueryTermAtom from '../../_atoms/searchQueryTermAtom';
+import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
 import windowStateAtom from '../../_atoms/windowStateAtom';
 import useAddAttributeQueryNode from '../../_hooks/useAddAttributeQueryNode';
 import useAddCollectionQueryNode from '../../_hooks/useAddCollectionQueryNode';

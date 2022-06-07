@@ -9,7 +9,7 @@ import { useClickAway } from 'react-use';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../_atoms/searchQueryRootNodeAtom';
-import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
+import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
 import SkeletonRows from '../_sharedComponents/SkeletonRows';
 import QueryNodeChip from './QueryNodeChip/QueryNodeChip';
 import RenderQuery from './RenderQuery/RenderQuery';

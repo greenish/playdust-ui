@@ -1,7 +1,7 @@
-import makeUseQueryChange from '../../_hooks/makeUseQueryChange';
+import makeUseChangeSearchQuery from '../../../../../_hooks/makeUseChangeSearchQuery';
 
-const useSetOnlyListed = makeUseQueryChange<boolean>(
-  () => (nextOnlyListed) => ({ onlyListed: nextOnlyListed })
+const useSetOnlyListed = makeUseChangeSearchQuery(
+  () => (nextOnlyListed: boolean) => ({ onlyListed: nextOnlyListed })
 );
 
 export default useSetOnlyListed;

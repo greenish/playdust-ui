@@ -1,18 +1,28 @@
-import { useRecoilValue } from 'recoil';
 import useGoHome from '../../_hooks/useGoHome';
-import searchStateAtom from '../_atoms/searchStateAtom';
-import removeQueryNode from '../_helpers/removeQueryNode';
-import useChangeSearchQuery from './useChangeSearchQuery';
+import makeUseChangeSearchQuery from './makeUseChangeSearchQuery';
+import useGetUpdateSearchQuery from './useGetUpdateSearchQuery';
 
-const useRemoveQueryNode = () => {
-  const changeSearchQuery = useChangeSearchQuery();
-  const { query } = useRecoilValue(searchStateAtom);
+const useRemoveQueryNode = makeUseChangeSearchQuery(() => {
   const goHome = useGoHome();
+  const getUpdateSearchQuery = useGetUpdateSearchQuery();
 
-  return (id: string) => {
-    const nextQuery = removeQueryNode(query, id);
+  return (removalId: string) => {
+    const updated = getUpdateSearchQuery((node) => {
+      if (node.id === removalId) {
+        return null;
+      }
 
-    const hasQueryNode = Object.values(nextQuery.nodes).some(
+      if (node.type === 'group' && node.children.includes(removalId)) {
+        return {
+          ...node,
+          children: node.children.filter((child) => child !== removalId),
+        };
+      }
+
+      return node;
+    });
+
+    const hasQueryNode = Object.values(updated.query.nodes).some(
       (entry) => entry.type === 'query'
     );
 
@@ -20,8 +30,8 @@ const useRemoveQueryNode = () => {
       return goHome();
     }
 
-    return changeSearchQuery({ query: nextQuery });
+    return updated;
   };
-};
+});
 
 export default useRemoveQueryNode;

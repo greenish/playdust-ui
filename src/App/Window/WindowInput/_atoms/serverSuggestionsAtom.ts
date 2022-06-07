@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import searchQueryTermAtom from '../../_atoms/searchQueryTermAtom';
+import searchQueryTermAtom from './searchQueryTermAtom';
 import frontendApi from '../../_helpers/frontendApi';
 import type OpenSearchCollectionSourceHighlightType from '../_types/OpenSearchCollectionSourceHighlightType';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';

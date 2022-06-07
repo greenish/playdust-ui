@@ -1,6 +1,6 @@
 import { noWait, selector } from 'recoil';
-import searchQueryActiveNodeAtom from '../../_atoms/searchQueryActiveNodeAtom';
-import searchQueryTermAtom from '../../_atoms/searchQueryTermAtom';
+import searchQueryActiveNodeAtom from './searchQueryActiveNodeAtom';
+import searchQueryTermAtom from './searchQueryTermAtom';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import clientSuggestionsAtom from './clientSuggestionsAtom';
 import explorerSuggestionsAtom from './explorerSuggestionsAtom';

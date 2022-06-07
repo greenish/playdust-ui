@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
-import searchQueryActiveNodeAtom from '../../_atoms/searchQueryActiveNodeAtom';
+import searchQueryActiveNodeAtom from './searchQueryActiveNodeAtom';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
-import searchQueryTermAtom from '../../_atoms/searchQueryTermAtom';
+import searchQueryTermAtom from './searchQueryTermAtom';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 
 const groupSuggestionsAtom = selector<SearchSuggestionType[] | null>({
