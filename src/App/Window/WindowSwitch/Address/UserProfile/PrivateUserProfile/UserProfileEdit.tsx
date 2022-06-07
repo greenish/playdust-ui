@@ -145,7 +145,7 @@ function UserProfileEdit({ toggleEdit }: UserProfileEditorProps) {
         {formFields.map(({ Icon, validator, ...props }: FormFieldProps) => {
           const value = formState[props.name] ?? '';
           const errorText =
-            validator && invalidFields.includes(props.name)
+            (validator || props.required) && invalidFields.includes(props.name)
               ? `${props.placeholder || props.name} is ${
                   props.required && !value ? 'required' : 'invalid'
                 }`

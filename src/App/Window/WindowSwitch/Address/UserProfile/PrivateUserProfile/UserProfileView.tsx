@@ -41,15 +41,15 @@ function UserProfileView({ toggleEdit }: UserProfileEditorProps) {
           },
         });
         setAppProfile({ ...publicProfile, ...data });
+        toggleEdit();
       } catch (e) {
         const error = e as AxiosError;
         if (error.isAxiosError && error.response?.status === 404) {
           setAppProfile(defaultProfile);
+          toggleEdit();
         }
       }
     }
-
-    toggleEdit();
   };
 
   return (
