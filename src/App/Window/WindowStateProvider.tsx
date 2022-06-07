@@ -31,7 +31,7 @@ function WindowStateProvider({
       setCurrentState(windowState);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [windowState]);
+  }, [JSON.stringify(windowState)]);
 
   useEffect(() => {
     syncProfile(profileState);
@@ -45,7 +45,13 @@ function WindowStateProvider({
 
   useEffect(() => {
     setSetWindowImages(() => setWindowImages);
-  }, [setWindowImages, setSetWindowImages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setWindowImages]);
+
+  useEffect(() => {
+    setConnectedWallet(connectedWallet);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [connectedWallet]);
 
   return null;
 }

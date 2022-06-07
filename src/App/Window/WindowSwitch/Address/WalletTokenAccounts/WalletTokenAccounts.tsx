@@ -99,7 +99,7 @@ function RenderTokenAccounts() {
   );
 }
 
-function TokenAccounts() {
+function WalletTokenAccounts() {
   const isWallet = useIsWallet();
   const isProgram = useIsProgram();
 
@@ -116,4 +116,4 @@ function TokenAccounts() {
   );
 }
 
-export default TokenAccounts;
+export default WalletTokenAccounts;

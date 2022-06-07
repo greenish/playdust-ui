@@ -1,4 +1,4 @@
-import { MetadataDataData } from '@metaplex-foundation/mpl-token-metadata';
+import { MetadataData } from '@metaplex-foundation/mpl-token-metadata';
 import { selector } from 'recoil';
 import MetaplexOffChainDataType from '../../../../../../_types/MetaplexOffChainDataType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
@@ -7,7 +7,7 @@ import safePubkeyString from '../../_helpers/safePubkeyString';
 
 type PlaydustNftData = {
   metaplexOffChainData: MetaplexOffChainDataType;
-  metaplexOnChainData: MetadataDataData;
+  metaplexOnChainData: MetadataData;
   rarity: {
     normalizedRarity?: number;
     absoluteRarity?: number;
@@ -31,7 +31,7 @@ const playdustNftDataAtom = selector<PlaydustNftData | null>({
 
     const playdustNftData: PlaydustNftData = {
       metaplexOffChainData: data.offChainData,
-      metaplexOnChainData: data.data,
+      metaplexOnChainData: data as unknown as MetadataData,
       rarity: {
         normalizedRarity: data.normalizedRarityScore,
         absoluteRarity: data.rarityScore,

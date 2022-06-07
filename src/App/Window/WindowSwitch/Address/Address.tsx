@@ -1,23 +1,27 @@
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
+import BPFUpgradeableLoaderAccountBuffer from './BPFUpgradeableLoaderAccountBuffer';
+import BPFUpgradeableLoaderAccountProgram from './BPFUpgradeableLoaderAccountProgram/BPFUpgradeableLoaderAccountProgram';
+import BPFUpgradeableLoaderAccountProgramData from './BPFUpgradeableLoaderAccountProgramData';
 import ConfigAccountStakeConfigCard from './ConfigAccountStakeConfigCard';
 import ConfigAccountValidatorInfoCard from './ConfigAccountValidatorInfoCard';
+import NFTTradingModule from './NFTTradingModule/NFTTradingModule';
 import NonceAccountCard from './NonceAccountCard/NonceAccountCard';
 import RawAccountData from './RawAccountData';
 import SPLTokenAccount from './SPLTokenAccount';
-import SPLTokenMint from './SPLTokenMint/SPLTokenMint';
+import SPLTokenMint from './SPLTokenMint';
 import SPLTokenMintFungible from './SPLTokenMintFungible/SPLTokenMintFungible';
 import SPLTokenMintNonFungible from './SPLTokenMintNonFungible/SPLTokenMintNonFungible';
 import SPLTokenMultisig from './SPLTokenMultisig';
 import StakeAccount from './StakeAccount/StakeAccount';
 import SysvarAccountSlotHashesCard from './SysvarAccountSlotHashesCard';
 import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
-import TokenAccounts from './TokenAccounts/TokenAccounts';
 import Transactions from './Transactions/Transactions';
 import UserProfile from './UserProfile/UserProfile';
 import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
 import WalletGallery from './WalletGallery';
+import WalletTokenAccounts from './WalletTokenAccounts/WalletTokenAccounts';
 import ContentContainer from './_sharedComponents/ContentContainer';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 
@@ -25,6 +29,12 @@ function Address() {
   return (
     <>
       {/* Special Account Views */}
+      <SuspenseBoundary
+        content={<NFTTradingModule />}
+        error={null}
+        loading={null}
+      />
+
       <SuspenseBoundary
         content={<SPLTokenMintNonFungible />}
         error={null}
@@ -52,7 +62,7 @@ function Address() {
         />
 
         <SuspenseBoundary
-          content={<TokenAccounts />}
+          content={<WalletTokenAccounts />}
           error={null}
           loading={null}
         />
@@ -76,11 +86,6 @@ function Address() {
           loading={null}
         />
         <SuspenseBoundary
-          content={<StakeAccount />}
-          error={null}
-          loading={null}
-        />
-        <SuspenseBoundary
           content={<SPLTokenMultisig />}
           error={null}
           loading={null}
@@ -94,6 +99,26 @@ function Address() {
         />
         <SuspenseBoundary
           content={<ConfigAccountStakeConfigCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<StakeAccount />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<BPFUpgradeableLoaderAccountBuffer />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<BPFUpgradeableLoaderAccountProgram />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<BPFUpgradeableLoaderAccountProgramData />}
           error={null}
           loading={null}
         />

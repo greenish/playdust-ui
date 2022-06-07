@@ -35,7 +35,8 @@ function useProfileState(): ProfileState {
         });
       }
     },
-    [setProfileStorage, profileStorage]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [setProfileStorage, profileStorage.value]
   );
 
   const setProfile = useCallback<SetProfileType>(
@@ -44,7 +45,8 @@ function useProfileState(): ProfileState {
         profileStorage.setValue(newProfile);
       }
     },
-    [profileStorage]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [profileStorage.setValue]
   );
 
   return [profileStorage.value, setProfile, syncProfile];

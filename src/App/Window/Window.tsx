@@ -6,6 +6,7 @@ import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
 import connectedWalletAtom from '../_atoms/connectedWalletAtom';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
+import Notifications from '../_sharedComponents/Notifications/Notifications';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
 import WindowStateProvider from './WindowStateProvider';
@@ -113,6 +114,7 @@ function Window() {
         connectedWallet={connectedWallet}
       />
       <WindowContentRenderer />
+      <Notifications />
     </RecoilRoot>
   );
 }

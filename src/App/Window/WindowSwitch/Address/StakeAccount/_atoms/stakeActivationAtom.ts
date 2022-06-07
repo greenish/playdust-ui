@@ -3,13 +3,13 @@ import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 
-const stakeActivationAtom = selector<StakeActivationData>({
+const stakeActivationAtom = selector<StakeActivationData | null>({
   key: 'stakeActivation',
   get: async ({ get }) => {
     const addressState = get(addressStateAtom);
 
     if (!addressState) {
-      throw new Error('addressState unavailable');
+      return null;
     }
 
     const { pubkey } = addressState;
