@@ -1,4 +1,4 @@
-import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
+import type OpenSearchNFTSourceType from '../../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
 import makePostQuery from './makePostQuery';
 
 const postNFTQuery = makePostQuery<OpenSearchNFTSourceType>('nft-metadata');

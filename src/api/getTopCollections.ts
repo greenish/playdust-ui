@@ -1,5 +1,5 @@
 import { NextApiRequest } from 'next';
-import type TopCollectionsResponseType from '../_types/TopCollectionsResponseType';
+import type TopCollectionsResponseType from '../App/Window/WindowSwitch/Home/_types/TopCollectionsResponseType';
 import nextApiHandler from './_helpers/nextApiHandler';
 import postCollectionQuery from './_helpers/postCollectionQuery';
 import postMultiNFTQuery from './_helpers/postMultiNFTQuery';

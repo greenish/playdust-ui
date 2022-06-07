@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import React, { useContext, useEffect } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import WindowSetImagesContext from '../../_sharedComponents/WindowSetImagesContext';
 import SearchOverview from './SearchOverview/SearchOverview';
 import SearchResults from './SearchResults/SearchResults';
 import SearchSideBar from './SearchSideBar/SearchSideBar';
+import searchResultsAtom from './_atoms/searchResultsAtom';
 
 const RootContainer = styled.div`
   display: flex;

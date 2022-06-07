@@ -1,32 +1,34 @@
-import type QueryOperationUnionType from '../../../_types/QueryOperationUnionType';
+import { nanoid } from 'nanoid';
+import { useRecoilValue } from 'recoil';
+import searchQueryActiveGroupIdxAtom from '../_atoms/searchQueryActiveGroupIdxAtom';
+import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
+import searchStateAtom from '../_atoms/searchStateAtom';
 import addQueryNode from '../_helpers/addQueryNode';
-import type QueryNodeAdditionType from '../_types/QueryNodeAdditionType';
-import makeUseQueryChange from './makeUseQueryChange';
+import AttributeQueryNodeType from '../_types/AttributeQueryNodeType';
+import useChangeSearchQuery from './useChangeSearchQuery';
 
-interface UseAddAttributeNodeInput {
-  value: string[];
-  trait: string;
-  operation: QueryOperationUnionType;
-  at?: number;
-}
+const useAddAttributeQueryNode = () => {
+  const { query } = useRecoilValue(searchStateAtom);
+  const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
+  const activeGroupId = useRecoilValue(searchQueryActiveGroupIdxAtom);
+  const changeSearchQuery = useChangeSearchQuery();
 
-const useAddAttributeQueryNode = makeUseQueryChange<UseAddAttributeNodeInput>(
-  (query) =>
-    ({ value, trait, operation, at }) => {
-      const queryAddition: QueryNodeAdditionType = {
-        content: {
-          field: 'attribute',
-          value,
-          trait,
-        },
-        operation,
-        at,
+  return (key: string, value: string) => {
+    if (activeNodeMeta) {
+      const queryAddition: AttributeQueryNodeType = {
+        id: nanoid(),
+        type: 'query',
+        field: 'attribute',
+        value,
+        key,
       };
+      const parentId = activeNodeMeta.nodeId;
 
-      const next = addQueryNode(query, queryAddition);
+      const next = addQueryNode(query, queryAddition, parentId, activeGroupId);
 
-      return { query: next };
+      return changeSearchQuery({ query: next });
     }
-);
+  };
+};
 
 export default useAddAttributeQueryNode;

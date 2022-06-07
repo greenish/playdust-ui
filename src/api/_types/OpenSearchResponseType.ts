@@ -1,4 +1,4 @@
-import OpenSearchHighlightType from '../../_types/OpenSearchHighlightType';
+import OpenSearchHighlightType from '../../App/Window/WindowInput/_types/OpenSearchHighlightType';
 
 interface OpenSearchResponseType<T = void, A = void> {
   hits: {

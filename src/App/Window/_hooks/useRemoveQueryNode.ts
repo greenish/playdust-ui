@@ -1,12 +1,27 @@
+import { useRecoilValue } from 'recoil';
+import useGoHome from '../../_hooks/useGoHome';
+import searchStateAtom from '../_atoms/searchStateAtom';
 import removeQueryNode from '../_helpers/removeQueryNode';
-import makeUseQueryChange from './makeUseQueryChange';
+import useChangeSearchQuery from './useChangeSearchQuery';
 
-const useRemoveQueryNode = makeUseQueryChange<string>(
-  (query) => (id: string) => {
+const useRemoveQueryNode = () => {
+  const changeSearchQuery = useChangeSearchQuery();
+  const { query } = useRecoilValue(searchStateAtom);
+  const goHome = useGoHome();
+
+  return (id: string) => {
     const nextQuery = removeQueryNode(query, id);
 
-    return { query: nextQuery };
-  }
-);
+    const hasQueryNode = Object.values(nextQuery.nodes).some(
+      (entry) => entry.type === 'query'
+    );
+
+    if (!hasQueryNode) {
+      return goHome();
+    }
+
+    return changeSearchQuery({ query: nextQuery });
+  };
+};
 
 export default useRemoveQueryNode;

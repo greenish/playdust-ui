@@ -1,5 +1,5 @@
-import type SearchSortType from '../../../../../../../_types/SearchSortUnionType';
-import makeUseQueryChange from '../../../../../_hooks/makeUseQueryChange';
+import type SearchSortType from '../../../../../_types/SearchSortType';
+import makeUseQueryChange from '../../_hooks/makeUseQueryChange';
 
 const useSetSortValue = makeUseQueryChange<SearchSortType>(() => (nextSort) => {
   if (nextSort.field === 'list-price') {

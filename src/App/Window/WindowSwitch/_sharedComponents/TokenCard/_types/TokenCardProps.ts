@@ -1,4 +1,4 @@
-import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType';
+import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 
 interface TokenCardProps {
   imageSize: number;

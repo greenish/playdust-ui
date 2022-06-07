@@ -2,7 +2,7 @@ import { ENV } from '@solana/spl-token-registry';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { selector } from 'recoil';
 import { assert, literal, string, union } from 'superstruct';
-import type SolanaClusterType from '../../_types/SolanaClusterType';
+import type SolanaClusterType from '../_types/SolanaClusterType';
 
 const clusterStatics = {
   MAINNET: {

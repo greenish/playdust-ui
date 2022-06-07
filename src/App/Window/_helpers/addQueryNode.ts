@@ -1,38 +1,32 @@
-import { nanoid } from 'nanoid';
-import type ComposedQueryType from '../../../_types/ComposedQueryType';
-import type QueryNodeType from '../../../_types/QueryNodeType';
-import type QueryNodeAdditionType from '../_types/QueryNodeAdditionType';
+import SearchQueryNodeType from '../_types/SearchQueryNodeType';
+import SearchQueryType from '../_types/SearchQueryType';
+import insertAtIdx from './insertAtIdx';
+import reduceSearchQuery from './reduceSearchQuery';
 
 const addQueryNode = (
-  state: ComposedQueryType,
-  { content, operation, at }: QueryNodeAdditionType
-): ComposedQueryType => {
-  const currX = at === undefined ? state.length : at;
-
-  const newNode: QueryNodeType = {
-    id: nanoid(),
-    ...content,
+  query: SearchQueryType,
+  nodeAddition: SearchQueryNodeType,
+  parentId: string,
+  index: number
+): SearchQueryType => {
+  const withAddedNodes = {
+    ...query,
+    nodes: {
+      ...query.nodes,
+      [nodeAddition.id]: nodeAddition,
+    },
   };
 
-  if (operation === 'or') {
-    const nextQuery: ComposedQueryType = state.map((entry, idx) => {
-      if (idx === currX) {
-        return [...entry, newNode];
-      }
+  return reduceSearchQuery(withAddedNodes, (node) => {
+    if (node.id === parentId && node.type === 'group') {
+      return {
+        ...node,
+        children: insertAtIdx(node.children, nodeAddition.id, index),
+      };
+    }
 
-      return entry;
-    });
-
-    return nextQuery;
-  }
-
-  const nextQuery = [
-    ...state.slice(0, currX + 1),
-    [newNode],
-    ...state.slice(currX + 1),
-  ];
-
-  return nextQuery;
+    return node;
+  });
 };
 
 export default addQueryNode;

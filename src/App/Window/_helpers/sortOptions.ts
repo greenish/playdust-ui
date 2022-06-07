@@ -1,4 +1,4 @@
-import type SearchSortType from '../../../_types/SearchSortUnionType';
+import type SearchSortType from '../_types/SearchSortType';
 
 type SearchSortOption = {
   name: string;

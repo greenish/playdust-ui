@@ -20,29 +20,31 @@ interface SimilarCollectionsProps {
   open: boolean;
   onClick: (selectedId: string) => void;
   onClose: () => void;
-  collectionId: string;
 }
 
 function SimilarCollections({
-  collectionId,
   open,
   onClose,
   onClick,
 }: SimilarCollectionsProps) {
-  const overview = useRecoilValue(collectionOverviewAtom(collectionId));
-  const { totalVolume, similar } = overview;
+  const overview = useRecoilValue(collectionOverviewAtom);
   const theme = useTheme();
+  const filtered = useMemo(() => {
+    if (!overview) {
+      return [];
+    }
 
-  const filtered = useMemo(
-    () =>
-      similar.filter((entry) => {
-        const noName = !entry.name || entry.name === '';
-        const noSymbol = !entry.symbol || entry.symbol === '';
+    return overview.similar.filter((entry) => {
+      const noName = !entry.name || entry.name === '';
+      const noSymbol = !entry.symbol || entry.symbol === '';
 
-        return !(noName && noSymbol);
-      }),
-    [similar]
-  );
+      return !(noName && noSymbol);
+    });
+  }, [overview]);
+
+  if (!overview) {
+    return null;
+  }
 
   const warningColor = theme.palette.warning.main;
 
@@ -64,14 +66,15 @@ function SimilarCollections({
               </TableCell>
               <TableCell align="right">
                 <Typography fontWeight="bold">
-                  {humanizeSolana(totalVolume)}
+                  {humanizeSolana(overview.totalVolume)}
                 </Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filtered.map((entry) => {
-              const color = entry.totalVolume > totalVolume ? warningColor : '';
+              const color =
+                entry.totalVolume > overview.totalVolume ? warningColor : '';
 
               return (
                 <TableRow

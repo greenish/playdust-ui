@@ -1,5 +1,5 @@
 import esb from 'elastic-builder';
-import OpenSearchNFTSourceType from '../_types/OpenSearchNFTSourceType';
+import OpenSearchNFTSourceType from '../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
 import postNFTQuery from './_helpers/postNFTQuery';
 

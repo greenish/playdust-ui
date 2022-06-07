@@ -1,8 +1,8 @@
 import { MetadataDataData } from '@metaplex-foundation/mpl-token-metadata';
 import { selector } from 'recoil';
-import MetaplexOffChainDataType from '../../../../../../_types/MetaplexOffChainDataType';
-import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType';
 import frontendApi from '../../../../_helpers/frontendApi';
+import MetaplexOffChainDataType from '../../../_types/MetaplexOffChainDataType';
+import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 import safePubkeyString from '../../_helpers/safePubkeyString';
 

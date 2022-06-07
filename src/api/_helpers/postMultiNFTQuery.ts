@@ -1,4 +1,4 @@
-import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
+import type OpenSearchNFTSourceType from '../../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
 import makePostMultiQuery from './makePostMultiQuery';
 
 function postMultiNFTQuery<A = void>(query: string) {

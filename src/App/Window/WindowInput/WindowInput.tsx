@@ -1,239 +1,219 @@
 import styled from '@emotion/styled';
-import { ManageSearch, Warning } from '@mui/icons-material';
-import {
-  Autocomplete,
-  Button,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  TextField,
-  Tooltip,
-} from '@mui/material';
+import { Box, List, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { useDebounceCallback } from '@react-hook/debounce';
-import React, { useState } from 'react';
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import useGoHome from '../../_hooks/useGoHome';
-import usePushWindowHash from '../../_hooks/usePushWindowHash';
-import searchQueryValidAtom from '../_atoms/searchQueryValidAtom';
-import searchResultsAtom from '../_atoms/searchResultsAtom';
-import searchStateUncommittedAtom from '../_atoms/searchStateUncommittedAtom';
-import windowStateAtom from '../_atoms/windowStateAtom';
-import serializeSearch from '../_helpers/serializeSearch';
-import useAddAttributeQueryNode from '../_hooks/useAddAttributeQueryNode';
-import usePrependCollectionQueryNode from '../_hooks/usePrependCollectionQueryNode';
-import SearchChips from './SearchChips';
-import SearchGraph from './SearchGraph/SearchGraph';
-import SuggestionResult from './SuggestionResult';
-import isSearchQueryValidAtom from './_atoms/isSearchQueryValidAtom';
+import { useSelect } from 'downshift';
+import parse from 'html-react-parser';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import AutosizeInput from 'react-input-autosize';
+import { useClickAway } from 'react-use';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
+import searchQueryRootNodeAtom from '../_atoms/searchQueryRootNodeAtom';
+import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
+import SkeletonRows from '../_sharedComponents/SkeletonRows';
+import QueryNodeChip from './QueryNodeChip/QueryNodeChip';
+import RenderQuery from './RenderQuery/RenderQuery';
+import searchQueryDebouncedTermAtom from './_atoms/searchQueryDebouncedTermAtom';
 import searchSuggestionsAtom from './_atoms/searchSuggestionsAtom';
-import searchSuggestionTermAtom from './_atoms/searchSuggestionTermAtom';
-import getWindowType from './_helpers/getWindowType';
-import useAddTextQueryNode from './_hooks/useAddTextQueryNode';
+import useOnSuggestionChange from './_hooks/useOnSuggestionChange';
+import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
 
 const RootContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+  position: relative;
   width: 100%;
 `;
 
+const InputContainer = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  flex-wrap: wrap;
+  padding: 0 8px;
+  font-size: 80%;
+  background: none;
+  cursor: text;
+`;
+
+const OverlayContainer = styled(Paper)`
+  position: absolute;
+  width: 100%;
+`;
+
+const EmptyContainer = styled.div`
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+`;
+
 function WindowInput() {
-  const windowState = useRecoilValue(windowStateAtom);
-  const isQueryValid = useRecoilValue(isSearchQueryValidAtom);
-  const searchQueryValid = useRecoilValue(searchQueryValidAtom);
-  const uncommitted = useRecoilValue(searchStateUncommittedAtom);
-  const loadable = useRecoilValueLoadable(searchResultsAtom);
-  const addTextQueryNode = useAddTextQueryNode();
-  const addAttributeQueryNode = useAddAttributeQueryNode();
-  const prependCollectionQueryNode = usePrependCollectionQueryNode();
-  const pushWindowHash = usePushWindowHash();
-  const goHome = useGoHome();
-  const [open, setOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  const [suggestionTerm, setSuggestionTerm] = useRecoilState(
-    searchSuggestionTermAtom
+  const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
+    searchQueryActiveNodeMetaAtom
   );
-  const debouncedSearchSuggestions = useDebounceCallback(
-    setSuggestionTerm,
-    500
+  const rootNode = useRecoilValue(searchQueryRootNodeAtom);
+  const [term, setTerm] = useRecoilState(searchQueryTermAtom);
+  const setDTerm = useSetRecoilState(searchQueryDebouncedTermAtom);
+  const setDebouncedTerm = useDebounceCallback(setDTerm, 500);
+  const theme = useTheme();
+  const isActive = !!activeNodeMeta;
+  const borderColor = isActive
+    ? theme.palette.primary.main
+    : theme.palette.grey[400];
+  const borderWidth = isActive ? 1.5 : 1;
+  const containerRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const setInputRef = useCallback((inputElement: HTMLInputElement | null) => {
+    inputRef.current = inputElement;
+  }, []);
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const { suggestions, loading } = useRecoilValue(searchSuggestionsAtom);
+  const lastSuggestionIdx = suggestions.length - 1;
+  const onSuggestionChange = useOnSuggestionChange();
+
+  useClickAway(containerRef, () => {
+    setActiveNodeMeta(null);
+  });
+
+  useEffect(() => {
+    setActiveIdx(0);
+  }, [activeNodeMeta]);
+
+  useWindowInputKeyEvent();
+
+  const {
+    isOpen,
+    getItemProps,
+    getToggleButtonProps,
+    getMenuProps,
+    highlightedIndex,
+  } = useSelect({
+    items: suggestions,
+    isOpen: suggestions.length > 0,
+    highlightedIndex: activeIdx,
+  });
+
+  const textInput = (
+    <AutosizeInput
+      key="auto-size-input"
+      inputStyle={{
+        fontFamily: 'inherit',
+        border: 'none',
+        outline: 'none',
+        background: 'inherit',
+      }}
+      inputRef={setInputRef}
+      value={term}
+      placeholder={rootNode ? undefined : 'Search...'}
+      onChange={(evt) => {
+        if (activeIdx !== 0) {
+          setActiveIdx(0);
+        }
+        setTerm(evt.target.value);
+        setDebouncedTerm(evt.target.value);
+      }}
+      autoFocus={true}
+      onClick={(e) => e.stopPropagation()}
+      onBlur={() => {
+        if (suggestions.length > 0) {
+          inputRef?.current?.focus();
+        }
+      }}
+      onKeyDown={(evt) => {
+        switch (evt.key) {
+          case 'ArrowUp':
+            return setActiveIdx(
+              activeIdx === 0 ? lastSuggestionIdx : activeIdx - 1
+            );
+          case 'ArrowDown':
+            return setActiveIdx(
+              activeIdx === lastSuggestionIdx ? 0 : activeIdx + 1
+            );
+          case 'Enter':
+            return onSuggestionChange(suggestions[highlightedIndex]);
+          default:
+        }
+      }}
+    />
   );
-  const { suggestions, loading: suggestionsLoading } = useRecoilValue(
-    searchSuggestionsAtom(windowState?.state ?? '')
-  );
-
-  const { state, type } = windowState;
-  const isSearchable = type === 'search' || type === 'home';
-
-  const filterOnServer = state === '';
-
-  const height = window.innerHeight * 0.8;
-
-  const handleClose = () => {
-    if (!isQueryValid) {
-      return;
-    }
-
-    pushWindowHash({
-      tabId: windowState.tabId,
-      type: 'search',
-      state: serializeSearch(uncommitted),
-    });
-
-    setOpen(false);
-  };
-  const disabled = loadable.state === 'loading' || !isSearchable;
 
   return (
-    <RootContainer>
-      <Autocomplete
-        size="small"
-        open={searchOpen}
-        filterOptions={(x) => x}
-        onOpen={() => setSearchOpen(true)}
-        onClose={() => setSearchOpen(false)}
-        onChange={(_evt, onChangeValue, reason) => {
-          if (reason === 'clear') {
-            return goHome();
-          }
-
-          const value = onChangeValue[1];
-
-          if (!value) {
-            return undefined;
-          }
-
-          setSuggestionTerm('');
-
-          // value is string if enter key is pressed
-          if (typeof value === 'string') {
-            const windowType = getWindowType(value);
-
-            if (windowType !== 'search') {
-              return pushWindowHash({
-                tabId: windowState.tabId,
-                type: windowType,
-                state: value,
-              });
-            }
-
-            return addTextQueryNode(value);
-          }
-
-          switch (value.group) {
-            case 'Collections':
-              return value.meta && prependCollectionQueryNode(value.meta);
-            case 'Search':
-              return addTextQueryNode(suggestionTerm);
-            case 'Explorer':
-              return pushWindowHash({
-                tabId: windowState.tabId,
-                type: value.type,
-                state: suggestionTerm,
-              });
-            case 'Attribute':
-              if (!value.attributeMeta) {
-                return undefined;
-              }
-
-              return addAttributeQueryNode({
-                value: [value.attributeMeta.option],
-                trait: value.attributeMeta.trait,
-                operation: 'and',
-              });
-            case 'Attribute Value':
-              return (
-                value.meta &&
-                addAttributeQueryNode({
-                  value: [value.meta],
-                  trait: '',
-                  operation: 'and',
-                })
-              );
-            case 'Attribute Trait':
-              return (
-                value.meta &&
-                addAttributeQueryNode({
-                  value: [],
-                  trait: value.meta,
-                  operation: 'and',
-                })
-              );
-            default:
-              return null;
-          }
-        }}
-        freeSolo={true}
-        multiple={true}
-        fullWidth={true}
-        value={['1']}
-        options={suggestions}
-        groupBy={(option) => option.group}
-        renderOption={(props, option) => (
-          <SuggestionResult
-            key={option.key}
-            parentProps={props}
-            label={option.label}
-            showLoader={
-              suggestions[suggestions.length - 1].key === option.key &&
-              suggestionsLoading
-            }
-          />
-        )}
-        renderTags={() =>
-          isSearchable ? (
-            <SearchChips disabled={disabled} />
-          ) : (
-            <Chip
-              size="small"
-              label={`${type}: ${state}`}
-              variant="outlined"
-              onDelete={() => goHome()}
-            />
-          )
-        }
-        filterSelectedOptions={true}
-        disabled={disabled}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder={isSearchable ? 'Search...' : ''}
-            onChange={(evt) =>
-              filterOnServer
-                ? debouncedSearchSuggestions(evt.target.value)
-                : setSuggestionTerm(evt.target.value)
-            }
-          />
-        )}
-      />
-      <Button
-        variant="contained"
-        onClick={() => setOpen(true)}
-        disableElevation={true}
+    <RootContainer ref={containerRef}>
+      <InputContainer
         sx={{
-          borderRadius: 0,
+          border: 'solid',
+          borderColor,
+          borderWidth,
+          '&:hover': {
+            borderColor: theme.palette.primary.main,
+          },
         }}
-        disabled={searchQueryValid.length === 0 || disabled}
+        {...getToggleButtonProps()}
+        onClick={() => {
+          if (rootNode) {
+            setActiveNodeMeta({
+              type: 'group',
+              nodeId: rootNode.id,
+              index: rootNode.children.length,
+            });
+          }
+          inputRef?.current?.focus();
+        }}
       >
-        <ManageSearch />
-      </Button>
-      <Dialog open={open} fullWidth={true} maxWidth="xl" onClose={handleClose}>
-        <DialogContent sx={{ height }}>
-          <SearchGraph />
-        </DialogContent>
-        <DialogActions>
-          {isQueryValid ? (
-            <Button onClick={handleClose}>Done</Button>
-          ) : (
-            <>
-              <Tooltip title="Invalid Query">
-                <Warning color="warning" />
-              </Tooltip>
-              <Button disabled={true}>Done</Button>
-            </>
-          )}
-        </DialogActions>
-      </Dialog>
+        {rootNode ? (
+          <RenderQuery
+            renderQueryNode={(queryNode) => (
+              <QueryNodeChip node={queryNode} textInput={textInput} />
+            )}
+            renderTextInput={() => <QueryNodeChip textInput={textInput} />}
+          />
+        ) : (
+          <EmptyContainer>{textInput}</EmptyContainer>
+        )}
+      </InputContainer>
+      <OverlayContainer elevation={isOpen ? 8 : 0} {...getMenuProps()}>
+        {isOpen && (
+          <List
+            sx={{
+              overflow: 'auto',
+              maxHeight: window.innerHeight * 0.5,
+            }}
+          >
+            {suggestions.map((suggestion, idx) => {
+              const isActiveSuggestion = highlightedIndex === idx;
+
+              return (
+                <Typography
+                  key={suggestion.key}
+                  {...getItemProps({ item: suggestion, index: idx })}
+                  onMouseMove={undefined}
+                  sx={{
+                    paddingX: 3,
+                    paddingY: 0.5,
+                    fontSize: '80%',
+                    cursor: 'pointer',
+                    background: isActiveSuggestion
+                      ? theme.palette.grey[200]
+                      : 'auto',
+                    '&:hover': {
+                      background: isActiveSuggestion
+                        ? 'auto'
+                        : theme.palette.grey[100],
+                    },
+                  }}
+                  onClick={() => onSuggestionChange(suggestion)}
+                >
+                  {parse(suggestion.label)}
+                </Typography>
+              );
+            })}
+            {loading && (
+              <Stack sx={{ px: 3 }}>
+                <SkeletonRows />
+              </Stack>
+            )}
+          </List>
+        )}
+      </OverlayContainer>
     </RootContainer>
   );
 }

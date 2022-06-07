@@ -1,5 +1,5 @@
-import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
-import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
+import type CollectionOverviewResponseType from '../App/Window/WindowSwitch/Search/SearchOverview/CollectionOverview/_types/CollectionOverviewResponseType';
+import type OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
 import postCollectionQuery from './_helpers/postCollectionQuery';
 

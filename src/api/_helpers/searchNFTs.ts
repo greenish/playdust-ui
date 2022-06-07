@@ -2,13 +2,13 @@ import type {
   SearchRequest,
   SearchResponse,
 } from '@opensearch-project/opensearch/api/types';
-import OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
+import OpenSearchNFTSourceType from '../../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
 import osClient from './osClient';
 
-async function searchNFTs<SourceType = OpenSearchNFTSourceType>(
-  body: SearchRequest['body']
-) {
-  const results = await osClient.search<SearchResponse<SourceType>>({
+async function searchNFTs(body: SearchRequest['body']) {
+  const results = await osClient.search<
+    SearchResponse<OpenSearchNFTSourceType>
+  >({
     index: 'nft-metadata',
     body,
   });

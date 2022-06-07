@@ -7,7 +7,6 @@ import activeWindowAtom from '../_atoms/activeWindowAtom';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import WindowInput from './WindowInput/WindowInput';
-import WindowInputNew from './WindowInputNew/WindowInputNew';
 import WindowStateProvider from './WindowStateProvider/WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
 import WindowSetImagesType from './_types/WindowSetImagesType';
@@ -80,13 +79,6 @@ function Window() {
               loading={null}
               error={null}
               content={<WindowInput />}
-            />
-          </SearchInputContainer>
-          <SearchInputContainer>
-            <SuspenseBoundary
-              loading={null}
-              error={null}
-              content={<WindowInputNew />}
             />
           </SearchInputContainer>
           <ContentContainer>

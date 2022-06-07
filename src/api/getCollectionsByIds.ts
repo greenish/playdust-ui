@@ -1,4 +1,4 @@
-import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
+import OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
 import postCollectionQuery from './_helpers/postCollectionQuery';
 

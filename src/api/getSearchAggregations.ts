@@ -1,50 +1,111 @@
-import { NextApiRequest } from 'next';
-import ComposedQueryType from '../_types/ComposedQueryType';
-import type SearchAggregationResponseType from '../_types/SearchAggregationResponseType';
-import type { AttributeAggregationType } from './_helpers/getAllAttributes';
-import getAllAttributes from './_helpers/getAllAttributes';
-import getNFTQuery from './_helpers/getNFTQuery';
+import {
+  QueryDslQueryContainer,
+  SearchRequest,
+} from '@opensearch-project/opensearch/api/types';
+import { array, create, number, object, string, type } from 'superstruct';
+import getQueryDependencyPath from '../App/Window/WindowInput/_helpers/getQueryDependencyPath';
+import hasCollectionDependency from '../App/Window/WindowInput/_helpers/hasCollectionDependency';
+import SearchAggResponseType from '../App/Window/WindowInput/_types/SearchAggResponseType';
+import SearchQueryType from '../App/Window/_types/SearchQueryType';
+import getAttributeAggQuery from './_helpers/getAttributeAggQuery';
+import getNFTQueryById from './_helpers/getNFTQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postMultiNFTQuery from './_helpers/postMultiNFTQuery';
-import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
+import searchNFTs from './_helpers/searchNFTs';
 
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: {
-    query?: ComposedQueryType;
-    onlyListed?: boolean;
-  };
-}
+const buildSuggestionQuery = (
+  query: SearchQueryType,
+  activeNodeId: string
+): QueryDslQueryContainer => {
+  const depPath = getQueryDependencyPath(query, activeNodeId);
 
-const getSearchAggregations = nextApiHandler<SearchAggregationResponseType>(
-  async (
-    req: ExtendedNextApiRequest
-  ): Promise<SearchAggregationResponseType> => {
-    const { query } = req.body;
-    const onlyListed = Boolean(req.body.onlyListed);
+  const queryList = depPath.map((children) =>
+    children.map((entry) => getNFTQueryById(query, entry))
+  );
 
-    if (!query) {
-      throw new Error('No `query` supplied!');
+  const flattened = queryList.reduce<QueryDslQueryContainer[]>((acc, curr) => {
+    if (curr === undefined) {
+      return acc;
     }
 
-    const nftQuery = getNFTQuery(query, 0, undefined, onlyListed);
+    return [...acc, ...(Array.isArray(curr) ? curr : [curr])];
+  }, []);
 
-    const { attributeQueries, cleanAttributes } = getAllAttributes(
-      query,
-      nftQuery
+  return {
+    bool: {
+      must: flattened,
+    },
+  };
+};
+
+const SearchAttributeAggType = type({
+  name: object({
+    doc_count: number(),
+    trait: object({
+      doc_count_error_upper_bound: number(),
+      sum_other_doc_count: number(),
+      buckets: array(
+        object({
+          key: string(),
+          doc_count: number(),
+          value: object({
+            doc_count_error_upper_bound: number(),
+            sum_other_doc_count: number(),
+            buckets: array(
+              object({
+                key: string(),
+                doc_count: number(),
+              })
+            ),
+          }),
+        })
+      ),
+    }),
+  }),
+});
+
+const SearchSuggestionInputType = type({
+  query: SearchQueryType,
+  activeNodeId: string(),
+});
+
+const getSearchAggregationsNew = nextApiHandler<SearchAggResponseType>(
+  async (req) => {
+    const { query, activeNodeId } = create(req.body, SearchSuggestionInputType);
+    const suggestionNFTQuery = buildSuggestionQuery(query, activeNodeId);
+    const activeNode = query.nodes[activeNodeId];
+    const isAttributeNode =
+      activeNode.type === 'query' && activeNode.field === 'attribute';
+
+    if (!hasCollectionDependency(query, activeNodeId)) {
+      return [];
+    }
+
+    const aggQuery = getAttributeAggQuery();
+    const aggRequest: SearchRequest['body'] = {
+      ...aggQuery,
+      query: suggestionNFTQuery,
+    };
+
+    const results = await searchNFTs(aggRequest);
+    const aggregations = create(
+      results.body.aggregations,
+      SearchAttributeAggType
     );
 
-    const attributeMultiQuery = queriesToMultiSearch(
-      attributeQueries,
-      'nft-metadata'
-    );
+    const payload = aggregations.name.trait.buckets.map((bucket) => ({
+      key: bucket.key,
+      values: bucket.value.buckets.map((bucketValue) => ({
+        value: bucketValue.key,
+        count: bucketValue.doc_count,
+      })),
+    }));
 
-    const attributeResults = await postMultiNFTQuery<AttributeAggregationType>(
-      attributeMultiQuery
-    );
-    const attributes = cleanAttributes(attributeResults);
+    if (isAttributeNode) {
+      return payload.filter((entry) => entry.key === activeNode.key);
+    }
 
-    return { attributes };
+    return payload;
   }
 );
 
-export default getSearchAggregations;
+export default getSearchAggregationsNew;

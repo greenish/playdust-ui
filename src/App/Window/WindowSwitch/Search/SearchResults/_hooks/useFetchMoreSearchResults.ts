@@ -3,10 +3,10 @@ import {
   useRecoilValueLoadable,
   useSetRecoilState,
 } from 'recoil';
-import searchResultsAtom from '../../../../_atoms/searchResultsAtom';
-import searchResultsMore from '../../../../_atoms/searchResultsMoreAtom';
 import searchStateSerializedAtom from '../../../../_atoms/searchStateSerializedAtom';
-import fetchSearchResults from '../../../../_helpers/fetchSearchResults';
+import searchResultsAtom from '../../_atoms/searchResultsAtom';
+import searchResultsMore from '../../_atoms/searchResultsMoreAtom';
+import fetchSearchResults from '../../_helpers/fetchSearchResults';
 
 const useFetchMoreSearchResults = () => {
   const setter = useSetRecoilState(searchResultsMore);

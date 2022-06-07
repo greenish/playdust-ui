@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import searchResultsAtom from '../../../_atoms/searchResultsAtom';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
+import searchResultsAtom from '../_atoms/searchResultsAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoTokensContainer = styled.div`
@@ -24,6 +24,7 @@ function SearchResults() {
       </NoTokensContainer>
     );
   }
+
   return (
     <TokenGrid
       initialized={hasValue}

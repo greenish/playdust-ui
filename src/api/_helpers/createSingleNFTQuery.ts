@@ -1,6 +1,6 @@
 import type { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import type QueryNodeType from '../../_types/QueryNodeType';
-import type SearchFilterUnionType from '../../_types/SearchFilterUnionType';
+import QueryNodeType from '../../App/Window/_types/QueryNodeType';
+import SearchFilterUnionType from '../../App/Window/_types/SearchFilterUnionType';
 
 const getRangeField = (field: SearchFilterUnionType) => {
   switch (field) {
@@ -21,7 +21,7 @@ const getRangeField = (field: SearchFilterUnionType) => {
 const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
   switch (child.field) {
     case 'attribute': {
-      const { trait, value } = child;
+      const { key, value } = child;
 
       return {
         nested: {
@@ -29,21 +29,17 @@ const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
           query: {
             bool: {
               must: [
-                trait !== ''
+                key !== ''
                   ? {
                       match: {
-                        'offChainData.attributes.trait_type.keyword': trait,
+                        'offChainData.attributes.trait_type.keyword': key,
                       },
                     }
                   : {},
-                value?.length > 0
+                value !== ''
                   ? {
-                      bool: {
-                        should: value.map((entry) => ({
-                          match: {
-                            'offChainData.attributes.value.keyword': entry,
-                          },
-                        })),
+                      match: {
+                        'offChainData.attributes.value.keyword': value,
                       },
                     }
                   : {},
