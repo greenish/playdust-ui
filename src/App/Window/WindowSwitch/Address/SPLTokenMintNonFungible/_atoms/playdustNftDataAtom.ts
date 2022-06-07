@@ -1,9 +1,8 @@
 import { MetadataData } from '@metaplex-foundation/mpl-token-metadata';
 import { selector } from 'recoil';
 import MetaplexOffChainDataType from '../../../../../../_types/MetaplexOffChainDataType';
-import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType';
-import frontendApi from '../../../../_helpers/frontendApi';
 import addressStateAtom from '../../_atoms/addressStateAtom';
+import nftByMintAtom from '../../_atoms/nftByMintAtom';
 import safePubkeyString from '../../_helpers/safePubkeyString';
 
 type PlaydustNftData = {
@@ -17,16 +16,14 @@ type PlaydustNftData = {
 
 const playdustNftDataAtom = selector<PlaydustNftData | null>({
   key: 'playdustNftDataAtom',
-  get: async ({ get }) => {
+  get: ({ get }) => {
     const addressState = get(addressStateAtom);
 
     if (!addressState) {
       return null;
     }
 
-    const { data } = await frontendApi.post<OpenSearchNFTSourceType>(
-      `/mint?address=${safePubkeyString(addressState.pubkey)}`
-    );
+    const data = get(nftByMintAtom(safePubkeyString(addressState.pubkey)));
 
     if (!data || !data.offChainData || !data.data) {
       return null;

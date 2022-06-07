@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
-import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType';
-import frontendApi from '../../../../_helpers/frontendApi';
-import tokenAccountsForAddressAtom from '../../_atoms/tokenAccountsForAddressAtom';
+import OpenSearchNFTSourceType from '../../../../../_types/OpenSearchNFTSourceType';
+import frontendApi from '../../../_helpers/frontendApi';
+import tokenAccountsForAddressAtom from './tokenAccountsForAddressAtom';
 
 const nftsForAddressAtom = selector<OpenSearchNFTSourceType[]>({
   key: 'nftsForAddressAtom',
