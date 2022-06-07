@@ -39,11 +39,6 @@ function WindowStateProvider({
   }, [profileState]);
 
   useEffect(() => {
-    setConnectedWallet(connectedWallet);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [connectedWallet]);
-
-  useEffect(() => {
     setSetWindowImages(() => setWindowImages);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setWindowImages]);
