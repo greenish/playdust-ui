@@ -19,8 +19,8 @@ function makeUseChangeSearchQuery<GetNextStateArgs extends unknown[]>(
     const pushWindowHash = usePushWindowHash();
     const windowState = useRecoilValue(windowStateAtom);
     const serialized = useRecoilValue(searchStateSerializedAtom);
-    const { query, sort, onlyListed } = parseSearch(serialized)
-    const setUncommittedState = useSetRecoilState(searchStateUncommittedAtom)
+    const { query, sort, onlyListed } = parseSearch(serialized);
+    const setUncommittedState = useSetRecoilState(searchStateUncommittedAtom);
     const getNextState = useGetNextState();
 
     return (...input: GetNextStateArgs) => {

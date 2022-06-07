@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
-import SearchQueryNodeType from '../../_types/SearchQueryNodeType';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchStateAtom from '../../_atoms/searchStateAtom';
+import SearchQueryNodeType from '../../_types/SearchQueryNodeType';
 
 const searchQueryActiveNodeAtom = selector<SearchQueryNodeType | null>({
   key: 'searchQueryActiveNodeAtom',

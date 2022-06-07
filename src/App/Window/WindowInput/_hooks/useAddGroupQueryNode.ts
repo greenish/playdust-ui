@@ -2,7 +2,6 @@ import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import searchQueryActiveGroupIdxAtom from '../../_atoms/searchQueryActiveGroupIdxAtom';
-import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
 import searchStateAtom from '../../_atoms/searchStateAtom';
@@ -11,6 +10,7 @@ import makeUseChangeSearchQuery from '../../_hooks/makeUseChangeSearchQuery';
 import useGetUpdateSearchQuery from '../../_hooks/useGetUpdateSearchQuery';
 import GroupNodeType from '../../_types/GroupNodeType';
 import SearchQueryType from '../../_types/SearchQueryType';
+import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
 
 const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
   const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);

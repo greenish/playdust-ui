@@ -1,12 +1,12 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import usePushWindowHash from '../../../_hooks/usePushWindowHash';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
-import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
 import windowStateAtom from '../../_atoms/windowStateAtom';
 import useAddAttributeQueryNode from '../../_hooks/useAddAttributeQueryNode';
 import useAddCollectionQueryNode from '../../_hooks/useAddCollectionQueryNode';
 import useUpdateAttributeQueryNode from '../../_hooks/useUpdateAttributeQueryNode';
 import searchQueryDebouncedTermAtom from '../_atoms/searchQueryDebouncedTermAtom';
+import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import useAddGroupQueryNode from './useAddGroupQueryNode';
 import useAddTextQueryNode from './useAddTextQueryNode';

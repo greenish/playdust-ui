@@ -2,12 +2,12 @@ import { nanoid } from 'nanoid';
 import { useRecoilValue } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
-import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
 import initializeSearchQuery from '../../_helpers/initializeSearchQuery';
 import makeUseChangeSearchQuery from '../../_hooks/makeUseChangeSearchQuery';
 import useGetAddQueryNode from '../../_hooks/useGetAddQueryNode';
 import type SearchSortType from '../../_types/SearchSortType';
 import TextQueryNodeType from '../../_types/TextQueryNodeType';
+import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
 
 const useAddTextQueryNode = makeUseChangeSearchQuery(() => {
   const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);

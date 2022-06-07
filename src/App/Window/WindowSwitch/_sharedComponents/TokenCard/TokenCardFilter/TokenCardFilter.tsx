@@ -11,8 +11,8 @@ import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import useRemoveQueryNode from '../../../../_hooks/useRemoveQueryNode';
-import findTopLevelSearchQueryAttributeAtom from './_atoms/findTopLevelSearchQueryAttributeAtom';
 import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
+import findTopLevelSearchQueryAttributeAtom from './_atoms/findTopLevelSearchQueryAttributeAtom';
 import useAddTopLevelQueryNode from './_hooks/useAddTopLevelQueryNode';
 
 interface TokenCardFilterProps {
