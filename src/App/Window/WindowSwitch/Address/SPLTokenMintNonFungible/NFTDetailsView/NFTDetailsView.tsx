@@ -1,7 +1,7 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ContentContainer from '../../_sharedComponents/ContentContainer';
+import ContentContainer from '../../../_sharedComponents/ContentContainer';
 import playdustNftDataAtom from '../_atoms/playdustNftDataAtom';
 import NFTDetailsRenderMedia from './NFTDetailsRenderMedia';
 

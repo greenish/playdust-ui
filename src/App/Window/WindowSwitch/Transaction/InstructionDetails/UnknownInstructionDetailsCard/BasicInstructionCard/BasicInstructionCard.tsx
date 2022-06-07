@@ -9,7 +9,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { SignatureResult, TransactionInstruction } from '@solana/web3.js';
+import { SignatureResult } from '@solana/web3.js';
 import React, { PropsWithChildren, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import LabeledAddressLink from '../../../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
@@ -60,7 +60,7 @@ function BasicInstructionCard(
     children,
   } = props;
 
-  const rawDetails = useRecoilValue(rawPopulatedTransactionAtom);
+  const rawPopulatedTransaction = useRecoilValue(rawPopulatedTransactionAtom);
 
   const [showRaw, setShowRaw] = useState(defaultRaw || false);
 
@@ -69,13 +69,27 @@ function BasicInstructionCard(
   const [resultColor] = ixResult(result, index);
 
   const raw =
-    rawDetails && childIndex === undefined
-      ? rawDetails.transaction.instructions[index]
+    rawPopulatedTransaction && childIndex === undefined
+      ? rawPopulatedTransaction.transaction.instructions[index]
       : undefined;
 
   const label = `#${index + 1}${
     childIndex !== undefined ? `.${childIndex + 1}` : ''
   }`;
+
+  let rawDetails;
+
+  if ('parsed' in ix) {
+    rawDetails = (
+      <RawParsedDetails ix={ix}>
+        {raw ? <RawDetails ix={raw} /> : null}
+      </RawParsedDetails>
+    );
+  } else if ('data' in ix) {
+    rawDetails = <>ok</>;
+  } else {
+    rawDetails = <RawDetails ix={ix} />;
+  }
 
   return (
     <Box>
@@ -96,13 +110,7 @@ function BasicInstructionCard(
                     <LabeledAddressLink to={ix.programId} allowCopy={true} />
                   </TableCell>
                 </TableRow>
-                {'parsed' in ix ? (
-                  <RawParsedDetails ix={ix}>
-                    {raw ? <RawDetails ix={raw} /> : null}
-                  </RawParsedDetails>
-                ) : (
-                  <RawDetails ix={ix as TransactionInstruction} />
-                )}
+                {rawDetails}
               </>
             ) : (
               children

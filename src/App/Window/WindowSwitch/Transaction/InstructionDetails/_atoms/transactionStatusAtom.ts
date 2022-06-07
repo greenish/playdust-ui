@@ -29,40 +29,35 @@ async function fetchTransactionStatus(
   endpoint: string,
   signature: TransactionSignature
 ) {
-  try {
-    const connection = new Connection(endpoint);
+  const connection = new Connection(endpoint);
 
-    const { value } = await connection.getSignatureStatus(signature, {
-      searchTransactionHistory: true,
-    });
+  const { value } = await connection.getSignatureStatus(signature, {
+    searchTransactionHistory: true,
+  });
 
-    let info = null;
-    if (value !== null) {
-      let confirmations: Confirmations;
-      if (typeof value.confirmations === 'number') {
-        confirmations = value.confirmations;
-      } else {
-        confirmations = 'max';
-      }
-
-      const blockTime = await connection.getBlockTime(value.slot);
-
-      const timestamp: Timestamp =
-        blockTime !== null ? blockTime : 'unavailable';
-
-      info = {
-        slot: value.slot,
-        timestamp,
-        confirmations,
-        confirmationStatus: value.confirmationStatus,
-        result: { err: value.err },
-      };
+  let info = null;
+  if (value !== null) {
+    let confirmations: Confirmations;
+    if (typeof value.confirmations === 'number') {
+      confirmations = value.confirmations;
+    } else {
+      confirmations = 'max';
     }
 
-    return { signature, info };
-  } catch (error) {
-    return null;
+    const blockTime = await connection.getBlockTime(value.slot);
+
+    const timestamp: Timestamp = blockTime !== null ? blockTime : 'unavailable';
+
+    info = {
+      slot: value.slot,
+      timestamp,
+      confirmations,
+      confirmationStatus: value.confirmationStatus,
+      result: { err: value.err },
+    };
   }
+
+  return { signature, info };
 }
 
 const transactionStatusAtom = selector<TransactionStatus | null>({

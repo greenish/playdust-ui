@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
-import ContentContainer from '../_sharedComponents/ContentContainer';
+import ContentContainer from '../../_sharedComponents/ContentContainer';
 import MetaplexCreators from './MetaplexCreators';
 import MetaplexNFTAttributes from './MetaplexNFTAttributes';
 import MetaplexRawOffChainMetadata from './MetaplexRawOffChainMetadata';
