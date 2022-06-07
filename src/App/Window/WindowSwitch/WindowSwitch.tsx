@@ -4,6 +4,7 @@ import windowStateAtom from '../_atoms/windowStateAtom';
 import Address from './Address/Address';
 import Home from './Home/Home';
 import Search from './Search/Search';
+import Block from './Block/Block';
 
 function WindowSwitch() {
   const windowState = useRecoilValue(windowStateAtom);
@@ -16,7 +17,7 @@ function WindowSwitch() {
     case 'address':
       return <Address />;
     case 'block':
-      return null;
+      return <Block />;
     case 'tx':
       return null;
     case 'epoch':
