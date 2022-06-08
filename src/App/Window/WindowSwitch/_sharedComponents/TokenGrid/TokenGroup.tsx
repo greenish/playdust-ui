@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import { ArrowForwardIos } from '@mui/icons-material';
 import { Skeleton, Typography } from '@mui/material';
 import React, { useCallback } from 'react';
-import SearchWindowScroller from '../../Search/SearchWindowScroller/SearchWindowScroller';
 import Link from '../Link';
 import TokenCard from '../TokenCard/TokenCard';
+import VirtualizedGrid from './_sharedComponents/VirtualizedGrid';
 import type TokenGroupProps from './_types/TokenGroupProps';
 import VirtualizedGridChildProps from './_types/VirtualizedGridChildProps';
 
@@ -116,7 +116,7 @@ function TokenGroup(props: TokenGroupProps) {
   >(({ index }) => <RowRenderer index={index} parentProps={props} />, [props]);
 
   return (
-    <SearchWindowScroller
+    <VirtualizedGrid
       initialized={props.initialized}
       getRowMeta={(_width, height, isLoading) => {
         const rowHeight =
@@ -130,7 +130,12 @@ function TokenGroup(props: TokenGroupProps) {
           : Math.ceil(height / rowHeight);
         const hasMore = props.totalRows > rowCount;
 
-        return { rowCount, rowHeight, hasMore, cardsPerRow: 1 };
+        return {
+          rowCount,
+          rowHeight,
+          hasMore,
+          cardsPerRow: 1,
+        };
       }}
       rowRenderer={rowWrapper}
       next={props.next}

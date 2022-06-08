@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { Box } from '@mui/material';
 import React, { useCallback } from 'react';
-import SearchWindowScroller from '../../Search/SearchWindowScroller/SearchWindowScroller';
 import TokenCard from '../TokenCard/TokenCard';
+import VirtualizedGrid from './_sharedComponents/VirtualizedGrid';
 import type TokenListProps from './_types/TokenListProps';
 import type VirtualizedGridChildProps from './_types/VirtualizedGridChildProps';
 
@@ -25,8 +25,15 @@ function RowRenderer({ parentProps, gridProps }: RowRendererProps) {
   const tokenRange = Array.from(Array(cardsPerRow).keys());
   const justifyContent = cardsPerRow > 2 ? 'space-between' : 'space-evenly';
 
+  const imageSize = gridProps.imageSize || parentProps.imageSize;
+
   return (
-    <RowContainer style={{ justifyContent, marginRight: parentProps.cardGap }}>
+    <RowContainer
+      style={{
+        justifyContent,
+        marginRight: parentProps.cardGap,
+      }}
+    >
       {tokenRange.map((tokenIdx) => {
         const actualIdx = startingIdx + tokenIdx;
         const metadata = tokens[actualIdx];
@@ -36,7 +43,7 @@ function RowRenderer({ parentProps, gridProps }: RowRendererProps) {
             <TokenCard
               skeleton={true}
               key={actualIdx}
-              imageSize={parentProps.imageSize}
+              imageSize={imageSize}
               contentHeight={parentProps.contentHeight}
             />
           );
@@ -46,15 +53,15 @@ function RowRenderer({ parentProps, gridProps }: RowRendererProps) {
           <TokenCard
             key={metadata?.mint || actualIdx}
             metadata={metadata}
-            imageSize={parentProps.imageSize}
+            imageSize={imageSize}
             contentHeight={parentProps.contentHeight}
           />
         ) : (
           <div
             key={tokenIdx}
             style={{
-              width: parentProps.imageSize,
-              height: parentProps.imageSize,
+              width: imageSize,
+              height: imageSize,
             }}
           />
         );
@@ -82,7 +89,7 @@ function TokenList(props: TokenListProps) {
   );
 
   return (
-    <SearchWindowScroller
+    <VirtualizedGrid
       content={
         props.content && (
           <Box style={{ margin: cardGap, marginLeft: 0 }}>{props.content}</Box>
@@ -93,7 +100,9 @@ function TokenList(props: TokenListProps) {
       getRowMeta={(width, height, isLoading) => {
         const cardsPerRow = Math.floor(width / (imageSize + cardGap)) || 1;
 
-        const rowHeight = imageSize + contentHeight + rowGap;
+        const dynamicImageSize = width / cardsPerRow - cardGap;
+
+        const rowHeight = dynamicImageSize + contentHeight + rowGap;
 
         const cardRows = initialized
           ? Math.ceil(tokens.length / cardsPerRow) || 0
@@ -112,6 +121,7 @@ function TokenList(props: TokenListProps) {
         const hasMore = total > tokens.length;
 
         return {
+          imageSize: dynamicImageSize,
           rowHeight,
           rowCount,
           hasMore,

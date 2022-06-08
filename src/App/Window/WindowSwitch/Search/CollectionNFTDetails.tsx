@@ -1,8 +1,47 @@
-import { Box, Card, Typography } from '@mui/material';
-import React from 'react';
+import { Box, Card, Skeleton, styled, Typography } from '@mui/material';
+import React, { ReactNode } from 'react';
+import OpenSearchCollectionSourceType from '../../_types/OpenSearchCollectionSourceType';
+import humanizeCollection from '../_helpers/humanizeCollection';
+import humanizeSolana from '../_helpers/humanizeSolana';
 
-function OverviewItem() {
-  return (
+const border = '1px solid #EEEEEE';
+
+type Item = {
+  label: string;
+  getValue: (data: OpenSearchCollectionSourceType) => ReactNode;
+};
+
+const items: Item[] = [
+  {
+    label: 'Total Volume',
+    getValue: ({ totalVolume }) => humanizeSolana(totalVolume),
+  },
+  {
+    label: 'Floor Price',
+    getValue: ({ floorPrice }) => humanizeSolana(floorPrice),
+  },
+  {
+    label: 'Items',
+    getValue: ({ elementCount }) =>
+      elementCount && elementCount.toLocaleString(),
+  },
+  {
+    label: 'Listed Items',
+    getValue: () => null,
+  },
+  {
+    label: 'Listed In',
+    getValue: () => null,
+  },
+];
+
+interface OverviewItemProps {
+  label: string;
+  value: ReactNode;
+}
+
+function OverviewItem(props: OverviewItemProps) {
+  return props.value ? (
     <Box
       sx={{
         flexGrow: 1,
@@ -12,55 +51,85 @@ function OverviewItem() {
         display: 'flex',
         flexDirection: 'column',
         ':not(:last-child)': {
-          borderRight: '1px solid #EEEEEE',
+          borderRight: border,
         },
       }}
     >
-      <div>Total Volume</div>
-      <div>23.4</div>
+      <Box>{props.label}</Box>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        {props.value}
+      </Box>
     </Box>
-  );
+  ) : null;
 }
 
-function CollectionNFTDetails() {
+const CardContainer = styled(Card)({
+  display: 'flex',
+  backgroundColor: 'white',
+  border,
+  flexDirection: 'column',
+  padding: 24,
+  width: '100%',
+});
+
+const ItemsContainer = styled(Box)({
+  marginTop: 24,
+  border,
+  display: 'flex',
+  justifyContent: 'space-around',
+});
+
+interface CollectionNFTDetailsProps {
+  overview: OpenSearchCollectionSourceType | null;
+  skeleton?: boolean;
+}
+
+function CollectionNFTDetails(props: CollectionNFTDetailsProps) {
+  if (props.skeleton) {
+    return (
+      <CardContainer>
+        <Skeleton height={50} />
+        <Skeleton height={150} />
+        <ItemsContainer>
+          {items.map((item) => (
+            <OverviewItem
+              key={item.label}
+              label={item.label}
+              value={<Skeleton sx={{ width: '75%' }} />}
+            />
+          ))}
+        </ItemsContainer>
+      </CardContainer>
+    );
+  }
+
+  if (!props.overview) {
+    return null;
+  }
+
   return (
-    <Card
-      sx={{
-        display: 'flex',
-        backgroundColor: 'white',
-        border: '1px solid #EEEEEE',
-        pb: 0,
-      }}
-    >
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ p: 3 }}>
-          <Typography gutterBottom={true} variant="h5" component="div">
-            Degenerate Ape Academy
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Our mission here at the academy is simple: Take 10,000 of the
-            smoothest brained apes, put them all in one location and let the
-            mayhem ensue. The academy was founded on the principles of
-            friendship making, crayon eating and absolute, unregulated,
-            deplorable, degenerate behaviour. Welcome fellow apes, to the
-            Degenerate Ape Academy.
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            borderTop: '1px solid #EEEEEE',
-            display: 'flex',
-            justifyContent: 'space-around',
-          }}
-        >
-          <OverviewItem />
-          <OverviewItem />
-          <OverviewItem />
-          <OverviewItem />
-          <OverviewItem />
-        </Box>
-      </Box>
-    </Card>
+    <CardContainer>
+      <Typography gutterBottom={true} variant="h5" component="div">
+        {humanizeCollection(props.overview)}
+      </Typography>
+      {props.overview.description && (
+        <Typography variant="body2" color="text.secondary">
+          {props.overview.description}
+        </Typography>
+      )}
+      <ItemsContainer>
+        {items.map(
+          (item) =>
+            props.overview && (
+              <OverviewItem
+                key={item.label}
+                label={item.label}
+                value={item.getValue(props.overview)}
+              />
+            )
+        )}
+      </ItemsContainer>
+    </CardContainer>
   );
 }
 

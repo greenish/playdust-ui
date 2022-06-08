@@ -3,6 +3,7 @@ import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
 import CollectionNFTDetails from '../CollectionNFTDetails';
+import collectionOverviewAtom from '../SearchOverview/CollectionOverview/_atoms/collectionOverviewAtom';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
@@ -12,6 +13,21 @@ const NoTokensContainer = styled.div`
   justify-content: center;
   margin-top: 64px;
 `;
+
+function CollectionOverview() {
+  const overview = useRecoilValueLoadable(collectionOverviewAtom);
+
+  return (
+    <CollectionNFTDetails
+      skeleton={overview.state === 'loading'}
+      overview={
+        overview.state === 'hasValue' && overview.contents
+          ? overview.contents
+          : null
+      }
+    />
+  );
+}
 
 function SearchResults() {
   const loadable = useRecoilValueLoadable(searchResultsAtom);
@@ -29,14 +45,14 @@ function SearchResults() {
   return (
     <TokenGrid
       initialized={hasValue}
-      imageSize={225}
+      imageSize={200}
       contentHeight={70}
       cardGap={16}
       rowGap={16}
       tokens={hasValue ? loadable.contents.nfts : []}
       total={hasValue ? loadable.contents.total : 0}
       next={fetchMoreSearchResults}
-      content={<CollectionNFTDetails />}
+      content={<CollectionOverview />}
     />
   );
 }
