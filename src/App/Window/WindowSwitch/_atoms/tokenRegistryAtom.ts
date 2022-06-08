@@ -5,7 +5,7 @@ import {
   TokenListProvider,
 } from '@solana/spl-token-registry';
 import { selector } from 'recoil';
-import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import solanaClusterAtom from '../../../_atoms/solanaClusterAtom';
 
 const tokenRegistryAtom = selector<TokenInfoMap>({
   key: 'tokenRegistry',

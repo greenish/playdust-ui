@@ -1,87 +1,139 @@
-import { Box, Typography } from '@mui/material'
+import { DateTime } from 'luxon';
 import React from 'react';
-import ExplorerAccordion from '../Address/_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from '../Address/_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from '../Address/_sharedComponents/ExplorerGridRow';
-import ExplorerLink from '../Address/_sharedComponents/ExplorerLink/ExplorerLink';
-/* import lamportsToSol from '../../helpers/lamportsToSol'
-* import toLocaleString from '../../helpers/toLocaleString'
- *  */
+import { useRecoilValue } from 'recoil';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
+import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
+import lamportsToSol from '../_helpers/lamportsToSol';
+import blockStateAtom from './_atoms/blockStateAtom';
+// import solPriceAtom from './_atoms/solPriceAtom';
 
-const BlockOverview = () => {
-    const block = useRecoilValue(blockStateAtom);
-    const solPrice = useRecoilValue(solPriceAtom);
+function BlockOverview() {
+  const block = useRecoilValue(blockStateAtom);
+  const solPrice = 1; // useRecoilValue(solPriceAtom);
 
-    if (!block) {
-        return <div>Block not found</div>
+  if (!block) {
+    return <div>Block not found</div>;
+  }
+
+  const {
+    blockTime,
+    blockhash,
+    parentSlot,
+    previousBlockhash,
+    rewards,
+    transactions,
+  } = block;
+
+  const epoch = '';
+  let slotLeader = '';
+  const parentSlotLeader = '';
+  const childSlot = '';
+  const childSlotLeader = '';
+
+  const rewardTotal = (rewards || []).reduce((accum, reward) => {
+    if (reward.rewardType === 'Fee') {
+      slotLeader = reward.pubkey;
     }
+    return accum + reward.lamports;
+  }, 0);
 
-    const {
-        blockTime,
-        blockhash,
-        parentSlot,
-        previousBlockhash,
-        rewards,
-        transactions,
-    } = block;
+  const rewardTotalInSOL = lamportsToSol(rewardTotal);
+  const valueOfSOL = rewardTotalInSOL * solPrice;
+  const reward = `${rewardTotalInSOL} SOL ($${valueOfSOL}) SOL price ${solPrice}`;
 
-    let leader = '';
+  const localBlockTime = blockTime
+    ? DateTime.fromMillis(blockTime * 1000).toLocaleString(
+        DateTime.DATETIME_FULL
+      )
+    : '';
+  const utcBlockTime = blockTime
+    ? DateTime.fromMillis(blockTime * 1000).toLocaleString(
+        DateTime.DATETIME_FULL
+      )
+    : '';
 
-    const rewardTotal = (rewards || []).reduce((accum: number, reward: any) => {
-        if (reward.rewardType === 'Fee') {
-            leader = reward.pubkey
-        }
-        return accum + reward.lamports
-    }, 0)
+  return (
+    <ExplorerAccordion
+      id="block-overview"
+      title="Block Overview"
+      expanded={true}
+      content={
+        <ExplorerGrid>
+          <ExplorerGridRow label="Block Hash" value={<pre>{blockhash}</pre>} />
 
-    const rewardTotalInSOL = lamportsToSol(rewardTotal);
-    const valueOfSOL = rewardTotalInSOL * solPrice;
-    const reward = `${rewardTotalInSOL} SOL (\$${valueOfSOL}) SOL price ${solPrice}`;
+          <ExplorerGridRow label="Slot" value={parentSlot + 1} />
 
-    const localBlockTime = toLocaleString(blockTime);
-
-    return (
-        <ExplorerAccordion
-            id="block-overview"
-            title="Block Overview"
-            expanded={true}
-            content={
-                <ExplorerGrid>
-                    <ExplorerGridRow
-                        label="Block"
-                        value={<>
-                            #{parentSlot + 1} <SlotLink to={parentSlot} label="Prev" />{' '}
-                            <ExplorerLink type="slot" to={parentSlot + 2} label="Next" />
-                        </>} />
-
-                    <ExplorerGridRow
-                        label="Timestamp (Local)"
-                        value={localBlockTime} />
-
-                    <ExplorerGridRow
-                        label="Block Hash"
-                        value={blockhash} />
-
-                    <ExplorerGridRow
-                        label="Leader"
-                        value={leader} />
-
-                    <ExplorerGridRow
-                        label="Reward"
-                        value={reward} />
-
-                    <ExplorerGridRow
-                        label="Transactions Total"
-                        value={`${transactions.length} transactions (successful?)`} />
-
-                    <ExplorerGridRow
-                        label="Previous Block Hash"
-                        value={previousBlockhash} />
-
-                </ExplorerGrid>
+          <ExplorerGridRow
+            label="Slot Leader"
+            value={
+              <ExplorerLink type="block" to={slotLeader} allowCopy={true} />
             }
-        />
-    );
+          />
+
+          <ExplorerGridRow
+            label="Timestamp (Local)"
+            value={<pre>{localBlockTime}</pre>}
+          />
+
+          <ExplorerGridRow
+            label="Timestamp (UTC)"
+            value={<pre>{localBlockTime}</pre>}
+          />
+
+          <ExplorerGridRow label="Epoch" value={<pre>{epoch}</pre>} />
+
+          <ExplorerGridRow
+            label="Parent Blockhash"
+            value={<pre>{previousBlockhash}</pre>}
+          />
+
+          <ExplorerGridRow
+            label="Parent Slot"
+            value={<ExplorerLink type="block" to={parentSlot} />}
+          />
+
+          <ExplorerGridRow
+            label="Parent Slot Leader"
+            value={
+              <ExplorerLink
+                type="block"
+                to={parentSlotLeader}
+                allowCopy={true}
+              />
+            }
+          />
+
+          <ExplorerGridRow
+            label="Child Slot"
+            value={<ExplorerLink type="block" to={childSlot} />}
+          />
+
+          <ExplorerGridRow
+            label="Child Slot Leader"
+            value={
+              <ExplorerLink
+                type="block"
+                to={childSlotLeader}
+                allowCopy={true}
+              />
+            }
+          />
+
+          <ExplorerGridRow
+            label="Processed Transactions"
+            value={transactions.length}
+          />
+
+          <ExplorerGridRow
+            label="Successful Transactions"
+            value={transactions.length}
+          />
+        </ExplorerGrid>
+      }
+    />
+  );
 }
 
 export default BlockOverview;

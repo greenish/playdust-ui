@@ -1,17 +1,24 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import blockStateAtom from './_atoms/blockStateAtom';
+import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import ContentContainer from '../_sharedComponents/ContentContainer';
+import BlockDetails from './BlockDetails/BlockDetails';
+import BlockOverview from './BlockOverview';
 
-export const Block = () => {
-  const block = useRecoilValue(blockStateAtom);
-  const slot = Number(state);
-
+function Block() {
   return (
-    <>
-      <BlockOverview />
-      <BlockDetails />
-    </>
-  )
+    <ContentContainer>
+      <SuspenseBoundary
+        content={<BlockOverview />}
+        error={null}
+        loading={null}
+      />
+      <SuspenseBoundary
+        content={<BlockDetails />}
+        error={null}
+        loading={null}
+      />
+    </ContentContainer>
+  );
 }
 
-export default Block
+export default Block;

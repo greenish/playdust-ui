@@ -3,17 +3,14 @@ import React from 'react';
 import lamportsToSolString from './_helpers/lamportsToSolString';
 
 interface SolBalanceProps {
-  lamports?: number | BN;
+  lamports?: number | BN | null;
   maximumFractionDigits?: number;
 }
 
-function SolBalance({
-  lamports = 0,
-  maximumFractionDigits = 9,
-}: SolBalanceProps) {
+function SolBalance({ lamports, maximumFractionDigits = 9 }: SolBalanceProps) {
   return (
     <span>
-      <pre>◎ {lamportsToSolString(lamports, maximumFractionDigits)}</pre>
+      <pre>◎ {lamportsToSolString(lamports ?? 0, maximumFractionDigits)}</pre>
     </span>
   );
 }

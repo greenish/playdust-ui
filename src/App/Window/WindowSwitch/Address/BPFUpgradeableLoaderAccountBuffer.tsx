@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import parsedBPFUpgradeableLoaderAccountAtom from './_atoms/parsedBPFUpgradeableLoaderAccountAtom';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from './_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
-import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
+import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 
 function BPFUpgradeableLoaderAccountBuffer() {
   const parsedBPFUpgradeableLoaderAccount = useRecoilValue(

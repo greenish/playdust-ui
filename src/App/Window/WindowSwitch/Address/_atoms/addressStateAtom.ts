@@ -2,10 +2,10 @@ import { PublicKey } from '@solana/web3.js';
 import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
-import addressLabel from '../_helpers/addressLabel';
+import addressLabel from '../../_helpers/addressLabel';
 import safePubkey from '../_helpers/safePubkey';
 import AddressExplorerType from '../_types/AddressExplorerType';
-import tokenRegistryAtom from './tokenRegistryAtom';
+import tokenRegistryAtom from '../../_atoms/tokenRegistryAtom';
 
 const addressStateAtom = selector<AddressExplorerType | null>({
   key: 'addressStateAtom',

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ellipsisify from '../../../../../_helpers/ellipsisify';
-import encodeWindowHash from '../../../../../_helpers/encodeWindowHash';
-import windowStateAtom from '../../../../_atoms/windowStateAtom';
-import Link from '../../../_sharedComponents/Link';
+import ellipsisify from '../../../../_helpers/ellipsisify';
+import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
+import Link from '../_sharedComponents/Link';
 import safePubkeyString from '../../_helpers/safePubkeyString';
 import ExplorerLinkProps from '../_types/ExplorerLinkProps';
 import CopyButton from './CopyButton';

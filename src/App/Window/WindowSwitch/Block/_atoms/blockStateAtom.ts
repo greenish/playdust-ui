@@ -1,5 +1,5 @@
-import { BlockResponse, Connection } from '@solana/web3.js'
-import { selector } from 'recoil'
+import { BlockResponse, Connection } from '@solana/web3.js';
+import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
 // import BlockExplorerType from '../_types/BlockExplorerType';

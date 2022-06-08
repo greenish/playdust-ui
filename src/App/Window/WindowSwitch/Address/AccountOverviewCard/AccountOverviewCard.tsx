@@ -2,10 +2,10 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import addressStateAtom from '../_atoms/addressStateAtom';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
-import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
+import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
 import AccountDomainsRow from './AccountDomainsRow/AccountDomainsRow';
 import AccountInfoRows from './AccountInfoRows';
 

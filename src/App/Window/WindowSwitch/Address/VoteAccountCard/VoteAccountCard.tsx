@@ -1,11 +1,11 @@
 import { DateTime } from 'luxon';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
-import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
-import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
+import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
+import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import parsedVoteAccountAtom from './_atoms/parsedVoteAccountAtom';
 
 // Fx9gdBmp4Rer7rxu139ofGKcx3iffKS91gg2kFUeBvjD
