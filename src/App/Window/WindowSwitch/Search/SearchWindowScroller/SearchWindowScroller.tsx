@@ -18,25 +18,23 @@ import {
 import RowMetaProps from '../../_sharedComponents/TokenGrid/_types/RowMetaProps';
 import VirtualizedGridChildProps from '../../_sharedComponents/TokenGrid/_types/VirtualizedGridChildProps';
 
-const ContentBox = styled.div`
-  flex: 1 0 auto;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
-
-const WindowScrollerWrapper = styled.div`
-  flex: 1 1 auto;
-`;
-
 const RootContainer = styled.div`
   flex: 1 0 auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   flex: 1 1 auto;
+  height: 100%;
+`;
+
+const ContentContainer = styled.div`
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 
 interface VirtualizedGridProps {
@@ -52,8 +50,8 @@ interface VirtualizedGridProps {
 }
 
 interface AutoSizedContainerProps
-  extends VirtualizedGridProps,
-    WindowScrollerChildProps {
+  extends Omit<VirtualizedGridProps, 'content'> {
+  windowScrollerProps: WindowScrollerChildProps;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   width: number;
@@ -68,11 +66,10 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
     initialized,
     getRowMeta,
     width,
-    height,
-    isScrolling,
-    onChildScroll,
-    scrollTop,
+    windowScrollerProps: { height, isScrolling, onChildScroll, scrollTop },
   } = props;
+
+  console.log('height', height);
 
   const meta = useMemo(
     () => getRowMeta(width, height, isLoading),
@@ -122,7 +119,7 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
           <List
             ref={infiniteLoaderProps.registerChild}
             onRowsRendered={infiniteLoaderProps.onRowsRendered}
-            height={height || 0}
+            height={height}
             width={width}
             rowCount={rowCount}
             rowHeight={rowHeight}
@@ -140,46 +137,36 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
   );
 }
 
-function SearchWindowScroller(props: VirtualizedGridProps) {
+function SearchWindowScroller({ content, ...props }: VirtualizedGridProps) {
   const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>();
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <RootContainer ref={setScrollElement}>
-      <ContentBox>
-        {props.content}
-        {scrollElement && (
+      {scrollElement && (
+        <ContentContainer>
+          {content}
           <WindowScroller scrollElement={scrollElement}>
-            {({
-              height,
-              isScrolling,
-              onChildScroll,
-              scrollTop,
-              registerChild,
-              scrollLeft,
-            }) => (
-              <div ref={registerChild}>
-                <AutoSizer disableHeight={true}>
-                  {({ width }) => (
-                    <AutoSizedContainer
-                      {...props}
-                      isLoading={isLoading}
-                      setIsLoading={setIsLoading}
-                      width={width}
-                      height={height}
-                      isScrolling={isScrolling}
-                      onChildScroll={onChildScroll}
-                      scrollTop={scrollTop}
-                      scrollLeft={scrollLeft} // remove
-                      registerChild={registerChild} // remove
-                    />
-                  )}
-                </AutoSizer>
-              </div>
-            )}
+            {(windowScrollerProps) =>
+              windowScrollerProps.height ? (
+                <div ref={windowScrollerProps.registerChild}>
+                  <AutoSizer disableHeight={true}>
+                    {({ width }) => (
+                      <AutoSizedContainer
+                        {...props}
+                        isLoading={isLoading}
+                        setIsLoading={setIsLoading}
+                        width={width}
+                        windowScrollerProps={windowScrollerProps}
+                      />
+                    )}
+                  </AutoSizer>
+                </div>
+              ) : null
+            }
           </WindowScroller>
-        )}
-      </ContentBox>
+        </ContentContainer>
+      )}
     </RootContainer>
   );
 }

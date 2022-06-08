@@ -11,7 +11,7 @@ import useFetchMoreTopCollections from './_hooks/useFetchMoreTopCollections';
 
 const RootContainer = styled.div`
   padding: 0 16px;
-  overflow: hidden;
+  overflow: auto;
   height: 100%;
   width: 100%;
 `;

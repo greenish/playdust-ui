@@ -16,7 +16,7 @@ const RootContainer = styled.div`
 
 const RightContainer = styled.div`
   display: flex;
-  overflow: auto;
+  overflow: hidden;
   width: 100%;
   height: 100%;
   flex-direction: column;
