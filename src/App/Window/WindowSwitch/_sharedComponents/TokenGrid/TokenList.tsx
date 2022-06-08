@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
+import { Box } from '@mui/material';
 import React, { useCallback } from 'react';
+import SearchWindowScroller from '../../Search/SearchWindowScroller/SearchWindowScroller';
 import TokenCard from '../TokenCard/TokenCard';
-import VirtualizedGrid from './_sharedComponents/VirtualizedGrid';
 import type TokenListProps from './_types/TokenListProps';
 import type VirtualizedGridChildProps from './_types/VirtualizedGridChildProps';
 
@@ -81,7 +82,12 @@ function TokenList(props: TokenListProps) {
   );
 
   return (
-    <VirtualizedGrid
+    <SearchWindowScroller
+      content={
+        props.content && (
+          <Box style={{ margin: cardGap, marginLeft: 0 }}>{props.content}</Box>
+        )
+      }
       initialized={initialized}
       next={props.next}
       getRowMeta={(width, height, isLoading) => {

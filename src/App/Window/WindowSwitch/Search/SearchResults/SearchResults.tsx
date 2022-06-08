@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
+import CollectionNFTDetails from '../CollectionNFTDetails';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
@@ -35,6 +36,7 @@ function SearchResults() {
       tokens={hasValue ? loadable.contents.nfts : []}
       total={hasValue ? loadable.contents.total : 0}
       next={fetchMoreSearchResults}
+      content={<CollectionNFTDetails />}
     />
   );
 }
