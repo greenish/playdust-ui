@@ -100,7 +100,7 @@ function TokenList(props: TokenListProps) {
       getRowMeta={(width, height, isLoading) => {
         const cardsPerRow = Math.floor(width / (imageSize + cardGap)) || 1;
 
-        const dynamicImageSize = width / cardsPerRow - cardGap;
+        const dynamicImageSize = Math.floor(width / cardsPerRow - cardGap);
 
         const rowHeight = dynamicImageSize + contentHeight + rowGap;
 

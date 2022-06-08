@@ -1,8 +1,8 @@
 import { Box, Card, Skeleton, styled, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
-import OpenSearchCollectionSourceType from '../../_types/OpenSearchCollectionSourceType';
-import humanizeCollection from '../_helpers/humanizeCollection';
-import humanizeSolana from '../_helpers/humanizeSolana';
+import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
+import humanizeCollection from '../../_helpers/humanizeCollection';
+import humanizeSolana from '../../_helpers/humanizeSolana';
 
 const border = '1px solid #EEEEEE';
 

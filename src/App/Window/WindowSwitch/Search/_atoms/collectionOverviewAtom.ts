@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
-import searchStateAtom from '../../../../../_atoms/searchStateAtom';
-import api from '../../../../../_helpers/frontendApi';
-import CollectionQueryNodeType from '../../../../../_types/CollectionQueryNodeType';
+import searchStateAtom from '../../../_atoms/searchStateAtom';
+import api from '../../../_helpers/frontendApi';
+import CollectionQueryNodeType from '../../../_types/CollectionQueryNodeType';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
 
 const collectionOverviewAtom = selector<CollectionOverviewResponseType | null>({

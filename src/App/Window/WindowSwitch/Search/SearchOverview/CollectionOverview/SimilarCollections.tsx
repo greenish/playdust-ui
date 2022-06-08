@@ -14,7 +14,7 @@ import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
-import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
+import collectionOverviewAtom from '../../_atoms/collectionOverviewAtom';
 
 interface SimilarCollectionsProps {
   open: boolean;

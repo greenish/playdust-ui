@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil';
 import useAddCollectionQueryNode from '../../../../_hooks/useAddCollectionQueryNode';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
 import SimilarCollections from './SimilarCollections';
-import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
+import collectionOverviewAtom from '../../_atoms/collectionOverviewAtom';
 
 const RootContainer = styled.div`
   display: flex;

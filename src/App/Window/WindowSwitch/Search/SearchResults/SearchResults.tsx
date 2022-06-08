@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
-import CollectionNFTDetails from '../CollectionNFTDetails';
-import collectionOverviewAtom from '../SearchOverview/CollectionOverview/_atoms/collectionOverviewAtom';
+import CollectionNFTDetails from './CollectionNFTDetails';
+import collectionOverviewAtom from '../_atoms/collectionOverviewAtom';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
