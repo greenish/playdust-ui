@@ -1,12 +1,24 @@
-import ComposedQueryType from '../../../_types/ComposedQueryType';
+import SearchQueryType from '../_types/SearchQueryType';
+import reduceSearchQuery from './reduceSearchQuery';
 
 const removeQueryNode = (
-  state: ComposedQueryType,
-  id: string
-): ComposedQueryType => {
-  const nextQuery = state
-    .map((parent) => parent.filter((child) => child.id !== id))
-    .filter((parent) => parent.length > 0);
+  query: SearchQueryType,
+  removalId: string
+): SearchQueryType => {
+  const nextQuery = reduceSearchQuery(query, (node) => {
+    if (node.id === removalId) {
+      return null;
+    }
+
+    if (node.type === 'group' && node.children.includes(removalId)) {
+      return {
+        ...node,
+        children: node.children.filter((child) => child !== removalId),
+      };
+    }
+
+    return node;
+  });
 
   return nextQuery;
 };

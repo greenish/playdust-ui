@@ -1,5 +1,5 @@
-import TopCollectionsResponseType from '../../../../../_types/TopCollectionsResponseType';
 import frontendApi from '../../../_helpers/frontendApi';
+import TopCollectionsResponseType from '../_types/TopCollectionsResponseType';
 
 const fetchTopCollections = async (
   page: number

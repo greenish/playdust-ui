@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
-import { Chip, Tooltip } from '@mui/material';
+import { Chip, Tooltip, Typography } from '@mui/material';
 import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import useAddCollectionQueryNode from '../../../../_hooks/useAddCollectionQueryNode';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
-import useInitCollectionQuery from '../../../_hooks/useInitCollectionQuery';
-import collectionIdAtom from '../_atoms/collectionIdAtom';
 import SimilarCollections from './SimilarCollections';
 import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
 
@@ -21,36 +20,42 @@ const ChipContainer = styled.div`
 
 function CollectionOverview() {
   const [similarOpen, setSimilarOpen] = useState(false);
-  const collectionId = useRecoilValue(collectionIdAtom);
-  const overview = useRecoilValue(collectionOverviewAtom(collectionId));
-  const initCollectionQuery = useInitCollectionQuery();
-
-  const { totalVolume, similar, elementCount } = overview;
+  const overview = useRecoilValue(collectionOverviewAtom);
+  const addCollectionQueryNode = useAddCollectionQueryNode();
 
   const isPossibleDuplicate = useMemo(() => {
-    if (!similar.length) {
+    if (!overview) {
       return false;
     }
 
-    const highestVolume = similar[0]?.totalVolume || 0;
+    if (!overview.similar.length) {
+      return false;
+    }
 
-    return highestVolume > totalVolume;
-  }, [similar, totalVolume]);
+    const highestVolume = overview.similar[0]?.totalVolume || 0;
+
+    return highestVolume > overview.totalVolume;
+  }, [overview]);
+
+  if (!overview) {
+    return null;
+  }
 
   return (
     <RootContainer>
       <ChipContainer>
+        <Typography sx={{ mr: 1 }}>&middot;</Typography>
         <Chip
           size="small"
-          label={`Collection Volume: ${humanizeSolana(totalVolume)}`}
+          label={`Collection Volume: ${humanizeSolana(overview.totalVolume)}`}
           variant="outlined"
         />
         <Chip
           size="small"
-          label={`Collection Items: ${elementCount.toLocaleString()}`}
+          label={`Collection Items: ${overview.elementCount.toLocaleString()}`}
           variant="outlined"
         />
-        {similar.length && (
+        {overview.similar.length && (
           <>
             <Tooltip
               sx={{
@@ -62,17 +67,18 @@ function CollectionOverview() {
               <Chip
                 size="small"
                 label={`${
-                  similar.length === 20 ? '20+' : similar.length
+                  overview.similar.length === 20
+                    ? '20+'
+                    : overview.similar.length
                 } Similar Collections`}
                 variant="outlined"
                 color={isPossibleDuplicate ? 'warning' : 'default'}
               />
             </Tooltip>
             <SimilarCollections
-              collectionId={collectionId}
               open={similarOpen}
               onClose={() => setSimilarOpen(false)}
-              onClick={initCollectionQuery}
+              onClick={(id) => addCollectionQueryNode(id, true)}
             />
           </>
         )}

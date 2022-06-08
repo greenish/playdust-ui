@@ -27,12 +27,14 @@ const SearchInputContainer = styled.div`
   padding: 16px;
   position: sticky;
   width: 100%;
+  z-index: 2;
 `;
 
 const ContentContainer = styled.div`
   overflow: auto;
   height: 100%;
   width: 100%;
+  z-index: 1;
 `;
 
 const SpinnerContainer = styled.div`

@@ -1,5 +1,6 @@
-import type QueryNodeType from '../../_types/QueryNodeType';
-import type SearchFilterUnionType from '../../_types/SearchFilterUnionType';
+import type { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
+import QueryNodeType from '../../App/Window/_types/QueryNodeType';
+import SearchFilterUnionType from '../../App/Window/_types/SearchFilterUnionType';
 
 const getRangeField = (field: SearchFilterUnionType) => {
   switch (field) {
@@ -17,10 +18,10 @@ const getRangeField = (field: SearchFilterUnionType) => {
   }
 };
 
-const createSingleNFTQuery = (child: QueryNodeType) => {
+const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
   switch (child.field) {
     case 'attribute': {
-      const { trait, value } = child;
+      const { key, value } = child;
 
       return {
         nested: {
@@ -28,22 +29,21 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
           query: {
             bool: {
               must: [
-                trait !== '' && {
-                  match: {
-                    'offChainData.attributes.trait_type.keyword': trait,
-                  },
-                },
-                value &&
-                  value.length > 0 && {
-                    bool: {
-                      should: value.map((entry) => ({
-                        match: {
-                          'offChainData.attributes.value.keyword': entry,
-                        },
-                      })),
-                    },
-                  },
-              ].filter(Boolean),
+                key !== ''
+                  ? {
+                      match: {
+                        'offChainData.attributes.trait_type.keyword': key,
+                      },
+                    }
+                  : {},
+                value !== ''
+                  ? {
+                      match: {
+                        'offChainData.attributes.value.keyword': value,
+                      },
+                    }
+                  : {},
+              ],
             },
           },
         },
@@ -77,28 +77,39 @@ const createSingleNFTQuery = (child: QueryNodeType) => {
     case 'range': {
       const rangeField = getRangeField(child.value);
 
-      return {
-        bool: {
-          must: [
-            {
-              range: {
-                [rangeField]: {
-                  gte: child.min,
-                  lte: child.max,
+      const mustBase = [
+        {
+          range: {
+            [rangeField]: {
+              gte: child.min,
+              lte: child.max,
+            },
+          },
+        },
+      ];
+
+      const must =
+        rangeField === 'lastListPrice'
+          ? [
+              ...mustBase,
+              {
+                term: {
+                  listed: true,
                 },
               },
-            },
-            rangeField === 'lastListPrice' && {
-              term: {
-                listed: true,
-              },
-            },
-          ].filter(Boolean),
+            ]
+          : mustBase;
+
+      return {
+        bool: {
+          must,
         },
       };
     }
     default: {
-      return false;
+      const n: never = child;
+
+      return n;
     }
   }
 };

@@ -1,13 +1,15 @@
+import SearchQueryType from '../_types/SearchQueryType';
 import type SearchStateType from '../_types/SearchStateType';
 
 const serializeSearch = (state: SearchStateType) => {
   const { query, sort, onlyListed } = state;
-  if (query.length === 0 && query[0] === undefined && !sort && !onlyListed) {
+
+  if (!SearchQueryType.is(query)) {
     return '';
   }
 
   const raw = {
-    query: query.map((parent) => parent.map(({ id, ...rest }) => rest)),
+    query,
     sort,
     onlyListed,
   };

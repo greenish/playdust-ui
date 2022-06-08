@@ -1,13 +1,9 @@
 import styled from '@emotion/styled';
 import { Checkbox, FormControlLabel } from '@mui/material';
 import React, { useMemo, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import type SearchFilterUnionType from '../../../../../../_types/SearchFilterUnionType';
 import useRemoveQueryNode from '../../../../_hooks/useRemoveQueryNode';
-import useUpdateRangeQueryNode from '../../../../_hooks/useUpdateRangeQueryNode';
-import RangeInput from '../../../../_sharedComponents/RangeInput';
-import rangeQueryByNameAtom from './_atoms/rangeQueryByNameAtom';
-import useAddRangeQueryNode from './_hooks/useAddRangeQueryNode';
+import type SearchFilterUnionType from '../../../../_types/SearchFilterUnionType';
+import RangeInput from './RangeInput';
 
 interface SearchFilterType {
   label: string;
@@ -35,10 +31,10 @@ const ItemContainer = styled.div`
 `;
 
 function RangeFilter({ label, name }: SearchFilterType) {
-  const addRangeQueryNode = useAddRangeQueryNode();
   const removeQueryNode = useRemoveQueryNode();
-  const queryValue = useRecoilValue(rangeQueryByNameAtom(name));
-  const updateRangeQueryNode = useUpdateRangeQueryNode();
+  const queryValue = null;
+  // const queryValue = useRecoilValue(rangeQueryByNameAtom(name));
+  // const updateRangeQueryNode = useUpdateRangeQueryNode();
 
   const [local, setLocal] = useState({
     visible: false,
@@ -47,12 +43,15 @@ function RangeFilter({ label, name }: SearchFilterType) {
   });
 
   const { visible, setVisible, min, max } = useMemo(() => {
-    if (queryValue) {
+    if (queryValue !== null) {
       return {
         visible: true,
-        min: queryValue.min,
-        max: queryValue.max,
-        setVisible: () => removeQueryNode(queryValue.id),
+        min: 0,
+        max: 0,
+        setVisible: () => {},
+        // min: queryValue.min,
+        // max: queryValue.max,
+        // setVisible: () => removeQueryNode(queryValue.id),
       };
     }
 
@@ -63,7 +62,7 @@ function RangeFilter({ label, name }: SearchFilterType) {
       setVisible: (newValue: boolean) =>
         setLocal({ ...local, visible: newValue }),
     };
-  }, [local, queryValue, removeQueryNode]);
+  }, [local, queryValue]);
 
   return (
     <ItemContainer key={name}>
@@ -82,11 +81,12 @@ function RangeFilter({ label, name }: SearchFilterType) {
           min={min}
           max={max}
           value={name}
-          onApply={(newValue) =>
-            queryValue
-              ? updateRangeQueryNode({ id: queryValue.id, update: newValue })
-              : addRangeQueryNode(newValue)
-          }
+          onApply={() => null}
+          // onApply={(newValue) =>
+          //   queryValue
+          //     ? updateRangeQueryNode({ id: queryValue.id, update: newValue })
+          //     : addRangeQueryNode(newValue)
+          // }
           sol={name !== 'rarity-score'}
         />
       )}

@@ -1,32 +1,39 @@
-import type AttributeQueryContentType from '../../../_types/AttributeQueryContentType';
+import { useRecoilValue } from 'recoil';
+import searchStateAtom from '../_atoms/searchStateAtom';
+import reduceSearchQuery from '../_helpers/reduceSearchQuery';
 import removeQueryNode from '../_helpers/removeQueryNode';
-import updateQueryNode from '../_helpers/updateQueryNode';
-import makeUseQueryChange from './makeUseQueryChange';
+import useChangeSearchQuery from './useChangeSearchQuery';
 
-interface UseUpdateAttributeNodeInput {
-  id: string;
-  update: Partial<AttributeQueryContentType>;
-  clearOnEmpty?: boolean;
-}
+const useUpdateAttributeQueryNode = () => {
+  const { query } = useRecoilValue(searchStateAtom);
+  const changeSearchQuery = useChangeSearchQuery();
 
-const useUpdateAttributeQueryNode =
-  makeUseQueryChange<UseUpdateAttributeNodeInput>(
-    (query) =>
-      ({ id, update, clearOnEmpty }) => {
-        if (
-          clearOnEmpty &&
-          update.value !== undefined &&
-          update.value.length === 0
-        ) {
-          const next = removeQueryNode(query, id);
-
-          return { query: next };
-        }
-
-        const next = updateQueryNode(query, id, update);
+  return (id: string, value: string | null) => {
+    changeSearchQuery(() => {
+      if (value === null) {
+        const next = removeQueryNode(query, id);
 
         return { query: next };
       }
-  );
+
+      const updatedQuery = reduceSearchQuery(query, (node) => {
+        if (
+          node.id === id &&
+          node.type === 'query' &&
+          node.field === 'attribute'
+        ) {
+          return {
+            ...node,
+            value,
+          };
+        }
+
+        return node;
+      });
+
+      return { query: updatedQuery };
+    });
+  };
+};
 
 export default useUpdateAttributeQueryNode;

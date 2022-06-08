@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
-import { Chip, Skeleton, Typography } from '@mui/material';
+import { Chip, Skeleton } from '@mui/material';
 import React, { Suspense } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import type SearchOverviewResponseType from '../../../../../_types/SearchOverviewResponseType';
+import { useRecoilValueLoadable } from 'recoil';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import CollectionOverview from './CollectionOverview/CollectionOverview';
-import collectionIdAtom from './_atoms/collectionIdAtom';
 import searchOverviewAtom from './_atoms/searchOverviewAtom';
+import type SearchOverviewResponseType from './_types/SearchOverviewResponseType';
 
 const RootContainer = styled.div`
   height: 48px;
@@ -19,13 +18,11 @@ const ChipContentContainer = styled.div`
   display: flex;
 `;
 
-const max = 10000;
-
 const chips = [
   {
     label: 'Total Items',
-    getValue: ({ count }: SearchOverviewResponseType) =>
-      `${count.toLocaleString()}${count >= max ? '+' : ''}`,
+    getValue: ({ total }: SearchOverviewResponseType) =>
+      total && `~${total.toLocaleString()}`,
   },
   {
     label: 'Listed Items',
@@ -37,6 +34,11 @@ const chips = [
     getValue: ({ floor }: SearchOverviewResponseType) => humanizeSolana(floor),
   },
   {
+    label: 'Avg Price',
+    getValue: ({ average }: SearchOverviewResponseType) =>
+      humanizeSolana(average),
+  },
+  {
     label: 'Ceiling Price',
     getValue: ({ ceiling }: SearchOverviewResponseType) =>
       humanizeSolana(ceiling),
@@ -45,7 +47,6 @@ const chips = [
 
 function SearchOverview() {
   const searchOverview = useRecoilValueLoadable(searchOverviewAtom);
-  const collectionId = useRecoilValue(collectionIdAtom);
 
   return (
     <RootContainer>
@@ -67,12 +68,9 @@ function SearchOverview() {
           variant="outlined"
         />
       ))}
-      {collectionId && (
-        <Suspense fallback={null}>
-          <Typography sx={{ mr: 1 }}>&middot;</Typography>
-          <CollectionOverview />
-        </Suspense>
-      )}
+      <Suspense fallback={null}>
+        <CollectionOverview />
+      </Suspense>
     </RootContainer>
   );
 }

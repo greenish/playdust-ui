@@ -1,10 +1,11 @@
-import { NextApiRequest } from 'next';
-import ComposedQueryType from '../_types/ComposedQueryType';
-import OpenSearchNFTSourceType from '../_types/OpenSearchNFTSourceType';
-import type SearchSortType from '../_types/SearchSortUnionType';
-import getNFTQuery from './_helpers/getNFTQuery';
+import { assign, create, number, type } from 'superstruct';
+import SearchResponseType from '../App/Window/WindowSwitch/Search/_types/SearchResponseType';
+import OpenSearchNFTSourceType from '../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
+import SearchStateType from '../App/Window/_types/SearchStateType';
+import getNFTSearchRequest from './_helpers/getNFTSearchRequest';
+import getOSTotalValue from './_helpers/getOSTotalValue';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postNFTQuery from './_helpers/postNFTQuery';
+import searchNFTs from './_helpers/searchNFTs';
 
 const makeGetSearchEnv = (key: string, defaultValue: number) => (): number => {
   const envVariable = process.env[key];
@@ -33,43 +34,42 @@ const getSizeFrom = (page: number) => {
   return { size: nextSearchSize, from };
 };
 
-type SearchResponseType = {
-  nfts: OpenSearchNFTSourceType[];
-  total: number;
-  page: number;
-};
-
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: {
-    query?: ComposedQueryType;
-    onlyListed?: boolean;
-    sort?: SearchSortType;
-    page?: number;
-  };
-}
-
-const getSearch = nextApiHandler<SearchResponseType>(
-  async (req: ExtendedNextApiRequest): Promise<SearchResponseType> => {
-    const query = req.body.query as ComposedQueryType;
-    const sort = req.body.sort as SearchSortType;
-    const page = req.body.page || (0 as number);
-    const onlyListed = Boolean(req.body.onlyListed);
-
-    if (!query || !sort) {
-      throw new Error('No `query` or `sort` supplied!');
-    }
-
-    const { size, from } = getSizeFrom(page);
-
-    const nftQuery = getNFTQuery(query, size, sort, onlyListed, from);
-    const nftResult = await postNFTQuery(nftQuery);
-
-    const { hits } = nftResult;
-    const nfts = hits.hits.map((entry) => entry._source);
-    const total = hits.total.value;
-
-    return { nfts, total, page };
-  }
+const SearchRequestType = assign(
+  SearchStateType,
+  type({
+    page: number(),
+  })
 );
 
-export default getSearch;
+const getSearchNew = nextApiHandler<SearchResponseType>(async (req) => {
+  const { query, page, onlyListed, sort } = create(req.body, SearchRequestType);
+  const { size, from } = getSizeFrom(page);
+  const nftSearchRequest = getNFTSearchRequest(query, {
+    onlyListed,
+    sort,
+    size,
+    from,
+  });
+  const results = await searchNFTs(nftSearchRequest);
+
+  const nfts = results.body.hits.hits.reduce<OpenSearchNFTSourceType[]>(
+    (acc, curr) => {
+      const source = curr._source;
+
+      if (source) {
+        return [...acc, source];
+      }
+
+      return acc;
+    },
+    []
+  );
+
+  return {
+    nfts,
+    total: getOSTotalValue(results),
+    page,
+  };
+});
+
+export default getSearchNew;

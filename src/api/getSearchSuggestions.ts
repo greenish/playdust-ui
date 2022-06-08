@@ -1,6 +1,6 @@
 import { NextApiRequest } from 'next';
-import OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
-import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
+import SearchSuggestionResponseType from '../App/Window/WindowInput/_types/SearchSuggestionResponseType';
+import OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
 import postMutliCollectionQuery from './_helpers/postMultiCollectionQuery';
 import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
@@ -22,6 +22,8 @@ const getAttributeQuery = (term: string) => ({
       description: {},
       name: {},
     },
+    pre_tags: ['<b>'],
+    post_tags: ['</b>'],
   },
   sort: [
     '_score',
@@ -34,7 +36,7 @@ const getAttributeQuery = (term: string) => ({
 });
 
 const getCollectionQuery = (term: string) => ({
-  size: 10,
+  size: 20,
   query: {
     multi_match: {
       fields: ['description', 'name', 'symbol'],
@@ -50,6 +52,8 @@ const getCollectionQuery = (term: string) => ({
       name: {},
       symbol: {},
     },
+    pre_tags: ['<b>'],
+    post_tags: ['</b>'],
   },
   sort: [
     {

@@ -1,6 +1,6 @@
 import { MetadataData } from '@metaplex-foundation/mpl-token-metadata';
 import { selector } from 'recoil';
-import MetaplexOffChainDataType from '../../../../../../_types/MetaplexOffChainDataType';
+import MetaplexOffChainDataType from '../../../_types/MetaplexOffChainDataType';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 import nftByMintAtom from '../../_atoms/nftByMintAtom';
 import safePubkeyString from '../../_helpers/safePubkeyString';

@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import type TopCollectionsResponseType from '../../../../../_types/TopCollectionsResponseType';
+import type TopCollectionsResponseType from '../_types/TopCollectionsResponseType';
 import topCollectionsBaseAtom from './topCollectionsBaseAtom';
 import topCollectionsMoreAtom from './topCollectionsMoreAtom';
 

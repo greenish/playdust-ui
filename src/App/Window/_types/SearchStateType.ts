@@ -1,10 +1,12 @@
-import type ComposedQueryType from '../../../_types/ComposedQueryType';
-import type SearchSortType from '../../../_types/SearchSortUnionType';
+import { boolean, Infer, optional, type } from 'superstruct';
+import SearchQueryType from './SearchQueryType';
+import SearchSortType from './SearchSortType';
 
-interface SearchStateType {
-  query: ComposedQueryType;
-  sort?: SearchSortType;
-  onlyListed?: boolean;
-}
+type SearchStateType = Infer<typeof SearchStateType>;
+const SearchStateType = type({
+  query: SearchQueryType,
+  sort: optional(SearchSortType),
+  onlyListed: optional(boolean()),
+});
 
 export default SearchStateType;

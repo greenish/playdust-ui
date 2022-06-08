@@ -11,7 +11,10 @@ const searchStateAtom = selector<SearchStateType>({
 
     if (!current || current.type !== 'search' || current.state === '') {
       return {
-        query: [],
+        query: {
+          rootId: '',
+          nodes: {},
+        },
       };
     }
 

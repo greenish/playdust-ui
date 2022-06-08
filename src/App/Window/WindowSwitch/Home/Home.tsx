@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import React, { useEffect, useMemo } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import setWindowImagesAtom from '../../_atoms/setWindowImagesAtom';
+import useAddCollectionQueryNode from '../../_hooks/useAddCollectionQueryNode';
 import humanizeCollection from '../_helpers/humanizeCollection';
 import humanizeSolana from '../_helpers/humanizeSolana';
-import useInitCollectionQuery from '../_hooks/useInitCollectionQuery';
 import TokenGrid from '../_sharedComponents/TokenGrid/TokenGrid';
 import topCollectionsAtom from './_atoms/topCollectionsAtom';
 import useFetchMoreTopCollections from './_hooks/useFetchMoreTopCollections';
@@ -19,7 +19,7 @@ const RootContainer = styled.div`
 function Home() {
   const topCollectionsLoadable = useRecoilValueLoadable(topCollectionsAtom);
   const fetchMore = useFetchMoreTopCollections();
-  const initCollectionQuery = useInitCollectionQuery('href');
+  const addCollectionQuery = useAddCollectionQueryNode('href');
   const hasValue = topCollectionsLoadable.state === 'hasValue';
   const setWindowImages = useRecoilValue(setWindowImagesAtom);
 
@@ -35,14 +35,14 @@ function Home() {
         key: collection.id,
         groupLabel: humanizeCollection(collection),
         groupSecondary: humanizeSolana(collection.totalVolume),
-        groupHref: initCollectionQuery(collection.id),
+        groupHref: addCollectionQuery(collection.id),
         groupTotal: collection.elementCount,
         nfts,
       }));
     }
 
     return [];
-  }, [hasValue, initCollectionQuery, topCollectionsLoadable.contents]);
+  }, [hasValue, addCollectionQuery, topCollectionsLoadable.contents]);
 
   return (
     <RootContainer>

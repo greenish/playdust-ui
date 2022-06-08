@@ -27,6 +27,9 @@ const baseTheme = createTheme({
       default: '#FEFEFE',
     },
   },
+  shape: {
+    borderRadius: 0,
+  },
 });
 
 const themeOverrides = createTheme({
@@ -37,11 +40,6 @@ const themeOverrides = createTheme({
       },
     },
     MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 0,
-        },
-      },
       defaultProps: {
         size: 'small',
       },
@@ -88,7 +86,6 @@ const themeOverrides = createTheme({
         size: 'small',
         sx: {
           marginTop: '20px',
-          borderRadius: 0,
           '& legend': {
             display: 'none',
           },
@@ -97,7 +94,6 @@ const themeOverrides = createTheme({
       styleOverrides: {
         select: {
           backgroundColor: baseTheme.palette.background.default,
-          borderRadius: 0,
           marginTop: -4,
         },
       },
@@ -147,32 +143,28 @@ const themeOverrides = createTheme({
       },
       styleOverrides: {
         root: ({ ownerState }) => {
-          const base = {
-            '& .MuiInputBase-root': {
-              borderRadius: 0,
-            },
-          };
-
-          if (ownerState.label === undefined) {
-            return base;
+          if (ownerState.label !== undefined) {
+            return {
+              paddingTop: 20,
+              '& input': {
+                marginTop: -4,
+              },
+              '& legend': {
+                display: 'none',
+              },
+            };
           }
-
-          return {
-            ...base,
-            paddingTop: 20,
-            '& input': {
-              marginTop: -4,
-            },
-            '& legend': {
-              display: 'none',
-            },
-          };
         },
       },
     },
     MuiAutocomplete: {
       defaultProps: {
         PaperComponent: (props) => <Paper {...props} elevation={1} />,
+      },
+    },
+    MuiChip: {
+      defaultProps: {
+        size: 'small',
       },
     },
   },

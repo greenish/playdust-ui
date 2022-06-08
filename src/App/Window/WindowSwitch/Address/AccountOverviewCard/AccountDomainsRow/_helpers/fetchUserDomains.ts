@@ -7,7 +7,7 @@ import {
 } from '@bonfida/spl-name-service';
 import { Connection, PublicKey } from '@solana/web3.js';
 import BN from 'bn.js';
-import SolanaClusterType from '../../../../../../../_types/SolanaClusterType';
+import SolanaClusterType from '../../../../../../_types/SolanaClusterType';
 import safePubkey from '../../../_helpers/safePubkey';
 
 // Name auctionning Program ID

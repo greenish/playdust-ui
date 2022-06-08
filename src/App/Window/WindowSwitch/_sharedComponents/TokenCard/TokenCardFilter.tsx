@@ -1,6 +1,5 @@
 import { FilterAltOutlined } from '@mui/icons-material';
 import {
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -9,13 +8,7 @@ import {
   Popover,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import type OpenSearchNFTSourceType from '../../../../../_types/OpenSearchNFTSourceType';
-import isCollectionQueryAtom from '../../../_atoms/isCollectionQueryAtom';
-import searchQueryAttributesAtom from '../../../_atoms/searchQueryAttributesAtom';
-import useAddAttributeQueryNode from '../../../_hooks/useAddAttributeQueryNode';
-import usePrependCollectionQueryNode from '../../../_hooks/usePrependCollectionQueryNode';
-import useUpdateAttributeQueryNode from '../../../_hooks/useUpdateAttributeQueryNode';
+import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
 
 interface TokenCardFilterProps {
   metadata: OpenSearchNFTSourceType;
@@ -23,13 +16,7 @@ interface TokenCardFilterProps {
 
 function TokenCardFilter({ metadata }: TokenCardFilterProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const addAttributeQueryNode = useAddAttributeQueryNode();
-  const updateAtrributeQueryNode = useUpdateAttributeQueryNode();
-  const exactAttributes = useRecoilValue(searchQueryAttributesAtom);
-  const isCollectionQuery = useRecoilValue(isCollectionQueryAtom);
   const attributes = metadata.offChainData.attributes || [];
-  const prependCollectionQueryNode = usePrependCollectionQueryNode();
-  const { heuristicCollectionId } = metadata;
 
   return (
     <>
@@ -46,7 +33,7 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
       >
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormGroup>
-            {!isCollectionQuery && heuristicCollectionId && (
+            {/* {!isCollectionQuery && heuristicCollectionId && (
               <Button
                 onClick={() =>
                   prependCollectionQueryNode(heuristicCollectionId)
@@ -54,13 +41,14 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
               >
                 Search in Collection
               </Button>
-            )}
+            )} */}
             {attributes.map((attribute) => {
-              const found = exactAttributes.find(
-                (entry) =>
-                  entry.trait === attribute.trait_type &&
-                  entry.value?.includes(attribute.value)
-              );
+              // const found = exactAttributes.find(
+              //   (entry) =>
+              //     entry.trait === attribute.trait_type &&
+              //     entry.value?.includes(attribute.value)
+              // );
+              const found = undefined;
 
               return (
                 <FormControlLabel
@@ -70,21 +58,21 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
                       checked={!!found}
                       onChange={() => {
                         if (!found) {
-                          addAttributeQueryNode({
-                            value: [attribute.value],
-                            trait: attribute.trait_type,
-                            operation: 'and',
-                          });
-                        } else {
-                          updateAtrributeQueryNode({
-                            id: found.id,
-                            update: {
-                              value: found.value.filter(
-                                (entry) => entry !== attribute.value
-                              ),
-                            },
-                            clearOnEmpty: true,
-                          });
+                          //   addAttributeQueryNode({
+                          //     value: [attribute.value],
+                          //     trait: attribute.trait_type,
+                          //     operation: 'and',
+                          //   });
+                          // } else {
+                          //   updateAtrributeQueryNode({
+                          //     id: found.id,
+                          //     update: {
+                          //       value: found.value.filter(
+                          //         (entry) => entry !== attribute.value
+                          //       ),
+                          //     },
+                          //     clearOnEmpty: true,
+                          //   });
                         }
 
                         setAnchorEl(null);
