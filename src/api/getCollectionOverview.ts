@@ -1,4 +1,4 @@
-import type CollectionOverviewResponseType from '../App/Window/WindowSwitch/Search/SearchOverview/CollectionOverview/_types/CollectionOverviewResponseType';
+import CollectionOverviewResponseType from '../App/Window/WindowSwitch/Search/SearchResults/CollectionNFTDetails/_types/CollectionOverviewResponseType';
 import type OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
 import postCollectionQuery from './_helpers/postCollectionQuery';

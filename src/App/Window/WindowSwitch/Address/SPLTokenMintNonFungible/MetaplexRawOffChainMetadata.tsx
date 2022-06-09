@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 
 // react-json-view can only be client render since it uses window

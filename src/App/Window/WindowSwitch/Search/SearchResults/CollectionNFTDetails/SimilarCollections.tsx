@@ -14,7 +14,7 @@ import useAddCollectionQueryNode from '../../../../_hooks/useAddCollectionQueryN
 import OpenSearchCollectionSourceType from '../../../../_types/OpenSearchCollectionSourceType';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
-import CollectionOverviewResponseType from '../../_types/CollectionOverviewResponseType';
+import CollectionOverviewResponseType from './_types/CollectionOverviewResponseType';
 
 type Column = {
   label: string;

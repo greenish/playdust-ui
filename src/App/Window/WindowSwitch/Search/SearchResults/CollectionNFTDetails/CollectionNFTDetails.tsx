@@ -3,12 +3,12 @@ import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import ImageButton from '../../../../../_sharedComponents/ImageButton';
 import OpenSearchCollectionSourceType from '../../../../_types/OpenSearchCollectionSourceType';
-import ExplorerAccordion from '../../../Address/_sharedComponents/ExplorerAccordion';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
-import collectionOverviewAtom from '../../_atoms/collectionOverviewAtom';
+import ExplorerAccordion from '../../../_sharedComponents/ExplorerAccordion';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import SimilarCollections from './SimilarCollections';
+import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
 
 const border = '1px solid #EEEEEE';
 
