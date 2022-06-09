@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import humanizeCollection from '../../../_helpers/humanizeCollection';
+import humanizeCollection from '../../../../_helpers/humanizeCollection';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
 import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
 
@@ -66,7 +66,7 @@ function SimilarCollections({
               </TableCell>
               <TableCell align="right">
                 <Typography fontWeight="bold">
-                  {humanizeSolana(overview.totalVolume)}
+                  {humanizeSolana(overview.volume.global.total)}
                 </Typography>
               </TableCell>
             </TableRow>
@@ -74,7 +74,9 @@ function SimilarCollections({
           <TableBody>
             {filtered.map((entry) => {
               const color =
-                entry.totalVolume > overview.totalVolume ? warningColor : '';
+                entry.volume.global.total > overview.volume.global.total
+                  ? warningColor
+                  : '';
 
               return (
                 <TableRow
@@ -95,7 +97,7 @@ function SimilarCollections({
                   </TableCell>
                   <TableCell align="right">
                     <Typography color={color}>
-                      {humanizeSolana(entry.totalVolume)}
+                      {humanizeSolana(entry.volume.global.total)}
                     </Typography>
                   </TableCell>
                 </TableRow>

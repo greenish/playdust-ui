@@ -11,11 +11,11 @@ function NFTDetailsView() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
   const ownerWalletAddress = useRecoilValue(currentOwnerForMintAtom);
 
-  if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
+  if (!playdustNftData || !playdustNftData.mintOffChainMetadata) {
     return null;
   }
 
-  const offChainData = playdustNftData.metaplexOffChainData;
+  const offChainData = playdustNftData.mintOffChainMetadata;
 
   return (
     <ContentContainer
@@ -56,31 +56,33 @@ function NFTDetailsView() {
                   {`Owner: ${shortenPublicKey(ownerWalletAddress)}`}
                 </Typography>
               )}
-              <Box sx={{ backgroundColor: 'rgba(255, 255, 255, 0.08);' }}>
-                <Grid container={true} spacing={0}>
-                  <Grid item={true} xs={12}>
-                    <Typography sx={{ opacity: '0.5' }}>
-                      Rarity Score
-                    </Typography>
-                  </Grid>
-                  {playdustNftData.rarity.absoluteRarity && (
-                    <Grid item={true} xs={6}>
-                      <Typography>
-                        {playdustNftData.rarity.absoluteRarity}
-                      </Typography>
-                    </Grid>
-                  )}
-                  {playdustNftData.rarity.normalizedRarity && (
-                    <Grid item={true} xs={6}>
+              {playdustNftData.mintRarity && (
+                <Box>
+                  <Grid container={true} spacing={0}>
+                    <Grid item={true} xs={12}>
                       <Typography sx={{ opacity: '0.5' }}>
-                        {`${playdustNftData.rarity.normalizedRarity.toPrecision(
-                          2
-                        )}%`}
+                        Rarity Score
                       </Typography>
                     </Grid>
-                  )}
-                </Grid>
-              </Box>
+                    {playdustNftData.mintRarity.rarityScore && (
+                      <Grid item={true} xs={6}>
+                        <Typography>
+                          {playdustNftData.mintRarity.rarityScore}
+                        </Typography>
+                      </Grid>
+                    )}
+                    {playdustNftData.mintRarity.normalizedRarityScore && (
+                      <Grid item={true} xs={6}>
+                        <Typography sx={{ opacity: '0.5' }}>
+                          {`${playdustNftData.mintRarity.normalizedRarityScore.toPrecision(
+                            2
+                          )}%`}
+                        </Typography>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Box>
+              )}
             </Stack>
           </Grid>
         </Grid>

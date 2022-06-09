@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
 import frontendApi from '../../_helpers/frontendApi';
-import type OpenSearchCollectionSourceHighlightType from '../_types/OpenSearchCollectionSourceHighlightType';
+import humanizeCollection from '../../_helpers/humanizeCollection';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import hasCollectionDependencyAtom from './hasCollectionDependencyAtom';
@@ -9,10 +9,10 @@ import searchQueryTermAtom from './searchQueryTermAtom';
 import searchQueryTermWindowTypeAtom from './searchQueryTermWindowTypeAtom';
 
 const getHighlight = ({
-  highlight,
-}: OpenSearchCollectionSourceHighlightType) => {
+  highlights,
+}: SearchSuggestionResponseType['collections'][0]) => {
   const highlightArray =
-    highlight.description || highlight.name || highlight.symbol;
+    highlights?.description || highlights?.name || highlights?.symbol;
 
   if (highlightArray) {
     return highlightArray[0];
@@ -23,41 +23,19 @@ const getHighlight = ({
 
 const formatServerSuggestions = ({
   collections,
-}: // attributeNames,
-// attributeValues,
-SearchSuggestionResponseType) => {
+}: SearchSuggestionResponseType) => {
   const suggestions: SearchSuggestionType[] = [];
 
   collections.map((collection) =>
     suggestions.push({
       key: collection.source.id,
       group: 'Collections',
-      label: `${
-        collection.source.name || collection.source.symbol
-      }: ${getHighlight(collection)}`,
+      label: `${humanizeCollection(collection.source)}: ${getHighlight(
+        collection
+      )}`,
       collectionId: collection.source.id,
     })
   );
-
-  // attributeNames.map((attributeName) =>
-  //   suggestions.push({
-  //     key: `attributeName:${attributeName.actual}`,
-  //     group: 'Attribute Trait',
-  //     label: `has: ${attributeName.highlight}`,
-  //     meta: attributeName.actual,
-  //     type: 'search',
-  //   })
-  // );
-
-  // attributeValues.map((attributeValue) =>
-  //   suggestions.push({
-  //     key: `attributeValue:${attributeValue.actual}`,
-  //     group: 'Attribute Value',
-  //     label: `equals: ${attributeValue.highlight}`,
-  //     meta: attributeValue.actual,
-  //     type: 'search',
-  //   })
-  // );
 
   return suggestions;
 };

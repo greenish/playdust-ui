@@ -208,7 +208,7 @@ function WindowInput() {
             })}
             {loading && (
               <Stack sx={{ px: 3 }}>
-                <SkeletonRows />
+                <SkeletonRows rows={2} />
               </Stack>
             )}
           </List>

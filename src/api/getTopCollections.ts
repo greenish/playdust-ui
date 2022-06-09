@@ -1,14 +1,14 @@
-import { NextApiRequest } from 'next';
+import type { SearchRequest } from '@opensearch-project/opensearch/api/types';
+import { defaulted, number, type } from 'superstruct';
 import type TopCollectionsResponseType from '../App/Window/WindowSwitch/Home/_types/TopCollectionsResponseType';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postCollectionQuery from './_helpers/postCollectionQuery';
-import postMultiNFTQuery from './_helpers/postMultiNFTQuery';
-import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
+import searchCollections from './_helpers/searchCollections';
+import searchNFTs from './_helpers/searchNFTs';
 
 const collectionPageSize = 25;
 const topCollectionLimit = 100;
 
-const getTopCollectionQuery = (page: number) => ({
+const getTopCollectionQuery = (page: number): SearchRequest['body'] => ({
   _source: {
     exclude: ['attributes'],
   },
@@ -17,32 +17,32 @@ const getTopCollectionQuery = (page: number) => ({
   sort: [
     '_score',
     {
-      totalVolume: {
+      'volume.global.total': {
         order: 'desc',
       },
     },
   ],
 });
 
-const getNFTQuery = (collectionId: string) => ({
+const getNFTQuery = (collectionId: string): SearchRequest['body'] => ({
   size: 20,
-  _source: [
-    'mint',
-    'offChainData.image',
-    'offChainData.name',
-    'heuristicCollectionId',
-  ],
+  _source: ['mint', 'image', 'name'],
   query: {
     bool: {
       filter: [
         {
-          terms: {
-            heuristicCollectionId: [collectionId],
+          nested: {
+            path: 'collections',
+            query: {
+              term: {
+                'collections.id': collectionId,
+              },
+            },
           },
         },
         {
           exists: {
-            field: 'offChainData.image',
+            field: 'image',
           },
         },
       ],
@@ -50,36 +50,30 @@ const getNFTQuery = (collectionId: string) => ({
   },
   sort: [
     {
-      rarityScore: 'asc',
+      normalizedRarityScore: 'desc',
     },
   ],
 });
 
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: {
-    page?: number;
-  };
-}
+const TopCollectionsBody = type({
+  page: defaulted(number(), 0),
+});
 
 const getTopCollections = nextApiHandler<TopCollectionsResponseType>(
-  async (req: ExtendedNextApiRequest): Promise<TopCollectionsResponseType> => {
-    const page: number = req.body.page || 0;
+  async (req) => {
+    const { page } = TopCollectionsBody.create(req);
 
     const topCollectionQuery = getTopCollectionQuery(page);
-    const topCollectionResult = await postCollectionQuery(topCollectionQuery);
+    const [topCollectionResult] = await searchCollections([topCollectionQuery]);
 
-    const topNFTQueries = topCollectionResult.hits.hits.map((entry) =>
-      getNFTQuery(entry._id)
-    );
-    const multiNftQuery = queriesToMultiSearch(topNFTQueries, 'nft-metadata');
-    const nftResults = await postMultiNFTQuery(multiNftQuery);
-    const nftSources = nftResults.map((entry) =>
-      entry.hits.hits.map((child) => child._source)
+    const topNFTQueries = topCollectionResult.sources.map((entry) =>
+      getNFTQuery(entry.id)
     );
 
-    const results = topCollectionResult.hits.hits.map((collection, idx) => ({
-      collection: collection._source,
-      nfts: nftSources[idx],
+    const nftResults = await searchNFTs(topNFTQueries);
+    const results = topCollectionResult.sources.map((collection, idx) => ({
+      collection,
+      nfts: nftResults[idx].sources,
     }));
 
     return {

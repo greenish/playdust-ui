@@ -2,12 +2,20 @@ import {
   QueryDslQueryContainer,
   SearchRequest,
 } from '@opensearch-project/opensearch/api/types';
-import { array, create, number, object, string, type } from 'superstruct';
+import {
+  array,
+  boolean,
+  create,
+  number,
+  object,
+  optional,
+  string,
+  type,
+} from 'superstruct';
 import getQueryDependencyPath from '../App/Window/WindowInput/_helpers/getQueryDependencyPath';
 import hasCollectionDependency from '../App/Window/WindowInput/_helpers/hasCollectionDependency';
 import SearchAggResponseType from '../App/Window/WindowInput/_types/SearchAggResponseType';
 import SearchQueryType from '../App/Window/_types/SearchQueryType';
-import getAttributeAggQuery from './_helpers/getAttributeAggQuery';
 import getNFTQueryById from './_helpers/getNFTQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchNFTs from './_helpers/searchNFTs';
@@ -37,10 +45,40 @@ const buildSuggestionQuery = (
   };
 };
 
+const getAttributeAggQuery = (
+  aggSize = 20,
+  aggOptionSize = 50
+): SearchRequest['body'] => ({
+  size: 0,
+  aggs: {
+    name: {
+      nested: {
+        path: 'attributes',
+      },
+      aggs: {
+        key: {
+          terms: {
+            field: 'attributes.key.keyword',
+            size: aggSize,
+          },
+          aggs: {
+            value: {
+              terms: {
+                field: 'attributes.value.keyword',
+                size: aggOptionSize,
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
 const SearchAttributeAggType = type({
   name: object({
     doc_count: number(),
-    trait: object({
+    key: object({
       doc_count_error_upper_bound: number(),
       sum_other_doc_count: number(),
       buckets: array(
@@ -65,12 +103,16 @@ const SearchAttributeAggType = type({
 
 const SearchSuggestionInputType = type({
   query: SearchQueryType,
+  onlyListed: optional(boolean()),
   activeNodeId: string(),
 });
 
-const getSearchAggregationsNew = nextApiHandler<SearchAggResponseType>(
+const getSearchAggregations = nextApiHandler<SearchAggResponseType>(
   async (req) => {
-    const { query, activeNodeId } = create(req.body, SearchSuggestionInputType);
+    const { query, activeNodeId, onlyListed } = create(
+      req.body,
+      SearchSuggestionInputType
+    );
     const suggestionNFTQuery = buildSuggestionQuery(query, activeNodeId);
     const activeNode = query.nodes[activeNodeId];
     const isAttributeNode =
@@ -86,13 +128,10 @@ const getSearchAggregationsNew = nextApiHandler<SearchAggResponseType>(
       query: suggestionNFTQuery,
     };
 
-    const results = await searchNFTs(aggRequest);
-    const aggregations = create(
-      results.body.aggregations,
-      SearchAttributeAggType
-    );
+    const [results] = await searchNFTs([aggRequest], { onlyListed });
+    const aggregations = create(results.aggregations, SearchAttributeAggType);
 
-    const payload = aggregations.name.trait.buckets.map((bucket) => ({
+    const payload = aggregations.name.key.buckets.map((bucket) => ({
       key: bucket.key,
       values: bucket.value.buckets.map((bucketValue) => ({
         value: bucketValue.key,
@@ -108,4 +147,4 @@ const getSearchAggregationsNew = nextApiHandler<SearchAggResponseType>(
   }
 );
 
-export default getSearchAggregationsNew;
+export default getSearchAggregations;

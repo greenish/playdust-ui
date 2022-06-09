@@ -23,11 +23,11 @@ interface CreatorInfo {
 function MetaplexCreators() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
-  if (!playdustNftData || !playdustNftData.metaplexOnChainData) {
+  if (!playdustNftData || !playdustNftData.mintOnChainMetadata) {
     return null;
   }
 
-  const details = playdustNftData.metaplexOnChainData;
+  const details = playdustNftData.mintOnChainMetadata;
 
   return (
     <ExplorerAccordion

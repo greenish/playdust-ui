@@ -13,11 +13,11 @@ const Item = styled(Paper)`
 function MetaplexNFTAttributes() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
-  if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
+  if (!playdustNftData || !playdustNftData.mintOffChainMetadata) {
     return null;
   }
 
-  const { attributes } = playdustNftData.metaplexOffChainData;
+  const { attributes } = playdustNftData.mintOffChainMetadata;
 
   if (!attributes) {
     return null;

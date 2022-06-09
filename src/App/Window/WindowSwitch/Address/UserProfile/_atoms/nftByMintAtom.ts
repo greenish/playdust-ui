@@ -1,6 +1,6 @@
 import { selectorFamily } from 'recoil';
-import frontendApi from '../../../_helpers/frontendApi';
-import OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
+import frontendApi from '../../../../_helpers/frontendApi';
+import OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 
 const nftByMintAtom = selectorFamily<OpenSearchNFTSourceType | null, string>({
   key: 'nftByMintAtom',

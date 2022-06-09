@@ -24,11 +24,11 @@ function NFTDetailsRenderMedia() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
   const [visible, setVisible] = useState(false);
 
-  if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
+  if (!playdustNftData || !playdustNftData.mintOffChainMetadata) {
     return null;
   }
 
-  const offChainData = playdustNftData.metaplexOffChainData;
+  const offChainData = playdustNftData.mintOffChainMetadata;
 
   const isNSFW = false;
 

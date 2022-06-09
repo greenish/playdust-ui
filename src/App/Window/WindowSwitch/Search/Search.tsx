@@ -42,9 +42,9 @@ function Search() {
       searchResults.contents.total > 0
     ) {
       const filtered = searchResults.contents.nfts
-        .filter((nft) => nft?.offChainData?.image)
+        .filter((nft) => nft?.image)
         .slice(0, 4)
-        .map((nft) => nft?.offChainData?.image);
+        .map((nft) => nft?.image);
 
       if (filtered.length) {
         setWindowImages(filtered);

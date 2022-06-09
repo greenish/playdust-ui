@@ -32,9 +32,9 @@ function CollectionOverview() {
       return false;
     }
 
-    const highestVolume = overview.similar[0]?.totalVolume || 0;
+    const highestVolume = overview.similar[0]?.volume.global.total || 0;
 
-    return highestVolume > overview.totalVolume;
+    return highestVolume > overview.volume.global.total;
   }, [overview]);
 
   if (!overview) {
@@ -47,7 +47,9 @@ function CollectionOverview() {
         <Typography sx={{ mr: 1 }}>&middot;</Typography>
         <Chip
           size="small"
-          label={`Collection Volume: ${humanizeSolana(overview.totalVolume)}`}
+          label={`Collection Volume: ${humanizeSolana(
+            overview.volume.global.total
+          )}`}
           variant="outlined"
         />
         <Chip
@@ -55,7 +57,7 @@ function CollectionOverview() {
           label={`Collection Items: ${overview.elementCount.toLocaleString()}`}
           variant="outlined"
         />
-        {overview.similar.length && (
+        {overview.similar.length > 0 && (
           <>
             <Tooltip
               sx={{

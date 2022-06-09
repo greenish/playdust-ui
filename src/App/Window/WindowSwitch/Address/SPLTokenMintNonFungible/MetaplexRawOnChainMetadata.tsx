@@ -12,7 +12,7 @@ const DynamicReactJson = dynamic(import('react-json-view'), {
 function MetaplexRawOnChainMetadata() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
-  if (!playdustNftData || !playdustNftData.metaplexOnChainData) {
+  if (!playdustNftData || !playdustNftData.mintOnChainMetadata) {
     return null;
   }
 
@@ -22,7 +22,7 @@ function MetaplexRawOnChainMetadata() {
       content={
         <DynamicReactJson
           name={null}
-          src={playdustNftData.metaplexOnChainData}
+          src={playdustNftData.mintOnChainMetadata}
           collapseStringsAfterLength={50}
           groupArraysAfterLength={20}
         />
