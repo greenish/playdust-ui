@@ -121,34 +121,16 @@ const getCollectionOverview = nextApiHandler<CollectionOverviewResponseType>(
       { body: similarCollectionQuery },
     ]);
 
-    const baseNFTSearchRequest = {
-      body: {
-        query: getNFTQuery(collectionId),
-        size: 0,
-      },
-      options: {
-        onlyListed: true,
-      },
-    };
-
-    if (seed.image) {
-      const [collectionListedResult] = await searchNFTs([
-        baseNFTSearchRequest,
-        {
-          body: getRarestNFTsByCollectionBody(collectionId, 10),
-        },
-      ]);
-
-      return {
-        ...seed,
-        elementCount: seed.elementCount || 0,
-        similar: similarResult.sources,
-        listed: collectionListedResult.total,
-      };
-    }
-
     const [collectionListedResult, rarestNFTs] = await searchNFTs([
-      baseNFTSearchRequest,
+      {
+        body: {
+          query: getNFTQuery(collectionId),
+          size: 0,
+        },
+        options: {
+          onlyListed: true,
+        },
+      },
       {
         body: getRarestNFTsByCollectionBody(collectionId),
       },
