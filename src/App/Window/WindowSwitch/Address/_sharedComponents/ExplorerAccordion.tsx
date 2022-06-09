@@ -13,6 +13,7 @@ type ExplorerAccordionPropTypes = {
   content: JSX.Element;
   expanded?: boolean;
   onChange?: AccordionProps['onChange'];
+  itemType?: 'table';
 };
 
 const slug = (input: string): string =>
@@ -25,6 +26,7 @@ function ExplorerAccordion({
   content,
   expanded = false,
   onChange,
+  itemType,
 }: ExplorerAccordionPropTypes) {
   const [accordionState, setAccordionState] = useState({
     expanded,
@@ -36,6 +38,7 @@ function ExplorerAccordion({
 
   return (
     <Accordion
+      itemType={itemType}
       expanded={currentlyExpanded}
       onChange={(e, isExpanded) => {
         setAccordionState({

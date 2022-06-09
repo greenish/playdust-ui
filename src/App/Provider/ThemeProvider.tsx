@@ -8,6 +8,7 @@ import { createTheme } from '@mui/material/styles';
 import React, { PropsWithChildren } from 'react';
 
 const greyBackground = '#F6F6F6';
+const border = '1px solid #e2e2e2';
 
 const baseTheme = createTheme({
   typography: {
@@ -165,6 +166,36 @@ const themeOverrides = createTheme({
     MuiChip: {
       defaultProps: {
         size: 'small',
+      },
+    },
+    MuiAccordion: {
+      defaultProps: {
+        square: true,
+        disableGutters: true,
+      },
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          border,
+          borderBottom: 0,
+          '.MuiAccordionSummary-root': {
+            background: greyBackground,
+            borderBottom: border,
+          },
+          '.MuiAccordionDetails-root': {
+            padding: ownerState.itemType === 'table' ? 0 : 16,
+            borderBottom: border,
+          },
+        }),
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          '&:last-child td, &:last-child th': {
+            border: 0,
+          },
+          cursor: ownerState.onClick ? 'pointer' : 'default',
+        }),
       },
     },
   },

@@ -74,7 +74,7 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
     initialized,
     getRowMeta,
     width,
-    windowScrollerProps: { height, isScrolling, onChildScroll, scrollTop },
+    windowScrollerProps: { height = 0, isScrolling, onChildScroll, scrollTop },
   } = props;
 
   const meta = useMemo(
@@ -166,23 +166,21 @@ function VirtualizedGrid({ content, ...props }: VirtualizedGridProps) {
             </div>
           )}
           <WindowScroller ref={windowScrollerRef} scrollElement={scrollElement}>
-            {(windowScrollerProps) =>
-              windowScrollerProps.height ? (
-                <div ref={windowScrollerProps.registerChild}>
-                  <AutoSizer disableHeight={true}>
-                    {({ width }) => (
-                      <AutoSizedContainer
-                        {...props}
-                        isLoading={isLoading}
-                        setIsLoading={setIsLoading}
-                        width={width}
-                        windowScrollerProps={windowScrollerProps}
-                      />
-                    )}
-                  </AutoSizer>
-                </div>
-              ) : null
-            }
+            {(windowScrollerProps) => (
+              <div ref={windowScrollerProps.registerChild}>
+                <AutoSizer disableHeight={true}>
+                  {({ width }) => (
+                    <AutoSizedContainer
+                      {...props}
+                      isLoading={isLoading}
+                      setIsLoading={setIsLoading}
+                      width={width}
+                      windowScrollerProps={windowScrollerProps}
+                    />
+                  )}
+                </AutoSizer>
+              </div>
+            )}
           </WindowScroller>
         </ContentContainer>
       )}

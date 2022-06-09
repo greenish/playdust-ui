@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
+import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
-import collectionOverviewAtom from '../_atoms/collectionOverviewAtom';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
-import CollectionNFTDetails from './CollectionNFTDetails';
+import CollectionNFTDetails from './CollectionNFTDetails/CollectionNFTDetails';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoTokensContainer = styled.div`
@@ -16,10 +16,8 @@ const NoTokensContainer = styled.div`
 
 function SearchResults() {
   const loadable = useRecoilValueLoadable(searchResultsAtom);
-  const overview = useRecoilValueLoadable(collectionOverviewAtom);
   const fetchMoreSearchResults = useFetchMoreSearchResults();
-  const hasValue =
-    loadable.state === 'hasValue' && overview.state === 'hasValue';
+  const hasValue = loadable.state === 'hasValue';
 
   if (hasValue && loadable.contents.total === 0) {
     return (
@@ -39,7 +37,13 @@ function SearchResults() {
       tokens={hasValue ? loadable.contents.nfts : []}
       total={hasValue ? loadable.contents.total : 0}
       next={fetchMoreSearchResults}
-      content={<CollectionNFTDetails />}
+      content={
+        <SuspenseBoundary
+          error={null}
+          loading={null}
+          content={<CollectionNFTDetails />}
+        />
+      }
     />
   );
 }

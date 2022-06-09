@@ -10,7 +10,7 @@ import topCollectionsAtom from './_atoms/topCollectionsAtom';
 import useFetchMoreTopCollections from './_hooks/useFetchMoreTopCollections';
 
 const RootContainer = styled.div`
-  padding: 0 16px;
+  padding: 0 0 0 16px;
   overflow: auto;
   height: 100%;
   width: 100%;
