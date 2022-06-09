@@ -12,7 +12,7 @@ const searchOverviewAtom = selector<SearchOverviewResponseType>({
     const serialized = get(searchStateSerializedAtom);
     const parsed = parseSearch(serialized);
 
-    if (!parsed) {
+    if (!parsed || parsed.query.rootId === '') {
       return {
         listed: 0,
         floor: 0,

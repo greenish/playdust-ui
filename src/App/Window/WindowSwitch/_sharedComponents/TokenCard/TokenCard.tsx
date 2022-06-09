@@ -8,7 +8,7 @@ import humanizeSolana from '../../_helpers/humanizeSolana';
 import Link from '../Link';
 import ImageCard from './ImageCard';
 import SkeletonImageCard from './SkeletonImageCard';
-import TokenCardFilter from './TokenCardFilter';
+import TokenCardFilter from './TokenCardFilter/TokenCardFilter';
 import type TokenCardProps from './_types/TokenCardProps';
 
 const CardContentContainer = styled.div`

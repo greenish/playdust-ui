@@ -1,14 +1,11 @@
-import { useRecoilValue } from 'recoil';
-import searchStateAtom from '../../../../_atoms/searchStateAtom';
-import reduceSearchQuery from '../../../../_helpers/reduceSearchQuery';
-import useChangeSearchQuery from '../../../../_hooks/useChangeSearchQuery';
+import makeUseChangeSearchQuery from '../../../../_hooks/makeUseChangeSearchQuery';
+import useGetUpdateSearchQuery from '../../../../_hooks/useGetUpdateSearchQuery';
 
-const useToggleGroupOperator = () => {
-  const { query } = useRecoilValue(searchStateAtom);
-  const changeSearchQuery = useChangeSearchQuery();
+const useToggleGroupOperator = makeUseChangeSearchQuery(() => {
+  const getUpdateSearchQuery = useGetUpdateSearchQuery();
 
-  return (groupNodeId: string) => {
-    const updatedQuery = reduceSearchQuery(query, (node) => {
+  return (groupNodeId: string) =>
+    getUpdateSearchQuery((node) => {
       if (node.type === 'group' && node.id === groupNodeId) {
         return {
           ...node,
@@ -18,9 +15,6 @@ const useToggleGroupOperator = () => {
 
       return node;
     });
-
-    changeSearchQuery({ query: updatedQuery });
-  };
-};
+});
 
 export default useToggleGroupOperator;

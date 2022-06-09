@@ -1,11 +1,11 @@
 import { selector } from 'recoil';
-import searchQueryTermAtom from '../../_atoms/searchQueryTermAtom';
 import frontendApi from '../../_helpers/frontendApi';
 import type OpenSearchCollectionSourceHighlightType from '../_types/OpenSearchCollectionSourceHighlightType';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import hasCollectionDependencyAtom from './hasCollectionDependencyAtom';
 import searchQueryDebouncedTermAtom from './searchQueryDebouncedTermAtom';
+import searchQueryTermAtom from './searchQueryTermAtom';
 import searchQueryTermWindowTypeAtom from './searchQueryTermWindowTypeAtom';
 
 const getHighlight = ({
