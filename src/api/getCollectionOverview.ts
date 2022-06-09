@@ -36,7 +36,6 @@ const getMatchField = (
       ]
     : [];
 
-
 const getSimilarCollectionQuery = ({
   id,
   name,
@@ -75,10 +74,10 @@ const getSimilarCollectionQuery = ({
             query: {
               exists: {
                 field: 'attributes',
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       ],
     },
   },
@@ -91,7 +90,6 @@ const getSimilarCollectionQuery = ({
     },
   ],
 });
-
 
 const getNFTQuery = (collectionId: string): QueryDslQueryContainer => ({
   bool: {
