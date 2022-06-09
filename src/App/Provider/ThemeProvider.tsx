@@ -191,9 +191,9 @@ const themeOverrides = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: ({ ownerState }) => ({
-          '&:last-child td, &:last-child th': {
-            border: 0,
-          },
+          // '&:last-child td, &:last-child th': {
+          //   border: 0,
+          // },
           cursor: ownerState.onClick ? 'pointer' : 'default',
         }),
       },

@@ -1,4 +1,4 @@
-import { Box, Card, styled, Typography } from '@mui/material';
+import { Box, Card, Grid, styled, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import ImageButton from '../../../../../_sharedComponents/ImageButton';
@@ -71,18 +71,21 @@ function OverviewItem(props: OverviewItemProps) {
 
 const CardContainer = styled(Card)({
   display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
   backgroundColor: 'white',
   border,
-  flexDirection: 'column',
   padding: 24,
   width: '100%',
+  height: '100%',
 });
 
 const ItemsContainer = styled(Box)({
-  marginTop: 24,
-  border,
   display: 'flex',
   justifyContent: 'space-around',
+  width: '100%',
+  border,
+  marginBottom: 16,
 });
 
 function CollectionNFTDetails() {
@@ -100,28 +103,27 @@ function CollectionNFTDetails() {
         .map((nft) => nft?.offChainData?.image)
     : [];
 
+  const hasSimilar = !!overview.similar.length;
+
   return (
-    <Box>
-      <CardContainer>
-        <Box sx={{ display: 'flex' }}>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={hasSimilar ? 6 : 12}>
+        <CardContainer>
           <ImageButton size={200} transitionDuration={1} images={images} />
-          <Box
-            sx={{
-              ml: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
+          <Typography
+            gutterBottom={true}
+            variant="h5"
+            component="div"
+            sx={{ mt: 2 }}
           >
-            <Typography gutterBottom={true} variant="h5" component="div">
-              {humanizeCollection(overview)}
+            {humanizeCollection(overview)}
+          </Typography>
+          {overview.description && (
+            <Typography variant="body2" color="text.secondary">
+              {overview.description}
             </Typography>
-            {overview.description && (
-              <Typography variant="body2" color="text.secondary">
-                {overview.description}
-              </Typography>
-            )}
-            <ItemsContainer>
+          )}
+          {/* <ItemsContainer>
               {items.map(
                 (item) =>
                   overview && (
@@ -132,16 +134,53 @@ function CollectionNFTDetails() {
                     />
                   )
               )}
-            </ItemsContainer>
+            </ItemsContainer> */}
+        </CardContainer>
+      </Grid>
+      {hasSimilar && (
+        <Grid item xs={12} md={6}>
+          <ItemsContainer>
+            {items.map(
+              (item) =>
+                overview && (
+                  <OverviewItem
+                    key={item.label}
+                    label={item.label}
+                    value={item.getValue(overview)}
+                  />
+                )
+            )}
+          </ItemsContainer>
+          <Box sx={{ border }}>
+            <SimilarCollections overview={overview} />
           </Box>
-        </Box>
-      </CardContainer>
+        </Grid>
+      )}
+    </Grid>
+  );
+}
+function _CollectionNFTDetails() {
+  const overview = useRecoilValue(collectionOverviewAtom);
+  const searchResults = useRecoilValue(searchResultsAtom);
 
+  if (!overview) {
+    return null;
+  }
+
+  const images = searchResults.total
+    ? searchResults.nfts
+        .filter((nft) => nft?.offChainData?.image)
+        .slice(0, 4)
+        .map((nft) => nft?.offChainData?.image)
+    : [];
+
+  return (
+    <Box sx={{ display: 'flex' }}>
       {!!overview.similar.length && (
-        <Box sx={{ mt: 3 }}>
+        <Box sx={{ ml: 2, maxHeight: 450, overflow: 'auto' }}>
           <ExplorerAccordion
             itemType="table"
-            expanded={false}
+            expanded={true}
             id="similar-collections"
             title="Similar NFT Collections found"
             content={<SimilarCollections overview={overview} />}

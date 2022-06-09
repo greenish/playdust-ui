@@ -2,11 +2,23 @@ import { selector } from 'recoil';
 import searchStateAtom from '../../../../../_atoms/searchStateAtom';
 import api from '../../../../../_helpers/frontendApi';
 import CollectionQueryNodeType from '../../../../../_types/CollectionQueryNodeType';
+import addressStateAtom from '../../../../Address/_atoms/addressStateAtom';
+import nftByMintAtom from '../../../../Address/_atoms/nftByMintAtom';
+import safePubkeyString from '../../../../Address/_helpers/safePubkeyString';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
 
-const collectionOverviewAtom = selector<CollectionOverviewResponseType | null>({
-  key: 'collectionOverviewAtom',
-  get: async ({ get }) => {
+const collectionIdAtom = selector<string | null>({
+  key: 'collectionIdAtom',
+  get: ({ get }) => {
+    const addressState = get(addressStateAtom);
+
+    if (addressState) {
+      const mintAddress = safePubkeyString(addressState.pubkey);
+      const nft = get(nftByMintAtom(mintAddress));
+
+      return nft?.heuristicCollectionId || null;
+    }
+
     const { query } = get(searchStateAtom);
 
     const collectionNodes = Object.values(query.nodes).filter((entry) =>
@@ -15,8 +27,21 @@ const collectionOverviewAtom = selector<CollectionOverviewResponseType | null>({
     const firstNode = collectionNodes[0];
 
     if (collectionNodes.length === 1 && CollectionQueryNodeType.is(firstNode)) {
+      return firstNode.value;
+    }
+
+    return null;
+  },
+});
+
+const collectionOverviewAtom = selector<CollectionOverviewResponseType | null>({
+  key: 'collectionOverviewAtom',
+  get: async ({ get }) => {
+    const collectionId = get(collectionIdAtom);
+
+    if (collectionId) {
       const { data } = await api.get<CollectionOverviewResponseType>(
-        `/collection-overview?id=${firstNode.value}`
+        `/collection-overview?id=${collectionId}`
       );
 
       return data;
