@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
-import CollectionNFTDetails from './CollectionNFTDetails';
 import collectionOverviewAtom from '../_atoms/collectionOverviewAtom';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
+import CollectionNFTDetails from './CollectionNFTDetails';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoTokensContainer = styled.div`
@@ -14,25 +14,12 @@ const NoTokensContainer = styled.div`
   margin-top: 64px;
 `;
 
-function CollectionOverview() {
-  const overview = useRecoilValueLoadable(collectionOverviewAtom);
-
-  return (
-    <CollectionNFTDetails
-      skeleton={overview.state === 'loading'}
-      overview={
-        overview.state === 'hasValue' && overview.contents
-          ? overview.contents
-          : null
-      }
-    />
-  );
-}
-
 function SearchResults() {
   const loadable = useRecoilValueLoadable(searchResultsAtom);
+  const overview = useRecoilValueLoadable(collectionOverviewAtom);
   const fetchMoreSearchResults = useFetchMoreSearchResults();
-  const hasValue = loadable.state === 'hasValue';
+  const hasValue =
+    loadable.state === 'hasValue' && overview.state === 'hasValue';
 
   if (hasValue && loadable.contents.total === 0) {
     return (
@@ -52,7 +39,7 @@ function SearchResults() {
       tokens={hasValue ? loadable.contents.nfts : []}
       total={hasValue ? loadable.contents.total : 0}
       next={fetchMoreSearchResults}
-      content={<CollectionOverview />}
+      content={<CollectionNFTDetails />}
     />
   );
 }

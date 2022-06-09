@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useDebounceCallback } from '@react-hook/debounce';
 import React, {
   Dispatch,
   ReactNode,
@@ -132,7 +133,7 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
             autoHeight={true}
             isScrolling={isScrolling}
             onScroll={onChildScroll}
-            overscanRowCount={2}
+            overscanRowCount={4}
             scrollTop={scrollTop}
           />
         )}
@@ -145,12 +146,26 @@ function VirtualizedGrid({ content, ...props }: VirtualizedGridProps) {
   const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>();
   const [isLoading, setIsLoading] = useState(false);
 
+  const windowScrollerRef = useRef<WindowScroller>(null);
+  const updatePosition = useDebounceCallback(() =>
+    windowScrollerRef.current?.updatePosition()
+  );
+  const contentObserver = React.useRef(
+    new ResizeObserver(() => {
+      updatePosition();
+    })
+  );
+
   return (
     <RootContainer ref={setScrollElement}>
       {scrollElement && (
         <ContentContainer>
-          {content}
-          <WindowScroller scrollElement={scrollElement}>
+          {content && (
+            <div ref={(el) => el && contentObserver.current.observe(el)}>
+              {content}
+            </div>
+          )}
+          <WindowScroller ref={windowScrollerRef} scrollElement={scrollElement}>
             {(windowScrollerProps) =>
               windowScrollerProps.height ? (
                 <div ref={windowScrollerProps.registerChild}>
