@@ -40,8 +40,10 @@ const SearchSuggestionsBody = type({
 const getSearchSuggetions = nextApiHandler<SearchSuggestionResponseType>(
   async (req) => {
     const { term } = SearchSuggestionsBody.create(req.body);
-    const collectionQuery = getCollectionQuery(term);
-    const [collectionResult] = await searchCollections([collectionQuery]);
+    const collectionBody = getCollectionQuery(term);
+    const [collectionResult] = await searchCollections([
+      { body: collectionBody },
+    ]);
 
     const collections = collectionResult.sources.map((source, idx) => ({
       source,

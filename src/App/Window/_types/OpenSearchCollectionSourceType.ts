@@ -9,6 +9,7 @@ type OpenSearchCollectionSourceType = Infer<
 const OpenSearchCollectionSourceType = type({
   name: coercedOptional(string()),
   symbol: coercedOptional(string()),
+  image: coercedOptional(string()),
   attributes: coercedDefaulted(
     array(
       type({

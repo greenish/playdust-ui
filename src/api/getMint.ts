@@ -14,8 +14,10 @@ const getMint = nextApiHandler<OpenSearchNFTSourceType>(async (req) => {
 
   const [{ sources }] = await searchNFTs([
     {
-      query,
-      size: 1,
+      body: {
+        query,
+        size: 1,
+      },
     },
   ]);
 

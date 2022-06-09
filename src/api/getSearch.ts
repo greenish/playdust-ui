@@ -44,19 +44,19 @@ const getSearch = nextApiHandler<SearchResponseType>(async (req) => {
   const { size, from } = getSizeFrom(page);
   const nftQuery = getNFTQueryById(query, query.rootId);
 
-  const [{ sources, total }] = await searchNFTs(
-    [
-      {
+  const [{ sources, total }] = await searchNFTs([
+    {
+      body: {
         query: nftQuery,
         size,
         from,
       },
-    ],
-    {
-      sort,
-      onlyListed,
-    }
-  );
+      options: {
+        sort,
+        onlyListed,
+      },
+    },
+  ]);
 
   return {
     nfts: sources,

@@ -4,6 +4,7 @@ import type TopCollectionsResponseType from '../App/Window/WindowSwitch/Home/_ty
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchCollections from './_helpers/searchCollections';
 import searchNFTs from './_helpers/searchNFTs';
+import getRarestNFTsByCollectionBody from './_helpers/getRarestNFTsByCollectionBody';
 
 const collectionPageSize = 25;
 const topCollectionLimit = 100;
@@ -24,37 +25,6 @@ const getTopCollectionQuery = (page: number): SearchRequest['body'] => ({
   ],
 });
 
-const getNFTQuery = (collectionId: string): SearchRequest['body'] => ({
-  size: 20,
-  _source: ['mint', 'image', 'name'],
-  query: {
-    bool: {
-      filter: [
-        {
-          nested: {
-            path: 'collections',
-            query: {
-              term: {
-                'collections.id': collectionId,
-              },
-            },
-          },
-        },
-        {
-          exists: {
-            field: 'image',
-          },
-        },
-      ],
-    },
-  },
-  sort: [
-    {
-      normalizedRarityScore: 'desc',
-    },
-  ],
-});
-
 const TopCollectionsBody = type({
   page: defaulted(number(), 0),
 });
@@ -63,12 +33,14 @@ const getTopCollections = nextApiHandler<TopCollectionsResponseType>(
   async (req) => {
     const { page } = TopCollectionsBody.create(req);
 
-    const topCollectionQuery = getTopCollectionQuery(page);
-    const [topCollectionResult] = await searchCollections([topCollectionQuery]);
+    const topCollectionBody = getTopCollectionQuery(page);
+    const [topCollectionResult] = await searchCollections([
+      { body: topCollectionBody },
+    ]);
 
-    const topNFTQueries = topCollectionResult.sources.map((entry) =>
-      getNFTQuery(entry.id)
-    );
+    const topNFTQueries = topCollectionResult.sources.map((entry) => ({
+      body: getRarestNFTsByCollectionBody(entry.id),
+    }));
 
     const nftResults = await searchNFTs(topNFTQueries);
     const results = topCollectionResult.sources.map((collection, idx) => ({

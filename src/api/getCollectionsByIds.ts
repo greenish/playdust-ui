@@ -9,7 +9,7 @@ const getCollectionsByIds = nextApiHandler<OpenSearchCollectionSourceType[]>(
   async (req) => {
     const ids = CollectionByIds.create(req.body);
 
-    const esQuery = {
+    const osBody = {
       size: ids.length,
       query: {
         bool: {
@@ -22,7 +22,7 @@ const getCollectionsByIds = nextApiHandler<OpenSearchCollectionSourceType[]>(
       },
     };
 
-    const [results] = await searchCollections([esQuery]);
+    const [results] = await searchCollections([{ body: osBody }]);
 
     return results.sources;
   }

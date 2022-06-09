@@ -17,104 +17,122 @@ const getOSTotalValue = (total: SearchTotalHits | number) => {
 };
 
 type RequestBodyType = SearchRequest['body'];
+type SearchOSInputType<OptionsType> = {
+  body: RequestBodyType;
+  options?: OptionsType;
+};
 type SearchOSReturnType<SourceType> = {
   sources: SourceType[];
   total: number;
   aggregations: Record<string, AggregationsAggregate> | undefined;
   highlights: (Record<string, string[]> | undefined)[];
 };
-type GetSearchBodyType<OptionsType> = (
+type WrapSearchBodyType<OptionsType> = (
   body: RequestBodyType,
   options: OptionsType | undefined
 ) => RequestBodyType;
 
+async function singleSearch<SourceType>(
+  body: RequestBodyType,
+  index: string
+): Promise<SearchOSReturnType<SourceType>[]> {
+  const results = await osClient.search<SearchResponse<SourceType>>({
+    index,
+    body,
+  });
+
+  const sources = results.body.hits.hits.reduce<SourceType[]>((acc, curr) => {
+    const source = curr._source;
+
+    if (source) {
+      return [...acc, source];
+    }
+
+    return acc;
+  }, []);
+  const { aggregations } = results.body;
+  const highlights = results.body.hits.hits.map((entry) => entry.highlight);
+
+  return [
+    {
+      sources,
+      aggregations,
+      total: getOSTotalValue(results.body.hits.total),
+      highlights,
+    },
+  ];
+}
+
+async function multiSearch<SourceType>(
+  body: string[]
+): Promise<SearchOSReturnType<SourceType>[]> {
+  const mSearchResults = await osClient.msearch<
+    MsearchResponse<SourceType>,
+    string[]
+  >({
+    body,
+  });
+
+  const responses = mSearchResults.body.responses.reduce<
+    SearchOSReturnType<SourceType>[]
+  >((acc, curr) => {
+    if ('error' in curr) {
+      return acc;
+    }
+
+    const { aggregations } = curr;
+
+    const sources = curr.hits.hits.reduce<SourceType[]>((yAcc, yCurr) => {
+      if (!yCurr._source) {
+        return yAcc;
+      }
+
+      return [...yAcc, yCurr._source];
+    }, []);
+
+    const highlights = curr.hits.hits.map((entry) => entry.highlight);
+
+    return [
+      ...acc,
+      {
+        sources,
+        aggregations,
+        total: getOSTotalValue(curr.hits.total),
+        highlights,
+      },
+    ];
+  }, []);
+
+  return responses;
+}
+
 function makeSearchOS<SourceType, OptionsType>(
   index: 'nft-metadata' | 'nft-collection',
   struct: Struct<SourceType>,
-  getSearchBody: GetSearchBodyType<OptionsType>
+  wrapSearchBody: WrapSearchBodyType<OptionsType>
 ) {
   return async (
-    bodies: RequestBodyType[],
-    options?: OptionsType
+    input: SearchOSInputType<OptionsType>[]
   ): Promise<SearchOSReturnType<SourceType>[]> => {
     const creator = array(struct);
+    const isSingleSearch = input.length === 1;
+    let data: SearchOSReturnType<SourceType>[] = [];
 
-    if (bodies.length === 1) {
-      const body = getSearchBody(bodies[0], options);
-
-      const results = await osClient.search<SearchResponse<SourceType>>({
-        index,
-        body,
-      });
-
-      const sources = results.body.hits.hits.reduce<SourceType[]>(
-        (acc, curr) => {
-          const source = curr._source;
-
-          if (source) {
-            return [...acc, source];
-          }
-
-          return acc;
-        },
-        []
-      );
-      const { aggregations } = results.body;
-      const highlights = results.body.hits.hits.map((entry) => entry.highlight);
-
-      return [
-        {
-          sources: creator.create(sources),
-          aggregations,
-          total: getOSTotalValue(results.body.hits.total),
-          highlights,
-        },
-      ];
+    if (isSingleSearch) {
+      const body = wrapSearchBody(input[0].body, input[0].options);
+      data = await singleSearch<SourceType>(body, index);
+    } else {
+      const body = input.flatMap((entry) => [
+        `{ "index": "${index}" }`,
+        JSON.stringify(wrapSearchBody(entry.body, entry.options)),
+      ]);
+      data = await multiSearch<SourceType>(body);
     }
 
-    const mSearchBody = bodies.flatMap((body) => [
-      `{ "index": "${index}" }`,
-      JSON.stringify(getSearchBody(body, options)),
-    ]);
-
-    const mSearchResults = await osClient.msearch<
-      MsearchResponse<SourceType>,
-      string[]
-    >({
-      body: mSearchBody,
-    });
-
-    const responses = mSearchResults.body.responses.reduce<
-      SearchOSReturnType<SourceType>[]
-    >((acc, curr) => {
-      if ('error' in curr) {
-        return acc;
-      }
-
-      const { aggregations } = curr;
-
-      const sources = curr.hits.hits.reduce<SourceType[]>((yAcc, yCurr) => {
-        if (!yCurr._source) {
-          return yAcc;
-        }
-
-        return [...yAcc, yCurr._source];
-      }, []);
-
-      const highlights = curr.hits.hits.map((entry) => entry.highlight);
-
-      return [
-        ...acc,
-        {
-          sources: creator.create(sources),
-          aggregations,
-          total: getOSTotalValue(curr.hits.total),
-          highlights,
-        },
-      ];
-    }, []);
-
-    return responses;
+    return data.map((entry) => ({
+      ...entry,
+      sources: creator.create(entry.sources),
+    }));
   };
 }
 

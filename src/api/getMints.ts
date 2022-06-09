@@ -6,7 +6,7 @@ import searchNFTs from './_helpers/searchNFTs';
 const getMints = nextApiHandler<OpenSearchNFTSourceType[]>(async (req) => {
   const mints = create(req.body, array(string()));
 
-  const searchRequest = {
+  const searchBody = {
     size: mints.length,
     query: {
       ids: {
@@ -15,7 +15,7 @@ const getMints = nextApiHandler<OpenSearchNFTSourceType[]>(async (req) => {
     },
   };
 
-  const [{ sources }] = await searchNFTs([searchRequest]);
+  const [{ sources }] = await searchNFTs([{ body: searchBody }]);
 
   return sources;
 });

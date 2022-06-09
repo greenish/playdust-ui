@@ -57,7 +57,7 @@ const getCollectionImage = nextApiHandler<Buffer>(async (req, res) => {
       ],
       size: 4,
     };
-    const [result] = await searchNFTs([query]);
+    const [result] = await searchNFTs([{ body: query }]);
     const images = result.sources.map((entry) => entry.image);
 
     const cdnPaths = images.map(

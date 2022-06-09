@@ -3,6 +3,8 @@ import type OpenSearchCollectionSourceType from '../../../../../_types/OpenSearc
 interface CollectionOverviewResponseType
   extends OpenSearchCollectionSourceType {
   similar: OpenSearchCollectionSourceType[];
+  listed: number;
+  images?: string[];
 }
 
 export default CollectionOverviewResponseType;

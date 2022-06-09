@@ -29,9 +29,9 @@ const getSearchOverview = nextApiHandler<SearchOverviewResponseType>(
     const { query } = SearchOverviewRequest.create(req.body);
     const nftQuery = getNFTQueryById(query, query.rootId);
 
-    const [result] = await searchNFTs(
-      [
-        {
+    const [result] = await searchNFTs([
+      {
+        body: {
           query: nftQuery,
           aggregations: {
             asks: {
@@ -47,11 +47,11 @@ const getSearchOverview = nextApiHandler<SearchOverviewResponseType>(
           },
           size: 0,
         },
-      ],
-      {
-        onlyListed: true,
-      }
-    );
+        options: {
+          onlyListed: true,
+        },
+      },
+    ]);
 
     const { asks } = SearchOverviewAggType.create(result.aggregations);
     const { ceiling, floor, average } = asks;

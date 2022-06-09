@@ -128,7 +128,12 @@ const getSearchAggregations = nextApiHandler<SearchAggResponseType>(
       query: suggestionNFTQuery,
     };
 
-    const [results] = await searchNFTs([aggRequest], { onlyListed });
+    const [results] = await searchNFTs([
+      {
+        body: aggRequest,
+        options: { onlyListed },
+      },
+    ]);
     const aggregations = create(results.aggregations, SearchAttributeAggType);
 
     const payload = aggregations.name.key.buckets.map((bucket) => ({
