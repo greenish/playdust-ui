@@ -20,13 +20,13 @@ const profilePictureAtom = atom<ProfilePictureData | null>({
 
       const nft = get(nftByMintAtom(publicProfile.profilePictureMintAddress));
 
-      if (!nft || !nft.offChainData) {
+      if (!nft) {
         return null;
       }
 
       return {
         profilePictureMintAddress: nft.mint,
-        profilePictureImage: nft.offChainData.image,
+        profilePictureImage: nft.image,
       };
     },
   }),

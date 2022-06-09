@@ -17,7 +17,7 @@ function SPLTokenMintNonFungible() {
 
   useEffect(() => {
     if (setWindowImages && playdustNftData) {
-      setWindowImages([playdustNftData.metaplexOffChainData.image]);
+      setWindowImages([playdustNftData.mintOffChainMetadata.image]);
     }
   }, [setWindowImages, playdustNftData]);
 

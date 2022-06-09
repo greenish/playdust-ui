@@ -1,7 +1,14 @@
+import {
+  QueryDslQueryContainer,
+  SearchRequest,
+} from '@opensearch-project/opensearch/api/types';
+import { string } from 'superstruct';
 import CollectionOverviewResponseType from '../App/Window/WindowSwitch/_sharedComponents/CollectionNFTDetails/_types/CollectionOverviewResponseType';
 import type OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
+import getRarestNFTsByCollectionBody from './_helpers/getRarestNFTsByCollectionBody';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postCollectionQuery from './_helpers/postCollectionQuery';
+import searchCollections from './_helpers/searchCollections';
+import searchNFTs from './_helpers/searchNFTs';
 
 const getSeedQuery = (collectionId: string) => ({
   size: 1,
@@ -15,12 +22,25 @@ const getSeedQuery = (collectionId: string) => ({
   },
 });
 
+const getMatchField = (
+  input: string | null | undefined
+): QueryDslQueryContainer[] =>
+  input
+    ? [
+        {
+          match: {
+            input,
+          },
+        },
+      ]
+    : [];
+
 const getSimilarCollectionQuery = ({
   id,
   name,
   description,
   symbol,
-}: Partial<OpenSearchCollectionSourceType>) => ({
+}: OpenSearchCollectionSourceType): SearchRequest['body'] => ({
   _source: {
     exclude: ['attributes'],
   },
@@ -40,27 +60,15 @@ const getSimilarCollectionQuery = ({
         {
           bool: {
             should: [
-              name && {
-                match: {
-                  name,
-                },
-              },
-              symbol && {
-                match: {
-                  symbol,
-                },
-              },
-              description && {
-                match: {
-                  description,
-                },
-              },
+              ...getMatchField(name),
+              ...getMatchField(symbol),
+              ...getMatchField(description),
               {
                 exists: {
                   field: 'attributes',
                 },
               },
-            ].filter(Boolean),
+            ],
           },
         },
       ],
@@ -69,36 +77,84 @@ const getSimilarCollectionQuery = ({
   sort: [
     '_score',
     {
-      totalVolume: {
+      'volume.global.total': {
         order: 'desc',
       },
     },
   ],
 });
 
+const getNFTQuery = (collectionId: string): QueryDslQueryContainer => ({
+  bool: {
+    filter: [
+      {
+        nested: {
+          path: 'collections',
+          query: {
+            term: {
+              'collections.id': collectionId,
+            },
+          },
+        },
+      },
+    ],
+  },
+});
+
 const getCollectionOverview = nextApiHandler<CollectionOverviewResponseType>(
   async (req) => {
-    const collectionId = req.query.id as string;
+    const collectionId = string().create(req.query.id);
 
     const seedQuery = getSeedQuery(collectionId);
-    const seedResult = await postCollectionQuery(seedQuery);
-
-    const seed = seedResult.hits.hits[0]._source;
+    const [seedResult] = await searchCollections([{ body: seedQuery }]);
+    const seed = seedResult.sources[0];
 
     const similarCollectionQuery = getSimilarCollectionQuery(seed);
-    const similarResult = await postCollectionQuery(similarCollectionQuery);
-    const similar: OpenSearchCollectionSourceType[] = similarResult.hits.hits
-      .map(({ _source }) => ({
-        ..._source,
-        totalVolume: _source.totalVolume || 0,
-      }))
-      .sort((a, b) => b.totalVolume - a.totalVolume);
+    const [similarResult] = await searchCollections([
+      { body: similarCollectionQuery },
+    ]);
+
+    const baseNFTSearchRequest = {
+      body: {
+        query: getNFTQuery(collectionId),
+        size: 0,
+      },
+      options: {
+        onlyListed: true,
+      },
+    };
+
+    if (seed.image) {
+      const [collectionListedResult] = await searchNFTs([
+        baseNFTSearchRequest,
+        {
+          body: getRarestNFTsByCollectionBody(collectionId, 10),
+        },
+      ]);
+
+      return {
+        ...seed,
+        elementCount: seed.elementCount || 0,
+        similar: similarResult.sources,
+        listed: collectionListedResult.total,
+      };
+    }
+
+    const [collectionListedResult, rarestNFTs] = await searchNFTs([
+      baseNFTSearchRequest,
+      {
+        body: getRarestNFTsByCollectionBody(collectionId),
+      },
+    ]);
+
+    const rarestImages = rarestNFTs.sources.map((entry) => entry.image);
 
     return {
       ...seed,
-      totalVolume: seed.totalVolume || 0,
       elementCount: seed.elementCount || 0,
-      similar,
+      similar: similarResult.sources,
+      listed: collectionListedResult.total,
+      images: rarestImages,
     };
   }
 );

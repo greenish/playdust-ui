@@ -1,12 +1,12 @@
 import { array, create, string } from 'superstruct';
 import type OpenSearchNFTSourceType from '../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postNFTQuery from './_helpers/postNFTQuery';
+import searchNFTs from './_helpers/searchNFTs';
 
 const getMints = nextApiHandler<OpenSearchNFTSourceType[]>(async (req) => {
   const mints = create(req.body, array(string()));
 
-  const nftQuery = {
+  const searchBody = {
     size: mints.length,
     query: {
       ids: {
@@ -15,8 +15,7 @@ const getMints = nextApiHandler<OpenSearchNFTSourceType[]>(async (req) => {
     },
   };
 
-  const results = await postNFTQuery(nftQuery);
-  const sources = results.hits.hits.map((entry) => entry._source);
+  const [{ sources }] = await searchNFTs([{ body: searchBody }]);
 
   return sources;
 });

@@ -59,7 +59,6 @@
     "coingecko-api-v3": "^0.0.13",
     "copy-text-to-clipboard": "^3.0.1",
     "downshift": "^6.1.7",
-    "elastic-builder": "^2.16.0",
     "html-react-parser": "^1.4.10",
     "intercept-stdout": "^0.1.2",
     "js-cookie": "^3.0.1",

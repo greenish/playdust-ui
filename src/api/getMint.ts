@@ -1,7 +1,7 @@
-import esb from 'elastic-builder';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import OpenSearchNFTSourceType from '../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postNFTQuery from './_helpers/postNFTQuery';
+import searchNFTs from './_helpers/searchNFTs';
 
 const getMint = nextApiHandler<OpenSearchNFTSourceType>(async (req) => {
   const mintAddress = req.query.address;
@@ -10,14 +10,18 @@ const getMint = nextApiHandler<OpenSearchNFTSourceType>(async (req) => {
     throw new Error('No valid `address` supplied!');
   }
 
-  const requestBody = esb
-    .requestBodySearch()
-    .query(esb.matchQuery('mint', mintAddress))
-    .toJSON();
-  const result = await postNFTQuery(requestBody);
-  const source = result?.hits?.hits[0]?._source;
+  const query: QueryDslQueryContainer = { match: { mint: mintAddress } };
 
-  return source;
+  const [{ sources }] = await searchNFTs([
+    {
+      body: {
+        query,
+        size: 1,
+      },
+    },
+  ]);
+
+  return sources[0];
 });
 
 export default getMint;

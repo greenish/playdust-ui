@@ -25,24 +25,20 @@ const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
 
       return {
         nested: {
-          path: 'offChainData.attributes',
+          path: 'attributes',
           query: {
             bool: {
               must: [
-                key !== ''
-                  ? {
-                      match: {
-                        'offChainData.attributes.trait_type.keyword': key,
-                      },
-                    }
-                  : {},
-                value !== ''
-                  ? {
-                      match: {
-                        'offChainData.attributes.value.keyword': value,
-                      },
-                    }
-                  : {},
+                {
+                  match: {
+                    'attributes.key.keyword': key,
+                  },
+                },
+                {
+                  match: {
+                    'attributes.value.keyword': value,
+                  },
+                },
               ],
             },
           },
@@ -53,8 +49,13 @@ const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
       const { value } = child;
 
       return {
-        term: {
-          heuristicCollectionId: value,
+        nested: {
+          path: 'collections',
+          query: {
+            term: {
+              'collections.id': value,
+            },
+          },
         },
       };
     }
@@ -63,11 +64,11 @@ const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
 
       return {
         nested: {
-          path: 'offChainData.attributes',
+          path: 'attributes',
           query: {
             multi_match: {
               query: value,
-              fields: ['data.name', 'offChainData.attributes.value'],
+              fields: ['name', 'attributes.value'],
               fuzziness: 'AUTO',
             },
           },

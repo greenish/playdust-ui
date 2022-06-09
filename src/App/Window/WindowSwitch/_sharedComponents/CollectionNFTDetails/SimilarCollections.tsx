@@ -11,9 +11,9 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
+import humanizeCollection from '../../../_helpers/humanizeCollection';
 import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
 import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
-import humanizeCollection from '../../_helpers/humanizeCollection';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import CollectionOverviewResponseType from './_types/CollectionOverviewResponseType';
 
@@ -29,11 +29,11 @@ const columns: Column[] = [
   },
   {
     label: 'Total Volume',
-    getValue: ({ totalVolume }) => humanizeSolana(totalVolume),
+    getValue: ({ volume }) => humanizeSolana(volume.global.total),
   },
   {
     label: 'Floor Price',
-    getValue: ({ floorPrice }) => humanizeSolana(floorPrice),
+    getValue: ({ floorPrice }) => humanizeSolana(floorPrice.global),
   },
   {
     label: 'Items',
@@ -65,15 +65,18 @@ function SimilarCollections({
   const overviewColor = useMemo(() => {
     const { similar, ...current } = overview;
 
-    if (!current.totalVolume) {
+    if (!current.volume.global.total) {
       return theme.palette.error;
     }
 
     const highestVolume = Math.max(
-      ...[current.totalVolume, ...similar.map((s) => s.totalVolume)]
+      ...[
+        current.volume.global.total,
+        ...similar.map((s) => s.volume.global.total),
+      ]
     );
 
-    if (current.totalVolume === highestVolume) {
+    if (current.volume.global.total === highestVolume) {
       return theme.palette.success;
     }
 

@@ -11,11 +11,11 @@ function NFTDetailsView() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
   const ownerWalletAddress = useRecoilValue(currentOwnerForMintAtom);
 
-  if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
+  if (!playdustNftData || !playdustNftData.mintOffChainMetadata) {
     return null;
   }
 
-  const offChainData = playdustNftData.metaplexOffChainData;
+  const offChainData = playdustNftData.mintOffChainMetadata;
 
   return (
     <ContentContainer
@@ -55,21 +55,28 @@ function NFTDetailsView() {
           >
             {offChainData.description}
           </Typography>
-          <Box sx={{ backgroundColor: 'grey.300', width: '50%', p: 1, pl: 2 }}>
-            <Typography sx={{ opacity: '0.5' }}>Rarity Score</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {playdustNftData.rarity.absoluteRarity && (
-                <Typography sx={{ fontWeight: 600, fontSize: 28 }}>
-                  {playdustNftData.rarity.absoluteRarity}
-                </Typography>
-              )}
-              {playdustNftData.rarity.normalizedRarity && (
-                <Typography sx={{ opacity: '0.5', ml: 2 }}>
-                  {`${playdustNftData.rarity.normalizedRarity.toPrecision(3)}%`}
-                </Typography>
-              )}
+          {playdustNftData.mintRarity && (
+            <Box
+              sx={{ backgroundColor: 'grey.300', width: '50%', p: 1, pl: 2 }}
+            >
+              <Typography sx={{ opacity: '0.5' }}>Rarity Score</Typography>
+
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {playdustNftData.mintRarity.rarityScore && (
+                  <Typography sx={{ fontWeight: 600, fontSize: 28 }}>
+                    {playdustNftData.mintRarity.rarityScore}
+                  </Typography>
+                )}
+                {playdustNftData.mintRarity.normalizedRarityScore && (
+                  <Typography sx={{ opacity: '0.5', ml: 2 }}>
+                    {`${playdustNftData.mintRarity.normalizedRarityScore.toPrecision(
+                      3
+                    )}%`}
+                  </Typography>
+                )}
+              </Box>
             </Box>
-          </Box>
+          )}
         </CardContent>
       </Card>
     </ContentContainer>

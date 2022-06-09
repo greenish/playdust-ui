@@ -16,7 +16,7 @@ const collectionIdAtom = selector<string | null>({
       const mintAddress = safePubkeyString(addressState.pubkey);
       const nft = get(nftByMintAtom(mintAddress));
 
-      return nft?.heuristicCollectionId || null;
+      return null;
     }
 
     const { query } = get(searchStateAtom);

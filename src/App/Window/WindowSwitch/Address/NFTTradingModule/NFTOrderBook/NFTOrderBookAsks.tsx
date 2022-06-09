@@ -60,7 +60,7 @@ function NFTOrderBookAsks() {
           {filteredAsks.length <= 0 && (
             <TableRow sx={{ textAlign: 'left', padding: '16px' }}>
               <TableCell>
-                <b>No active bids found!</b>
+                <b>No active asks found!</b>
               </TableCell>
             </TableRow>
           )}

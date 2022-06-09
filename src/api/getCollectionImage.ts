@@ -1,7 +1,8 @@
+import { SearchRequest } from '@opensearch-project/opensearch/api/types';
 import axios, { AxiosPromise } from 'axios';
 import sharp from 'sharp';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postNFTQuery from './_helpers/postNFTQuery';
+import searchNFTs from './_helpers/searchNFTs';
 
 const cdnBase = 'https://cdn.playdust.dev/api/image/';
 
@@ -27,18 +28,23 @@ const getCollectionImage = nextApiHandler<Buffer>(async (req, res) => {
   });
 
   try {
-    const query = {
+    const query: SearchRequest['body'] = {
       query: {
         bool: {
           filter: [
             {
-              terms: {
-                heuristicCollectionId: [collectionId],
+              nested: {
+                path: 'collections',
+                query: {
+                  term: {
+                    'collections.id': collectionId,
+                  },
+                },
               },
             },
             {
               exists: {
-                field: 'offChainData.image',
+                field: 'image',
               },
             },
           ],
@@ -51,10 +57,8 @@ const getCollectionImage = nextApiHandler<Buffer>(async (req, res) => {
       ],
       size: 4,
     };
-    const result = await postNFTQuery(query);
-    const images = result.hits.hits.map(
-      (entry) => entry._source.offChainData.image
-    );
+    const [result] = await searchNFTs([{ body: query }]);
+    const images = result.sources.map((entry) => entry.image);
 
     const cdnPaths = images.map(
       (image) =>

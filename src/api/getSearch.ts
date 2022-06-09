@@ -1,9 +1,7 @@
 import { assign, create, number, type } from 'superstruct';
-import OpenSearchNFTSourceType from '../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
 import SearchResponseType from '../App/Window/WindowSwitch/_types/SearchResponseType';
 import SearchStateType from '../App/Window/_types/SearchStateType';
-import getNFTSearchRequest from './_helpers/getNFTSearchRequest';
-import getOSTotalValue from './_helpers/getOSTotalValue';
+import getNFTQueryById from './_helpers/getNFTQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchNFTs from './_helpers/searchNFTs';
 
@@ -41,35 +39,30 @@ const SearchRequestType = assign(
   })
 );
 
-const getSearchNew = nextApiHandler<SearchResponseType>(async (req) => {
+const getSearch = nextApiHandler<SearchResponseType>(async (req) => {
   const { query, page, onlyListed, sort } = create(req.body, SearchRequestType);
   const { size, from } = getSizeFrom(page);
-  const nftSearchRequest = getNFTSearchRequest(query, {
-    onlyListed,
-    sort,
-    size,
-    from,
-  });
-  const results = await searchNFTs(nftSearchRequest);
+  const nftQuery = getNFTQueryById(query, query.rootId);
 
-  const nfts = results.body.hits.hits.reduce<OpenSearchNFTSourceType[]>(
-    (acc, curr) => {
-      const source = curr._source;
-
-      if (source) {
-        return [...acc, source];
-      }
-
-      return acc;
+  const [{ sources, total }] = await searchNFTs([
+    {
+      body: {
+        query: nftQuery,
+        size,
+        from,
+      },
+      options: {
+        sort,
+        onlyListed,
+      },
     },
-    []
-  );
+  ]);
 
   return {
-    nfts,
-    total: getOSTotalValue(results),
+    nfts: sources,
+    total,
     page,
   };
 });
 
-export default getSearchNew;
+export default getSearch;

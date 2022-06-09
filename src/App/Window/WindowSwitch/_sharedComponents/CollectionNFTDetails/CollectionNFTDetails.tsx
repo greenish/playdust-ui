@@ -2,9 +2,9 @@ import { Box, Card, Grid, styled, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import ImageButton from '../../../../_sharedComponents/ImageButton';
+import humanizeCollection from '../../../_helpers/humanizeCollection';
 import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
-import humanizeCollection from '../../_helpers/humanizeCollection';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import SimilarCollections from './SimilarCollections';
 import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
@@ -19,16 +19,15 @@ type Item = {
 const items: Item[] = [
   {
     label: 'Total Volume',
-    getValue: ({ totalVolume }) => humanizeSolana(totalVolume),
+    getValue: ({ volume }) => humanizeSolana(volume.global.total),
   },
   {
     label: 'Floor Price',
-    getValue: ({ floorPrice }) => humanizeSolana(floorPrice),
+    getValue: ({ floorPrice }) => humanizeSolana(floorPrice.global),
   },
   {
     label: 'Items',
-    getValue: ({ elementCount }) =>
-      elementCount && elementCount.toLocaleString(),
+    getValue: ({ elementCount }) => elementCount.toLocaleString(),
   },
   {
     label: 'Listed Items',
@@ -97,9 +96,9 @@ function CollectionNFTDetails() {
 
   const images = searchResults.total
     ? searchResults.nfts
-        .filter((nft) => nft?.offChainData?.image)
+        .filter((nft) => nft.image)
         .slice(0, 4)
-        .map((nft) => nft?.offChainData?.image)
+        .map((nft) => nft.image)
     : [];
 
   const hasSimilar = !!overview.similar.length;

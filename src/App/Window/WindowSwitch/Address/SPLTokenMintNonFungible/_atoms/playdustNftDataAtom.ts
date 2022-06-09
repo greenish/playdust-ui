@@ -1,44 +1,52 @@
 import { MetadataData } from '@metaplex-foundation/mpl-token-metadata';
+import axios from 'axios';
 import { selector } from 'recoil';
 import addressStateAtom from '../../../_atoms/addressStateAtom';
-import nftByMintAtom from '../../../_atoms/nftByMintAtom';
-import safePubkeyString from '../../../_helpers/safePubkeyString';
-import MetaplexOffChainDataType from '../../../_types/MetaplexOffChainDataType';
 
-type PlaydustNftData = {
-  metaplexOffChainData: MetaplexOffChainDataType;
-  metaplexOnChainData: MetadataData;
-  rarity: {
-    normalizedRarity?: number;
-    absoluteRarity?: number;
+type MetaplexOffChainDataType = {
+  name: string;
+  symbol: string;
+  external_url: string;
+  description: string;
+  seller_fee_basis_points: number;
+  image: string;
+  attributes?: {
+    trait_type: string;
+    value: string;
+  }[];
+  collection?: {
+    name: string;
+    family: string;
   };
 };
 
-const playdustNftDataAtom = selector<PlaydustNftData | null>({
+type PlaydustMintAPIResponseType = {
+  mintOnChainMetadata: MetadataData;
+  mintOffChainMetadata: MetaplexOffChainDataType;
+  mintRarity?: {
+    normalizedRarityScore?: number;
+    rarityScore?: number;
+  };
+};
+
+const playdustNftDataAtom = selector<PlaydustMintAPIResponseType | null>({
   key: 'playdustNftDataAtom',
-  get: ({ get }) => {
+  get: async ({ get }) => {
     const addressState = get(addressStateAtom);
 
     if (!addressState) {
       return null;
     }
 
-    const data = get(nftByMintAtom(safePubkeyString(addressState.pubkey)));
+    const { data } = await axios.get<PlaydustMintAPIResponseType>(
+      `/playdust-api/mint?mintAddress=${addressState.pubkey.toString()}`
+    );
 
-    if (!data || !data.offChainData || !data.data) {
+    if (!data || !data.mintOffChainMetadata || !data.mintOnChainMetadata) {
       return null;
     }
 
-    const playdustNftData: PlaydustNftData = {
-      metaplexOffChainData: data.offChainData,
-      metaplexOnChainData: data as unknown as MetadataData,
-      rarity: {
-        normalizedRarity: data.normalizedRarityScore,
-        absoluteRarity: data.rarityScore,
-      },
-    };
-
-    return playdustNftData;
+    return data;
   },
 });
 

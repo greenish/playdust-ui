@@ -35,6 +35,7 @@
   "exclude": [
     "node_modules",
     "src/explorer/**",
-    "src/me/**"
+    "src/me/**",
+    "solana"
   ]
 }
