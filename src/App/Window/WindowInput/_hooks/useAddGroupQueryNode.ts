@@ -2,25 +2,30 @@ import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import searchQueryActiveGroupIdxAtom from '../../_atoms/searchQueryActiveGroupIdxAtom';
-import searchQueryActiveNodeAtom from '../../_atoms/searchQueryActiveNodeAtom';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
 import searchStateAtom from '../../_atoms/searchStateAtom';
 import insertAtIdx from '../../_helpers/insertAtIdx';
-import reduceSearchQuery from '../../_helpers/reduceSearchQuery';
-import useChangeSearchQuery from '../../_hooks/useChangeSearchQuery';
+import makeUseChangeSearchQuery from '../../_hooks/makeUseChangeSearchQuery';
+import useGetUpdateSearchQuery from '../../_hooks/useGetUpdateSearchQuery';
 import GroupNodeType from '../../_types/GroupNodeType';
+import SearchQueryType from '../../_types/SearchQueryType';
+import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
 
-const useAddGroupQueryNode = () => {
+const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
   const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
   const activeNode = useRecoilValue(searchQueryActiveNodeAtom);
   const activeGroupIdx = useRecoilValue(searchQueryActiveGroupIdxAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const { query } = useRecoilValue(searchStateAtom);
-  const changeSearchQuery = useChangeSearchQuery();
+  const getUpdateSearchQuery = useGetUpdateSearchQuery();
 
   const getNextState = useCallback(
-    (operator: GroupNodeType['operator'], endIdx: number, newId: string) => {
+    (
+      operator: GroupNodeType['operator'],
+      endIdx: number,
+      newId: string
+    ): { query: SearchQueryType; index: number } | null => {
       if (activeNode?.type !== 'group') {
         return null;
       }
@@ -81,15 +86,7 @@ const useAddGroupQueryNode = () => {
         };
       }
 
-      const baseUpdatedQuery = {
-        ...query,
-        nodes: {
-          ...query.nodes,
-          [newNode.id]: newNode,
-        },
-      };
-
-      const updatedQuery = reduceSearchQuery(baseUpdatedQuery, (node) => {
+      const updated = getUpdateSearchQuery((node) => {
         if (node.type === 'group' && node.id !== newNode.id) {
           return {
             ...node,
@@ -104,14 +101,14 @@ const useAddGroupQueryNode = () => {
         }
 
         return node;
-      });
+      }, newNode);
 
       return {
-        query: updatedQuery,
+        query: updated.query,
         index: 1,
       };
     },
-    [activeGroupIdx, activeNode, query, rootNode?.id]
+    [activeGroupIdx, activeNode, getUpdateSearchQuery, query, rootNode?.id]
   );
 
   return (operator: GroupNodeType['operator'], endIdx: number) => {
@@ -122,13 +119,14 @@ const useAddGroupQueryNode = () => {
       return;
     }
 
-    changeSearchQuery({ query: nextState.query });
     setActiveNodeMeta({
       nodeId: newId,
       type: 'group',
       index: nextState.index,
     });
+
+    return { query: nextState.query };
   };
-};
+});
 
 export default useAddGroupQueryNode;

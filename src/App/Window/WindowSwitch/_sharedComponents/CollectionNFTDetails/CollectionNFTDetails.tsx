@@ -1,12 +1,11 @@
 import { Box, Card, Grid, styled, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
-import ImageButton from '../../../../../_sharedComponents/ImageButton';
-import OpenSearchCollectionSourceType from '../../../../_types/OpenSearchCollectionSourceType';
-import humanizeCollection from '../../../_helpers/humanizeCollection';
-import humanizeSolana from '../../../_helpers/humanizeSolana';
-import ExplorerAccordion from '../../../_sharedComponents/ExplorerAccordion';
+import ImageButton from '../../../../_sharedComponents/ImageButton';
+import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
+import humanizeCollection from '../../_helpers/humanizeCollection';
+import humanizeSolana from '../../_helpers/humanizeSolana';
 import SimilarCollections from './SimilarCollections';
 import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
 
@@ -106,8 +105,8 @@ function CollectionNFTDetails() {
   const hasSimilar = !!overview.similar.length;
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={hasSimilar ? 6 : 12}>
+    <Grid container={true} spacing={2}>
+      <Grid item={true} xs={12} md={hasSimilar ? 6 : 12}>
         <CardContainer>
           <ImageButton size={200} transitionDuration={1} images={images} />
           <Typography
@@ -138,7 +137,7 @@ function CollectionNFTDetails() {
         </CardContainer>
       </Grid>
       {hasSimilar && (
-        <Grid item xs={12} md={6}>
+        <Grid item={true} xs={12} md={6}>
           <ItemsContainer>
             {items.map(
               (item) =>
@@ -157,37 +156,6 @@ function CollectionNFTDetails() {
         </Grid>
       )}
     </Grid>
-  );
-}
-function _CollectionNFTDetails() {
-  const overview = useRecoilValue(collectionOverviewAtom);
-  const searchResults = useRecoilValue(searchResultsAtom);
-
-  if (!overview) {
-    return null;
-  }
-
-  const images = searchResults.total
-    ? searchResults.nfts
-        .filter((nft) => nft?.offChainData?.image)
-        .slice(0, 4)
-        .map((nft) => nft?.offChainData?.image)
-    : [];
-
-  return (
-    <Box sx={{ display: 'flex' }}>
-      {!!overview.similar.length && (
-        <Box sx={{ ml: 2, maxHeight: 450, overflow: 'auto' }}>
-          <ExplorerAccordion
-            itemType="table"
-            expanded={true}
-            id="similar-collections"
-            title="Similar NFT Collections found"
-            content={<SimilarCollections overview={overview} />}
-          />
-        </Box>
-      )}
-    </Box>
   );
 }
 

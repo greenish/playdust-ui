@@ -3,9 +3,9 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import connectedWalletAtom from '../../../../_atoms/connectedWalletAtom';
-import addressStateAtom from '../_atoms/addressStateAtom';
+import addressStateAtom from '../../_atoms/addressStateAtom';
+import safePubkeyString from '../../_helpers/safePubkeyString';
 import currentOwnerForMintAtom from '../_atoms/currentOwnerForMintAtom';
-import safePubkeyString from '../_helpers/safePubkeyString';
 import ordersForMintAtom from './_atoms/ordersForMintAtom';
 import tradingDialogAtom from './_atoms/tradingDialogAtom';
 

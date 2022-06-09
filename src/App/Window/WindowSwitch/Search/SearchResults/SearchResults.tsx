@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import searchResultsAtom from '../../_atoms/searchResultsAtom';
+import CollectionNFTDetails from '../../_sharedComponents/CollectionNFTDetails/CollectionNFTDetails';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
-import searchResultsAtom from '../_atoms/searchResultsAtom';
-import CollectionNFTDetails from './CollectionNFTDetails/CollectionNFTDetails';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoTokensContainer = styled.div`

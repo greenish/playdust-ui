@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import TokenCard from '../_sharedComponents/TokenCard/TokenCard';
 import nftsForAddressAtom from './_atoms/nftsForAddressAtom';
 import useIsWallet from './_hooks/useIsWallet';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 import PaginatedList from './_sharedComponents/PaginatedList';
 
 const RootContainer = styled.div`

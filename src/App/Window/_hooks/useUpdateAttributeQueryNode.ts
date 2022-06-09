@@ -1,39 +1,31 @@
-import { useRecoilValue } from 'recoil';
-import searchStateAtom from '../_atoms/searchStateAtom';
-import reduceSearchQuery from '../_helpers/reduceSearchQuery';
-import removeQueryNode from '../_helpers/removeQueryNode';
-import useChangeSearchQuery from './useChangeSearchQuery';
+import makeUseChangeSearchQuery from './makeUseChangeSearchQuery';
+import useGetRemoveQueryNode from './useGetRemoveQueryNode';
+import useGetUpdateSearchQuery from './useGetUpdateSearchQuery';
 
-const useUpdateAttributeQueryNode = () => {
-  const { query } = useRecoilValue(searchStateAtom);
-  const changeSearchQuery = useChangeSearchQuery();
+const useUpdateAttributeQueryNode = makeUseChangeSearchQuery(() => {
+  const getRemoveQueryNode = useGetRemoveQueryNode();
+  const getUpdateSearchQuery = useGetUpdateSearchQuery();
 
   return (id: string, value: string | null) => {
-    changeSearchQuery(() => {
-      if (value === null) {
-        const next = removeQueryNode(query, id);
+    if (value === null) {
+      return getRemoveQueryNode(id);
+    }
 
-        return { query: next };
+    return getUpdateSearchQuery((node) => {
+      if (
+        node.id === id &&
+        node.type === 'query' &&
+        node.field === 'attribute'
+      ) {
+        return {
+          ...node,
+          value,
+        };
       }
 
-      const updatedQuery = reduceSearchQuery(query, (node) => {
-        if (
-          node.id === id &&
-          node.type === 'query' &&
-          node.field === 'attribute'
-        ) {
-          return {
-            ...node,
-            value,
-          };
-        }
-
-        return node;
-      });
-
-      return { query: updatedQuery };
+      return node;
     });
   };
-};
+});
 
 export default useUpdateAttributeQueryNode;

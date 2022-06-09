@@ -1,7 +1,7 @@
 import React from 'react';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import CollectionNFTDetails from '../../Search/SearchResults/CollectionNFTDetails/CollectionNFTDetails';
-import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
+import CollectionNFTDetails from '../../_sharedComponents/CollectionNFTDetails/CollectionNFTDetails';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 
 function MetaplexNFTCollectionDetails() {
   return (

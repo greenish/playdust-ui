@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import addressStateAtom from '../../_atoms/addressStateAtom';
+import addressStateAtom from '../../../_atoms/addressStateAtom';
 import profileApi from '../_helpers/profileApi';
 import PublicProfileType from '../_types/PublicProfileType';
 

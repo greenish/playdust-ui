@@ -1,4 +1,4 @@
-import type OpenSearchCollectionSourceType from '../../../../../_types/OpenSearchCollectionSourceType';
+import type OpenSearchCollectionSourceType from '../../../../_types/OpenSearchCollectionSourceType';
 
 interface CollectionOverviewResponseType
   extends OpenSearchCollectionSourceType {

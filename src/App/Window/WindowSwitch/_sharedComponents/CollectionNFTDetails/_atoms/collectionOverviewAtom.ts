@@ -1,10 +1,10 @@
 import { selector } from 'recoil';
-import searchStateAtom from '../../../../../_atoms/searchStateAtom';
-import api from '../../../../../_helpers/frontendApi';
-import CollectionQueryNodeType from '../../../../../_types/CollectionQueryNodeType';
-import addressStateAtom from '../../../../Address/_atoms/addressStateAtom';
-import nftByMintAtom from '../../../../Address/_atoms/nftByMintAtom';
-import safePubkeyString from '../../../../Address/_helpers/safePubkeyString';
+import searchStateAtom from '../../../../_atoms/searchStateAtom';
+import api from '../../../../_helpers/frontendApi';
+import CollectionQueryNodeType from '../../../../_types/CollectionQueryNodeType';
+import addressStateAtom from '../../../_atoms/addressStateAtom';
+import nftByMintAtom from '../../../_atoms/nftByMintAtom';
+import safePubkeyString from '../../../_helpers/safePubkeyString';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
 
 const collectionIdAtom = selector<string | null>({

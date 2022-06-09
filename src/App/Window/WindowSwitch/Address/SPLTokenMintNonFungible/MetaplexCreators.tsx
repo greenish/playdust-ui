@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 

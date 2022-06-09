@@ -11,10 +11,10 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
-import useAddCollectionQueryNode from '../../../../_hooks/useAddCollectionQueryNode';
-import OpenSearchCollectionSourceType from '../../../../_types/OpenSearchCollectionSourceType';
-import humanizeCollection from '../../../_helpers/humanizeCollection';
-import humanizeSolana from '../../../_helpers/humanizeSolana';
+import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
+import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
+import humanizeCollection from '../../_helpers/humanizeCollection';
+import humanizeSolana from '../../_helpers/humanizeSolana';
 import CollectionOverviewResponseType from './_types/CollectionOverviewResponseType';
 
 type Column = {

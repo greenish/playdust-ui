@@ -7,11 +7,11 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
+import tokenRegistryAtom from '../../_atoms/tokenRegistryAtom';
+import safePubkeyString from '../../_helpers/safePubkeyString';
 import tokenAccountsForAddressAtom from '../_atoms/tokenAccountsForAddressAtom';
-import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
-import safePubkeyString from '../_helpers/safePubkeyString';
 import useIsWallet from '../_hooks/useIsWallet';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import PaginatedList from '../_sharedComponents/PaginatedList';

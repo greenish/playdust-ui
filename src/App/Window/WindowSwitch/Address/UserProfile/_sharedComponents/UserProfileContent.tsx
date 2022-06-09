@@ -3,7 +3,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
 import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
-import addressStateAtom from '../../_atoms/addressStateAtom';
+import addressStateAtom from '../../../_atoms/addressStateAtom';
 import PublicProfileType from '../_types/PublicProfileType';
 
 interface UserProfileContentProps {

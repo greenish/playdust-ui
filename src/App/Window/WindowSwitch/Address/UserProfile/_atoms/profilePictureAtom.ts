@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import nftByMintAtom from '../../_atoms/nftByMintAtom';
+import nftByMintAtom from '../../../_atoms/nftByMintAtom';
 import publicProfileAtom from './publicProfileAtom';
 
 type ProfilePictureData = {

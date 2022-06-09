@@ -1,17 +1,13 @@
 import { nanoid } from 'nanoid';
 import { useRecoilValue } from 'recoil';
-import searchQueryActiveGroupIdxAtom from '../_atoms/searchQueryActiveGroupIdxAtom';
 import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
-import searchStateAtom from '../_atoms/searchStateAtom';
-import addQueryNode from '../_helpers/addQueryNode';
 import AttributeQueryNodeType from '../_types/AttributeQueryNodeType';
-import useChangeSearchQuery from './useChangeSearchQuery';
+import makeUseChangeSearchQuery from './makeUseChangeSearchQuery';
+import useGetAddQueryNode from './useGetAddQueryNode';
 
-const useAddAttributeQueryNode = () => {
-  const { query } = useRecoilValue(searchStateAtom);
+const useAddAttributeQueryNode = makeUseChangeSearchQuery(() => {
   const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
-  const activeGroupId = useRecoilValue(searchQueryActiveGroupIdxAtom);
-  const changeSearchQuery = useChangeSearchQuery();
+  const getAddQueryNode = useGetAddQueryNode();
 
   return (key: string, value: string) => {
     if (activeNodeMeta) {
@@ -24,11 +20,9 @@ const useAddAttributeQueryNode = () => {
       };
       const parentId = activeNodeMeta.nodeId;
 
-      const next = addQueryNode(query, queryAddition, parentId, activeGroupId);
-
-      return changeSearchQuery({ query: next });
+      return getAddQueryNode(queryAddition, parentId);
     }
   };
-};
+});
 
 export default useAddAttributeQueryNode;

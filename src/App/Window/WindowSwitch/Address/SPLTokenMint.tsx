@@ -1,11 +1,11 @@
 import { Chip } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
-import addressStateAtom from './_atoms/addressStateAtom';
+import addressStateAtom from '../_atoms/addressStateAtom';
+import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
+import safePubkeyString from '../_helpers/safePubkeyString';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
-import tokenRegistryAtom from './_atoms/tokenRegistryAtom';
-import safePubkeyString from './_helpers/safePubkeyString';
+import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import ExternalLink from './_sharedComponents/ExternalLink';

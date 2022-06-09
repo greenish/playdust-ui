@@ -2,7 +2,7 @@ import { selector } from 'recoil';
 import searchStateSerializedAtom from '../../../../_atoms/searchStateSerializedAtom';
 import frontendApi from '../../../../_helpers/frontendApi';
 import parseSearch from '../../../../_helpers/parseSearch';
-import searchResultsBaseAtom from '../../_atoms/searchResultsBaseAtom';
+import searchResultsBaseAtom from '../../../_atoms/searchResultsBaseAtom';
 import type SearchOverviewResponseType from '../_types/SearchOverviewResponseType';
 
 const searchOverviewAtom = selector<SearchOverviewResponseType>({
@@ -12,7 +12,7 @@ const searchOverviewAtom = selector<SearchOverviewResponseType>({
     const serialized = get(searchStateSerializedAtom);
     const parsed = parseSearch(serialized);
 
-    if (!parsed) {
+    if (!parsed || parsed.query.rootId === '') {
       return {
         listed: 0,
         floor: 0,
