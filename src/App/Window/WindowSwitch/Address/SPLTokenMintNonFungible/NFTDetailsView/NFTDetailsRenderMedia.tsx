@@ -32,39 +32,31 @@ function NFTDetailsRenderMedia() {
 
   const isNSFW = false;
 
-  return (
-    <div>
-      {isNSFW ? (
-        <BlurImageContainer>
-          <VisibilityContainer>
-            {visible ? (
-              <VisibilityOffIcon onClick={() => setVisible(false)} />
-            ) : (
-              <VisibilityIcon onClick={() => setVisible(true)} />
-            )}
-          </VisibilityContainer>
-          {visible ? (
-            <img
-              alt={offChainData.name || ''}
-              src={offChainData.image}
-              height={500}
-            />
-          ) : (
-            <BlurImage
-              alt={offChainData.name || ''}
-              src={offChainData.image}
-              height={500}
-            />
-          )}
-        </BlurImageContainer>
-      ) : (
+  return isNSFW ? (
+    <BlurImageContainer>
+      <VisibilityContainer>
+        {visible ? (
+          <VisibilityOffIcon onClick={() => setVisible(false)} />
+        ) : (
+          <VisibilityIcon onClick={() => setVisible(true)} />
+        )}
+      </VisibilityContainer>
+      {visible ? (
         <img
           alt={offChainData.name || ''}
           src={offChainData.image}
           height={500}
         />
+      ) : (
+        <BlurImage
+          alt={offChainData.name || ''}
+          src={offChainData.image}
+          height={500}
+        />
       )}
-    </div>
+    </BlurImageContainer>
+  ) : (
+    <img alt={offChainData.name || ''} src={offChainData.image} height={500} />
   );
 }
 

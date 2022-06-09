@@ -56,7 +56,7 @@ function ExplorerAccordion({
         aria-label={typeof title === 'string' ? title : 'Accordion Title'}
         id={`${id}-header`}
       >
-        <Typography variant="h5" component="h2" gutterBottom={false}>
+        <Typography variant="h6" gutterBottom={false}>
           {title}
         </Typography>
       </AccordionSummary>
