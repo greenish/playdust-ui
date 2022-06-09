@@ -23,13 +23,14 @@ const getSeedQuery = (collectionId: string) => ({
 });
 
 const getMatchField = (
+  key: string,
   input: string | null | undefined
 ): QueryDslQueryContainer[] =>
-  input
+  input && input !== ''
     ? [
         {
           match: {
-            input,
+            [key]: input,
           },
         },
       ]
@@ -60,15 +61,21 @@ const getSimilarCollectionQuery = ({
         {
           bool: {
             should: [
-              ...getMatchField(name),
-              ...getMatchField(symbol),
-              ...getMatchField(description),
-              {
-                exists: {
-                  field: 'attributes',
-                },
-              },
+              ...getMatchField('name', name),
+              ...getMatchField('symbol', symbol),
+              ...getMatchField('description', description),
             ],
+            minimum_should_match: 2,
+          },
+        },
+        {
+          nested: {
+            path: 'attributes',
+            query: {
+              exists: {
+                field: 'attributes',
+              },
+            },
           },
         },
       ],
