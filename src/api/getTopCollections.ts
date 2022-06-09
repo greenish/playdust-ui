@@ -1,10 +1,10 @@
 import type { SearchRequest } from '@opensearch-project/opensearch/api/types';
 import { defaulted, number, type } from 'superstruct';
 import type TopCollectionsResponseType from '../App/Window/WindowSwitch/Home/_types/TopCollectionsResponseType';
+import getRarestNFTsByCollectionBody from './_helpers/getRarestNFTsByCollectionBody';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchCollections from './_helpers/searchCollections';
 import searchNFTs from './_helpers/searchNFTs';
-import getRarestNFTsByCollectionBody from './_helpers/getRarestNFTsByCollectionBody';
 
 const collectionPageSize = 25;
 const topCollectionLimit = 100;
