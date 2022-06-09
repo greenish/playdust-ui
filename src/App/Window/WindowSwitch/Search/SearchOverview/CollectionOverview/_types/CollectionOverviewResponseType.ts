@@ -4,7 +4,7 @@ interface CollectionOverviewResponseType
   extends OpenSearchCollectionSourceType {
   similar: OpenSearchCollectionSourceType[];
   listed: number;
-  images?: string[];
+  images: string[];
 }
 
 export default CollectionOverviewResponseType;
