@@ -42,7 +42,7 @@ function CardImageContainer({
                 height: imageSize,
                 filter: censored ? 'blur(1.5rem)' : 'none',
                 opacity: isLoaded ? 1 : 0,
-                transition: 'all .2s ease',
+                transition: 'all .5s ease',
               }}
               alt=""
               width={imageSize}
