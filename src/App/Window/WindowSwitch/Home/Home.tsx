@@ -2,16 +2,16 @@ import styled from '@emotion/styled';
 import React, { useEffect, useMemo } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import setWindowImagesAtom from '../../_atoms/setWindowImagesAtom';
+import humanizeCollection from '../../_helpers/humanizeCollection';
 import useAddCollectionQueryNode from '../../_hooks/useAddCollectionQueryNode';
-import humanizeCollection from '../_helpers/humanizeCollection';
 import humanizeSolana from '../_helpers/humanizeSolana';
 import TokenGrid from '../_sharedComponents/TokenGrid/TokenGrid';
 import topCollectionsAtom from './_atoms/topCollectionsAtom';
 import useFetchMoreTopCollections from './_hooks/useFetchMoreTopCollections';
 
 const RootContainer = styled.div`
-  padding: 0 16px;
-  overflow: hidden;
+  padding: 0 0 0 16px;
+  overflow: auto;
   height: 100%;
   width: 100%;
 `;
@@ -34,7 +34,7 @@ function Home() {
       return results.map(({ collection, nfts }) => ({
         key: collection.id,
         groupLabel: humanizeCollection(collection),
-        groupSecondary: humanizeSolana(collection.totalVolume),
+        groupSecondary: humanizeSolana(collection.volume.global.total),
         groupHref: addCollectionQuery(collection.id),
         groupTotal: collection.elementCount,
         nfts,

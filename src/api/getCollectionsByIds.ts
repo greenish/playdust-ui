@@ -1,12 +1,15 @@
+import { array, string } from 'superstruct';
 import OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postCollectionQuery from './_helpers/postCollectionQuery';
+import searchCollections from './_helpers/searchCollections';
+
+const CollectionByIds = array(string());
 
 const getCollectionsByIds = nextApiHandler<OpenSearchCollectionSourceType[]>(
   async (req) => {
-    const ids = req.body as string[];
+    const ids = CollectionByIds.create(req.body);
 
-    const esQuery = {
+    const osBody = {
       size: ids.length,
       query: {
         bool: {
@@ -19,10 +22,9 @@ const getCollectionsByIds = nextApiHandler<OpenSearchCollectionSourceType[]>(
       },
     };
 
-    const response = await postCollectionQuery(esQuery);
-    const results = response.hits.hits.map((entry) => entry._source);
+    const [results] = await searchCollections([{ body: osBody }]);
 
-    return results;
+    return results.sources;
   }
 );
 

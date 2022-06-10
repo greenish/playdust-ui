@@ -4,9 +4,9 @@ import {
   useSetRecoilState,
 } from 'recoil';
 import searchStateSerializedAtom from '../../../../_atoms/searchStateSerializedAtom';
-import searchResultsAtom from '../../_atoms/searchResultsAtom';
-import searchResultsMore from '../../_atoms/searchResultsMoreAtom';
-import fetchSearchResults from '../../_helpers/fetchSearchResults';
+import searchResultsAtom from '../../../_atoms/searchResultsAtom';
+import searchResultsMore from '../../../_atoms/searchResultsMoreAtom';
+import fetchSearchResults from '../../../_helpers/fetchSearchResults';
 
 const useFetchMoreSearchResults = () => {
   const setter = useSetRecoilState(searchResultsMore);

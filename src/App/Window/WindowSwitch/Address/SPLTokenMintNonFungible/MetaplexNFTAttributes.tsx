@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import playdustNftDataAtom from '../../_atoms/playdustNftDataAtom';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
-import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 
 const Item = styled(Paper)`
   background-color: #f6f6f6;
@@ -13,11 +13,11 @@ const Item = styled(Paper)`
 function MetaplexNFTAttributes() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
-  if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
+  if (!playdustNftData || !playdustNftData.mintOffChainMetadata) {
     return null;
   }
 
-  const { attributes } = playdustNftData.metaplexOffChainData;
+  const { attributes } = playdustNftData.mintOffChainMetadata;
 
   if (!attributes) {
     return null;

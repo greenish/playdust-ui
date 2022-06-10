@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import getCDNUrl from '../../../../../_helpers/getCDNUrl';
 import SuspenseBoundary from '../../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import useProfileState from '../../../../_hooks/useProfileState';
-import CardImageContainer from '../../../_sharedComponents/CardImageContainer/CardImageContainer';
+import CardImageContainer from '../../../_sharedComponents/CardImageContainer';
 import OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 import nftsForAddressAtom from '../../_atoms/nftsForAddressAtom';
 import profilePictureAtom from '../_atoms/profilePictureAtom';
@@ -27,9 +27,7 @@ interface ImageSelectProps {
 }
 
 function ImageSelect({ onChange }: ImageSelectProps) {
-  const nfts = useRecoilValue(nftsForAddressAtom).filter(
-    (nft) => nft.offChainData
-  );
+  const nfts = useRecoilValue(nftsForAddressAtom);
 
   if (!nfts.length) {
     return <i>No NFTs found...</i>;
@@ -40,7 +38,7 @@ function ImageSelect({ onChange }: ImageSelectProps) {
       {nfts.map((nft) => (
         <ButtonBase key={nft.mint} onClick={() => onChange(nft)}>
           <CardImageContainer
-            src={getCDNUrl(nft.offChainData.image)}
+            src={getCDNUrl(nft.image)}
             imageSize={imageSize}
           />
         </ButtonBase>
@@ -72,7 +70,7 @@ function useProfileImage() {
     onChange: (nft: OpenSearchNFTSourceType) => {
       setProfilePicture({
         profilePictureMintAddress: nft.mint,
-        profilePictureImage: nft.offChainData.image,
+        profilePictureImage: nft.image,
       });
       setOpen(false);
     },

@@ -12,9 +12,9 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
-import addressStateAtom from '../../_atoms/addressStateAtom';
+import addressStateAtom from '../../../_atoms/addressStateAtom';
+import safePubkeyString from '../../../_helpers/safePubkeyString';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
-import safePubkeyString from '../../_helpers/safePubkeyString';
 import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
 import ordersForMintAtom from '../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../_atoms/tradingDialogAtom';
@@ -60,7 +60,7 @@ function NFTOrderBookAsks() {
           {filteredAsks.length <= 0 && (
             <TableRow sx={{ textAlign: 'left', padding: '16px' }}>
               <TableCell>
-                <b>No active bids found!</b>
+                <b>No active asks found!</b>
               </TableCell>
             </TableRow>
           )}

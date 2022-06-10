@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
-import tokenRegistryAtom from './_atoms/tokenRegistryAtom';
 import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 import ExplorerGrid from './_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';

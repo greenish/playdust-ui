@@ -2,10 +2,10 @@ import styled from '@emotion/styled';
 import React, { useEffect } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import setWindowImagesAtom from '../../_atoms/setWindowImagesAtom';
+import searchResultsAtom from '../_atoms/searchResultsAtom';
 import SearchOverview from './SearchOverview/SearchOverview';
 import SearchResults from './SearchResults/SearchResults';
 import SearchSideBar from './SearchSideBar/SearchSideBar';
-import searchResultsAtom from './_atoms/searchResultsAtom';
 
 const RootContainer = styled.div`
   display: flex;
@@ -42,9 +42,9 @@ function Search() {
       searchResults.contents.total > 0
     ) {
       const filtered = searchResults.contents.nfts
-        .filter((nft) => nft?.offChainData?.image)
+        .filter((nft) => nft?.image)
         .slice(0, 4)
-        .map((nft) => nft?.offChainData?.image);
+        .map((nft) => nft?.image);
 
       if (filtered.length) {
         setWindowImages(filtered);

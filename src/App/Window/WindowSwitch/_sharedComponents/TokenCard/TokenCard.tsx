@@ -52,15 +52,13 @@ function TokenCard({
   disableQuickFilter = false,
 }: TokenCardProps) {
   const windowState = useRecoilValue(windowStateAtom);
-  const { image, name } = metadata?.offChainData || {};
   const href = encodeWindowHash({
     type: 'address',
     state: metadata?.mint || '',
     tabId: windowState.tabId,
   });
-  const { lastListPrice, listed } = metadata || {};
 
-  if (skeleton) {
+  if (skeleton === true || !metadata) {
     return (
       <SkeletonImageCard imageSize={imageSize} contentHeight={contentHeight} />
     );
@@ -69,23 +67,27 @@ function TokenCard({
   return (
     <ImageCard
       imageSize={imageSize}
-      src={image && getCDNUrl(image)}
+      src={getCDNUrl(metadata.image)}
       href={href}
       content={
         contentHeight ? (
           <CardContentContainer>
             <CardTextContainer>
               <CardText>
-                <Link href={href}>{name || metadata?.data?.name}</Link>
+                <Link href={href}>{metadata.name}</Link>
               </CardText>
             </CardTextContainer>
             <CardSecondaryContainer>
               <span>
-                {listed ? humanizeSolana(lastListPrice) : humanizeSolana()}
+                {humanizeSolana(
+                  metadata.asks && metadata.asks.length > 0
+                    ? Math.min(...metadata.asks.map((entry) => entry.price))
+                    : undefined
+                )}
               </span>
               {!disableQuickFilter && (
                 <TokenCardFilterContainer>
-                  {metadata && metadata.offChainData?.attributes && (
+                  {metadata && metadata.attributes && (
                     <TokenCardFilter metadata={metadata} />
                   )}
                 </TokenCardFilterContainer>

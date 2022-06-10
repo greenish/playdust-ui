@@ -21,7 +21,7 @@ interface TokenCardFilterProps {
 
 function TokenCardFilter({ metadata }: TokenCardFilterProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const attributes = metadata.offChainData.attributes || [];
+  const { attributes } = metadata;
   const findAttribute = useRecoilValue(findTopLevelSearchQueryAttributeAtom);
   const removeQueryNode = useRemoveQueryNode();
   const addTopLevelQueryNode = useAddTopLevelQueryNode();
@@ -42,14 +42,11 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormGroup>
             {attributes.map((attribute) => {
-              const found = findAttribute(
-                attribute.trait_type,
-                attribute.value
-              );
+              const found = findAttribute(attribute.key, attribute.value);
 
               return (
                 <FormControlLabel
-                  key={`${attribute.trait_type}:${attribute.value}`}
+                  key={`${attribute.key}:${attribute.value}`}
                   control={
                     <Checkbox
                       checked={!!found}
@@ -61,13 +58,13 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
                               id: nanoid(),
                               type: 'query',
                               field: 'attribute',
-                              key: attribute.trait_type,
+                              key: attribute.key,
                               value: attribute.value,
                             });
                       }}
                     />
                   }
-                  label={`${attribute.trait_type}: ${attribute.value}`}
+                  label={`${attribute.key}: ${attribute.value}`}
                 />
               );
             })}

@@ -1,41 +1,10 @@
-import { NextApiRequest } from 'next';
+import { SearchRequest } from '@opensearch-project/opensearch/api/types';
+import { string, type } from 'superstruct';
 import SearchSuggestionResponseType from '../App/Window/WindowInput/_types/SearchSuggestionResponseType';
-import OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postMutliCollectionQuery from './_helpers/postMultiCollectionQuery';
-import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
-import type OpenSearchResponseType from './_types/OpenSearchResponseType';
+import searchCollections from './_helpers/searchCollections';
 
-const getAttributeQuery = (term: string) => ({
-  size: 25,
-  _source: ['attributes.name', 'attributes.values.v'],
-  query: {
-    multi_match: {
-      fields: ['attributes.name', 'attributes.values.v'],
-      query: term,
-    },
-  },
-  highlight: {
-    fields: {
-      'attributes.name': {},
-      'attributes.values.v': {},
-      description: {},
-      name: {},
-    },
-    pre_tags: ['<b>'],
-    post_tags: ['</b>'],
-  },
-  sort: [
-    '_score',
-    {
-      totalVolume: {
-        order: 'desc',
-      },
-    },
-  ],
-});
-
-const getCollectionQuery = (term: string) => ({
+const getCollectionQuery = (term: string): SearchRequest['body'] => ({
   size: 20,
   query: {
     multi_match: {
@@ -57,85 +26,32 @@ const getCollectionQuery = (term: string) => ({
   },
   sort: [
     {
-      totalVolume: {
+      'volume.global.total': {
         order: 'desc',
       },
     },
   ],
 });
 
-type AttributeNameValues = Pick<
-  SearchSuggestionResponseType,
-  'attributeNames' | 'attributeValues'
->;
-
-const addActual = (highlight: string) => ({
-  highlight,
-  actual: highlight.replaceAll('<em>', '').replaceAll('</em>', ''),
+const SearchSuggestionsBody = type({
+  term: string(),
 });
 
-const cleanAttributes = (
-  attributeResult: OpenSearchResponseType<OpenSearchCollectionSourceType>
-): AttributeNameValues => {
-  const attributes = attributeResult.hits.hits
-    .map((entry) => entry.highlight)
-    .reduce<{ names: string[]; values: string[] }>(
-      (acc, curr) => {
-        const values = curr['attributes.values.v'] || [];
-        const names = curr['attributes.name'] || [];
-
-        return {
-          names: [...new Set([...acc.names, ...names])],
-          values: [...new Set([...acc.values, ...values])],
-        };
-      },
-      { names: [], values: [] }
-    );
-
-  const withActual = {
-    attributeNames: attributes.names.map(addActual),
-    attributeValues: attributes.values.map(addActual),
-  };
-
-  return withActual;
-};
-
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: {
-    term?: string;
-  };
-}
-
 const getSearchSuggetions = nextApiHandler<SearchSuggestionResponseType>(
-  async (
-    req: ExtendedNextApiRequest
-  ): Promise<SearchSuggestionResponseType> => {
-    const { term } = req.body;
+  async (req) => {
+    const { term } = SearchSuggestionsBody.create(req.body);
+    const collectionBody = getCollectionQuery(term);
+    const [collectionResult] = await searchCollections([
+      { body: collectionBody },
+    ]);
 
-    if (!term) {
-      throw new Error('No search `term` supplied!');
-    }
-
-    const attributeQuery = getAttributeQuery(term);
-    const collectionQuery = getCollectionQuery(term);
-    const multiCollectionQuery = queriesToMultiSearch(
-      [collectionQuery, attributeQuery],
-      'nft-collection'
-    );
-
-    const [collectionResult, attributeResult] = await postMutliCollectionQuery(
-      multiCollectionQuery
-    );
-
-    const attributes = cleanAttributes(attributeResult);
-    const collections = collectionResult.hits.hits.map((entry) => ({
-      source: entry._source,
-      highlight: entry.highlight,
+    const collections = collectionResult.sources.map((source, idx) => ({
+      source,
+      highlights: collectionResult.highlights[idx],
     }));
 
     return {
       collections,
-      ...attributes,
     };
   }
 );

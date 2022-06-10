@@ -3,7 +3,6 @@ import SearchSuggestionType from '../_types/SearchSuggestionType';
 import clientSuggestionsAtom from './clientSuggestionsAtom';
 import explorerSuggestionsAtom from './explorerSuggestionsAtom';
 import groupSuggestionsAtom from './groupSuggestionsAtom';
-import searchQueryActiveNodeAtom from './searchQueryActiveNodeAtom';
 import searchQueryTermAtom from './searchQueryTermAtom';
 import serverSuggestionsAtom from './serverSuggestionsAtom';
 
@@ -15,16 +14,7 @@ type SearchSuggestionAtomType = {
 const searchSuggestionsAtom = selector<SearchSuggestionAtomType>({
   key: 'searchSuggestionsAtom',
   get: ({ get }) => {
-    const activeNode = get(searchQueryActiveNodeAtom);
     const term = get(searchQueryTermAtom);
-
-    if (term.length === 0 && !activeNode) {
-      return {
-        loading: false,
-        suggestions: [],
-      };
-    }
-
     const suggestions: SearchSuggestionType[] = [];
 
     const fuzzySuggestion: SearchSuggestionType = {
@@ -73,10 +63,12 @@ const searchSuggestionsAtom = selector<SearchSuggestionAtomType>({
       }
     }
 
+    const loading =
+      clientSuggestionsLoadable.state === 'loading' ||
+      serverSuggestionsLoadable.state === 'loading';
+
     return {
-      loading:
-        clientSuggestionsLoadable.state === 'loading' ||
-        serverSuggestionsLoadable.state === 'loading',
+      loading,
       suggestions,
     };
   },

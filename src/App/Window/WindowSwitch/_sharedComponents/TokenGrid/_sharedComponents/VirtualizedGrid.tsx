@@ -1,25 +1,38 @@
 import styled from '@emotion/styled';
+import { useDebounceCallback } from '@react-hook/debounce';
 import React, {
   Dispatch,
+  ReactNode,
   SetStateAction,
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {
   AutoSizer,
   InfiniteLoader,
-  List,
+  List as ReactVirtualizedList,
+  ListProps,
   ListRowRenderer,
+  WindowScroller,
+  WindowScrollerChildProps,
 } from 'react-virtualized';
-import 'react-virtualized/styles.css';
-import type RowMetaProps from '../_types/RowMetaProps';
-import type VirtualizedGridChildProps from '../_types/VirtualizedGridChildProps';
+import RowMetaProps from '../_types/RowMetaProps';
+import VirtualizedGridChildProps from '../_types/VirtualizedGridChildProps';
 
 const RootContainer = styled.div`
+  overflow-x: hidden;
   height: 100%;
   width: 100%;
-  display: block;
+`;
+
+const ContentContainer = styled.div`
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 
 interface VirtualizedGridProps {
@@ -31,13 +44,27 @@ interface VirtualizedGridProps {
   rowRenderer: (childProps: VirtualizedGridChildProps) => React.ReactElement;
   initialized: boolean;
   next?: () => Promise<void>;
+  content?: ReactNode;
 }
 
-interface AutoSizedContainerProps extends VirtualizedGridProps {
+interface AutoSizedContainerProps
+  extends Omit<VirtualizedGridProps, 'content'> {
+  windowScrollerProps: WindowScrollerChildProps;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   width: number;
-  height: number;
+}
+
+function List(props: ListProps) {
+  const listRef = useRef<ReactVirtualizedList>(null);
+
+  useEffect(() => {
+    listRef.current?.recomputeGridSize();
+  }, [props.rowHeight]);
+
+  return (
+    <ReactVirtualizedList {...props} height={props.height} ref={listRef} />
+  );
 }
 
 function AutoSizedContainer(props: AutoSizedContainerProps) {
@@ -49,13 +76,20 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
     initialized,
     getRowMeta,
     width,
-    height,
+    windowScrollerProps: {
+      height = 0,
+      isScrolling,
+      onChildScroll,
+      scrollTop,
+      registerChild,
+    },
   } = props;
 
   const meta = useMemo(
     () => getRowMeta(width, height, isLoading),
     [getRowMeta, width, height, isLoading]
   );
+
   const { rowHeight, rowCount, hasMore } = meta;
 
   const rowWrapper = useCallback<ListRowRenderer>(
@@ -72,6 +106,7 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
 
   return (
     <div
+      ref={registerChild}
       style={{
         height,
         width,
@@ -97,7 +132,6 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
       >
         {(infiniteLoaderProps) => (
           <List
-            ref={infiniteLoaderProps.registerChild}
             onRowsRendered={infiniteLoaderProps.onRowsRendered}
             height={height}
             width={width}
@@ -105,6 +139,11 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
             rowHeight={rowHeight}
             rowRenderer={rowWrapper}
             props={props}
+            autoHeight={true}
+            isScrolling={isScrolling}
+            onScroll={onChildScroll}
+            overscanRowCount={4}
+            scrollTop={scrollTop}
           />
         )}
       </InfiniteLoader>
@@ -112,22 +151,46 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
   );
 }
 
-function VirtualizedGrid(props: VirtualizedGridProps) {
+function VirtualizedGrid({ content, ...props }: VirtualizedGridProps) {
+  const [scrollElement, setScrollElement] = useState<HTMLDivElement | null>();
   const [isLoading, setIsLoading] = useState(false);
 
+  const windowScrollerRef = useRef<WindowScroller>(null);
+  const updatePosition = useDebounceCallback(() =>
+    windowScrollerRef.current?.updatePosition()
+  );
+  const contentObserver = React.useRef(
+    new ResizeObserver(() => {
+      updatePosition();
+    })
+  );
+
   return (
-    <RootContainer>
-      <AutoSizer>
-        {(autoSizerProps) => (
-          <AutoSizedContainer
-            {...props}
-            isLoading={isLoading}
-            setIsLoading={setIsLoading}
-            width={autoSizerProps.width}
-            height={autoSizerProps.height}
-          />
-        )}
-      </AutoSizer>
+    <RootContainer ref={setScrollElement}>
+      {scrollElement && (
+        <ContentContainer>
+          {content && (
+            <div ref={(el) => el && contentObserver.current.observe(el)}>
+              {content}
+            </div>
+          )}
+          <WindowScroller ref={windowScrollerRef} scrollElement={scrollElement}>
+            {(windowScrollerProps) => (
+              <AutoSizer disableHeight={true}>
+                {({ width }) => (
+                  <AutoSizedContainer
+                    {...props}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    width={width}
+                    windowScrollerProps={windowScrollerProps}
+                  />
+                )}
+              </AutoSizer>
+            )}
+          </WindowScroller>
+        </ContentContainer>
+      )}
     </RootContainer>
   );
 }

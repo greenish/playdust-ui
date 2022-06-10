@@ -1,8 +1,8 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import playdustNftDataAtom from '../../_atoms/playdustNftDataAtom';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
-import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 
 // react-json-view can only be client render since it uses window
 const DynamicReactJson = dynamic(import('react-json-view'), {
@@ -12,7 +12,7 @@ const DynamicReactJson = dynamic(import('react-json-view'), {
 function MetaplexRawOffChainMetadata() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
-  if (!playdustNftData || !playdustNftData.metaplexOffChainData) {
+  if (!playdustNftData || !playdustNftData.mintOffChainMetadata) {
     return null;
   }
 
@@ -22,7 +22,7 @@ function MetaplexRawOffChainMetadata() {
       content={
         <DynamicReactJson
           name={null}
-          src={playdustNftData.metaplexOffChainData}
+          src={playdustNftData.mintOffChainMetadata}
           collapseStringsAfterLength={50}
           groupArraysAfterLength={20}
         />

@@ -1,8 +1,10 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
+import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import searchResultsAtom from '../../_atoms/searchResultsAtom';
+import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
-import searchResultsAtom from '../_atoms/searchResultsAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoTokensContainer = styled.div`
@@ -28,13 +30,20 @@ function SearchResults() {
   return (
     <TokenGrid
       initialized={hasValue}
-      imageSize={225}
+      imageSize={175}
       contentHeight={70}
       cardGap={16}
       rowGap={16}
       tokens={hasValue ? loadable.contents.nfts : []}
       total={hasValue ? loadable.contents.total : 0}
       next={fetchMoreSearchResults}
+      content={
+        <SuspenseBoundary
+          error={null}
+          loading={null}
+          content={<CollectionOverview />}
+        />
+      }
     />
   );
 }

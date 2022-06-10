@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
+import playdustNftDataAtom from '../../_atoms/playdustNftDataAtom';
 import ContentContainer from '../_sharedComponents/ContentContainer';
 import MetaplexCreators from './MetaplexCreators';
 import MetaplexNFTAttributes from './MetaplexNFTAttributes';
+import MetaplexNFTCollectionOverview from './MetaplexNFTCollectionOverview';
 import MetaplexRawOffChainMetadata from './MetaplexRawOffChainMetadata';
 import MetaplexRawOnChainMetadata from './MetaplexRawOnChainMetadata';
 import NFTDetailsView from './NFTDetailsView/NFTDetailsView';
-import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 
 // 5fzi7TauBFdac94hvm8DcTVN7jrCwYmf6PLuT2TJA7oe
 function SPLTokenMintNonFungible() {
@@ -16,7 +17,7 @@ function SPLTokenMintNonFungible() {
 
   useEffect(() => {
     if (setWindowImages && playdustNftData) {
-      setWindowImages([playdustNftData.metaplexOffChainData.image]);
+      setWindowImages([playdustNftData.mintOffChainMetadata.image]);
     }
   }, [setWindowImages, playdustNftData]);
 
@@ -24,6 +25,7 @@ function SPLTokenMintNonFungible() {
     <>
       <NFTDetailsView />
       <ContentContainer>
+        <MetaplexNFTCollectionOverview />
         <MetaplexNFTAttributes />
         <MetaplexCreators />
         <MetaplexRawOffChainMetadata />

@@ -1,4 +1,4 @@
-import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
+import OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 import type TokenGridBaseProps from './TokenGridBaseProps';
 
 interface TokenListProps extends TokenGridBaseProps {

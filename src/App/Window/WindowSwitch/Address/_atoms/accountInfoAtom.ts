@@ -2,9 +2,9 @@ import { Connection } from '@solana/web3.js';
 import { selector } from 'recoil';
 import { create } from 'superstruct';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
-import safePubkey from '../_helpers/safePubkey';
+import addressStateAtom from '../../_atoms/addressStateAtom';
+import safePubkey from '../../_helpers/safePubkey';
 import { AccountInfoType } from '../_types/AccountInfoType';
-import addressStateAtom from './addressStateAtom';
 
 const accountInfoAtom = selector<AccountInfoType | null>({
   key: 'accountInfo',
