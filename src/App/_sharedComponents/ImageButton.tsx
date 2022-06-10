@@ -52,7 +52,6 @@ function ImageButton({
   children,
 }: SizedButtonProps) {
   const loadedImages = usePreloadImages(images);
-  console.log('loadedImages', loadedImages);
 
   const sx = useCallback(
     (theme: Theme) => {
