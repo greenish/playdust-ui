@@ -1,7 +1,7 @@
 import React from 'react';
-import safePubkeyString from '../../_helpers/safePubkeyString';
-import ExplorerLink from '../ExplorerLink/ExplorerLink';
-import ExplorerLinkProps from '../_types/ExplorerLinkProps';
+import safePubkeyString from '../../../_helpers/safePubkeyString';
+import ExplorerLink from '../../../_sharedComponents/ExplorerLink/ExplorerLink';
+import ExplorerLinkProps from '../../../_types/ExplorerLinkProps';
 import useAddressLabel from './_hooks/useAddressLabel';
 
 function LabeledAddressLink({

@@ -12,10 +12,10 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
+import safePubkeyString from '../../../_helpers/safePubkeyString';
+import ExplorerLink from '../../../_sharedComponents/ExplorerLink/ExplorerLink';
 import addressStateAtom from '../../_atoms/addressStateAtom';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
-import safePubkeyString from '../../_helpers/safePubkeyString';
-import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
 import ordersForMintAtom from '../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../_atoms/tradingDialogAtom';
 
