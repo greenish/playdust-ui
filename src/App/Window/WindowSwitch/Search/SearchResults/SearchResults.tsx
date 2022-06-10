@@ -30,7 +30,7 @@ function SearchResults() {
   return (
     <TokenGrid
       initialized={hasValue}
-      imageSize={200}
+      imageSize={175}
       contentHeight={70}
       cardGap={16}
       rowGap={16}

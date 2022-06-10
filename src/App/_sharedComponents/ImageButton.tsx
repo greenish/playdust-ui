@@ -4,37 +4,36 @@ import React, {
   PropsWithChildren,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import getCDNUrl from '../_helpers/getCDNUrl';
 import safePromise from '../_helpers/safePromise';
 
 function usePreloadImages(images: string[] = []) {
-  const [loadedImages, setLoadedImages] = useState<string[]>(
-    images.slice(0, 1)
-  );
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (images.length) {
-      const loadImages = async () => {
-        const promises = images.map(
-          (image) =>
-            new Promise<string>((resolve) => {
-              const img = new Image();
+    const loadImages = async () => {
+      const promises = images.map(
+        (image) =>
+          new Promise<void>((resolve) => {
+            const img = new Image();
 
-              img.src = getCDNUrl(image);
-              img.onload = () => resolve(img.src);
-            })
-        );
+            img.src = getCDNUrl(image);
+            img.onload = () => resolve();
+            img.onerror = () => resolve();
+          })
+      );
 
-        setLoadedImages(await Promise.all(promises));
-      };
+      await Promise.all(promises);
+      setIsLoaded(true);
+    };
 
-      safePromise(loadImages());
-    }
-  }, [images, setLoadedImages]);
+    safePromise(loadImages());
+  }, [images, setIsLoaded]);
 
-  return loadedImages;
+  return isLoaded;
 }
 
 type SizedButtonProps = PropsWithChildren<{
@@ -51,7 +50,13 @@ function ImageButton({
   onClick,
   children,
 }: SizedButtonProps) {
-  const loadedImages = usePreloadImages(images);
+  const isLoaded = usePreloadImages(images);
+
+  const loadedImages = useMemo(() => {
+    if (images) {
+      return isLoaded ? images : [images[0]];
+    }
+  }, [images, isLoaded]);
 
   const sx = useCallback(
     (theme: Theme) => {
@@ -69,13 +74,13 @@ function ImageButton({
         },
       };
 
-      if (loadedImages.length) {
+      if (loadedImages) {
         const sliceLength = 100 / loadedImages.length;
         const keyframeInput = loadedImages
           .map((image, idx) => {
             const start = idx === 0 ? '0%,100%' : `${sliceLength * idx}%`;
 
-            return `${start} {background-image: url("${image}");}`;
+            return `${start} {background-image: url("${getCDNUrl(image)}");}`;
           })
           .join('');
 
@@ -96,7 +101,17 @@ function ImageButton({
 
   return (
     <Fab sx={sx} disabled={!onClick} onClick={onClick}>
-      {!images && children}
+      {loadedImages ? (
+        <div
+          style={{
+            backgroundImage: loadedImages
+              .map((image) => `url("${getCDNUrl(image)}")`)
+              .join(),
+          }}
+        />
+      ) : (
+        children
+      )}
     </Fab>
   );
 }

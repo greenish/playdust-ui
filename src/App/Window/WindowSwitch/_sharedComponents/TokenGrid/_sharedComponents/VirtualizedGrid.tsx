@@ -62,7 +62,9 @@ function List(props: ListProps) {
     listRef.current?.recomputeGridSize();
   }, [props.rowHeight]);
 
-  return <ReactVirtualizedList {...props} ref={listRef} />;
+  return (
+    <ReactVirtualizedList {...props} height={props.height} ref={listRef} />
+  );
 }
 
 function AutoSizedContainer(props: AutoSizedContainerProps) {
@@ -74,7 +76,13 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
     initialized,
     getRowMeta,
     width,
-    windowScrollerProps: { height = 0, isScrolling, onChildScroll, scrollTop },
+    windowScrollerProps: {
+      height = 0,
+      isScrolling,
+      onChildScroll,
+      scrollTop,
+      registerChild,
+    },
   } = props;
 
   const meta = useMemo(
@@ -98,6 +106,7 @@ function AutoSizedContainer(props: AutoSizedContainerProps) {
 
   return (
     <div
+      ref={registerChild}
       style={{
         height,
         width,
@@ -167,19 +176,17 @@ function VirtualizedGrid({ content, ...props }: VirtualizedGridProps) {
           )}
           <WindowScroller ref={windowScrollerRef} scrollElement={scrollElement}>
             {(windowScrollerProps) => (
-              <div ref={windowScrollerProps.registerChild}>
-                <AutoSizer disableHeight={true}>
-                  {({ width }) => (
-                    <AutoSizedContainer
-                      {...props}
-                      isLoading={isLoading}
-                      setIsLoading={setIsLoading}
-                      width={width}
-                      windowScrollerProps={windowScrollerProps}
-                    />
-                  )}
-                </AutoSizer>
-              </div>
+              <AutoSizer disableHeight={true}>
+                {({ width }) => (
+                  <AutoSizedContainer
+                    {...props}
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    width={width}
+                    windowScrollerProps={windowScrollerProps}
+                  />
+                )}
+              </AutoSizer>
             )}
           </WindowScroller>
         </ContentContainer>

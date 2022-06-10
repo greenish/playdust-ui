@@ -13,12 +13,13 @@ import {
 import React, { ReactNode, useMemo } from 'react';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
+import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import CollectionOverviewResponseType from './_types/CollectionOverviewResponseType';
 
 type Column = {
   label: string;
-  getValue: (data: CollectionOverviewResponseType) => ReactNode;
+  getValue: (data: OpenSearchCollectionSourceType) => ReactNode;
 };
 
 const columns: Column[] = [
@@ -58,7 +59,6 @@ function SimilarCollections({
 
       return !(noName && noSymbol);
     });
-    // .slice(0, 5);
   }, [overview]);
 
   const overviewColor = useMemo(() => {
@@ -85,13 +85,14 @@ function SimilarCollections({
   return (
     overview && (
       <Box
-        sx={{ display: 'flex', flexDirection: 'column', maxHeight: '350px' }}
+        sx={{ display: 'flex', flexDirection: 'column', maxHeight: '300px' }}
       >
         <Typography sx={{ p: '8px 16px', backgroundColor: '#F6F6F6' }}>
           Similar NFT Collections found
         </Typography>
         <Box sx={{ width: '100%', overflow: 'auto' }}>
           <Table
+            stickyHeader={true}
             size="small"
             sx={{
               backgroundColor: 'white',
@@ -116,8 +117,8 @@ function SimilarCollections({
               </TableRow>
             </TableHead>
             <TableBody>
-              {[overview, ...filtered].map((entry, index) => {
-                const isOverview = !index;
+              {[overview, ...filtered].map((entry) => {
+                const isOverview = entry === overview;
 
                 const fontProps: TypographyProps = {
                   fontSize: '0.8rem',

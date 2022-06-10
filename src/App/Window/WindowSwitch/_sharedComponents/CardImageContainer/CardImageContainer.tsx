@@ -25,8 +25,7 @@ function CardImageContainer({
         <Box
           component="div"
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
+            position: 'relative',
             maxHeight: imageSize,
             width: imageSize,
             height: imageSize,
@@ -37,12 +36,13 @@ function CardImageContainer({
             <img // eslint-disable-line @next/next/no-img-element
               src={src}
               style={{
+                position: 'absolute',
                 objectFit: 'cover',
                 width: imageSize,
                 height: imageSize,
                 filter: censored ? 'blur(1.5rem)' : 'none',
                 opacity: isLoaded ? 1 : 0,
-                transition: 'all .5s ease',
+                transition: 'all .2s ease',
               }}
               alt=""
               width={imageSize}
@@ -52,9 +52,9 @@ function CardImageContainer({
           ) : null}
           <Skeleton
             sx={{
+              position: 'absolute',
               height: imageSize,
               width: imageSize,
-              position: 'absolute',
               opacity: isLoaded ? 0 : 1,
               transition: 'all .5s ease',
             }}

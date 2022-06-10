@@ -180,10 +180,17 @@ const themeOverrides = createTheme({
           '.MuiAccordionSummary-root': {
             background: greyBackground,
             borderBottom: border,
+            minHeight: 'unset',
+            '.MuiAccordionSummary-content': {
+              margin: '8px 0',
+            },
           },
           '.MuiAccordionDetails-root': {
             padding: ownerState.itemType === 'table' ? 0 : 16,
             borderBottom: border,
+          },
+          '&:before': {
+            opacity: 0,
           },
         }),
       },
@@ -191,9 +198,6 @@ const themeOverrides = createTheme({
     MuiTableRow: {
       styleOverrides: {
         root: ({ ownerState }) => ({
-          // '&:last-child td, &:last-child th': {
-          //   border: 0,
-          // },
           cursor: ownerState.onClick ? 'pointer' : 'default',
         }),
       },
