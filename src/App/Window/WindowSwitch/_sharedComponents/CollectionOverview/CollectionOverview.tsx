@@ -13,11 +13,11 @@ import ImageButton from '../../../../_sharedComponents/ImageButton';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
+import collectionOverviewAtom from '../../_atoms/collectionOverviewAtom';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import humanizeSolana from '../../_helpers/humanizeSolana';
+import CollectionOverviewResponseType from '../../_types/CollectionOverviewResponseType';
 import SimilarCollections from './SimilarCollections';
-import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
-import CollectionOverviewResponseType from './_types/CollectionOverviewResponseType';
 
 const border = '1px solid #EEEEEE';
 

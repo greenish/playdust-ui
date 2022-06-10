@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
-import PlaydustMintAPIResponseType from '../../../../_types/PlaydustMintAPIResponseType';
-import addressStateAtom from '../../../_atoms/addressStateAtom';
-import nftByMintAtom from '../../../_atoms/nftByMintAtom';
+import PlaydustMintAPIResponseType from '../_types/PlaydustMintAPIResponseType';
+import addressStateAtom from './addressStateAtom';
+import nftByMintAtom from './nftByMintAtom';
 
 const playdustNftDataAtom = selector<PlaydustMintAPIResponseType | null>({
   key: 'playdustNftDataAtom',

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { selectorFamily } from 'recoil';
-import PlaydustMintAPIResponseType from '../../_types/PlaydustMintAPIResponseType';
+import PlaydustMintAPIResponseType from '../_types/PlaydustMintAPIResponseType';
 
 const nftByMintAtom = selectorFamily<
   PlaydustMintAPIResponseType | null,

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import collectionOverviewAtom from '../../_atoms/collectionOverviewAtom';
 import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
-import collectionOverviewAtom from '../../_sharedComponents/CollectionOverview/_atoms/collectionOverviewAtom';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 
 function MetaplexNFTCollectionOverview() {

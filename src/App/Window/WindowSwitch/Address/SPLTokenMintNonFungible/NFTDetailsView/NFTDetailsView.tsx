@@ -2,9 +2,9 @@ import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
+import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
 import ContentContainer from '../../_sharedComponents/ContentContainer';
-import playdustNftDataAtom from '../_atoms/playdustNftDataAtom';
 import NFTDetailsRenderMedia from './NFTDetailsRenderMedia';
 
 function NFTDetailsView() {

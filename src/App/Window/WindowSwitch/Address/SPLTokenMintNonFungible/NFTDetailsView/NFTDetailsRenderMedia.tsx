@@ -3,7 +3,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import playdustNftDataAtom from '../_atoms/playdustNftDataAtom';
+import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
 
 const BlurImage = styled.img`
   filter: blur(1.5rem);

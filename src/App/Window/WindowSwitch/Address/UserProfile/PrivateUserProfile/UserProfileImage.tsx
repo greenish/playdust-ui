@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import getCDNUrl from '../../../../../_helpers/getCDNUrl';
 import SuspenseBoundary from '../../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import useProfileState from '../../../../_hooks/useProfileState';
-import CardImageContainer from '../../../_sharedComponents/CardImageContainer/CardImageContainer';
+import CardImageContainer from '../../../_sharedComponents/CardImageContainer';
 import OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 import nftsForAddressAtom from '../../_atoms/nftsForAddressAtom';
 import profilePictureAtom from '../_atoms/profilePictureAtom';
