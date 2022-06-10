@@ -1,19 +1,20 @@
-import { Box, Card, Grid, styled, Typography } from '@mui/material';
+import { Box, ButtonBase, Card, Grid, styled, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import ImageButton from '../../../../_sharedComponents/ImageButton';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
-import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
-import searchResultsAtom from '../../_atoms/searchResultsAtom';
+import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import SimilarCollections from './SimilarCollections';
 import collectionOverviewAtom from './_atoms/collectionOverviewAtom';
+import CollectionOverviewResponseType from './_types/CollectionOverviewResponseType';
 
 const border = '1px solid #EEEEEE';
 
 type Item = {
   label: string;
-  getValue: (data: OpenSearchCollectionSourceType) => ReactNode;
+  getValue: (data: CollectionOverviewResponseType) => ReactNode;
 };
 
 const items: Item[] = [
@@ -30,8 +31,8 @@ const items: Item[] = [
     getValue: ({ elementCount }) => elementCount.toLocaleString(),
   },
   {
-    label: 'Listed Items',
-    getValue: () => null,
+    label: 'Listed',
+    getValue: ({ listed }) => listed.toLocaleString(),
   },
   {
     label: 'Listed In',
@@ -59,10 +60,16 @@ function OverviewItem(props: OverviewItemProps) {
         },
       }}
     >
-      <Box>{props.label}</Box>
-      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <Typography fontSize="0.85rem" color="#9BA6B1">
+        {props.label}
+      </Typography>
+      <Typography
+        fontWeight="bold"
+        fontSize="0.8rem"
+        sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+      >
         {props.value}
-      </Box>
+      </Typography>
     </Box>
   ) : null;
 }
@@ -86,76 +93,71 @@ const ItemsContainer = styled(Box)({
   marginBottom: 16,
 });
 
-function CollectionNFTDetails() {
+function CollectionOverview() {
   const overview = useRecoilValue(collectionOverviewAtom);
-  const searchResults = useRecoilValue(searchResultsAtom);
+  const windowState = useRecoilValue(windowStateAtom);
+  const addCollectionQueryNode = useAddCollectionQueryNode();
 
   if (!overview) {
     return null;
   }
 
-  const images = searchResults.total
-    ? searchResults.nfts
-        .filter((nft) => nft.image)
-        .slice(0, 4)
-        .map((nft) => nft.image)
-    : [];
-
   const hasSimilar = !!overview.similar.length;
+  const gridItemSize = hasSimilar ? 6 : 12;
+
+  const goToCollection =
+    windowState.type !== 'search'
+      ? () => addCollectionQueryNode(overview.id, true)
+      : undefined;
 
   return (
     <Grid container={true} spacing={2}>
-      <Grid item={true} xs={12} md={hasSimilar ? 6 : 12}>
+      <Grid item={true} xs={12} md={gridItemSize}>
         <CardContainer>
-          <ImageButton size={200} transitionDuration={1} images={images} />
-          <Typography
-            gutterBottom={true}
-            variant="h5"
-            component="div"
-            sx={{ mt: 2 }}
-          >
-            {humanizeCollection(overview)}
-          </Typography>
+          <ImageButton
+            onClick={goToCollection}
+            size={200}
+            transitionDuration={1}
+            images={overview.images}
+          />
+          <ButtonBase disabled={!goToCollection} onClick={goToCollection}>
+            <Typography
+              gutterBottom={true}
+              variant="h5"
+              component="div"
+              sx={{ mt: 2 }}
+            >
+              {humanizeCollection(overview)}
+            </Typography>
+          </ButtonBase>
           {overview.description && (
             <Typography variant="body2" color="text.secondary">
               {overview.description}
             </Typography>
           )}
-          {/* <ItemsContainer>
-              {items.map(
-                (item) =>
-                  overview && (
-                    <OverviewItem
-                      key={item.label}
-                      label={item.label}
-                      value={item.getValue(overview)}
-                    />
-                  )
-              )}
-            </ItemsContainer> */}
         </CardContainer>
       </Grid>
-      {hasSimilar && (
-        <Grid item={true} xs={12} md={6}>
-          <ItemsContainer>
-            {items.map(
-              (item) =>
-                overview && (
-                  <OverviewItem
-                    key={item.label}
-                    label={item.label}
-                    value={item.getValue(overview)}
-                  />
-                )
-            )}
-          </ItemsContainer>
+      <Grid item={true} xs={12} md={gridItemSize}>
+        <ItemsContainer>
+          {items.map(
+            (item) =>
+              overview && (
+                <OverviewItem
+                  key={item.label}
+                  label={item.label}
+                  value={item.getValue(overview)}
+                />
+              )
+          )}
+        </ItemsContainer>
+        {hasSimilar && (
           <Box sx={{ border }}>
             <SimilarCollections overview={overview} />
           </Box>
-        </Grid>
-      )}
+        )}
+      </Grid>
     </Grid>
   );
 }
 
-export default CollectionNFTDetails;
+export default CollectionOverview;

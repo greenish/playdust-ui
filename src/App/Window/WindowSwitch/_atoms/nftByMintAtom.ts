@@ -1,17 +1,24 @@
+import axios from 'axios';
 import { selectorFamily } from 'recoil';
-import frontendApi from '../../_helpers/frontendApi';
-import OpenSearchNFTSourceType from '../_types/OpenSearchNFTSourceType';
+import PlaydustMintAPIResponseType from '../../_types/PlaydustMintAPIResponseType';
 
-const nftByMintAtom = selectorFamily<OpenSearchNFTSourceType | null, string>({
+const nftByMintAtom = selectorFamily<
+  PlaydustMintAPIResponseType | null,
+  string
+>({
   key: 'nftByMintAtom',
   get: (mintAddress) => async () => {
     if (!mintAddress) {
       return null;
     }
 
-    const { data } = await frontendApi.post<OpenSearchNFTSourceType>(
-      `/mint?address=${mintAddress}`
+    const { data } = await axios.get<PlaydustMintAPIResponseType>(
+      `/playdust-api/mint?mintAddress=${mintAddress}`
     );
+
+    if (!data || !data.mintOffChainMetadata || !data.mintOnChainMetadata) {
+      return null;
+    }
 
     return data;
   },

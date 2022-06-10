@@ -1,7 +1,41 @@
 import { keyframes } from '@emotion/react';
 import { Fab, Theme } from '@mui/material';
-import React, { PropsWithChildren, useCallback } from 'react';
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import getCDNUrl from '../_helpers/getCDNUrl';
+import safePromise from '../_helpers/safePromise';
+
+function usePreloadImages(images: string[] = []) {
+  const [loadedImages, setLoadedImages] = useState<string[]>(
+    images.slice(0, 1)
+  );
+
+  useEffect(() => {
+    if (images.length) {
+      const loadImages = async () => {
+        const promises = images.map(
+          (image) =>
+            new Promise<string>((resolve) => {
+              const img = new Image();
+
+              img.src = getCDNUrl(image);
+              img.onload = () => resolve(img.src);
+            })
+        );
+
+        setLoadedImages(await Promise.all(promises));
+      };
+
+      safePromise(loadImages());
+    }
+  }, [images, setLoadedImages]);
+
+  return loadedImages;
+}
 
 type SizedButtonProps = PropsWithChildren<{
   size?: number;
@@ -17,6 +51,9 @@ function ImageButton({
   onClick,
   children,
 }: SizedButtonProps) {
+  const loadedImages = usePreloadImages(images);
+  console.log('loadedImages', loadedImages);
+
   const sx = useCallback(
     (theme: Theme) => {
       const baseStyleProps = {
@@ -33,18 +70,18 @@ function ImageButton({
         },
       };
 
-      if (images) {
-        const sliceLength = 100 / images.length;
-        const keyframeInput = images
+      if (loadedImages.length) {
+        const sliceLength = 100 / loadedImages.length;
+        const keyframeInput = loadedImages
           .map((image, idx) => {
             const start = idx === 0 ? '0%,100%' : `${sliceLength * idx}%`;
 
-            return `${start} {background-image: url("${getCDNUrl(image)}");}`;
+            return `${start} {background-image: url("${image}");}`;
           })
           .join('');
 
         const animation = keyframes(keyframeInput);
-        const animationTime = transitionDuration * images.length;
+        const animationTime = transitionDuration * loadedImages.length;
 
         return {
           ...baseStyleProps,
@@ -55,7 +92,7 @@ function ImageButton({
 
       return baseStyleProps;
     },
-    [size, transitionDuration, images]
+    [size, transitionDuration, loadedImages]
   );
 
   return (

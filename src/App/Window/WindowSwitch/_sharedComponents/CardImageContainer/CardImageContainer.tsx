@@ -1,6 +1,6 @@
 import { Box, Skeleton } from '@mui/material';
 import React, { useState } from 'react';
-import LazyImage from './LazyImage';
+import { useInView } from 'react-intersection-observer';
 
 interface CardImageContainerProps {
   src?: string;
@@ -14,38 +14,55 @@ function CardImageContainer({
   censored,
 }: CardImageContainerProps) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    rootMargin: '300px 0px',
+  });
 
   return (
-    <>
-      {src && (
+    <div ref={ref} data-inview={inView} style={{ overflow: 'hidden' }}>
+      {src ? (
         <Box
           component="div"
           sx={{
             display: 'flex',
             justifyContent: 'center',
             maxHeight: imageSize,
+            width: imageSize,
+            height: imageSize,
+            minHeight: imageSize,
           }}
         >
-          <LazyImage
-            src={src}
-            style={
-              isLoaded
-                ? {
-                    objectFit: 'cover',
-                    width: imageSize,
-                    height: imageSize,
-                    filter: censored ? 'blur(1.5rem)' : 'none',
-                  }
-                : { display: 'none' }
-            }
-            width={imageSize}
-            height={imageSize}
-            onLoad={() => setIsLoaded(true)}
-            alt=""
+          {inView ? (
+            <img // eslint-disable-line @next/next/no-img-element
+              src={src}
+              style={{
+                objectFit: 'cover',
+                width: imageSize,
+                height: imageSize,
+                filter: censored ? 'blur(1.5rem)' : 'none',
+                opacity: isLoaded ? 1 : 0,
+                transition: 'all .5s ease',
+              }}
+              alt=""
+              width={imageSize}
+              height={imageSize}
+              onLoad={() => setIsLoaded(true)}
+            />
+          ) : null}
+          <Skeleton
+            sx={{
+              height: imageSize,
+              width: imageSize,
+              position: 'absolute',
+              opacity: isLoaded ? 0 : 1,
+              transition: 'all .5s ease',
+            }}
+            animation="wave"
+            variant="rectangular"
           />
         </Box>
-      )}
-      {!isLoaded && (
+      ) : (
         <Skeleton
           sx={{
             height: imageSize,
@@ -55,7 +72,7 @@ function CardImageContainer({
           variant="rectangular"
         />
       )}
-    </>
+    </div>
   );
 }
 

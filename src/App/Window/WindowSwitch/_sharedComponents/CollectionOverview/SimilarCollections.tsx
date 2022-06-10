@@ -13,13 +13,12 @@ import {
 import React, { ReactNode, useMemo } from 'react';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
-import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import CollectionOverviewResponseType from './_types/CollectionOverviewResponseType';
 
 type Column = {
   label: string;
-  getValue: (data: OpenSearchCollectionSourceType) => ReactNode;
+  getValue: (data: CollectionOverviewResponseType) => ReactNode;
 };
 
 const columns: Column[] = [

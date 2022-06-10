@@ -3,7 +3,7 @@ import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
-import CollectionNFTDetails from '../../_sharedComponents/CollectionNFTDetails/CollectionNFTDetails';
+import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
@@ -41,7 +41,7 @@ function SearchResults() {
         <SuspenseBoundary
           error={null}
           loading={null}
-          content={<CollectionNFTDetails />}
+          content={<CollectionOverview />}
         />
       }
     />

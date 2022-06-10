@@ -2,21 +2,16 @@ import { selector } from 'recoil';
 import searchStateAtom from '../../../../_atoms/searchStateAtom';
 import api from '../../../../_helpers/frontendApi';
 import CollectionQueryNodeType from '../../../../_types/CollectionQueryNodeType';
-import addressStateAtom from '../../../_atoms/addressStateAtom';
-import nftByMintAtom from '../../../_atoms/nftByMintAtom';
-import safePubkeyString from '../../../_helpers/safePubkeyString';
+import playdustNftDataAtom from '../../../Address/SPLTokenMintNonFungible/_atoms/playdustNftDataAtom';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
 
 const collectionIdAtom = selector<string | null>({
   key: 'collectionIdAtom',
   get: ({ get }) => {
-    const addressState = get(addressStateAtom);
+    const nft = get(playdustNftDataAtom);
 
-    if (addressState) {
-      const mintAddress = safePubkeyString(addressState.pubkey);
-      const nft = get(nftByMintAtom(mintAddress));
-
-      return null;
+    if (nft?.playdustCollection?.id) {
+      return nft.playdustCollection.id;
     }
 
     const { query } = get(searchStateAtom);

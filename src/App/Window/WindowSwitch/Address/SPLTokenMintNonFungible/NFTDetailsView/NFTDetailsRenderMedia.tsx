@@ -45,18 +45,18 @@ function NFTDetailsRenderMedia() {
         <img
           alt={offChainData.name || ''}
           src={offChainData.image}
-          height={500}
+          height={300}
         />
       ) : (
         <BlurImage
           alt={offChainData.name || ''}
           src={offChainData.image}
-          height={500}
+          height={300}
         />
       )}
     </BlurImageContainer>
   ) : (
-    <img alt={offChainData.name || ''} src={offChainData.image} height={500} />
+    <img alt={offChainData.name || ''} src={offChainData.image} height={300} />
   );
 }
 
