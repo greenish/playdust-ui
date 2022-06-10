@@ -130,7 +130,12 @@ function TokenGroup(props: TokenGroupProps) {
           : Math.ceil(height / rowHeight);
         const hasMore = props.totalRows > rowCount;
 
-        return { rowCount, rowHeight, hasMore, cardsPerRow: 1 };
+        return {
+          rowCount,
+          rowHeight,
+          hasMore,
+          cardsPerRow: 1,
+        };
       }}
       rowRenderer={rowWrapper}
       next={props.next}

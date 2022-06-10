@@ -3,7 +3,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import playdustNftDataAtom from '../_atoms/playdustNftDataAtom';
+import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
 
 const BlurImage = styled.img`
   filter: blur(1.5rem);
@@ -32,39 +32,31 @@ function NFTDetailsRenderMedia() {
 
   const isNSFW = false;
 
-  return (
-    <div>
-      {isNSFW ? (
-        <BlurImageContainer>
-          <VisibilityContainer>
-            {visible ? (
-              <VisibilityOffIcon onClick={() => setVisible(false)} />
-            ) : (
-              <VisibilityIcon onClick={() => setVisible(true)} />
-            )}
-          </VisibilityContainer>
-          {visible ? (
-            <img
-              alt={offChainData.name || ''}
-              src={offChainData.image}
-              height={500}
-            />
-          ) : (
-            <BlurImage
-              alt={offChainData.name || ''}
-              src={offChainData.image}
-              height={500}
-            />
-          )}
-        </BlurImageContainer>
-      ) : (
+  return isNSFW ? (
+    <BlurImageContainer>
+      <VisibilityContainer>
+        {visible ? (
+          <VisibilityOffIcon onClick={() => setVisible(false)} />
+        ) : (
+          <VisibilityIcon onClick={() => setVisible(true)} />
+        )}
+      </VisibilityContainer>
+      {visible ? (
         <img
           alt={offChainData.name || ''}
           src={offChainData.image}
-          height={500}
+          height={300}
+        />
+      ) : (
+        <BlurImage
+          alt={offChainData.name || ''}
+          src={offChainData.image}
+          height={300}
         />
       )}
-    </div>
+    </BlurImageContainer>
+  ) : (
+    <img alt={offChainData.name || ''} src={offChainData.image} height={300} />
   );
 }
 

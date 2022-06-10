@@ -1,8 +1,8 @@
 import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import addressStateAtom from '../../_atoms/addressStateAtom';
 import fetchTokenAccountsForAddress from '../_helpers/fetchTokenAccountsForAddress';
 import TokenAccountsType from '../_types/TokenAccountsType';
-import addressStateAtom from './addressStateAtom';
 
 const tokenAccountsForAddressAtom = selector<TokenAccountsType[]>({
   key: 'tokenAccountsForAddressAtom',

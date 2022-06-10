@@ -12,7 +12,7 @@ function ContentContainer({
   return (
     <Box
       sx={{
-        margin: '8px 0px',
+        margin: '16px 0px',
         ...sx,
       }}
     >

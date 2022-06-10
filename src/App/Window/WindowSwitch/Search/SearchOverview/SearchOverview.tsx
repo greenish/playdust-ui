@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import { Chip, Skeleton } from '@mui/material';
-import React, { Suspense } from 'react';
+import React from 'react';
 import { useRecoilValueLoadable } from 'recoil';
 import humanizeSolana from '../../_helpers/humanizeSolana';
-import CollectionOverview from './CollectionOverview/CollectionOverview';
 import searchOverviewAtom from './_atoms/searchOverviewAtom';
 import type SearchOverviewResponseType from './_types/SearchOverviewResponseType';
 
@@ -11,7 +10,7 @@ const RootContainer = styled.div`
   height: 48px;
   display: flex;
   align-items: center;
-  overflow-x: scroll;
+  overflow-x: auto;
 `;
 
 const ChipContentContainer = styled.div`
@@ -68,9 +67,6 @@ function SearchOverview() {
           variant="outlined"
         />
       ))}
-      <Suspense fallback={null}>
-        <CollectionOverview />
-      </Suspense>
     </RootContainer>
   );
 }

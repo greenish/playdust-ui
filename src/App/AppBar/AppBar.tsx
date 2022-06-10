@@ -1,23 +1,15 @@
-import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Add, Close, DeleteSweep, Home, Search } from '@mui/icons-material';
-import {
-  Fab,
-  IconButton,
-  SxProps,
-  Theme,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { IconButton, Typography, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { PropsWithChildren, ReactNode, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import appStateAtom from '../_atoms/appStateAtom';
 import appBarWidth from '../_helpers/appBarWidth';
-import getCDNUrl from '../_helpers/getCDNUrl';
 import safePromise from '../_helpers/safePromise';
 import useGoHome from '../_hooks/useGoHome';
+import ImageButton from '../_sharedComponents/ImageButton';
 import AppWindowType from '../_types/AppWindowType';
 import Playdust from './PlaydustIcon';
 import WalletButton from './WalletButton/WalletButton';
@@ -79,65 +71,6 @@ const CloseButtonContainer = styled.div`
   }
 `;
 
-type SizedButtonProps = PropsWithChildren<{
-  size?: number;
-  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
-  images?: string[];
-}>;
-
-function SizedButton({
-  size = largeButtonSize,
-  onClick,
-  children,
-  images,
-}: SizedButtonProps) {
-  const theme = useTheme();
-
-  const sx = useMemo<SxProps<Theme>>(() => {
-    const baseStyleProps = {
-      maxWidth: size,
-      minWidth: size,
-      maxHeight: size,
-      minHeight: size,
-      boxShadow: '0px 0px 2px 0px #fefefe',
-      zIndex: 2,
-      backgroundColor: theme.palette.background.default,
-
-      '&:hover': {
-        backgroundColor: theme.palette.grey['200'],
-      },
-    };
-
-    if (images) {
-      const sliceLength = 100 / images.length;
-      const keyframeInput = images
-        .map((image, idx) => {
-          const start = idx === 0 ? '0%,100%' : `${sliceLength * idx}%`;
-
-          return `${start} {background-image: url("${getCDNUrl(image)}");}`;
-        })
-        .join('');
-
-      const animation = keyframes(keyframeInput);
-      const animationTime = imageAnimationLength * images.length;
-
-      return {
-        ...baseStyleProps,
-        backgroundSize: 'cover',
-        animation: `${animation} ${animationTime}s infinite`,
-      };
-    }
-
-    return baseStyleProps;
-  }, [images, size, theme]);
-
-  return (
-    <Fab sx={sx} onClick={onClick}>
-      {!images && children}
-    </Fab>
-  );
-}
-
 const getWindowTab = (window: AppWindowType): ReactNode | undefined => {
   switch (window.type) {
     case 'home':
@@ -187,13 +120,13 @@ function AppBar() {
           return (
             <TabButtonContainer key={tab.id}>
               <div>
-                <SizedButton
+                <ImageButton
                   size={largeButtonSize}
                   images={currentWindow.images}
                   onClick={() => goToTab(tab)}
                 >
                   {getWindowTab(currentWindow)}
-                </SizedButton>
+                </ImageButton>
                 {isActive && (
                   <ActiveHighlight
                     style={{
@@ -205,23 +138,23 @@ function AppBar() {
               </div>
               {isActive && (
                 <CloseButtonContainer>
-                  <SizedButton
+                  <ImageButton
                     size={smallButtonSize}
                     onClick={() => removeTab()}
                   >
                     <Close fontSize="small" />
-                  </SizedButton>
+                  </ImageButton>
                 </CloseButtonContainer>
               )}
             </TabButtonContainer>
           );
         })}
         <TabButtonContainer>
-          <SizedButton onClick={() => goToNewTab()}>
+          <ImageButton onClick={() => goToNewTab()}>
             <Add />
-          </SizedButton>
+          </ImageButton>
           {inWindowManager && tabs.length > 0 && (
-            <SizedButton
+            <ImageButton
               size={24}
               onClick={() => {
                 localStorage.clear();
@@ -230,7 +163,7 @@ function AppBar() {
               }}
             >
               <DeleteSweep fontSize="small" />
-            </SizedButton>
+            </ImageButton>
           )}
         </TabButtonContainer>
       </TopContainer>

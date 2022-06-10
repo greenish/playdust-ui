@@ -3,6 +3,7 @@ interface RowMetaProps {
   rowCount: number;
   hasMore: boolean;
   cardsPerRow: number;
+  imageSize?: number;
 }
 
 export default RowMetaProps;
