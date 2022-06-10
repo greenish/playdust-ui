@@ -61,13 +61,24 @@ const getSimilarCollectionQuery = ({
         {
           bool: {
             should: [
-              ...getMatchField('name', name),
-              ...getMatchField('symbol', symbol),
-              ...getMatchField('description', description),
+              {
+                bool: {
+                  should: [
+                    ...getMatchField('name', name),
+                    ...getMatchField('symbol', symbol),
+                    ...getMatchField('description', description),
+                  ],
+                  minimum_should_match: 2,
+                },
+              },
+              ...getMatchField('name.keyword', name),
+              ...getMatchField('symbol.keyword', symbol),
+              ...getMatchField('description.keyword', description),
             ],
-            minimum_should_match: 2,
+            minimum_should_match: 1,
           },
         },
+
         {
           nested: {
             path: 'attributes',
