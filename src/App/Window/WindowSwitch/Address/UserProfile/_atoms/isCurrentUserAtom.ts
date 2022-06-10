@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
 import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
-import addressStateAtom from '../../_atoms/addressStateAtom';
+import addressStateAtom from '../../../_atoms/addressStateAtom';
 
 const isCurrentUserAtom = selector<boolean>({
   key: 'isCurrentUserAtom',

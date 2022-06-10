@@ -13,6 +13,7 @@ type ExplorerAccordionPropTypes = {
   content: JSX.Element;
   expanded?: boolean;
   onChange?: AccordionProps['onChange'];
+  itemType?: 'table';
 };
 
 const slug = (input: string): string =>
@@ -25,6 +26,7 @@ function ExplorerAccordion({
   content,
   expanded = false,
   onChange,
+  itemType,
 }: ExplorerAccordionPropTypes) {
   const [accordionState, setAccordionState] = useState({
     expanded,
@@ -36,6 +38,7 @@ function ExplorerAccordion({
 
   return (
     <Accordion
+      itemType={itemType}
       expanded={currentlyExpanded}
       onChange={(e, isExpanded) => {
         setAccordionState({
@@ -53,7 +56,7 @@ function ExplorerAccordion({
         aria-label={typeof title === 'string' ? title : 'Accordion Title'}
         id={`${id}-header`}
       >
-        <Typography variant="h5" component="h2" gutterBottom={false}>
+        <Typography variant="subtitle2" fontWeight="bold" gutterBottom={false}>
           {title}
         </Typography>
       </AccordionSummary>

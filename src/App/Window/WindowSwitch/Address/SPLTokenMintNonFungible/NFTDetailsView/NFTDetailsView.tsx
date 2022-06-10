@@ -1,10 +1,10 @@
-import { Box, Grid, Stack, Typography } from '@mui/material';
+import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
+import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
 import ContentContainer from '../../_sharedComponents/ContentContainer';
-import playdustNftDataAtom from '../_atoms/playdustNftDataAtom';
 import NFTDetailsRenderMedia from './NFTDetailsRenderMedia';
 
 function NFTDetailsView() {
@@ -20,73 +20,65 @@ function NFTDetailsView() {
   return (
     <ContentContainer
       sx={{
-        boxShadow: '0px 0px 10px 2px rgb(0,0,0, 0.2)',
-        backgroundColor: '#FBFBFD',
+        borderTop: '1px solid #e2e2e2',
+        boxShadow: (theme) => `0px 10px 10px -10px ${theme.palette.grey[500]}`,
+        backgroundColor: '#F6F6F6',
       }}
     >
-      <Box>
-        <Grid container={true} spacing={0}>
-          <Grid item={true} xs={6}>
-            <NFTDetailsRenderMedia />
-          </Grid>
-          <Grid item={true} xs={6}>
-            <Stack>
-              <Typography
-                sx={{
-                  fontWeight: '700',
-                  fontSize: '40px',
-                  lineHeight: '156%;',
-                }}
-              >
-                {offChainData.name}
-              </Typography>
-              <Typography
-                sx={{ fontWeight: '400', fontSize: '14px', lineHeight: '168%' }}
-              >
-                {offChainData.description}
-              </Typography>
-              {ownerWalletAddress && (
-                <Typography
-                  sx={{
-                    fontWeight: '400',
-                    fontSize: '14px',
-                    lineHeight: '168%',
-                  }}
-                >
-                  {`Owner: ${shortenPublicKey(ownerWalletAddress)}`}
-                </Typography>
-              )}
-              {playdustNftData.mintRarity && (
-                <Box>
-                  <Grid container={true} spacing={0}>
-                    <Grid item={true} xs={12}>
-                      <Typography sx={{ opacity: '0.5' }}>
-                        Rarity Score
-                      </Typography>
-                    </Grid>
-                    {playdustNftData.mintRarity.rarityScore && (
-                      <Grid item={true} xs={6}>
-                        <Typography>
-                          {playdustNftData.mintRarity.rarityScore}
-                        </Typography>
-                      </Grid>
-                    )}
-                    {playdustNftData.mintRarity.normalizedRarityScore && (
-                      <Grid item={true} xs={6}>
-                        <Typography sx={{ opacity: '0.5' }}>
-                          {`${playdustNftData.mintRarity.normalizedRarityScore.toPrecision(
-                            2
-                          )}%`}
-                        </Typography>
-                      </Grid>
-                    )}
-                  </Grid>
-                </Box>
-              )}
-            </Stack>
-          </Grid>
-        </Grid>
-      </Box>
+      <Card sx={{ display: 'flex', backgroundColor: 'inherit' }}>
+        <CardMedia component={NFTDetailsRenderMedia} />
+        <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Typography
+            sx={{
+              fontWeight: '700',
+              fontSize: '40px',
+              lineHeight: 1.25,
+            }}
+          >
+            {offChainData.name}
+          </Typography>
+          {ownerWalletAddress && (
+            <Typography
+              sx={{
+                fontWeight: '400',
+                fontSize: '14px',
+              }}
+            >
+              <Box sx={{ opacity: 0.4 }} component="span">
+                {'Owned by '}
+              </Box>
+              {shortenPublicKey(ownerWalletAddress)}
+            </Typography>
+          )}
+          <Typography
+            sx={{ fontWeight: '400', fontSize: '14px', mt: 2, mb: 2 }}
+          >
+            {offChainData.description}
+          </Typography>
+          {playdustNftData.mintRarity && (
+            <Box
+              sx={{ backgroundColor: 'grey.300', width: '50%', p: 1, pl: 2 }}
+            >
+              <Typography sx={{ opacity: '0.5' }}>Rarity Score</Typography>
+
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {playdustNftData.mintRarity.rarityScore && (
+                  <Typography sx={{ fontWeight: 600, fontSize: 28 }}>
+                    {playdustNftData.mintRarity.rarityScore}
+                  </Typography>
+                )}
+                {playdustNftData.mintRarity.normalizedRarityScore && (
+                  <Typography sx={{ opacity: '0.5', ml: 2 }}>
+                    {`${playdustNftData.mintRarity.normalizedRarityScore.toPrecision(
+                      3
+                    )}%`}
+                  </Typography>
+                )}
+              </Box>
+            </Box>
+          )}
+        </CardContent>
+      </Card>
     </ContentContainer>
   );
 }

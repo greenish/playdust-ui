@@ -1,7 +1,7 @@
 import { PublicKey } from '@solana/web3.js';
 import { useRecoilValue } from 'recoil';
+import addressStateAtom from '../../_atoms/addressStateAtom';
 import accountInfoAtom from '../_atoms/accountInfoAtom';
-import addressStateAtom from '../_atoms/addressStateAtom';
 
 function useIsWallet(): boolean {
   const addressState = useRecoilValue(addressStateAtom);

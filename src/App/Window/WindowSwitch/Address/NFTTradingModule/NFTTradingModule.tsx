@@ -10,7 +10,7 @@ import {
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import addressStateAtom from '../_atoms/addressStateAtom';
+import addressStateAtom from '../../_atoms/addressStateAtom';
 import parsedTokenAccountAtom from '../_atoms/parsedTokenAccountAtom';
 import ContentContainer from '../_sharedComponents/ContentContainer';
 import NFTOrderBook from './NFTOrderBook/NFTOrderBook';

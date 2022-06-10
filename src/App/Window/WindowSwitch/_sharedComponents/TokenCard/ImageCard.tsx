@@ -1,6 +1,6 @@
 import { Box, Card } from '@mui/material';
 import React from 'react';
-import CardImageContainer from '../CardImageContainer/CardImageContainer';
+import CardImageContainer from '../CardImageContainer';
 import Link from '../Link';
 import TokenCardContentContainer from './_sharedComponents/TokenCardContentContainer';
 

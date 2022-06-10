@@ -1,7 +1,7 @@
 import { Connection, StakeActivationData } from '@solana/web3.js';
 import { selector } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import addressStateAtom from '../../_atoms/addressStateAtom';
+import addressStateAtom from '../../../_atoms/addressStateAtom';
 
 const stakeActivationAtom = selector<StakeActivationData | null>({
   key: 'stakeActivation',

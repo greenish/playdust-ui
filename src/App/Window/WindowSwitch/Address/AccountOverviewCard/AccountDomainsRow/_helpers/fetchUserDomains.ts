@@ -8,7 +8,7 @@ import {
 import { Connection, PublicKey } from '@solana/web3.js';
 import BN from 'bn.js';
 import SolanaClusterType from '../../../../../../_types/SolanaClusterType';
-import safePubkey from '../../../_helpers/safePubkey';
+import safePubkey from '../../../../_helpers/safePubkey';
 
 // Name auctionning Program ID
 const PROGRAM_ID = new PublicKey('jCebN34bUfdeUYJT13J1yG16XWQpt5PDx6Mse9GUqhR');

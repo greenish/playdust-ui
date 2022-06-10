@@ -7,8 +7,10 @@ import useGoHome from '../../../../_hooks/useGoHome';
 import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
 import isSearchQueryValidAtom from './_atoms/isSearchQueryValidAtom';
-import searchResultsAtom from './_atoms/searchResultsAtom';
+import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
+import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
 
 const NoResultsContainer = styled.div`
   width: 100%;
@@ -57,13 +59,20 @@ function SearchResults() {
   return (
     <TokenGrid
       initialized={hasValue}
-      imageSize={225}
+      imageSize={175}
       contentHeight={70}
       cardGap={16}
       rowGap={16}
       tokens={hasValue ? searchResults.contents.nfts : []}
       total={hasValue ? searchResults.contents.total : 0}
       next={fetchMoreSearchResults}
+      content={
+        <SuspenseBoundary
+          error={null}
+          loading={null}
+          content={<CollectionOverview />}
+        />
+      }
     />
   );
 }

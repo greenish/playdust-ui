@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
-import addressStateAtom from '../../_atoms/addressStateAtom';
+import addressStateAtom from '../../../_atoms/addressStateAtom';
 import fetchTransactionsForAddress from '../_helpers/fetchTransactionsForAddress';
 import TransactionType from '../_types/TransactionType';
 
