@@ -4,13 +4,12 @@ import { Button, Stack } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import useGoHome from '../../../../_hooks/useGoHome';
-import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
-import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
-import isSearchQueryValidAtom from './_atoms/isSearchQueryValidAtom';
-import searchResultsAtom from '../../_atoms/searchResultsAtom';
-import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
+import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
+import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
+import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoResultsContainer = styled.div`
   width: 100%;
@@ -24,7 +23,6 @@ function SearchResults() {
   const fetchMoreSearchResults = useFetchMoreSearchResults();
   const hasValue = searchResults.state === 'hasValue';
   const goHome = useGoHome();
-  const isSearchQueryValid = useRecoilValue(isSearchQueryValidAtom);
   const setWindowImages = useRecoilValue(setWindowImagesAtom);
 
   useEffect(() => {
@@ -38,7 +36,7 @@ function SearchResults() {
     }
   }, [searchResults, setWindowImages]);
 
-  if (hasValue && (searchResults.contents.total === 0 || !isSearchQueryValid)) {
+  if (hasValue && searchResults.contents.total === 0) {
     return (
       <NoResultsContainer>
         <Stack sx={{ gap: 2 }}>
