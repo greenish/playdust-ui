@@ -1,5 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import searchStateAtom from '../_atoms/searchStateAtom';
+import updateSearchQueryNodes from '../_helpers/updateSearchQueryNodes';
 import SearchQueryNodeType from '../_types/SearchQueryNodeType';
 import SearchStateType from '../_types/SearchStateType';
 
@@ -22,18 +23,7 @@ const useGetUpdateSearchQuery = () => {
 
     const updated = {
       ...normalizedQuery,
-      nodes: Object.entries(normalizedQuery.nodes).reduce((acc, curr) => {
-        const updatedNode = updateNode(curr[1]);
-
-        if (updatedNode === null) {
-          return acc;
-        }
-
-        return {
-          ...acc,
-          [updatedNode.id]: updatedNode,
-        };
-      }, {}),
+      nodes: updateSearchQueryNodes(normalizedQuery.nodes, updateNode),
     };
 
     return { query: updated };

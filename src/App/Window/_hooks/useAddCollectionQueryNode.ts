@@ -1,5 +1,5 @@
-import { nanoid } from 'nanoid';
 import { useRecoilValue } from 'recoil';
+import shortId from '../../_helpers/shortId';
 import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../_atoms/searchQueryRootNodeAtom';
 import initializeSearchQuery from '../_helpers/initializeSearchQuery';
@@ -14,7 +14,7 @@ const useAddCollectionQueryNode = makeUseChangeSearchQuery(() => {
 
   return (collectionId: string, initialize?: boolean) => {
     const newNode: CollectionQueryNodeType = {
-      id: nanoid(),
+      id: shortId(),
       type: 'query',
       field: 'collection',
       value: collectionId,
