@@ -1,47 +1,57 @@
-import { Connection } from '@solana/web3.js';
+import {
+  Connection,
+  ParsedInnerInstruction,
+  ParsedInstruction,
+  ParsedMessage,
+  ParsedMessageAccount,
+  ParsedTransaction,
+  ParsedTransactionMeta,
+  ParsedTransactionWithMeta,
+  PartiallyDecodedInstruction,
+  PublicKey,
+  TokenAmount,
+  TokenBalance,
+  TransactionError,
+} from '@solana/web3.js';
 import { selector } from 'recoil';
-import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
-import txStateAtom from './txStateAtom';
-
-/*
 import {
   any,
   array,
-  assert,
   boolean,
-  define,
   Describe,
   Infer,
   instance,
   nullable,
   number,
+  object,
   optional,
   string,
   type,
   union,
-  unknown,
 } from 'superstruct';
-
-
-const PublicKeyType = any();
+import solanaClusterAtom from '../../../../_atoms/solanaClusterAtom';
+import txStateAtom from './txStateAtom';
 
 type ParsedInstructionType = Infer<typeof ParsedInstructionType>;
 const ParsedInstructionType: Describe<ParsedInstruction> = type({
   program: string(),
-  programId: PublicKeyType,
+  programId: instance(PublicKey),
   parsed: any(),
 });
 
-type PartiallyDecodedInstructionType = Infer<typeof PartiallyDecodedInstructionType>;
-const PartiallyDecodedInstructionType: Describe<PartiallyDecodedInstruction> = type({
-  programId: PublicKeyType,
-  accounts: array(PublicKeyType),
-  data: string(),
-});
+type PartiallyDecodedInstructionType = Infer<
+  typeof PartiallyDecodedInstructionType
+>;
+const PartiallyDecodedInstructionType: Describe<PartiallyDecodedInstruction> =
+  type({
+    programId: instance(PublicKey),
+    accounts: array(instance(PublicKey)),
+    data: string(),
+  });
 
 type ParsedMessageAccountType = Infer<typeof ParsedMessageAccountType>;
 const ParsedMessageAccountType: Describe<ParsedMessageAccount> = type({
-  pubkey: PublicKeyType,
+  pubkey: instance(PublicKey),
   signer: boolean(),
   writable: boolean(),
 });
@@ -49,7 +59,9 @@ const ParsedMessageAccountType: Describe<ParsedMessageAccount> = type({
 type ParsedMessageType = Infer<typeof ParsedMessageType>;
 const ParsedMessageType: Describe<ParsedMessage> = type({
   accountKeys: array(ParsedMessageAccountType),
-  instructions: array(union([ ParsedInstructionType, PartiallyDecodedInstructionType ])),
+  instructions: array(
+    union([ParsedInstructionType, PartiallyDecodedInstructionType])
+  ),
   recentBlockhash: string(),
 });
 
@@ -59,18 +71,34 @@ const ParsedTransactionType: Describe<ParsedTransaction> = type({
   message: ParsedMessageType,
 });
 
-type ParsedInnerInstruction = Infer<typeof ParsedInnerInstructionType>;
+type ParsedInnerInstructionType = Infer<typeof ParsedInnerInstructionType>;
 const ParsedInnerInstructionType: Describe<ParsedInnerInstruction> = type({
+  index: number(),
+  instructions: array(
+    union([ParsedInstructionType, PartiallyDecodedInstructionType])
+  ),
+});
 
+type TokenAmountType = Infer<typeof TokenAmountType>;
+const TokenAmountType: Describe<TokenAmount> = type({
+  amount: string(),
+  decimals: number(),
+  uiAmount: nullable(number()),
+  uiAmountString: optional(string()),
 });
 
 type TokenBalanceType = Infer<typeof TokenBalanceType>;
 const TokenBalanceType: Describe<TokenBalance> = type({
-
+  accountIndex: number(),
+  mint: string(),
+  uiTokenAmount: TokenAmountType,
 });
 
-type TransactionError = Infer<typeof TransactionErrorType>;
-const TransactionErrorType: Describe TransactionError
+type TransactionErrorType = Infer<typeof TransactionErrorType>;
+const TransactionErrorType: Describe<TransactionError> = union([
+  object(),
+  string(),
+]);
 
 type ParsedTransactionMetaType = Infer<typeof ParsedTransactionType>;
 const ParsedTransactionMetaType: Describe<ParsedTransactionMeta> = type({
@@ -84,17 +112,20 @@ const ParsedTransactionMetaType: Describe<ParsedTransactionMeta> = type({
   err: nullable(TransactionErrorType),
 });
 
-type ParsedTransactionWithMetaType = Infer<typeof ParsedTransactionWithMetaType>;
-const ParsedTransactionWithMetaType: Describe<ParsedTransactionWithMeta> = type({
-  slot: number(),
-  transaction: ParsedTransactionType,
-  meta: nullable(ParsedTransactionMetaType),
-  blockTime: optional(nullable(number())),
-});
+type ParsedTransactionWithMetaType = Infer<
+  typeof ParsedTransactionWithMetaType
+>;
+const ParsedTransactionWithMetaType: Describe<ParsedTransactionWithMeta> = type(
+  {
+    slot: number(),
+    transaction: ParsedTransactionType,
+    meta: nullable(ParsedTransactionMetaType),
+    blockTime: optional(nullable(number())),
+  }
+);
 
 type ParsedConfirmedTransactionType = ParsedTransactionWithMetaType;
 const ParsedConfirmedTransactionType = ParsedTransactionWithMetaType;
-*/
 
 const parsedConfirmedTransactionAtom =
   selector<ParsedConfirmedTransactionType | null>({
