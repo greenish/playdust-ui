@@ -1,5 +1,5 @@
-import TransactionBuffer from '../_types/TransactionBufferType';
 import tradeApi from '../../_helpers/tradeApi';
+import TransactionBuffer from '../_types/TransactionBufferType';
 
 const makeNFTListing = async (
   wallet: string,

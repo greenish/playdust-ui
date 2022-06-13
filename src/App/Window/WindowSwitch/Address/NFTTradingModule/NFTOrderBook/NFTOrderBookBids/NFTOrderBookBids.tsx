@@ -17,12 +17,12 @@ import addressStateAtom from '../../../../_atoms/addressStateAtom';
 import humanizeSolana from '../../../../_helpers/humanizeSolana';
 import safePubkeyString from '../../../../_helpers/safePubkeyString';
 import currentOwnerForMintAtom from '../../../_atoms/currentOwnerForMintAtom';
-import ExplorerLink from '../../../_sharedComponents/ExplorerLink/ExplorerLink';
 import lamportsToSol from '../../../_helpers/lamportsToSol';
+import ExplorerLink from '../../../_sharedComponents/ExplorerLink/ExplorerLink';
 import ordersForMintAtom from '../../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../../_atoms/tradingDialogAtom';
-import walletEscrowAtom from './_atoms/walletEscrowAtom';
 import Tooltip from './Tooltip';
+import walletEscrowAtom from './_atoms/walletEscrowAtom';
 
 function NFTOrderBookBids() {
   const setTradingDialog = useSetRecoilState(tradingDialogAtom);

@@ -8,10 +8,10 @@ import {
 import React from 'react';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
 import lamportsToSol from '../../_helpers/lamportsToSol';
+import tradeApi from '../_helpers/tradeApi';
 import EscrowType from '../_types/EscrowType';
 import TradingDialogType from '../_types/TradingDialogType';
 import makeNFTListing from './_helpers/makeNFTListing';
-import tradeApi from '../_helpers/tradeApi';
 import useConfirmTransaction from './_hooks/useConfirmTransaction';
 import TradingDialogContentProps from './_types/TradingDialogContentProps';
 
