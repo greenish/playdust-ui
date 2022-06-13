@@ -48,7 +48,6 @@ const themeOverrides = createTheme({
     MuiCard: {
       defaultProps: {
         elevation: 0,
-        square: true,
       },
       styleOverrides: {
         root: {
@@ -66,7 +65,6 @@ const themeOverrides = createTheme({
     MuiPaper: {
       defaultProps: {
         elevation: 0,
-        square: true,
       },
     },
     MuiLink: {
@@ -170,7 +168,6 @@ const themeOverrides = createTheme({
     },
     MuiAccordion: {
       defaultProps: {
-        square: true,
         disableGutters: true,
       },
       styleOverrides: {

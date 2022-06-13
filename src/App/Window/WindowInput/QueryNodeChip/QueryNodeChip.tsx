@@ -61,13 +61,32 @@ function ChipLabel({ node }: ChipLabelProps) {
       return <CollectionChip {...node} />;
     case 'text':
       return <span>{node.value}</span>;
-    case 'range':
+    case 'range': {
+      const label = node.value.split('-').map(capitalize).join(' ');
+      const endLabel = node.value !== 'rarity-score' ? 'SOL' : '%';
+
+      if (!node.max) {
+        return (
+          <>
+            {label}: &gt;{node.min} {endLabel}
+          </>
+        );
+      }
+
+      if (!node.min) {
+        return (
+          <>
+            {label}: &lt;{node.max} {endLabel}
+          </>
+        );
+      }
+
       return (
         <>
-          {capitalize(node.value)}: {node.min}-{node.max}{' '}
-          {node.value !== 'rarity-score' ? 'SOL' : ''}
+          {label}: {node.min}-{node.max} {endLabel}
         </>
       );
+    }
     default: {
       return null;
     }

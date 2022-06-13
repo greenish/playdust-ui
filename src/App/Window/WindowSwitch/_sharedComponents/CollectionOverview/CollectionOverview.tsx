@@ -8,13 +8,12 @@ import {
   Typography,
 } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import ImageButton from '../../../../_sharedComponents/ImageButton';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
 import collectionOverviewAtom from '../../_atoms/collectionOverviewAtom';
-import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import CollectionOverviewResponseType from '../../_types/CollectionOverviewResponseType';
 import SimilarCollections from './SimilarCollections';
@@ -97,7 +96,6 @@ function CollectionOverview() {
   const overview = useRecoilValue(collectionOverviewAtom);
   const windowState = useRecoilValue(windowStateAtom);
   const addCollectionQueryNode = useAddCollectionQueryNode();
-  const searchResults = useRecoilValueLoadable(searchResultsAtom);
 
   const overviewItems = useMemo(
     () =>
@@ -116,15 +114,7 @@ function CollectionOverview() {
     return null;
   }
 
-  const images =
-    searchResults.state === 'hasValue' &&
-    searchResults.contents &&
-    searchResults.contents.total
-      ? searchResults.contents.nfts
-          .filter((nft) => nft.image)
-          .slice(0, 10)
-          .map((nft) => nft.image)
-      : overview.images;
+  const { images } = overview;
 
   const hasSimilar = !!overview.similar.length;
   const gridItemSize = hasSimilar ? 6 : 12;

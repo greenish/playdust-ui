@@ -43,10 +43,12 @@ const getTopCollections = nextApiHandler<TopCollectionsResponseType>(
     }));
 
     const nftResults = await searchNFTs(topNFTQueries);
-    const results = topCollectionResult.sources.map((collection, idx) => ({
-      collection,
-      nfts: nftResults[idx].sources,
-    }));
+    const results = topCollectionResult.sources
+      .map((collection, idx) => ({
+        collection,
+        nfts: nftResults[idx].sources,
+      }))
+      .filter((entry) => entry.nfts.length > 0);
 
     return {
       results,

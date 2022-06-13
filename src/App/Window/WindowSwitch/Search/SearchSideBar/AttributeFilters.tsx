@@ -1,159 +1,101 @@
-// import styled from '@emotion/styled';
-// import { ChevronRight, ExpandMore } from '@mui/icons-material';
-// import {
-//   Button,
-//   Checkbox,
-//   FormControl,
-//   FormControlLabel,
-//   FormGroup,
-// } from '@mui/material';
-// import React, { useEffect, useState } from 'react';
-// import { useRecoilValue } from 'recoil';
-// import AttributeQueryNodeType from '../../../../../../_types/AttributeQueryNodeType';
-// import safePromise from '../../../../../_helpers/safePromise';
-// import searchQueryAttributesAtom from '../../../../_atoms/searchQueryAttributesAtom';
-// import useAddAttributeQueryNode from '../../../../_hooks/useAddAttributeQueryNode';
-// import useUpdateAttributeQueryNode from '../../../../_hooks/useUpdateAttributeQueryNode';
-// import useSearchAggregations from './_hooks/useSearchAggregations';
+import styled from '@emotion/styled';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Typography,
+} from '@mui/material';
+import React, { useState } from 'react';
+import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useRecoilValue } from 'recoil';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
+import findTopLevelSearchQueryAttributeAtom from '../../_sharedComponents/TokenCard/TokenCardFilter/_atoms/findTopLevelSearchQueryAttributeAtom';
+import useToggleTopLevelAttributeNode from '../../_sharedComponents/TokenCard/TokenCardFilter/_hooks/useToggleTopLevelAttributeNode';
+import sidebarAggregationAtom from './_atoms/sidebarAggregationAtom';
 
-// const RootContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   width: calc(100% + 16px);
-//   height: 100%;
-//   overflow: auto;
-//   margin-left: -16px;
-//   padding-left: 16px;
-// `;
+const RootContainer = styled(Scrollbars)`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
 
-// const normalizeOptions = (
-//   options: string[],
-//   found: AttributeQueryNodeType | undefined,
-//   isExpanded: boolean
-// ) => {
-//   const normalized = options
-//     .map((option) => ({
-//       option,
-//       checked: !!(found && found.value.includes(option)),
-//     }))
-//     .sort((a, b) => {
-//       if (a.option === b.option) {
-//         return 0;
-//       }
-//       return a.option < b.option ? -1 : 1;
-//     });
-
-//   if (isExpanded) {
-//     return normalized;
-//   }
-
-//   return normalized.filter((entry) => entry.checked);
-// };
-
-// function AttributeFilters() {
-//   const queries = useRecoilValue(searchQueryAttributesAtom);
-//   const addAttributeQueryNode = useAddAttributeQueryNode();
-//   const updateAttributeNode = useUpdateAttributeQueryNode();
-//   const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({});
-
-//   const [searchAggregations, updateSearchAggregations] =
-//     useSearchAggregations();
-
-//   useEffect(() => {
-//     safePromise(updateSearchAggregations());
-//   }, [updateSearchAggregations]);
-
-//   const attributes = [...searchAggregations.attributes].sort((a, b) => {
-//     if (a.trait === b.trait) {
-//       return 0;
-//     }
-//     return a.trait < b.trait ? -1 : 1;
-//   });
-
-//   return (
-//     <RootContainer>
-//       {attributes.map((attribute) => {
-//         const isExpanded = showAll[attribute.trait] || false;
-//         const found = queries.find((entry) => entry.trait === attribute.trait);
-//         const options = normalizeOptions(attribute.options, found, isExpanded);
-
-//         return (
-//           <FormControl
-//             sx={{ mb: 2 }}
-//             component="fieldset"
-//             variant="standard"
-//             key={attribute.trait}
-//           >
-//             <Button
-//               sx={{
-//                 justifyContent: 'space-between',
-//                 fontWeight: '700',
-//                 textAlign: 'left',
-//               }}
-//               endIcon={isExpanded ? <ExpandMore /> : <ChevronRight />}
-//               onClick={() =>
-//                 setShowAll({ ...showAll, [attribute.trait]: !isExpanded })
-//               }
-//             >
-//               {attribute.trait}
-//             </Button>
-//             <FormGroup>
-//               {options.map(({ option, checked }) => (
-//                 <FormControlLabel
-//                   key={option}
-//                   control={
-//                     <Checkbox
-//                       sx={{ ml: 2 }}
-//                       size="small"
-//                       checked={checked}
-//                       onChange={() => {
-//                         if (!found) {
-//                           return addAttributeQueryNode({
-//                             value: [option],
-//                             trait: attribute.trait,
-//                             operation: 'and',
-//                           });
-//                         }
-
-//                         if (!checked) {
-//                           return updateAttributeNode({
-//                             id: found.id,
-//                             update: {
-//                               value: [...found.value, option],
-//                             },
-//                           });
-//                         }
-
-//                         const nextValue = found.value.filter(
-//                           (entry) => entry !== option
-//                         );
-
-//                         return updateAttributeNode({
-//                           id: found.id,
-//                           update: {
-//                             value: nextValue,
-//                           },
-//                           clearOnEmpty: true,
-//                         });
-//                       }}
-//                       name={option.toString()}
-//                     />
-//                   }
-//                   label={option}
-//                 />
-//               ))}
-//             </FormGroup>
-//           </FormControl>
-//         );
-//       })}
-//     </RootContainer>
-//   );
-// }
-
-import React from 'react';
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
+`;
 
 function AttributeFilters() {
-  return <span>Attribute Filters Placeholder</span>;
+  const attributes = useRecoilValue(sidebarAggregationAtom);
+  const findAttribute = useRecoilValue(findTopLevelSearchQueryAttributeAtom);
+  const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({});
+  const toggleAttribute = useToggleTopLevelAttributeNode();
+
+  return (
+    <RootContainer autoHide={true}>
+      <ContentContainer>
+        {attributes.map((attribute) => {
+          const isExpanded = showAll[attribute.key] || false;
+          const values = attribute.values
+            .map((entry) => ({
+              ...entry,
+              checked: !!findAttribute(attribute.key, entry.value),
+            }))
+            .sort(
+              (a, b) =>
+                Number(b.checked) - Number(a.checked) || b.count - a.count
+            )
+            .filter((entry) => {
+              if (isExpanded) {
+                return true;
+              }
+
+              return entry.checked;
+            });
+          const ExpandIcon =
+            !isExpanded && values.length > 0 ? ExpandLess : ExpandMore;
+
+          return (
+            <ExplorerAccordion
+              key={attribute.key}
+              itemType="table"
+              title={attribute.key}
+              expandIcon={<ExpandIcon />}
+              content={
+                <FormGroup>
+                  {values.map(({ value, checked, count }) => (
+                    <FormControlLabel
+                      key={value}
+                      control={
+                        <Checkbox
+                          sx={{ ml: 2 }}
+                          size="small"
+                          checked={checked}
+                          onChange={() => toggleAttribute(attribute.key, value)}
+                          name={value.toString()}
+                        />
+                      }
+                      label={
+                        <Typography sx={{ fontSize: '80%' }}>
+                          {value} ({count})
+                        </Typography>
+                      }
+                    />
+                  ))}
+                </FormGroup>
+              }
+              expanded={values.length > 0}
+              onChange={() => {
+                setShowAll({ ...showAll, [attribute.key]: !isExpanded });
+              }}
+            />
+          );
+        })}
+      </ContentContainer>
+    </RootContainer>
+  );
 }
 
 export default AttributeFilters;
