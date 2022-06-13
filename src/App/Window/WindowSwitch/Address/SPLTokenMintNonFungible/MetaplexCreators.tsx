@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import playdustNftDataAtom from '../../_atoms/playdustNftDataAtom';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 
 interface CreatorInfo {
