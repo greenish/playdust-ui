@@ -1,4 +1,4 @@
-import tradeApi from '../../_helpers/tradeApi';
+import tradeApi from '../../../_helpers/tradeApi';
 import TransactionBuffer from '../../_types/TransactionBufferType';
 
 const cancelNFTListing = async (

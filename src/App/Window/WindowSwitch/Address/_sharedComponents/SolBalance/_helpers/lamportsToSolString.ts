@@ -1,5 +1,5 @@
 import BN from 'bn.js';
-import lamportsToSol from './lamportsToSol';
+import lamportsToSol from '../../../_helpers/lamportsToSol';
 
 function lamportsToSolString(
   lamports: number | BN,

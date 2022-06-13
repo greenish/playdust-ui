@@ -7,11 +7,11 @@ import {
 } from '@mui/material';
 import React from 'react';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
-import lamportsToSol from '../../_sharedComponents/SolBalance/_helpers/lamportsToSol';
+import lamportsToSol from '../../_helpers/lamportsToSol';
 import EscrowType from '../_types/EscrowType';
 import TradingDialogType from '../_types/TradingDialogType';
 import makeNFTListing from './_helpers/makeNFTListing';
-import tradeApi from './_helpers/tradeApi';
+import tradeApi from '../_helpers/tradeApi';
 import useConfirmTransaction from './_hooks/useConfirmTransaction';
 import TradingDialogContentProps from './_types/TradingDialogContentProps';
 

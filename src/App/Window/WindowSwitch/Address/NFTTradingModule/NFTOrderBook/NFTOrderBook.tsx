@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import NFTOrderBookAsks from './NFTOrderBookAsks';
-import NFTOrderBookBids from './NFTOrderBookBids';
+import NFTOrderBookBids from './NFTOrderBookBids/NFTOrderBookBids';
 
 const OrderBookContainer = styled.div`
   display: flex;

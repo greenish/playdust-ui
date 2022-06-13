@@ -1,5 +1,5 @@
 import TransactionBuffer from '../_types/TransactionBufferType';
-import tradeApi from './tradeApi';
+import tradeApi from '../../_helpers/tradeApi';
 
 const makeNFTBid = async (
   wallet: string,
