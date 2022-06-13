@@ -1,5 +1,6 @@
-import { Cancel, CheckCircle } from '@mui/icons-material';
+import { Cancel, CheckCircle, ErrorOutline } from '@mui/icons-material';
 import {
+  Box,
   IconButton,
   Table,
   TableBody,
@@ -13,11 +14,15 @@ import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
 import addressStateAtom from '../../../_atoms/addressStateAtom';
+import humanizeSolana from '../../../_helpers/humanizeSolana';
 import safePubkeyString from '../../../_helpers/safePubkeyString';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
 import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
+import lamportsToSol from '../../_sharedComponents/SolBalance/_helpers/lamportsToSol';
 import ordersForMintAtom from '../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../_atoms/tradingDialogAtom';
+import walletEscrowAtom from '../_atoms/walletEscrowAtom';
+import Tooltip from '../_sharedComponents/Tooltip';
 
 function NFTOrderBookBids() {
   const setTradingDialog = useSetRecoilState(tradingDialogAtom);
@@ -26,6 +31,7 @@ function NFTOrderBookBids() {
   const walletModal = useWalletModal();
   const addressState = useRecoilValue(addressStateAtom);
   const connectedWallet = useRecoilValue(connectedWalletAtom);
+  const walletEscrow = useRecoilValue(walletEscrowAtom);
   const isOwner =
     connectedWallet !== null && ownerWalletAddress === connectedWallet;
 
@@ -36,6 +42,7 @@ function NFTOrderBookBids() {
   const mintAddress = safePubkeyString(addressState.pubkey);
   const myBid =
     orders?.bids.find((order) => order.wallet === connectedWallet) ?? null;
+  const escrowAmount = lamportsToSol(walletEscrow?.amount || 0);
 
   return (
     <TableContainer>
@@ -72,7 +79,25 @@ function NFTOrderBookBids() {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 key={order.txHash}
               >
-                <TableCell>{`◎ ${order.price}`}</TableCell>
+                <TableCell>
+                  {myBid?.txHash === order.txHash &&
+                  escrowAmount < order.price ? (
+                    <Tooltip
+                      title={`Bid is invalid. Escrow account has insufficient funds. (${humanizeSolana(
+                        escrowAmount
+                      )})`}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <ErrorOutline color="warning" />
+                        <Box sx={{ ml: 1, color: 'grey.500' }}>
+                          {humanizeSolana(order.price)}
+                        </Box>
+                      </Box>
+                    </Tooltip>
+                  ) : (
+                    humanizeSolana(order.price)
+                  )}
+                </TableCell>
                 <TableCell>
                   <ExplorerLink
                     type="address"

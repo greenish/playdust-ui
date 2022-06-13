@@ -7,8 +7,11 @@ import {
 } from '@mui/material';
 import React from 'react';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
+import lamportsToSol from '../../_sharedComponents/SolBalance/_helpers/lamportsToSol';
+import EscrowType from '../_types/EscrowType';
 import TradingDialogType from '../_types/TradingDialogType';
 import makeNFTListing from './_helpers/makeNFTListing';
+import tradeApi from './_helpers/tradeApi';
 import useConfirmTransaction from './_hooks/useConfirmTransaction';
 import TradingDialogContentProps from './_types/TradingDialogContentProps';
 
@@ -22,11 +25,26 @@ function AcceptBidDialogContent({
 
   const handleClick = () => {
     execute(() =>
-      confirmTransaction(
-        makeNFTListing(wallet, mintAddress, bid.price),
-        'NFT sold successfully!',
-        'Failed to sell NFT!'
-      )
+      tradeApi
+        .get<EscrowType>(`/escrow/${bid.wallet}`)
+        .catch(() => {
+          throw new Error('Failed to sell NFT!');
+        })
+        .then(({ data }) => {
+          const escrowAmount = lamportsToSol(data.amount);
+
+          if (escrowAmount < bid.price) {
+            throw new Error(
+              'Failed to sell NFT! Bidder has insufficient funds.'
+            );
+          }
+
+          return confirmTransaction(
+            makeNFTListing(wallet, mintAddress, bid.price),
+            'NFT sold successfully!',
+            'Failed to sell NFT!'
+          );
+        })
     );
   };
 
