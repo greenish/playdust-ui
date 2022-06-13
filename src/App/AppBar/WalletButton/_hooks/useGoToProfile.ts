@@ -1,5 +1,5 @@
 import { useWallet } from '@solana/wallet-adapter-react';
-import { nanoid } from 'nanoid';
+import shortId from '../../../_helpers/shortId';
 import usePushWindowHash from '../../../_hooks/usePushWindowHash';
 
 const useGoToProfile = () => {
@@ -9,7 +9,7 @@ const useGoToProfile = () => {
   return () => {
     if (wallet.publicKey) {
       const state = wallet.publicKey.toBase58();
-      pushWindowHash({ type: 'address', state, tabId: nanoid() });
+      pushWindowHash({ type: 'address', state, tabId: shortId() });
     }
   };
 };

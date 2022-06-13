@@ -1,5 +1,5 @@
-import { nanoid } from 'nanoid';
 import { useRecoilValue } from 'recoil';
+import shortId from '../../_helpers/shortId';
 import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
 import AttributeQueryNodeType from '../_types/AttributeQueryNodeType';
 import makeUseChangeSearchQuery from './makeUseChangeSearchQuery';
@@ -12,7 +12,7 @@ const useAddAttributeQueryNode = makeUseChangeSearchQuery(() => {
   return (key: string, value: string) => {
     if (activeNodeMeta) {
       const queryAddition: AttributeQueryNodeType = {
-        id: nanoid(),
+        id: shortId(),
         type: 'query',
         field: 'attribute',
         value,

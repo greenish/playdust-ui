@@ -1,11 +1,11 @@
-import { nanoid } from 'nanoid';
+import shortId from '../../_helpers/shortId';
 import usePushWindowHash from '../../_hooks/usePushWindowHash';
 
 const useGoToNewTab = () => {
   const pushWindowHash = usePushWindowHash();
 
   return () => {
-    pushWindowHash({ type: 'home', state: '', tabId: nanoid() });
+    pushWindowHash({ type: 'home', state: '', tabId: shortId() });
   };
 };
 
