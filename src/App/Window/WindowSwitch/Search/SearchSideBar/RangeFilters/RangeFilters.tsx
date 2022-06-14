@@ -137,6 +137,7 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
             onChange={() => {
               if (found) {
                 removeQueryNode(found.id);
+                return setLocalVisible(false);
               }
               setLocalVisible(!localVisible);
             }}
@@ -156,7 +157,7 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
               onChange={(_evt, newValue) => {
                 if (Array.isArray(newValue)) {
                   const [newMin, newMax] = newValue;
-                  if (newMax - newMin >= 10) {
+                  if (newMax - newMin >= 1) {
                     setLocalMin(newMin);
                     setLocalMax(newMax);
                   }
