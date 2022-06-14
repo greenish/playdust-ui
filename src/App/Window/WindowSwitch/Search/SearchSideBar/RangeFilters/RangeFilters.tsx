@@ -79,11 +79,11 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
   const sliderValue = useMemo(() => {
     const getMin = () => {
       if (localMin !== undefined) {
-        return localMin
+        return localMin;
       }
 
-      return found?.min || 0
-    }
+      return found?.min || 0;
+    };
 
     const min = getMin();
     const max = localMax || found?.max || 100;
