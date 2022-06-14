@@ -2,32 +2,35 @@ import { selector } from 'recoil';
 import searchStateAtom from '../../../../../_atoms/searchStateAtom';
 import AttributeQueryNodeType from '../../../../../_types/AttributeQueryNodeType';
 import topLevelAndChildrenAtom from '../../../../Search/SearchSideBar/_atoms/topLevelAndChildrenAtom';
+import AttributeQueryMapType from '../_types/AttributeQueryMapType';
 
-const findTopLevelSearchQueryAttributeAtom = selector<
-  (key: string, value: string) => AttributeQueryNodeType | undefined
->({
-  key: 'findTopLevelSearchQueryAttributeAtom',
+const topLevelAttributesMapAtom = selector<AttributeQueryMapType>({
+  key: 'topLevelAttributesMapAtom',
   get: ({ get }) => {
     const { query } = get(searchStateAtom);
     const children = get(topLevelAndChildrenAtom);
-    const topLevelAttributes = children.reduce<AttributeQueryNodeType[]>(
+
+    const topLevelAttributes = children.reduce<AttributeQueryMapType>(
       (acc, curr) => {
         const node = query.nodes[curr];
 
         if (AttributeQueryNodeType.is(node)) {
-          return [...acc, node];
+          return {
+            ...acc,
+            [node.key]: {
+              ...(acc[node.key] || {}),
+              [node.value]: node,
+            },
+          };
         }
 
         return acc;
       },
-      []
+      {}
     );
 
-    return (key, value) =>
-      topLevelAttributes.find(
-        (entry) => entry.key === key && entry.value === value
-      );
+    return topLevelAttributes;
   },
 });
 
-export default findTopLevelSearchQueryAttributeAtom;
+export default topLevelAttributesMapAtom;

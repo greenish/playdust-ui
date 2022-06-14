@@ -10,7 +10,7 @@ import {
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
-import findTopLevelSearchQueryAttributeAtom from './_atoms/findTopLevelSearchQueryAttributeAtom';
+import findTopLevelAttributeAtom from './_atoms/findTopLevelAttributeAtom';
 import useToggleTopLevelAttributeNode from './_hooks/useToggleTopLevelAttributeNode';
 
 interface TokenCardFilterProps {
@@ -20,7 +20,7 @@ interface TokenCardFilterProps {
 function TokenCardFilter({ metadata }: TokenCardFilterProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const { attributes } = metadata;
-  const findAttribute = useRecoilValue(findTopLevelSearchQueryAttributeAtom);
+  const findAttribute = useRecoilValue(findTopLevelAttributeAtom);
   const toggleAttribute = useToggleTopLevelAttributeNode();
 
   return (
