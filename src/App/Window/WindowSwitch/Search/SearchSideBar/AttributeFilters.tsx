@@ -12,7 +12,7 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 import findTopLevelAttributeAtom from '../../_sharedComponents/TokenCard/TokenCardFilter/_atoms/findTopLevelAttributeAtom';
 import useToggleTopLevelAttributeNode from '../../_sharedComponents/TokenCard/TokenCardFilter/_hooks/useToggleTopLevelAttributeNode';
-import sidebarAggregationAtom from './_atoms/sidebarAggregationAtom';
+import searchTopAggregationAtom from './_atoms/searchTopAggregationAtom';
 
 const RootContainer = styled(Scrollbars)`
   display: flex;
@@ -35,7 +35,7 @@ const showAllAttributesAtom = atom<{ [key: string]: boolean }>({
 const attributeFilterDataAtom = selector({
   key: 'attributeFilterDataAtom',
   get: ({ get }) => {
-    const aggregations = get(sidebarAggregationAtom);
+    const aggregations = get(searchTopAggregationAtom);
     const findAttribute = get(findTopLevelAttributeAtom);
     const showAll = get(showAllAttributesAtom);
 

@@ -6,12 +6,14 @@ import SearchQueryType from '../_types/SearchQueryType';
 import SearchStateType from '../_types/SearchStateType';
 
 const useGetUpdateSearchQuery = () => {
-  const { query } = useRecoilValue(searchStateAtom);
+  const searchState = useRecoilValue(searchStateAtom);
 
   return (
     updateNode: (node: SearchQueryNodeType) => SearchQueryNodeType | null,
-    nodeAdditions: SearchQueryNodeType | SearchQueryNodeType[] = []
+    nodeAdditions: SearchQueryNodeType | SearchQueryNodeType[] = [],
+    uncommittedQuery?: SearchQueryType
   ): Pick<SearchStateType, 'query'> => {
+    const query = uncommittedQuery || searchState.query;
     const additions = Array.isArray(nodeAdditions)
       ? nodeAdditions
       : [nodeAdditions];

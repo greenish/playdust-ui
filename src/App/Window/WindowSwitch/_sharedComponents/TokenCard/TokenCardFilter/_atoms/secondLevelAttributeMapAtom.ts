@@ -35,6 +35,7 @@ const secondLevelAttributeMapAtom = selector<AttributeQueryMapType>({
           });
 
           if (
+            directOrChildren.length > 0 &&
             haveSameAttribute &&
             array(AttributeQueryNodeType).is(directOrChildren)
           ) {
