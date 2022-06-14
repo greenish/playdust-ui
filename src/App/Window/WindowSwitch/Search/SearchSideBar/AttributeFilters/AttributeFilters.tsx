@@ -9,9 +9,9 @@ import {
 import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
-import findTopLevelAttributeAtom from '../../_sharedComponents/TokenCard/TokenCardFilter/_atoms/findTopLevelAttributeAtom';
-import useToggleTopLevelAttributeNode from '../../_sharedComponents/TokenCard/TokenCardFilter/_hooks/useToggleTopLevelAttributeNode';
+import findTopLevelAttributeAtom from '../../../_atoms/findTopLevelAttributeAtom';
+import useToggleTopLevelAttributeNode from '../../../_hooks/useToggleTopLevelAttributeNode';
+import ExplorerAccordion from '../../../_sharedComponents/ExplorerAccordion';
 import searchTopAggregationAtom from './_atoms/searchTopAggregationAtom';
 
 const RootContainer = styled(Scrollbars)`

@@ -9,9 +9,9 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
-import findTopLevelAttributeAtom from './_atoms/findTopLevelAttributeAtom';
-import useToggleTopLevelAttributeNode from './_hooks/useToggleTopLevelAttributeNode';
+import findTopLevelAttributeAtom from '../../_atoms/findTopLevelAttributeAtom';
+import useToggleTopLevelAttributeNode from '../../_hooks/useToggleTopLevelAttributeNode';
+import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
 
 interface TokenCardFilterProps {
   metadata: OpenSearchNFTSourceType;

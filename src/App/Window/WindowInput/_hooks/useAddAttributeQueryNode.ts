@@ -1,9 +1,9 @@
 import { useRecoilValue } from 'recoil';
-import shortId from '../../_helpers/shortId';
-import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
-import AttributeQueryNodeType from '../_types/AttributeQueryNodeType';
-import makeUseChangeSearchQuery from './makeUseChangeSearchQuery';
-import useGetAddQueryNode from './useGetAddQueryNode';
+import shortId from '../../../_helpers/shortId';
+import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
+import makeUseChangeSearchQuery from '../../_hooks/makeUseChangeSearchQuery';
+import useGetAddQueryNode from '../../_hooks/useGetAddQueryNode';
+import AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
 
 const useAddAttributeQueryNode = makeUseChangeSearchQuery(() => {
   const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);

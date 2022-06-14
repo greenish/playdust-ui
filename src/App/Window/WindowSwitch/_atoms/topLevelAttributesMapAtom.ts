@@ -1,8 +1,8 @@
 import { selector } from 'recoil';
-import searchStateAtom from '../../../../../_atoms/searchStateAtom';
-import AttributeQueryNodeType from '../../../../../_types/AttributeQueryNodeType';
-import topLevelAndChildrenAtom from '../../../../Search/SearchSideBar/_atoms/topLevelAndChildrenAtom';
+import searchStateAtom from '../../_atoms/searchStateAtom';
+import AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
 import AttributeQueryMapType from '../_types/AttributeQueryMapType';
+import topLevelAndChildrenAtom from './topLevelAndChildrenAtom';
 
 const topLevelAttributesMapAtom = selector<AttributeQueryMapType>({
   key: 'topLevelAttributesMapAtom',

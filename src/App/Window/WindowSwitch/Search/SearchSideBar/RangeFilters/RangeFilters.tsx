@@ -12,8 +12,8 @@ import React, { useMemo, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import useRemoveQueryNode from '../../../../_hooks/useRemoveQueryNode';
 import type RangeValueUnionType from '../../../../_types/RangeValueUnionType';
-import findTopLevelRangeQueryNodesAtom from '../_atoms/findTopLevelRangeQueryNodesAtom';
-import useUpsertTopLevelRangeQueryNode from '../_hooks/useUpsertTopLevelRangeQueryNode';
+import findTopLevelRangeQueryNodesAtom from './_atoms/findTopLevelRangeQueryNodesAtom';
+import useUpsertTopLevelRangeQueryNode from './_hooks/useUpsertTopLevelRangeQueryNode';
 
 interface RangeFilterProps {
   label: string;

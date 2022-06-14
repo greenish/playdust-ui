@@ -1,10 +1,10 @@
 import { selector } from 'recoil';
 import { array } from 'superstruct';
-import searchStateAtom from '../../../../../_atoms/searchStateAtom';
-import AttributeQueryNodeType from '../../../../../_types/AttributeQueryNodeType';
-import GroupNodeType from '../../../../../_types/GroupNodeType';
-import topLevelAndChildrenAtom from '../../../../Search/SearchSideBar/_atoms/topLevelAndChildrenAtom';
+import searchStateAtom from '../../_atoms/searchStateAtom';
+import AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
+import GroupNodeType from '../../_types/GroupNodeType';
 import AttributeQueryMapType from '../_types/AttributeQueryMapType';
+import topLevelAndChildrenAtom from './topLevelAndChildrenAtom';
 
 const secondLevelAttributeMapAtom = selector<AttributeQueryMapType>({
   key: 'secondLevelAttributeMapAtom',

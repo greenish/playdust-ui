@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import searchStateSerializedAtom from '../../_atoms/searchStateSerializedAtom';
+import searchStateSerializedAtom from '../../../_atoms/searchStateSerializedAtom';
 import fetchSearchResults from '../_helpers/fetchSearchResults';
 import type SearchResponseType from '../_types/SearchResponseType';
 

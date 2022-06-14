@@ -3,11 +3,11 @@ import { useEvent } from 'react-use';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { is } from 'superstruct';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
+import searchQueryParentIdMapAtom from '../../_atoms/searchQueryParentIdMapAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
 import searchStateAtom from '../../_atoms/searchStateAtom';
 import GroupNodeType from '../../_types/GroupNodeType';
 import SearchQueryNodeType from '../../_types/SearchQueryNodeType';
-import searchQueryParentIdMapAtom from '../_atoms/searchQueryParentIdMapAtom';
 import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
 
 const useWindowInputKeyEvent = () => {

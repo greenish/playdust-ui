@@ -2,7 +2,7 @@ import { selectorFamily } from 'recoil';
 import searchStateSerializedAtom from '../../_atoms/searchStateSerializedAtom';
 import frontendApi from '../../_helpers/frontendApi';
 import parseSearch from '../../_helpers/parseSearch';
-import type SearchAggResponseType from '../_types/SearchAggResponseType';
+import type SearchAggResponseType from '../../_types/SearchAggResponseType';
 
 const searchAggsByNodeAtom = selectorFamily<SearchAggResponseType, string>({
   key: 'searchAggsByNodeAtom',

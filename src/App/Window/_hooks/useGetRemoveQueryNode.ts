@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil';
-import searchQueryParentIdMapAtom from '../WindowInput/_atoms/searchQueryParentIdMapAtom';
+import searchQueryParentIdMapAtom from '../_atoms/searchQueryParentIdMapAtom';
 import searchStateAtom from '../_atoms/searchStateAtom';
 import SearchQueryType from '../_types/SearchQueryType';
 import SearchStateType from '../_types/SearchStateType';

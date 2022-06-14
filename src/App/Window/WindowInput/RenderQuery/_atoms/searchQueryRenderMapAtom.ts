@@ -1,12 +1,12 @@
 import { selector } from 'recoil';
 import { is } from 'superstruct';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
+import searchQueryParentIdMapAtom from '../../../_atoms/searchQueryParentIdMapAtom';
 import searchStateAtom from '../../../_atoms/searchStateAtom';
 import GroupNodeType from '../../../_types/GroupNodeType';
 import SearchQueryActiveNodeType from '../../../_types/SearchActiveNodeMetaType';
+import SearchQueryParentIdMapType from '../../../_types/SearchQueryParentIdMapType';
 import type SearchQueryType from '../../../_types/SearchQueryType';
-import searchQueryParentIdMapAtom from '../../_atoms/searchQueryParentIdMapAtom';
-import SearchQueryParentIdMapType from '../../_types/SearchQueryParentIdMapType';
 import GroupRenderNodeType from '../_types/GroupRenderNodeType';
 import GroupRenderOperatorNodeType from '../_types/GroupRenderOperatorNodeType';
 import QueryRenderNodeType from '../_types/QueryRenderNodeType';
