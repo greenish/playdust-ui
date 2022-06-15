@@ -1,6 +1,6 @@
-import makeUseChangeSearchQuery from './makeUseChangeSearchQuery';
-import useGetRemoveQueryNode from './useGetRemoveQueryNode';
-import useGetUpdateSearchQuery from './useGetUpdateSearchQuery';
+import makeUseChangeSearchQuery from '../../_hooks/makeUseChangeSearchQuery';
+import useGetRemoveQueryNode from '../../_hooks/useGetRemoveQueryNode';
+import useGetUpdateSearchQuery from '../../_hooks/useGetUpdateSearchQuery';
 
 const useUpdateAttributeQueryNode = makeUseChangeSearchQuery(() => {
   const getRemoveQueryNode = useGetRemoveQueryNode();

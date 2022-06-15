@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
-import type SearchResponseType from '../_types/SearchResponseType';
-import searchResultsBase from './searchResultsBaseAtom';
+import searchResultsBase from '../../_atoms/searchResultsBaseAtom';
+import type SearchResponseType from '../../_types/SearchResponseType';
 import searchResultsMore from './searchResultsMoreAtom';
 
 const searchResultsAtom = selector<SearchResponseType>({

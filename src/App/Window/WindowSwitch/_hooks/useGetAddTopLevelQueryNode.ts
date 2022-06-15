@@ -1,13 +1,12 @@
 import { useRecoilValue } from 'recoil';
-import shortId from '../../../../../../_helpers/shortId';
-import searchQueryRootNodeAtom from '../../../../../_atoms/searchQueryRootNodeAtom';
-import searchStateAtom from '../../../../../_atoms/searchStateAtom';
-import makeUseChangeSearchQuery from '../../../../../_hooks/makeUseChangeSearchQuery';
-import useGetAddQueryNode from '../../../../../_hooks/useGetAddQueryNode';
-import QueryNodeType from '../../../../../_types/QueryNodeType';
-import SearchQueryType from '../../../../../_types/SearchQueryType';
+import shortId from '../../../_helpers/shortId';
+import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
+import searchStateAtom from '../../_atoms/searchStateAtom';
+import useGetAddQueryNode from '../../_hooks/useGetAddQueryNode';
+import QueryNodeType from '../../_types/QueryNodeType';
+import SearchQueryType from '../../_types/SearchQueryType';
 
-const useAddTopLevelQueryNode = makeUseChangeSearchQuery(() => {
+const useGetAddTopLevelQueryNode = () => {
   const { query } = useRecoilValue(searchStateAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const getAddQueryNode = useGetAddQueryNode();
@@ -37,6 +36,6 @@ const useAddTopLevelQueryNode = makeUseChangeSearchQuery(() => {
       return { query: nextQuery };
     }
   };
-});
+};
 
-export default useAddTopLevelQueryNode;
+export default useGetAddTopLevelQueryNode;

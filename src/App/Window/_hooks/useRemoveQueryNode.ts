@@ -1,26 +1,13 @@
 import useGoHome from '../../_hooks/useGoHome';
 import makeUseChangeSearchQuery from './makeUseChangeSearchQuery';
-import useGetUpdateSearchQuery from './useGetUpdateSearchQuery';
+import useGetRemoveQueryNode from './useGetRemoveQueryNode';
 
 const useRemoveQueryNode = makeUseChangeSearchQuery(() => {
   const goHome = useGoHome();
-  const getUpdateSearchQuery = useGetUpdateSearchQuery();
+  const getRemoveQueryNode = useGetRemoveQueryNode();
 
   return (removalId: string) => {
-    const updated = getUpdateSearchQuery((node) => {
-      if (node.id === removalId) {
-        return null;
-      }
-
-      if (node.type === 'group' && node.children.includes(removalId)) {
-        return {
-          ...node,
-          children: node.children.filter((child) => child !== removalId),
-        };
-      }
-
-      return node;
-    });
+    const updated = getRemoveQueryNode(removalId);
 
     const hasQueryNode = Object.values(updated.query.nodes).some(
       (entry) => entry.type === 'query'

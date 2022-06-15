@@ -1,13 +1,13 @@
 import type { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import QueryNodeType from '../../App/Window/_types/QueryNodeType';
-import SearchFilterUnionType from '../../App/Window/_types/SearchFilterUnionType';
+import RangeValueUnionType from '../../App/Window/_types/RangeValueUnionType';
 
-const getRangeField = (field: SearchFilterUnionType) => {
+const getRangeField = (field: RangeValueUnionType) => {
   switch (field) {
     case 'list-price':
       return 'lastListPrice';
     case 'sale-price':
-      return 'lastTradePrice';
+      return 'lastSalePrice';
     case 'rarity-score':
       return 'normalizedRarityScore';
     default: {

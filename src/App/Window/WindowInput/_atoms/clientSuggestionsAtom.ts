@@ -1,6 +1,6 @@
 import { matchSorter } from 'match-sorter';
 import { selector } from 'recoil';
-import type SearchAggResponseType from '../_types/SearchAggResponseType';
+import type SearchAggResponseType from '../../_types/SearchAggResponseType';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import hasCollectionDependencyAtom from './hasCollectionDependencyAtom';
 import searchAggsByNodeAtom from './searchAggsByNodeAtom';

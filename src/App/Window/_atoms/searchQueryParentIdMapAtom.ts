@@ -1,9 +1,9 @@
 import { selector } from 'recoil';
 import { is } from 'superstruct';
-import searchStateAtom from '../../_atoms/searchStateAtom';
-import GroupNodeType from '../../_types/GroupNodeType';
-import type SearchQueryType from '../../_types/SearchQueryType';
+import GroupNodeType from '../_types/GroupNodeType';
 import SearchQueryParentIdMapType from '../_types/SearchQueryParentIdMapType';
+import type SearchQueryType from '../_types/SearchQueryType';
+import searchStateAtom from './searchStateAtom';
 
 const makeParentIdMap = (
   nodes: SearchQueryType['nodes'],

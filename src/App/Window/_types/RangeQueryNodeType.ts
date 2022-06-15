@@ -1,14 +1,14 @@
-import { assign, Infer, literal, number, type } from 'superstruct';
+import { assign, Infer, literal, number, optional, type } from 'superstruct';
 import QueryNodeIdType from './QueryNodeBaseType';
-import SearchFilterUnionType from './SearchFilterUnionType';
+import RangeValueUnionType from './RangeValueUnionType';
 
 type RangeQueryNodeType = Infer<typeof RangeQueryNodeType>;
 const RangeQueryNodeType = assign(
   type({
     field: literal('range'),
-    value: SearchFilterUnionType,
-    min: number(),
-    max: number(),
+    value: RangeValueUnionType,
+    min: optional(number()),
+    max: optional(number()),
   }),
   QueryNodeIdType
 );

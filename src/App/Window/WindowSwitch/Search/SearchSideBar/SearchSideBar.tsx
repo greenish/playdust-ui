@@ -3,7 +3,7 @@ import { Divider } from '@mui/material';
 import React from 'react';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import SkeletonRows from '../../../_sharedComponents/SkeletonRows';
-import AttributeFilters from './AttributeFilters';
+import AttributeFilters from './AttributeFilters/AttributeFilters';
 import OnlyListedSwitch from './OnlyListedSwitch/OnlyListedSwitch';
 import RangeFilters from './RangeFilters/RangeFilters';
 import SortFields from './SortFields/SortFields';

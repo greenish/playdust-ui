@@ -9,11 +9,9 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import shortId from '../../../../../_helpers/shortId';
-import useRemoveQueryNode from '../../../../_hooks/useRemoveQueryNode';
-import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
-import findTopLevelSearchQueryAttributeAtom from './_atoms/findTopLevelSearchQueryAttributeAtom';
-import useAddTopLevelQueryNode from './_hooks/useAddTopLevelQueryNode';
+import findTopLevelAttributeAtom from '../../_atoms/findTopLevelAttributeAtom';
+import useToggleTopLevelAttributeNode from '../../_hooks/useToggleTopLevelAttributeNode';
+import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
 
 interface TokenCardFilterProps {
   metadata: OpenSearchNFTSourceType;
@@ -22,9 +20,8 @@ interface TokenCardFilterProps {
 function TokenCardFilter({ metadata }: TokenCardFilterProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const { attributes } = metadata;
-  const findAttribute = useRecoilValue(findTopLevelSearchQueryAttributeAtom);
-  const removeQueryNode = useRemoveQueryNode();
-  const addTopLevelQueryNode = useAddTopLevelQueryNode();
+  const findAttribute = useRecoilValue(findTopLevelAttributeAtom);
+  const toggleAttribute = useToggleTopLevelAttributeNode();
 
   return (
     <>
@@ -52,15 +49,7 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
                       checked={!!found}
                       onChange={() => {
                         setAnchorEl(null);
-                        return found
-                          ? removeQueryNode(found.id)
-                          : addTopLevelQueryNode({
-                              id: shortId(),
-                              type: 'query',
-                              field: 'attribute',
-                              key: attribute.key,
-                              value: attribute.value,
-                            });
+                        toggleAttribute(attribute.key, attribute.value);
                       }}
                     />
                   }

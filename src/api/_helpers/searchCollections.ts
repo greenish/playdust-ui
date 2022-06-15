@@ -34,7 +34,8 @@ const existsQuery: QueryDslQueryContainer[] = [
 ];
 
 type SearchCollectionsType = {
-  useMust: boolean;
+  useMust?: boolean;
+  includeAttributes?: boolean;
 };
 
 const searchCollections = makeSearchOS<
@@ -53,6 +54,11 @@ const searchCollections = makeSearchOS<
   return {
     ...body,
     query: wrappedQuery,
+    _source: options?.includeAttributes
+      ? undefined
+      : {
+          exclude: ['attributes'],
+        },
   };
 });
 

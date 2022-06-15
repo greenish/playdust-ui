@@ -1,5 +1,5 @@
-import api from '../../_helpers/frontendApi';
-import parseSearch from '../../_helpers/parseSearch';
+import api from '../../../_helpers/frontendApi';
+import parseSearch from '../../../_helpers/parseSearch';
 import type SearchResponseType from '../_types/SearchResponseType';
 
 const initialState = {

@@ -1,14 +1,15 @@
 import styled from '@emotion/styled';
-import { HomeSharp } from '@mui/icons-material';
-import { Button, Stack } from '@mui/material';
+import { ArrowBack, HomeSharp } from '@mui/icons-material';
+import { Box, Button, Stack } from '@mui/material';
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import useGoHome from '../../../../_hooks/useGoHome';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
-import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
+import searchResultsAtom from './_atoms/searchResultsAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoResultsContainer = styled.div`
@@ -24,6 +25,7 @@ function SearchResults() {
   const hasValue = searchResults.state === 'hasValue';
   const goHome = useGoHome();
   const setWindowImages = useRecoilValue(setWindowImagesAtom);
+  const router = useRouter();
 
   useEffect(() => {
     if (setWindowImages && searchResults.state === 'hasValue') {
@@ -39,16 +41,26 @@ function SearchResults() {
   if (hasValue && searchResults.contents.total === 0) {
     return (
       <NoResultsContainer>
-        <Stack sx={{ gap: 2 }}>
+        <Stack sx={{ gap: 2, alignItems: 'center' }}>
           <i>no results found...</i>
-          <Button
-            onClick={() => goHome()}
-            startIcon={<HomeSharp />}
-            variant="contained"
-            size="large"
-          >
-            Go Home
-          </Button>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button
+              onClick={() => router.back()}
+              startIcon={<ArrowBack />}
+              variant="contained"
+              size="large"
+            >
+              Go Back
+            </Button>
+            <Button
+              onClick={() => goHome()}
+              startIcon={<HomeSharp />}
+              variant="contained"
+              size="large"
+            >
+              Go Home
+            </Button>
+          </Box>
         </Stack>
       </NoResultsContainer>
     );

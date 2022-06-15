@@ -14,6 +14,7 @@ type ExplorerAccordionPropTypes = {
   expanded?: boolean;
   onChange?: AccordionProps['onChange'];
   itemType?: 'table';
+  expandIcon?: React.ReactNode;
 };
 
 const slug = (input: string): string =>
@@ -27,6 +28,7 @@ function ExplorerAccordion({
   expanded = false,
   onChange,
   itemType,
+  expandIcon,
 }: ExplorerAccordionPropTypes) {
   const [accordionState, setAccordionState] = useState({
     expanded,
@@ -51,7 +53,7 @@ function ExplorerAccordion({
       }}
     >
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
+        expandIcon={expandIcon || <ExpandMoreIcon />}
         aria-controls={`${id}-content`}
         aria-label={typeof title === 'string' ? title : 'Accordion Title'}
         id={`${id}-header`}
