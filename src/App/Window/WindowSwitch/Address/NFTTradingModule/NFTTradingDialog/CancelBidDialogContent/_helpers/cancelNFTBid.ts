@@ -1,4 +1,4 @@
-import tradeApi from '../../_helpers/tradeApi';
+import tradeApi from '../../../_helpers/tradeApi';
 import TransactionBufferType from '../../_types/TransactionBufferType';
 
 const cancelNFTBid = async (
