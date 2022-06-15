@@ -1,17 +1,19 @@
 import styled from '@emotion/styled';
-import { Box, List, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { useSelect } from 'downshift';
 import parse from 'html-react-parser';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
+import { AutoSizer, ListRowRenderer } from 'react-virtualized';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../_atoms/searchQueryRootNodeAtom';
 import SkeletonRows from '../_sharedComponents/SkeletonRows';
 import QueryNodeChip from './QueryNodeChip/QueryNodeChip';
 import RenderQuery from './RenderQuery/RenderQuery';
+import VirtualizedList from './VirtualizedList';
 import searchQueryDebouncedTermAtom from './_atoms/searchQueryDebouncedTermAtom';
 import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
 import searchSuggestionsAtom from './_atoms/searchSuggestionsAtom';
@@ -136,6 +138,42 @@ function WindowInput() {
     />
   );
 
+  const rowRenderer = useCallback<ListRowRenderer>(
+    ({ index, key, style }) => {
+      const suggestion = suggestions[index];
+      const isActiveSuggestion = highlightedIndex === index;
+
+      return (
+        <div key={key} style={style}>
+          <Typography
+            {...getItemProps({ item: suggestion, index })}
+            onMouseMove={undefined}
+            sx={{
+              paddingX: 3,
+              paddingY: 0.5,
+              height: '100%',
+              fontSize: '80%',
+              cursor: 'pointer',
+              background: isActiveSuggestion ? theme.palette.grey[200] : 'auto',
+              '&:hover': {
+                background: isActiveSuggestion
+                  ? 'auto'
+                  : theme.palette.grey[100],
+              },
+            }}
+            onClick={() => onSuggestionChange(suggestion)}
+          >
+            {parse(suggestion.label)}
+          </Typography>
+        </div>
+      );
+    },
+    [getItemProps, highlightedIndex, onSuggestionChange, suggestions, theme]
+  );
+
+  const rowHeight = 30;
+  const maxHeight = window.innerHeight * 0.5;
+
   return (
     <RootContainer ref={containerRef}>
       <InputContainer
@@ -172,46 +210,26 @@ function WindowInput() {
       </InputContainer>
       <OverlayContainer elevation={isOpen ? 8 : 0} {...getMenuProps()}>
         {isOpen && (
-          <List
-            sx={{
-              overflow: 'auto',
-              maxHeight: window.innerHeight * 0.5,
-            }}
-          >
-            {suggestions.map((suggestion, idx) => {
-              const isActiveSuggestion = highlightedIndex === idx;
-
-              return (
-                <Typography
-                  key={suggestion.key}
-                  {...getItemProps({ item: suggestion, index: idx })}
-                  onMouseMove={undefined}
-                  sx={{
-                    paddingX: 3,
-                    paddingY: 0.5,
-                    fontSize: '80%',
-                    cursor: 'pointer',
-                    background: isActiveSuggestion
-                      ? theme.palette.grey[200]
-                      : 'auto',
-                    '&:hover': {
-                      background: isActiveSuggestion
-                        ? 'auto'
-                        : theme.palette.grey[100],
-                    },
-                  }}
-                  onClick={() => onSuggestionChange(suggestion)}
-                >
-                  {parse(suggestion.label)}
-                </Typography>
-              );
-            })}
+          <>
+            <AutoSizer disableHeight={true}>
+              {({ width }) => (
+                <VirtualizedList
+                  height={Math.min(maxHeight, suggestions.length * rowHeight)}
+                  width={width}
+                  rowCount={suggestions.length}
+                  rowRenderer={rowRenderer}
+                  rowHeight={30}
+                  overscanRowCount={4}
+                  scrollToIndex={highlightedIndex}
+                />
+              )}
+            </AutoSizer>
             {loading && (
               <Stack sx={{ px: 3 }}>
                 <SkeletonRows rows={2} />
               </Stack>
             )}
-          </List>
+          </>
         )}
       </OverlayContainer>
     </RootContainer>
