@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import parsedConfigAccountAtom from './_atoms/parsedConfigAccountAtom';
-import ExplorerGrid from './_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 
 // 7qUt9itGTzT7QLNTbmoPwXCKR93pd4i8TqZp1BEj5ah8

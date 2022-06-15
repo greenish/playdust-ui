@@ -1,13 +1,17 @@
 import styled from '@emotion/styled';
-import React from 'react';
-import { useRecoilValueLoadable } from 'recoil';
+import { HomeSharp } from '@mui/icons-material';
+import { Button, Stack } from '@mui/material';
+import React, { useEffect } from 'react';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import useGoHome from '../../../../_hooks/useGoHome';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
 import searchResultsAtom from '../../_atoms/searchResultsAtom';
 import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
 import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
-const NoTokensContainer = styled.div`
+const NoResultsContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -15,15 +19,38 @@ const NoTokensContainer = styled.div`
 `;
 
 function SearchResults() {
-  const loadable = useRecoilValueLoadable(searchResultsAtom);
+  const searchResults = useRecoilValueLoadable(searchResultsAtom);
   const fetchMoreSearchResults = useFetchMoreSearchResults();
-  const hasValue = loadable.state === 'hasValue';
+  const hasValue = searchResults.state === 'hasValue';
+  const goHome = useGoHome();
+  const setWindowImages = useRecoilValue(setWindowImagesAtom);
 
-  if (hasValue && loadable.contents.total === 0) {
+  useEffect(() => {
+    if (setWindowImages && searchResults.state === 'hasValue') {
+      const filtered = searchResults.contents.nfts
+        .filter((nft) => nft?.image)
+        .slice(0, 4)
+        .map((nft) => nft?.image);
+
+      setWindowImages(filtered);
+    }
+  }, [searchResults, setWindowImages]);
+
+  if (hasValue && searchResults.contents.total === 0) {
     return (
-      <NoTokensContainer>
-        <i>no results found...</i>
-      </NoTokensContainer>
+      <NoResultsContainer>
+        <Stack sx={{ gap: 2 }}>
+          <i>no results found...</i>
+          <Button
+            onClick={() => goHome()}
+            startIcon={<HomeSharp />}
+            variant="contained"
+            size="large"
+          >
+            Go Home
+          </Button>
+        </Stack>
+      </NoResultsContainer>
     );
   }
 
@@ -34,8 +61,8 @@ function SearchResults() {
       contentHeight={70}
       cardGap={16}
       rowGap={16}
-      tokens={hasValue ? loadable.contents.nfts : []}
-      total={hasValue ? loadable.contents.total : 0}
+      tokens={hasValue ? searchResults.contents.nfts : []}
+      total={hasValue ? searchResults.contents.total : 0}
       next={fetchMoreSearchResults}
       content={
         <SuspenseBoundary

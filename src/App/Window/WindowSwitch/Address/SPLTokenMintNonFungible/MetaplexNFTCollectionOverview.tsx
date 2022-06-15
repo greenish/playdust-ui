@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import collectionOverviewAtom from '../../_atoms/collectionOverviewAtom';
 import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 
 function MetaplexNFTCollectionOverview() {
   const overview = useRecoilValue(collectionOverviewAtom);

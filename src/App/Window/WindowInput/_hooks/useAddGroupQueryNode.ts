@@ -1,6 +1,6 @@
-import { nanoid } from 'nanoid';
 import { useCallback } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import shortId from '../../../_helpers/shortId';
 import searchQueryActiveGroupIdxAtom from '../../_atoms/searchQueryActiveGroupIdxAtom';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
@@ -112,7 +112,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
   );
 
   return (operator: GroupNodeType['operator'], endIdx: number) => {
-    const newId = nanoid();
+    const newId = shortId();
     const nextState = getNextState(operator, endIdx, newId);
 
     if (!nextState) {

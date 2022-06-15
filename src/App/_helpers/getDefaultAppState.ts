@@ -1,6 +1,6 @@
-import { nanoid } from 'nanoid';
 import type { AppStateType } from '../_types/AppStateType';
 import AppWindowType from '../_types/AppWindowType';
+import shortId from './shortId';
 
 const newHomeWindow: () => AppWindowType = () => ({
   type: 'home',
@@ -9,7 +9,7 @@ const newHomeWindow: () => AppWindowType = () => ({
 
 const getDefaultAppState = (tabId?: string): AppStateType => {
   const homeWindow = newHomeWindow();
-  const newTabId = tabId ?? nanoid();
+  const newTabId = tabId ?? shortId();
 
   return {
     tabs: [

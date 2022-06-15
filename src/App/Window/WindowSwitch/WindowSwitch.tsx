@@ -2,6 +2,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import windowStateAtom from '../_atoms/windowStateAtom';
 import Address from './Address/Address';
+import Epoch from './Epoch/Epoch';
 import Home from './Home/Home';
 import Search from './Search/Search';
 
@@ -20,7 +21,7 @@ function WindowSwitch() {
     case 'tx':
       return null;
     case 'epoch':
-      return null;
+      return <Epoch />;
     default:
       return null;
   }

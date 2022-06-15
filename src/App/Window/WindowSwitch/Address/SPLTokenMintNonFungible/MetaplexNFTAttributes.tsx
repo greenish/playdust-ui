@@ -3,7 +3,7 @@ import { Box, Grid, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import playdustNftDataAtom from '../../_atoms/playdustNftDataAtom';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 
 const Item = styled(Paper)`
   background-color: #f6f6f6;

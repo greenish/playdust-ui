@@ -24,17 +24,33 @@ const getSeedQuery = (collectionId: string) => ({
 
 const getMatchField = (
   key: string,
-  input: string | null | undefined
-): QueryDslQueryContainer[] =>
-  input && input !== ''
-    ? [
-        {
-          match: {
-            [key]: input,
-          },
+  input: string | null | undefined,
+  fuzzy = false
+): QueryDslQueryContainer[] => {
+  if (!input || input === '') {
+    return [];
+  }
+
+  if (fuzzy) {
+    return [
+      {
+        multi_match: {
+          query: input,
+          fuzziness: 'AUTO',
+          fields: [key],
         },
-      ]
-    : [];
+      },
+    ];
+  }
+
+  return [
+    {
+      match: {
+        [key]: input,
+      },
+    },
+  ];
+};
 
 const getSimilarCollectionQuery = ({
   id,
@@ -64,9 +80,8 @@ const getSimilarCollectionQuery = ({
               {
                 bool: {
                   should: [
-                    ...getMatchField('name', name),
-                    ...getMatchField('symbol', symbol),
-                    ...getMatchField('description', description),
+                    ...getMatchField('name', name, true),
+                    ...getMatchField('symbol', symbol, true),
                   ],
                   minimum_should_match: 2,
                 },

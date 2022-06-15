@@ -7,9 +7,9 @@ import {
   IconButton,
   Popover,
 } from '@mui/material';
-import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
+import shortId from '../../../../../_helpers/shortId';
 import useRemoveQueryNode from '../../../../_hooks/useRemoveQueryNode';
 import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 import findTopLevelSearchQueryAttributeAtom from './_atoms/findTopLevelSearchQueryAttributeAtom';
@@ -55,7 +55,7 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
                         return found
                           ? removeQueryNode(found.id)
                           : addTopLevelQueryNode({
-                              id: nanoid(),
+                              id: shortId(),
                               type: 'query',
                               field: 'attribute',
                               key: attribute.key,

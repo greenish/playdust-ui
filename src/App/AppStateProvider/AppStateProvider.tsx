@@ -1,9 +1,9 @@
-import { nanoid } from 'nanoid';
 import { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-use';
 import { LocationSensorState } from 'react-use/lib/useLocation';
 import { useRecoilValue } from 'recoil';
 import appStateAtom from '../_atoms/appStateAtom';
+import shortId from '../_helpers/shortId';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import decodeWindowHash from './_helpers/decodeWindowHash';
 import useAddTab from './_hooks/useAddTab';
@@ -22,7 +22,7 @@ function AppStateProvider() {
     (location: LocationSensorState) => {
       const windowHash = decodeWindowHash(location);
       const foundURLTab = tabs.find((entry) => entry.id === windowHash.tabId);
-      const foundInCache = tabs.find((entry) => {
+      const foundExactInCache = tabs.find((entry) => {
         const { state, type } = entry.windows[0] || {};
         const tabId = entry.id;
 
@@ -32,24 +32,30 @@ function AppStateProvider() {
           tabId === windowHash.tabId
         );
       });
+      const foundIdInCache = tabs.find(
+        (entry) => entry.id === windowHash.tabId
+      );
 
       const windowState = {
         type: windowHash.type,
         state: windowHash.state ?? '',
-        tabId: windowHash.tabId ?? nanoid(),
+        tabId: windowHash.tabId ?? shortId(),
       };
 
       switch (location?.trigger) {
         case 'load': {
           // Loading tab from URL
-          if (foundInCache) {
-            setSelectedTab(foundInCache.id);
+          if (foundExactInCache) {
+            setSelectedTab(foundExactInCache.id);
             break;
           }
 
           // Add new tab from URL, i.e. shared link
           if (windowHash.tabId) {
-            addTab(windowState);
+            addTab({
+              ...windowState,
+              tabId: foundIdInCache ? shortId() : windowState.tabId,
+            });
           }
 
           replaceWindowHash(windowState);
@@ -58,7 +64,7 @@ function AppStateProvider() {
         case 'popstate':
         case 'pushstate': {
           // Navigating to an existing tab
-          if (foundInCache) {
+          if (foundExactInCache) {
             setSelectedTab(windowState.tabId);
             break;
           }

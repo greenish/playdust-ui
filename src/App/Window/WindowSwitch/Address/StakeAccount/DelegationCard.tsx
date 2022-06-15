@@ -1,9 +1,9 @@
 import BN from 'bn.js';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
-import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
+import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
+import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
 import parsedStakeAccountAtom from './_atoms/parsedStakeAccountAtom';

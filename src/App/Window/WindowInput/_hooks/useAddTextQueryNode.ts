@@ -1,5 +1,5 @@
-import { nanoid } from 'nanoid';
 import { useRecoilValue } from 'recoil';
+import shortId from '../../../_helpers/shortId';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
 import initializeSearchQuery from '../../_helpers/initializeSearchQuery';
@@ -17,7 +17,7 @@ const useAddTextQueryNode = makeUseChangeSearchQuery(() => {
 
   return () => {
     const newNode: TextQueryNodeType = {
-      id: nanoid(),
+      id: shortId(),
       type: 'query',
       field: 'text',
       value: searchTerm,

@@ -1,5 +1,5 @@
-import { nanoid } from 'nanoid';
 import { useRecoilValue } from 'recoil';
+import shortId from '../../../../../../_helpers/shortId';
 import searchQueryRootNodeAtom from '../../../../../_atoms/searchQueryRootNodeAtom';
 import searchStateAtom from '../../../../../_atoms/searchStateAtom';
 import makeUseChangeSearchQuery from '../../../../../_hooks/makeUseChangeSearchQuery';
@@ -10,15 +10,15 @@ import SearchQueryType from '../../../../../_types/SearchQueryType';
 const useAddTopLevelQueryNode = makeUseChangeSearchQuery(() => {
   const { query } = useRecoilValue(searchStateAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
-  const getAddQuerynode = useGetAddQueryNode();
+  const getAddQueryNode = useGetAddQueryNode();
 
   return (newNode: QueryNodeType) => {
     if (rootNode) {
       if (rootNode.operator === 'and') {
-        return getAddQuerynode(newNode, rootNode.id, rootNode.children.length);
+        return getAddQueryNode(newNode, rootNode.id, rootNode.children.length);
       }
 
-      const andWrapperId = nanoid();
+      const andWrapperId = shortId();
 
       const nextQuery: SearchQueryType = {
         rootId: andWrapperId,

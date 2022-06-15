@@ -1,5 +1,4 @@
 import { selector } from 'recoil';
-import { assert } from 'superstruct';
 import GroupNodeType from '../_types/GroupNodeType';
 import searchStateAtom from './searchStateAtom';
 
@@ -14,7 +13,10 @@ const searchQueryRootNodeAtom = selector<GroupNodeType | null>({
 
     const rootNode = nodes[rootId];
 
-    assert(rootNode, GroupNodeType);
+    if (rootNode?.type !== 'group') {
+      return null;
+    }
+
     return rootNode;
   },
 });

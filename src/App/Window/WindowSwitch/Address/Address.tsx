@@ -1,5 +1,6 @@
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
 import BPFUpgradeableLoaderAccountBuffer from './BPFUpgradeableLoaderAccountBuffer';
 import BPFUpgradeableLoaderAccountProgram from './BPFUpgradeableLoaderAccountProgram/BPFUpgradeableLoaderAccountProgram';
@@ -23,7 +24,6 @@ import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
 import WalletGallery from './WalletGallery';
 import WalletTokenAccounts from './WalletTokenAccounts/WalletTokenAccounts';
 import ContentContainer from './_sharedComponents/ContentContainer';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
 
 function Address() {
   return (
