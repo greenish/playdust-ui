@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
@@ -30,7 +31,7 @@ const SearchInputContainer = styled.div`
   z-index: 2;
 `;
 
-const ContentContainer = styled.div`
+const ContentContainer = styled(Scrollbars)`
   overflow: auto;
   height: 100%;
   width: 100%;
@@ -58,7 +59,7 @@ const WindowContentRenderer = React.memo(() => {
           content={<WindowInput />}
         />
       </SearchInputContainer>
-      <ContentContainer>
+      <ContentContainer autoHide={true}>
         <SuspenseBoundary
           loading={
             <SpinnerContainer>
