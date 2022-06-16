@@ -1,25 +1,13 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
+import searchQueryRenderNodeMetaAtom from './_atoms/searchQueryRenderNodeMetaAtom';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
 import QueryPartDecorator from './_sharedComponents/QueryPartDecorator';
 import GroupRenderOperatorNodeType from './_types/GroupRenderOperatorNodeType';
 
-const operatorContainerStyles = {
-  width: '36px',
-};
-
-const activeBackground = {
-  background: 'rgb(255,0,0, 0.08)',
-};
-
 const secondaryHighlight = {
   color: 'rgb(180,180,180)',
-  fontWeight: 'bold',
-};
-
-const activeOperatorStyles = {
-  color: 'red',
   fontWeight: 'bold',
 };
 
@@ -31,21 +19,8 @@ function RenderGroupOperator({
   const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
     searchQueryActiveNodeMetaAtom
   );
-
-  const isAboveActive =
-    renderNode.activeDistance !== null && renderNode.activeDistance >= 0;
-  const isBelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.inActiveBranch &&
-    renderNode.activeDistance >= 1;
-  const is2BelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.inActiveBranch &&
-    renderNode.activeDistance >= 2;
-  const isActive =
-    renderNode.activeDistance !== null &&
-    renderNode.inActiveBranch &&
-    renderNode.activeDistance === 0;
+  const { renderLineBelow, higlightBackground, renderLineAbove, isActive } =
+    useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode));
 
   const isBelowOperator =
     renderNode.activeDistance !== null &&
@@ -58,7 +33,6 @@ function RenderGroupOperator({
 
   const activeNodeIndex =
     activeNodeMeta?.type === 'group' ? activeNodeMeta.index : -1;
-  const operator = renderNode.node.operator === 'and' ? 'AND' : 'OR';
 
   // first operator in a group is hidden unless input is placed there.
   if (renderNode.index === 0) {
@@ -77,17 +51,16 @@ function RenderGroupOperator({
         });
         evt.stopPropagation();
       }}
+      highlightBackground={higlightBackground}
+      highlightColor={isActive}
       style={{
-        ...operatorContainerStyles,
-        ...(isBelowActive ? activeBackground : {}),
-        ...(isActive ? activeOperatorStyles : {}),
-        ...(isBelowOperator ? secondaryHighlight : {}),
-        ...(isAboveOperator ? secondaryHighlight : {}),
+        width: '36px',
+        ...(isBelowOperator || isAboveOperator ? secondaryHighlight : {}),
       }}
     >
-      {operator}
-      {isAboveActive && <QueryPartDecorator position="below" />}
-      {is2BelowActive && <QueryPartDecorator position="above" />}
+      {renderNode.node.operator.toUpperCase()}
+      {renderLineBelow && <QueryPartDecorator position="below" />}
+      {renderLineAbove && <QueryPartDecorator position="above" />}
     </QueryPartContainer>
   );
 }

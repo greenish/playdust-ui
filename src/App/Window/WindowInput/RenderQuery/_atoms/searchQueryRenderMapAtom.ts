@@ -7,16 +7,9 @@ import GroupNodeType from '../../../_types/GroupNodeType';
 import SearchQueryActiveNodeType from '../../../_types/SearchActiveNodeMetaType';
 import SearchQueryParentIdMapType from '../../../_types/SearchQueryParentIdMapType';
 import type SearchQueryType from '../../../_types/SearchQueryType';
-import GroupRenderNodeType from '../_types/GroupRenderNodeType';
-import GroupRenderOperatorNodeType from '../_types/GroupRenderOperatorNodeType';
-import QueryRenderNodeType from '../_types/QueryRenderNodeType';
+import RenderMapNodeType from '../_types/RenderMapNodeType';
 
-type RenderMap = (
-  | QueryRenderNodeType
-  | GroupRenderNodeType
-  | GroupRenderOperatorNodeType
-)[];
-
+type RenderMap = RenderMapNodeType[];
 type GroupedRenderMap = RenderMap[];
 
 const makeRenderMap = (

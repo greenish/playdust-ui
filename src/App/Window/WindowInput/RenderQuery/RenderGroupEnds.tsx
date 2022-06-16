@@ -2,6 +2,7 @@ import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
+import searchQueryRenderNodeMetaAtom from './_atoms/searchQueryRenderNodeMetaAtom';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
 import QueryPartDecorator from './_sharedComponents/QueryPartDecorator';
 import GroupRenderNodeType from './_types/GroupRenderNodeType';
@@ -14,19 +15,12 @@ const stylesEnd = {
   paddingLeft: '4px',
 };
 
-const activeBackground = {
-  background: 'rgb(255,0,0, 0.08)',
-};
-
-const stylesActive = {
-  color: 'red',
-  // background: 'rgb(255,0,0, 0.08)',
-  fontWeight: 'bold',
-};
 
 function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
   const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
+  const { higlightBackground, renderLineBelow, renderLineAbove, isActive } =
+    useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode));
 
   if (!rootNode) {
     return null;
@@ -37,21 +31,6 @@ function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
   if (isRoot) {
     return null;
   }
-
-  const isAboveActive =
-    renderNode.activeDistance !== null && renderNode.activeDistance >= 0;
-  const isBelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.activeDistance >= 1 &&
-    renderNode.inActiveBranch;
-  const is2BelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.activeDistance >= 2 &&
-    renderNode.inActiveBranch;
-  const isActive =
-    renderNode.activeDistance !== null &&
-    renderNode.activeDistance === 0 &&
-    renderNode.inActiveBranch;
 
   const symbol = renderNode.type === 'groupStart' ? '(' : ')';
   const index =
@@ -67,16 +46,16 @@ function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
         });
         evt.stopPropagation();
       }}
+      highlightBackground={higlightBackground}
+      highlightColor={isActive}
       style={{
         ...(renderNode.type === 'groupStart' ? stylesStart : {}),
         ...(renderNode.type === 'groupEnd' ? stylesEnd : {}),
-        ...(isBelowActive ? activeBackground : {}),
-        ...(isActive ? stylesActive : {}),
       }}
     >
       {!isRoot && symbol}
-      {isAboveActive && <QueryPartDecorator position="below" />}
-      {is2BelowActive && <QueryPartDecorator position="above" />}
+      {renderLineBelow && <QueryPartDecorator position="below" />}
+      {renderLineAbove && <QueryPartDecorator position="above" />}
     </QueryPartContainer>
   );
 }

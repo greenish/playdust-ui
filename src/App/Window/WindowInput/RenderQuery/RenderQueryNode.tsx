@@ -1,36 +1,22 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
+import searchQueryRenderNodeMetaAtom from './_atoms/searchQueryRenderNodeMetaAtom';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
 import QueryPartDecorator from './_sharedComponents/QueryPartDecorator';
 import QueryRenderNodeType from './_types/QueryRenderNodeType';
-
-const belowActiveOperatorStyles = {
-  background: 'rgb(255,0,0, 0.08)',
-};
 
 function RenderQueryNode({
   renderNode,
   children,
 }: React.PropsWithChildren<{ renderNode: QueryRenderNodeType }>) {
-  const isAboveActive =
-    renderNode.activeDistance !== null && renderNode.activeDistance >= 0;
-  const isBelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.inActiveBranch &&
-    renderNode.activeDistance >= 1;
-  const is2BelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.inActiveBranch &&
-    renderNode.activeDistance >= 2;
+  const { higlightBackground, renderLineBelow, renderLineAbove } =
+    useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode));
 
   return (
-    <QueryPartContainer
-      style={{
-        ...(isBelowActive ? belowActiveOperatorStyles : {}),
-      }}
-    >
+    <QueryPartContainer highlightBackground={higlightBackground}>
       {children}
-      {isAboveActive && <QueryPartDecorator position="below" />}
-      {is2BelowActive && <QueryPartDecorator position="above" />}
+      {renderLineBelow && <QueryPartDecorator position="below" />}
+      {renderLineAbove && <QueryPartDecorator position="above" />}
     </QueryPartContainer>
   );
 }

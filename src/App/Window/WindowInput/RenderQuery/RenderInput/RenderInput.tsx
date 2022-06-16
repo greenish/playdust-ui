@@ -1,7 +1,10 @@
 import styled from '@emotion/styled';
 import { Tooltip } from '@mui/material';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 import GroupNodeType from '../../../_types/GroupNodeType';
+import searchQuerySelectedNodesAtom from '../../_atoms/searchQuerySelectedNodesAtom';
+import searchQueryRenderNodeMetaAtom from '../_atoms/searchQueryRenderNodeMetaAtom';
 import QueryPartContainer from '../_sharedComponents/QueryPartContainer';
 import QueryPartDecorator from '../_sharedComponents/QueryPartDecorator';
 import GroupRenderNodeType from '../_types/GroupRenderNodeType';
@@ -10,6 +13,10 @@ import useToggleGroupOperator from './_hooks/useToggleGroupOperator';
 
 const InputOperator = styled.div`
   font-weight: bold;
+  display: flex;
+  justify-content: center;
+  width: 36px;
+  cursor: pointer;
 `;
 
 type RenderInputProps = {
@@ -22,8 +29,10 @@ type RenderInputProps = {
 
 function RenderInput({ renderTextInput, renderNode }: RenderInputProps) {
   const toggleGroupOperator = useToggleGroupOperator();
-  const isAboveActive =
-    renderNode.activeDistance !== null && renderNode.activeDistance >= 0;
+  const { renderLineBelow } = useRecoilValue(
+    searchQueryRenderNodeMetaAtom(renderNode)
+  );
+  const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
 
   const [operator, oppositeOperator] =
     renderNode.node.operator === 'and' ? ['AND', 'OR'] : ['OR', 'AND'];
@@ -38,21 +47,13 @@ function RenderInput({ renderTextInput, renderNode }: RenderInputProps) {
         toggleGroupOperator(renderNode.node.id);
         e.stopPropagation();
       }}
+      highlightBackground={selectedNodes.length > 0}
     >
       <Tooltip title={`Toggle ${operator} to ${oppositeOperator}`}>
-        <InputOperator
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            width: '36px',
-            cursor: 'pointer',
-          }}
-        >
-          {`${operator}:`}
-        </InputOperator>
+        <InputOperator>{`${operator}:`}</InputOperator>
       </Tooltip>
       {renderTextInput(renderNode.node, index)}
-      {isAboveActive && <QueryPartDecorator position="below" />}
+      {renderLineBelow && <QueryPartDecorator position="below" />}
     </QueryPartContainer>
   );
 }

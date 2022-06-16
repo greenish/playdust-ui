@@ -39,6 +39,7 @@ const InputContainer = styled(Box)`
 const OverlayContainer = styled(Paper)`
   position: absolute;
   width: 100%;
+  padding-top: 8px;
 `;
 
 const EmptyContainer = styled.div`

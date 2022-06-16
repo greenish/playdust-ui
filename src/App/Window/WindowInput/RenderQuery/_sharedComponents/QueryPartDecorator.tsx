@@ -7,11 +7,11 @@ type QueryPartDecoratorProps = {
 const QueryPartDecorator = styled.div<QueryPartDecoratorProps>`
   position: absolute;
   width: 100%;
-  height: 7px;
+  height: ${({ position }) => (position === 'above' ? '1px' : '2px')};
   top: ${({ position }) => (position === 'above' ? '-7px' : 'auto')};
   bottom: ${({ position }) => (position === 'below' ? '-7px' : 'auto')};
   left: 0px;
-  background: rgb(220, 220, 220);
+  background: ${({ position }) => (position === 'below' ? '#DCE8FD' : '#276EF1')};
 `;
 
 export default QueryPartDecorator;

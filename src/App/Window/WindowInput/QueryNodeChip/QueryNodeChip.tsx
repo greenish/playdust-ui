@@ -131,7 +131,7 @@ function RenderQueryNodeChip({
         }
       }}
       sx={{
-        border: isActive ? '2px solid red' : '',
+        border: isActive ? '2px solid #276EF1' : '',
       }}
       onDelete={
         QueryNodeType.is(node) ? () => removeQueryNode(node.id) : undefined

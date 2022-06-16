@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-use';
 import { LocationSensorState } from 'react-use/lib/useLocation';
 import { useRecoilValue } from 'recoil';
+import activeWindowAtom from '../_atoms/activeWindowAtom';
 import appStateAtom from '../_atoms/appStateAtom';
 import shortId from '../_helpers/shortId';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
@@ -17,6 +18,7 @@ function AppStateProvider() {
   const setSelectedTab = useSetSelectedTab();
   const replaceWindowHash = useReplaceWindowHash();
   const newLocation = useLocation();
+  const activeWindow = useRecoilValue(activeWindowAtom);
 
   const handleLocationChange = useCallback(
     (location: LocationSensorState) => {
@@ -56,6 +58,13 @@ function AppStateProvider() {
               ...windowState,
               tabId: foundIdInCache ? shortId() : windowState.tabId,
             });
+
+            break
+          }
+
+          if (activeWindow) {
+            replaceWindowHash(activeWindow);
+            break;
           }
 
           replaceWindowHash(windowState);
@@ -88,7 +97,7 @@ function AppStateProvider() {
         default:
       }
     },
-    [addTab, replaceWindowHash, setAppWindowState, setSelectedTab, tabs]
+    [activeWindow, addTab, replaceWindowHash, setAppWindowState, setSelectedTab, tabs]
   );
 
   useEffect(() => {

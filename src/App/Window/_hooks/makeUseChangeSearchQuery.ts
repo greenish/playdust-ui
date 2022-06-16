@@ -7,8 +7,9 @@ import searchStateUncommittedAtom from '../_atoms/searchStateUncommittedAtom';
 import windowStateAtom from '../_atoms/windowStateAtom';
 import parseSearch from '../_helpers/parseSearch';
 import serializeSearch from '../_helpers/serializeSearch';
-import type ChangeSearchQueryMethodType from '../_types/ChangeSearchQueryMethodType';
 import type SearchStateType from '../_types/SearchStateType';
+
+type ChangeSearchQueryMethodType = 'router' | 'memory' | 'href';
 
 function makeUseChangeSearchQuery<GetNextStateArgs extends unknown[]>(
   useGetNextState: () => (
