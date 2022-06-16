@@ -12,7 +12,6 @@ import searchQueryRenderMapAtom from './_atoms/searchQueryRenderMapAtom';
 
 const QueryGroup = styled.div`
   display: flex;
-  padding: 8px 0;
   flex-wrap: no-wrap;
 `;
 

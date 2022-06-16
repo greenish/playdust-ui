@@ -22,7 +22,7 @@ const RootContainer = styled.div<RootContainerProps>`
   align-items: center;
   justify-content: center;
   padding: 4px 4px;
-  /* margin: 12px 0px; */
+  margin: 12px 0px;
   background: ${({ highlightBackground }) =>
     highlightBackground ? '#DCE8FD' : 'auto'};
   color: ${({ highlightColor }) => (highlightColor ? '#276EF1' : 'auto')};
