@@ -1,0 +1,155 @@
+name: api
+
+on:
+  push:
+    branches:
+      - 'amplify'
+#      - 'testing'
+#      - 'main'
+
+permissions:
+  id-token: write
+  contents: write
+
+env:
+  MODULE_NAME: ui 
+
+  TESTING_STACK_NAME: ui-testing
+  TESTING_PIPELINE_EXECUTION_ROLE: arn:aws:iam::446170235391:role/github-actions
+  TESTING_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::446170235391:role/github-actions
+  TESTING_REGION: us-east-1
+  
+  PROD_STACK_NAME: ui-prod
+  PROD_PIPELINE_EXECUTION_ROLE: arn:aws:iam::513523160844:role/github-actions
+  PROD_CLOUDFORMATION_EXECUTION_ROLE: arn:aws:iam::513523160844:role/github-actions
+  PROD_REGION: us-east-1
+
+jobs:
+  test:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          # trigger the tests here
+
+  build-and-package-testing:
+#    if: github.ref == 'refs/heads/testing'
+    if: github.ref == 'refs/heads/amplify'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+      - name: Install NPM dependencies
+        run: npm install
+      - name: Assume the testing pipeline user role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+      - name: Deploy Next.js app
+        run: npx serverless
+
+  build-and-package-prod:
+    if: github.ref == 'refs/heads/main'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Assume the prod pipeline user role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.PROD_REGION }}
+          role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: prod-packaging
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+      - name: Log in to Amazon ECR
+        id: login-prod-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build, tag and push image to Amazon ECR
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          docker build -t $PROD_ECR_REPOSITORY:$GITHUB_SHA -f api/Dockerfile .
+          docker push $PROD_ECR_REPOSITORY:$GITHUB_SHA
+      - name: Log out of Amazon ECR
+        if: always()
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}
+
+
+  deploy-testing:
+    if: github.ref == 'refs/heads/testing'
+    needs: [build-and-package-testing]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.TESTING_REGION }}
+          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: testing-deployment
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition playdust-ecs-testing \
+          --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: playdust-ecs-testing-api
+          image: ${{ env.TESTING_ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: playdust-ecs-testing-api
+          cluster: playdust-ecs-testing
+          wait-for-service-stability: true
+
+  deploy-prod:
+    if: github.ref == 'refs/heads/main'
+    needs: [build-and-package-prod]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.PROD_REGION }}
+          role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
+          role-session-name: prod-deployment
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition playdust-ecs-prod \
+          --query taskDefinition > task-definition.json
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: playdust-ecs-prod-api
+          image: ${{ env.PROD_ECR_REPOSITORY }}:${{ github.sha }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: playdust-ecs-prod-api
+          cluster: playdust-ecs-prod
+          wait-for-service-stability: true
+
+
