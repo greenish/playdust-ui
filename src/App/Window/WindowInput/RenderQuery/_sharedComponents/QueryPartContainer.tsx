@@ -7,14 +7,14 @@ import RenderMapNodeType from '../_types/RenderMapNodeType';
 type RootContainerProps = {
   highlightBackground: boolean;
   highlightColor: boolean;
-}
+};
 
 interface QueryPartContainerProps extends React.HTMLAttributes<HTMLDivElement> {
-  renderNode: RenderMapNodeType
+  renderNode: RenderMapNodeType;
   highlightBackground?: boolean;
   highlightColor?: boolean;
   disableLineAbove?: boolean;
-};
+}
 
 const RootContainer = styled.div<RootContainerProps>`
   position: relative;
@@ -40,7 +40,8 @@ const QueryPartDecorator = styled.div<QueryPartDecoratorProps>`
   top: ${({ position }) => (position === 'above' ? '-7px' : 'auto')};
   bottom: ${({ position }) => (position === 'below' ? '-7px' : 'auto')};
   left: 0px;
-  background: ${({ position }) => (position === 'below' ? '#DCE8FD' : '#276EF1')};
+  background: ${({ position }) =>
+    position === 'below' ? '#DCE8FD' : '#276EF1'};
 `;
 
 function QueryPartContainer({
@@ -52,20 +53,22 @@ function QueryPartContainer({
   style,
   onClick,
 }: QueryPartContainerProps) {
-
-  const meta = useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode))
+  const meta = useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode));
 
   return (
-  <RootContainer
-    highlightBackground={highlightBackground || meta.higlightBackground}
-    highlightColor={highlightColor || meta.isActive}
-    style={style}
-    onClick={onClick}
-  >
-    {children}
-    {meta.renderLineBelow && <QueryPartDecorator position="below" />}
-    {!disableLineAbove && meta.renderLineAbove && <QueryPartDecorator position="above" />}
-  </RootContainer>)
+    <RootContainer
+      highlightBackground={highlightBackground || meta.higlightBackground}
+      highlightColor={highlightColor || meta.isActive}
+      style={style}
+      onClick={onClick}
+    >
+      {children}
+      {meta.renderLineBelow && <QueryPartDecorator position="below" />}
+      {!disableLineAbove && meta.renderLineAbove && (
+        <QueryPartDecorator position="above" />
+      )}
+    </RootContainer>
+  );
 }
 
 export default QueryPartContainer;

@@ -71,12 +71,15 @@ const useWindowInputKeyEvent = () => {
           if (activeNodeMeta.nodeId !== rootNode.id) {
             return setActiveNodeMeta({
               ...activeNodeMeta,
-              endIndex: activeNodeMeta.endIndex === undefined ? 0 : activeNodeMeta.endIndex,
+              endIndex:
+                activeNodeMeta.endIndex === undefined
+                  ? 0
+                  : activeNodeMeta.endIndex,
               isGroupSelected: true,
             });
           }
 
-          return
+          return;
         }
 
         const offset = isLeft ? 0 : 1;

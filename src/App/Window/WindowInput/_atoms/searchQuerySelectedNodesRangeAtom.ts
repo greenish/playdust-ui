@@ -1,6 +1,6 @@
-import { selector } from "recoil";
-import searchQueryActiveNodeMetaAtom from "../../_atoms/searchQueryActiveNodeMetaAtom";
-import searchQueryActiveNodeAtom from "./searchQueryActiveNodeAtom";
+import { selector } from 'recoil';
+import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
+import searchQueryActiveNodeAtom from './searchQueryActiveNodeAtom';
 
 const searchQuerySelectedNodesRangeAtom = selector<[number, number] | null>({
   key: 'searchQuerySelectedNodesRangeAtom',
@@ -19,10 +19,13 @@ const searchQuerySelectedNodesRangeAtom = selector<[number, number] | null>({
     }
 
     const { index, endIndex } = activeNodeMeta;
-    const range: [number, number] = [Math.min(index, endIndex), Math.max(index, endIndex)];
+    const range: [number, number] = [
+      Math.min(index, endIndex),
+      Math.max(index, endIndex),
+    ];
 
     return range;
   },
-})
+});
 
-export default searchQuerySelectedNodesRangeAtom
+export default searchQuerySelectedNodesRangeAtom;

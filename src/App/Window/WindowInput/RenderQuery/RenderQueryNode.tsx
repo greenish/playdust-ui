@@ -7,9 +7,7 @@ function RenderQueryNode({
   children,
 }: React.PropsWithChildren<{ renderNode: QueryRenderNodeType }>) {
   return (
-    <QueryPartContainer renderNode={renderNode}>
-      {children}
-    </QueryPartContainer>
+    <QueryPartContainer renderNode={renderNode}>{children}</QueryPartContainer>
   );
 }
 

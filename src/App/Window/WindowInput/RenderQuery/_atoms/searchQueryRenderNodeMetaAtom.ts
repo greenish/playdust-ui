@@ -1,10 +1,10 @@
 import { selectorFamily } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
-import searchQueryPathToRootAtom from '../../../_atoms/searchQueryPathToRootAtom';
 import searchStateAtom from '../../../_atoms/searchStateAtom';
 import GroupNodeType from '../../../_types/GroupNodeType';
 import searchQuerySelectedNodesAtom from '../../_atoms/searchQuerySelectedNodesAtom';
 import RenderMapNodeType from '../_types/RenderMapNodeType';
+import searchQueryPathToRootAtom from './searchQueryPathToRootAtom';
 
 type SearchQueryRenderNodeMetaAtomType = {
   isActive: boolean;
@@ -37,10 +37,9 @@ const searchQueryRenderNodeIsSelectedAtom = selectorFamily<
         ? renderNode.node.id
         : renderNode.parent && renderNode.parent.id;
 
-      const intersections = selectedNodes
-        .filter((selected) =>
-          pathToRoot.includes(selected)
-        );
+      const intersections = selectedNodes.filter((selected) =>
+        pathToRoot.includes(selected)
+      );
 
       if (
         activeNodeMeta?.type === 'group' &&

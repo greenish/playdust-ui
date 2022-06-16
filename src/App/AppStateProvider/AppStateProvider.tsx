@@ -59,7 +59,7 @@ function AppStateProvider() {
               tabId: foundIdInCache ? shortId() : windowState.tabId,
             });
 
-            break
+            break;
           }
 
           if (activeWindow) {
@@ -97,7 +97,14 @@ function AppStateProvider() {
         default:
       }
     },
-    [activeWindow, addTab, replaceWindowHash, setAppWindowState, setSelectedTab, tabs]
+    [
+      activeWindow,
+      addTab,
+      replaceWindowHash,
+      setAppWindowState,
+      setSelectedTab,
+      tabs,
+    ]
   );
 
   useEffect(() => {

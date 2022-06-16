@@ -20,7 +20,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const { query } = useRecoilValue(searchStateAtom);
   const getUpdateSearchQuery = useGetUpdateSearchQuery();
-  const selectionRange = useRecoilValue(searchQuerySelectedNodesRangeAtom)
+  const selectionRange = useRecoilValue(searchQuerySelectedNodesRangeAtom);
 
   const getNextState = useCallback(
     (
@@ -30,7 +30,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
         return null;
       }
 
-      const [startIdx, endIdx] = selectionRange
+      const [startIdx, endIdx] = selectionRange;
       const newId = shortId();
 
       const isRootNode = activeNode.id === rootNode?.id;
@@ -112,7 +112,14 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
       };
     },
     // eslint-disable-next-line
-    [activeNode, activeNodeMeta, activeNodeMeta?.type, getUpdateSearchQuery, query, rootNode?.id]
+    [
+      activeNode,
+      activeNodeMeta,
+      activeNodeMeta?.type,
+      getUpdateSearchQuery,
+      query,
+      rootNode?.id,
+    ]
   );
 
   return (operator: GroupNodeType['operator']) => {

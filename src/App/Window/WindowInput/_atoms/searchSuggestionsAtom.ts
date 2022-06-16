@@ -36,7 +36,7 @@ const searchSuggestionsAtom = selector<SearchSuggestionAtomType>({
       return {
         loading: false,
         suggestions: selectionSuggestions,
-      }
+      };
     }
 
     if (term.length > 0) {

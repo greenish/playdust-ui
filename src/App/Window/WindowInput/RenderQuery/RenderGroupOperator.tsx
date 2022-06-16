@@ -18,8 +18,9 @@ function RenderGroupOperator({
   const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
     searchQueryActiveNodeMetaAtom
   );
-  const { isActive } =
-    useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode));
+  const { isActive } = useRecoilValue(
+    searchQueryRenderNodeMetaAtom(renderNode)
+  );
 
   const isBelowOperator =
     renderNode.activeDistance !== null &&
