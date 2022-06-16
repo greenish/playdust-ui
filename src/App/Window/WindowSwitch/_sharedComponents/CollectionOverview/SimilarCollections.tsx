@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import {
   Box,
   lighten,
@@ -11,11 +12,21 @@ import {
   useTheme,
 } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
 import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import CollectionOverviewResponseType from '../../_types/CollectionOverviewResponseType';
+
+const VerticalTrack = styled.div`
+  position: absolute;
+  width: 6px;
+  right: 2px;
+  bottom: 2px;
+  top: 37px;
+  border-radius: 3px;
+`;
 
 type Column = {
   label: string;
@@ -90,13 +101,16 @@ function SimilarCollections({
         <Typography sx={{ p: '8px 16px', backgroundColor: '#F6F6F6' }}>
           Similar NFT Collections found
         </Typography>
-        <Box sx={{ width: '100%', overflow: 'auto' }}>
+        <Scrollbars
+          autoHide={true}
+          autoHeight={true}
+          renderTrackVertical={() => <VerticalTrack />}
+        >
           <Table
             stickyHeader={true}
             size="small"
             sx={{
               backgroundColor: 'white',
-              overflow: 'auto',
             }}
           >
             <TableHead>
@@ -155,7 +169,7 @@ function SimilarCollections({
               })}
             </TableBody>
           </Table>
-        </Box>
+        </Scrollbars>
       </Box>
     )
   );
