@@ -4,9 +4,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import GroupNodeType from '../../../_types/GroupNodeType';
 import searchQuerySelectedNodesAtom from '../../_atoms/searchQuerySelectedNodesAtom';
-import searchQueryRenderNodeMetaAtom from '../_atoms/searchQueryRenderNodeMetaAtom';
 import QueryPartContainer from '../_sharedComponents/QueryPartContainer';
-import QueryPartDecorator from '../_sharedComponents/QueryPartDecorator';
 import GroupRenderNodeType from '../_types/GroupRenderNodeType';
 import GroupRenderOperatorNodeType from '../_types/GroupRenderOperatorNodeType';
 import useToggleGroupOperator from './_hooks/useToggleGroupOperator';
@@ -29,9 +27,6 @@ type RenderInputProps = {
 
 function RenderInput({ renderTextInput, renderNode }: RenderInputProps) {
   const toggleGroupOperator = useToggleGroupOperator();
-  const { renderLineBelow } = useRecoilValue(
-    searchQueryRenderNodeMetaAtom(renderNode)
-  );
   const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
 
   const [operator, oppositeOperator] =
@@ -48,12 +43,12 @@ function RenderInput({ renderTextInput, renderNode }: RenderInputProps) {
         e.stopPropagation();
       }}
       highlightBackground={selectedNodes.length > 0}
+      renderNode={renderNode}
     >
       <Tooltip title={`Toggle ${operator} to ${oppositeOperator}`}>
         <InputOperator>{`${operator}:`}</InputOperator>
       </Tooltip>
       {renderTextInput(renderNode.node, index)}
-      {renderLineBelow && <QueryPartDecorator position="below" />}
     </QueryPartContainer>
   );
 }

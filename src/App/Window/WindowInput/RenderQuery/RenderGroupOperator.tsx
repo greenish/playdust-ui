@@ -3,7 +3,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRenderNodeMetaAtom from './_atoms/searchQueryRenderNodeMetaAtom';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
-import QueryPartDecorator from './_sharedComponents/QueryPartDecorator';
 import GroupRenderOperatorNodeType from './_types/GroupRenderOperatorNodeType';
 
 const secondaryHighlight = {
@@ -19,7 +18,7 @@ function RenderGroupOperator({
   const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
     searchQueryActiveNodeMetaAtom
   );
-  const { renderLineBelow, higlightBackground, renderLineAbove, isActive } =
+  const { isActive } =
     useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode));
 
   const isBelowOperator =
@@ -51,16 +50,13 @@ function RenderGroupOperator({
         });
         evt.stopPropagation();
       }}
-      highlightBackground={higlightBackground}
-      highlightColor={isActive}
       style={{
         width: '36px',
         ...(isBelowOperator || isAboveOperator ? secondaryHighlight : {}),
       }}
+      renderNode={renderNode}
     >
       {renderNode.node.operator.toUpperCase()}
-      {renderLineBelow && <QueryPartDecorator position="below" />}
-      {renderLineAbove && <QueryPartDecorator position="above" />}
     </QueryPartContainer>
   );
 }

@@ -12,6 +12,7 @@ import searchQueryRenderMapAtom from './_atoms/searchQueryRenderMapAtom';
 
 const QueryGroup = styled.div`
   display: flex;
+  padding: 8px 0;
   flex-wrap: no-wrap;
 `;
 
@@ -36,6 +37,9 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
         <QueryGroup key={renderMap.map((entry) => entry.node.id).join(':')}>
           {renderMap.map((renderNode) => {
             const key = `${renderNode.type}:${renderNode.node.id}`;
+            const shouldRenderTextInput =
+              activeNodeMeta?.type === 'group' &&
+              activeNodeMeta?.nodeId === renderNode.node.id;
 
             switch (renderNode.type) {
               case 'groupStart':
@@ -43,8 +47,7 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
               case 'groupEnd':
                 return (
                   <Fragment key={key}>
-                    {activeNodeMeta?.type === 'group' &&
-                      activeNodeMeta?.nodeId === renderNode.node.id &&
+                    {shouldRenderTextInput &&
                       activeNodeMeta?.index ===
                         renderNode.node.children.length && (
                         <RenderInput
@@ -58,8 +61,7 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
               case 'groupOperator': {
                 return (
                   <Fragment key={key}>
-                    {activeNodeMeta?.type === 'group' &&
-                      activeNodeMeta?.nodeId === renderNode.node.id &&
+                    {shouldRenderTextInput &&
                       activeNodeMeta?.index === renderNode.index && (
                         <RenderInput
                           renderNode={renderNode}

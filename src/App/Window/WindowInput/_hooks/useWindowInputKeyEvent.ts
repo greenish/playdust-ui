@@ -48,7 +48,6 @@ const useWindowInputKeyEvent = () => {
           const atEnd = isLeft
             ? nextEndIdx === -1
             : nextEndIdx === node.children.length + 1;
-          console.log('made it')
 
           if (isGroupSelected && atEnd) {
             return;
