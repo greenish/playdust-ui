@@ -45,6 +45,7 @@ jobs:
           node-version: 14
       - name: Install NPM dependencies
         run: npm install
+        run: npm install -g @serverless/cli
       - name: Assume the testing pipeline user role
         uses: aws-actions/configure-aws-credentials@v1
         with:
