@@ -1,4 +1,5 @@
 import React from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
@@ -27,7 +28,7 @@ import ContentContainer from './_sharedComponents/ContentContainer';
 
 function Address() {
   return (
-    <>
+    <Scrollbars autoHide={true}>
       {/* Special Account Views */}
       <SuspenseBoundary
         content={<NFTTradingModule />}
@@ -155,7 +156,7 @@ function Address() {
           content={<Transactions />}
         />
       </ContentContainer>
-    </>
+    </Scrollbars>
   );
 }
 
