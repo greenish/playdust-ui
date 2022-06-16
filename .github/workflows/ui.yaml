@@ -56,7 +56,7 @@ jobs:
           role-duration-seconds: 3600
           role-skip-session-tagging: true
       - name: Deploy Next.js app
-        run: npx serverless
+        run: components-v1 npx serverless
 
   build-and-package-prod:
     if: github.ref == 'refs/heads/main'
