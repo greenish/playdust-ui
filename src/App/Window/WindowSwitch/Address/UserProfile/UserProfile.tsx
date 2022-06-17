@@ -9,7 +9,7 @@ function UserProfile() {
   const isWallet = useIsWallet();
   const isCurrentUser = useRecoilValue(isCurrentUserAtom);
 
-  if (!isWallet) {
+  if (!isWallet && !isCurrentUser) {
     return null;
   }
 

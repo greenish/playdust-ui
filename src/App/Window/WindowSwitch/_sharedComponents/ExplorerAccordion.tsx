@@ -13,7 +13,7 @@ type ExplorerAccordionPropTypes = {
   content: JSX.Element;
   expanded?: boolean;
   onChange?: AccordionProps['onChange'];
-  itemType?: 'table';
+  className?: string;
   expandIcon?: React.ReactNode;
 };
 
@@ -27,7 +27,7 @@ function ExplorerAccordion({
   content,
   expanded = false,
   onChange,
-  itemType,
+  className,
   expandIcon,
 }: ExplorerAccordionPropTypes) {
   const [accordionState, setAccordionState] = useState({
@@ -40,7 +40,7 @@ function ExplorerAccordion({
 
   return (
     <Accordion
-      itemType={itemType}
+      className={className}
       expanded={currentlyExpanded}
       onChange={(e, isExpanded) => {
         setAccordionState({

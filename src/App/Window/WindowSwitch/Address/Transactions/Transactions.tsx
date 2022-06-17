@@ -87,6 +87,10 @@ function Transactions() {
     setLoadingMore(false);
   }, [fetchMoreTransactions, setLoadingMore]);
 
+  if (!transactions.length) {
+    return <i>No Transactions found...</i>;
+  }
+
   return (
     <>
       <TableContainer>

@@ -4,6 +4,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
+import CardImageContainer from '../../../_sharedComponents/CardImageContainer';
 
 const BlurImage = styled.img`
   filter: blur(1.5rem);
@@ -20,7 +21,7 @@ const VisibilityContainer = styled.div`
   z-index: 10;
 `;
 
-function NFTDetailsRenderMedia() {
+function NFTDetailsRenderMedia({ imageSize }: { imageSize: number }) {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
   const [visible, setVisible] = useState(false);
 
@@ -42,21 +43,17 @@ function NFTDetailsRenderMedia() {
         )}
       </VisibilityContainer>
       {visible ? (
-        <img
-          alt={offChainData.name || ''}
-          src={offChainData.image}
-          height={300}
-        />
+        <CardImageContainer src={offChainData.image} imageSize={imageSize} />
       ) : (
         <BlurImage
           alt={offChainData.name || ''}
           src={offChainData.image}
-          height={300}
+          height={imageSize}
         />
       )}
     </BlurImageContainer>
   ) : (
-    <img alt={offChainData.name || ''} src={offChainData.image} height={300} />
+    <CardImageContainer src={offChainData.image} imageSize={imageSize} />
   );
 }
 

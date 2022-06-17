@@ -4,36 +4,44 @@ import React, {
   PropsWithChildren,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 import getCDNUrl from '../_helpers/getCDNUrl';
 import safePromise from '../_helpers/safePromise';
 
-function usePreloadImages(images: string[] = []) {
-  const [isLoaded, setIsLoaded] = useState(false);
+function usePreloadImages(images?: string[]) {
+  const [loadedImages, setLoadedImages] = useState<string[]>(
+    images ? [images[0]] : []
+  );
+
+  const loadImages = useCallback(
+    async (imagesToLoad: string[]) => {
+      const loaded = await Promise.all(
+        imagesToLoad.map(
+          (image) =>
+            new Promise<string>((resolve) => {
+              const img = new Image();
+
+              img.src = getCDNUrl(image);
+              img.onload = () => resolve(image);
+              img.onerror = () => resolve('');
+            })
+        )
+      );
+      setLoadedImages(loaded.filter(Boolean));
+    },
+    [setLoadedImages]
+  );
 
   useEffect(() => {
-    const loadImages = async () => {
-      const promises = images.map(
-        (image) =>
-          new Promise<void>((resolve) => {
-            const img = new Image();
+    if (images) {
+      safePromise(loadImages(images));
+    } else {
+      setLoadedImages([]);
+    }
+  }, [images, loadImages]);
 
-            img.src = getCDNUrl(image);
-            img.onload = () => resolve();
-            img.onerror = () => resolve();
-          })
-      );
-
-      await Promise.all(promises);
-      setIsLoaded(true);
-    };
-
-    safePromise(loadImages());
-  }, [images, setIsLoaded]);
-
-  return isLoaded;
+  return images && loadedImages;
 }
 
 type SizedButtonProps = PropsWithChildren<{
@@ -50,13 +58,7 @@ function ImageButton({
   onClick,
   children,
 }: SizedButtonProps) {
-  const isLoaded = usePreloadImages(images);
-
-  const loadedImages = useMemo(() => {
-    if (images) {
-      return isLoaded ? images : [images[0]];
-    }
-  }, [images, isLoaded]);
+  const loadedImages = usePreloadImages(images);
 
   const sx = useCallback(
     (theme: Theme) => {
