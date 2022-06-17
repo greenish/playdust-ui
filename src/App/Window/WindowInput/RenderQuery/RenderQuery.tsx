@@ -2,8 +2,6 @@ import styled from '@emotion/styled';
 import React, { Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
-import GroupNodeType from '../../_types/GroupNodeType';
-import QueryNodeType from '../../_types/QueryNodeType';
 import RenderGroupEnds from './RenderGroupEnds';
 import RenderGroupOperator from './RenderGroupOperator';
 import RenderInput from './RenderInput/RenderInput';
@@ -16,17 +14,10 @@ const QueryGroup = styled.div`
 `;
 
 type RenderQueryProps = {
-  renderTextInput: (
-    groupNode: GroupNodeType,
-    groupIndex: number
-  ) => JSX.Element | null;
-  renderQueryNode: (
-    queryNode: QueryNodeType,
-    groupNode: GroupNodeType
-  ) => JSX.Element | null;
+  textInput: JSX.Element;
 };
 
-function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
+function RenderQuery({ textInput }: RenderQueryProps) {
   const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
   const groupedRenderMap = useRecoilValue(searchQueryRenderMapAtom);
 
@@ -51,7 +42,7 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
                         renderNode.node.children.length && (
                         <RenderInput
                           renderNode={renderNode}
-                          renderTextInput={renderTextInput}
+                          textInput={textInput}
                         />
                       )}
                     <RenderGroupEnds renderNode={renderNode} />
@@ -64,7 +55,7 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
                       activeNodeMeta?.index === renderNode.index && (
                         <RenderInput
                           renderNode={renderNode}
-                          renderTextInput={renderTextInput}
+                          textInput={textInput}
                         />
                       )}
                     <RenderGroupOperator renderNode={renderNode} />
@@ -73,9 +64,11 @@ function RenderQuery({ renderTextInput, renderQueryNode }: RenderQueryProps) {
               }
               case 'query':
                 return (
-                  <RenderQueryNode key={key} renderNode={renderNode}>
-                    {renderQueryNode(renderNode.node, renderNode.parent)}
-                  </RenderQueryNode>
+                  <RenderQueryNode
+                    key={key}
+                    renderNode={renderNode}
+                    textInput={textInput}
+                  />
                 );
               default:
                 return null;

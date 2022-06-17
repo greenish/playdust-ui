@@ -95,49 +95,53 @@ function WindowInput() {
     highlightedIndex: activeIdx,
   });
 
-  const textInput = (
-    <AutosizeInput
-      key="auto-size-input"
-      inputStyle={{
-        fontFamily: 'inherit',
-        border: 'none',
-        outline: 'none',
-        background: 'inherit',
-      }}
-      inputRef={setInputRef}
-      value={term}
-      placeholder={rootNode ? undefined : 'Search...'}
-      onChange={(evt) => {
-        if (activeIdx !== 0) {
-          setActiveIdx(0);
-        }
-        setTerm(evt.target.value);
-        setDebouncedTerm(evt.target.value);
-      }}
-      autoFocus={true}
-      onClick={(e) => e.stopPropagation()}
-      onBlur={() => {
-        if (suggestions.length > 0) {
-          inputRef?.current?.focus();
-        }
-      }}
-      onKeyDown={(evt) => {
-        switch (evt.key) {
-          case 'ArrowUp':
-            return setActiveIdx(
-              activeIdx === 0 ? lastSuggestionIdx : activeIdx - 1
-            );
-          case 'ArrowDown':
-            return setActiveIdx(
-              activeIdx === lastSuggestionIdx ? 0 : activeIdx + 1
-            );
-          case 'Enter':
-            return onSuggestionChange(suggestions[highlightedIndex]);
-          default:
-        }
-      }}
+  const TextInput = React.memo(() => (
+    <QueryNodeChip
+      textInput={
+        <AutosizeInput
+          key="auto-size-input"
+          inputStyle={{
+            fontFamily: 'inherit',
+            border: 'none',
+            outline: 'none',
+            background: 'inherit',
+          }}
+          inputRef={setInputRef}
+          value={term}
+          placeholder={rootNode ? undefined : 'Search...'}
+          onChange={(evt) => {
+            if (activeIdx !== 0) {
+              setActiveIdx(0);
+            }
+            setTerm(evt.target.value);
+            setDebouncedTerm(evt.target.value);
+          }}
+          autoFocus={true}
+          onClick={(e) => e.stopPropagation()}
+          onBlur={() => {
+            if (suggestions.length > 0) {
+              inputRef?.current?.focus();
+            }
+          }}
+          onKeyDown={(evt) => {
+            switch (evt.key) {
+              case 'ArrowUp':
+                return setActiveIdx(
+                  activeIdx === 0 ? lastSuggestionIdx : activeIdx - 1
+                );
+              case 'ArrowDown':
+                return setActiveIdx(
+                  activeIdx === lastSuggestionIdx ? 0 : activeIdx + 1
+                );
+              case 'Enter':
+                return onSuggestionChange(suggestions[highlightedIndex]);
+              default:
+            }
+          }}
+        />
+      }
     />
-  );
+  ));
 
   const rowRenderer = useCallback<ListRowRenderer>(
     ({ index, key, style }) => {
@@ -200,13 +204,12 @@ function WindowInput() {
       >
         {rootNode ? (
           <RenderQuery
-            renderQueryNode={(queryNode) => (
-              <QueryNodeChip node={queryNode} textInput={textInput} />
-            )}
-            renderTextInput={() => <QueryNodeChip textInput={textInput} />}
+            textInput={<TextInput />}
           />
         ) : (
-          <EmptyContainer>{textInput}</EmptyContainer>
+          <EmptyContainer>
+            <TextInput />
+          </EmptyContainer>
         )}
       </InputContainer>
       <OverlayContainer elevation={isOpen ? 8 : 0} {...getMenuProps()}>

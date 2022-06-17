@@ -1,13 +1,24 @@
 import React from 'react';
+import QueryNodeChip from '../QueryNodeChip/QueryNodeChip';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
 import QueryRenderNodeType from './_types/QueryRenderNodeType';
 
+type RenderQueryNodeProps = {
+  renderNode: QueryRenderNodeType
+  textInput: JSX.Element
+}
+
 function RenderQueryNode({
   renderNode,
-  children,
-}: React.PropsWithChildren<{ renderNode: QueryRenderNodeType }>) {
+  textInput
+}: RenderQueryNodeProps) {
   return (
-    <QueryPartContainer renderNode={renderNode}>{children}</QueryPartContainer>
+    <QueryPartContainer renderNode={renderNode}>
+      <QueryNodeChip
+        node={renderNode.node}
+        textInput={textInput}
+      />
+    </QueryPartContainer>
   );
 }
 
