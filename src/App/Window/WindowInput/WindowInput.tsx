@@ -103,10 +103,10 @@ function WindowInput() {
       value={term}
       placeholder={rootNode ? undefined : 'Search...'}
       onChange={(evt) => {
-        const { value } = evt.target
+        const { value } = evt.target;
 
         if (value.includes('(') || value.includes(')')) {
-          return
+          return;
         }
 
         if (activeIdx !== 0) {

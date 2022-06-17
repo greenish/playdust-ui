@@ -29,7 +29,7 @@ function RenderInput({ renderChipInput, renderNode }: RenderInputProps) {
     renderNode.node.operator === 'and' ? ['AND', 'OR'] : ['OR', 'AND'];
 
   if (selectedNodes.length > 0) {
-    return null
+    return null;
   }
 
   return (

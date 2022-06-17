@@ -4,9 +4,9 @@ import QueryPartContainer from './_sharedComponents/QueryPartContainer';
 import QueryRenderNodeType from './_types/QueryRenderNodeType';
 
 type RenderQueryNodeProps = {
-  renderNode: QueryRenderNodeType
-  renderChipInput: (queryNode: QueryNodeType) => JSX.Element
-}
+  renderNode: QueryRenderNodeType;
+  renderChipInput: (queryNode: QueryNodeType) => JSX.Element;
+};
 
 function RenderQueryNode({
   renderNode,

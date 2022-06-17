@@ -161,21 +161,21 @@ const useHandleUD = () => {
   const lastSuggestionIdx = suggestions.length - 1;
 
   return (isUp: boolean) => {
-    const nextUpValue = activeIdx === 0 ? lastSuggestionIdx : activeIdx - 1
-    const nextDownValue = activeIdx === lastSuggestionIdx ? 0 : activeIdx + 1
-    const nextValue = isUp ? nextUpValue : nextDownValue
+    const nextUpValue = activeIdx === 0 ? lastSuggestionIdx : activeIdx - 1;
+    const nextDownValue = activeIdx === lastSuggestionIdx ? 0 : activeIdx + 1;
+    const nextValue = isUp ? nextUpValue : nextDownValue;
 
     setActiveIdx(nextValue);
   };
 };
 
 const useHandleEnter = () => {
-  const onSuggestionChange = useOnSuggestionChange()
-  const activeIdx = useRecoilValue(searchSuggestionIdxAtom)
+  const onSuggestionChange = useOnSuggestionChange();
+  const activeIdx = useRecoilValue(searchSuggestionIdxAtom);
   const { suggestions } = useRecoilValue(searchSuggestionsAtom);
 
-  return () => onSuggestionChange(suggestions[activeIdx])
-}
+  return () => onSuggestionChange(suggestions[activeIdx]);
+};
 
 const handleZ = (evt: KeyboardEvent) => {
   if (evt.metaKey && evt.shiftKey) {
@@ -185,41 +185,41 @@ const handleZ = (evt: KeyboardEvent) => {
   if (evt.metaKey) {
     return window.history.back();
   }
-}
+};
 
 const useHandleBackspace = () => {
-  const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom)
-  const removeSelection = useRemoveSelection()
+  const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
+  const removeSelection = useRemoveSelection();
 
   return () => {
     if (selectedNodes.length) {
-      removeSelection()
+      removeSelection();
     }
-  }
-}
+  };
+};
 
 const useHandleGroupChar = () => {
-  const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom)
-  const addGroupQueryNode = useAddGroupQueryNode()
+  const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
+  const addGroupQueryNode = useAddGroupQueryNode();
 
   return () => {
     if (activeNodeMeta?.type !== 'group') {
-      return
+      return;
     }
 
     if (activeNodeMeta.endIndex !== undefined) {
-      return addGroupQueryNode()
+      return addGroupQueryNode();
     }
-  }
-}
+  };
+};
 
 const useWindowInputKeyEvent = () => {
   const handleLR = useHandleLR();
   const handleShiftLR = useHandleShiftLR();
-  const handleUD = useHandleUD()
-  const handleEnter = useHandleEnter()
-  const handleBackspace = useHandleBackspace()
-  const handleGroupChar = useHandleGroupChar()
+  const handleUD = useHandleUD();
+  const handleEnter = useHandleEnter();
+  const handleBackspace = useHandleBackspace();
+  const handleGroupChar = useHandleGroupChar();
 
   const onKeyDown = useCallback(
     (evt: KeyboardEvent) => {
@@ -249,7 +249,14 @@ const useWindowInputKeyEvent = () => {
         default:
       }
     },
-    [handleBackspace, handleEnter, handleGroupChar, handleLR, handleShiftLR, handleUD]
+    [
+      handleBackspace,
+      handleEnter,
+      handleGroupChar,
+      handleLR,
+      handleShiftLR,
+      handleUD,
+    ]
   );
 
   useEvent('keydown', onKeyDown);

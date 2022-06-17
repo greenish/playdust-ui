@@ -11,7 +11,7 @@ const searchTopAggregationsFetchAtom = selector<SearchAggResponseType>({
     const { query } = get(searchStateAtom);
 
     if (query.rootId === '') {
-      return []
+      return [];
     }
 
     const { data } = await frontendApi.post<SearchAggResponseType>(

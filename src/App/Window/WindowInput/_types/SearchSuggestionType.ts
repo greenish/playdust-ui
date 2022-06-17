@@ -1,5 +1,4 @@
 import { WindowUnionType } from '../../../_types/WindowUnionType';
-import GroupNodeType from '../../_types/GroupNodeType';
 
 type SearchSuggestionType =
   | {

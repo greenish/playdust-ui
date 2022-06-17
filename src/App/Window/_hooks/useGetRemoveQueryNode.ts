@@ -15,9 +15,7 @@ function flattenNodes(nodes: SearchQueryType['nodes'], id: string): string[] {
     return [node.id];
   }
 
-  return [
-    ...node.children.flatMap((childId) => flattenNodes(nodes, childId)),
-  ];
+  return [...node.children.flatMap((childId) => flattenNodes(nodes, childId))];
 }
 
 const useGetRemoveQueryNode = () => {
@@ -49,17 +47,11 @@ const useGetRemoveQueryNode = () => {
     const ids = typeof removalIds === 'string' ? [removalIds] : removalIds;
     const expandedIds = ids.reduce<string[]>((acc, curr) => {
       if (GroupNodeType.is(searchState.query.nodes[curr])) {
-        return [
-          ...acc,
-          ...flattenNodes(searchState.query.nodes, curr),
-        ]
+        return [...acc, ...flattenNodes(searchState.query.nodes, curr)];
       }
 
-      return [
-        ...acc,
-        curr,
-      ]
-    }, [])
+      return [...acc, curr];
+    }, []);
 
     return expandedIds.reduce<RemovalReturnType>((acc, removalId) => {
       const parentId = parentMap[removalId];

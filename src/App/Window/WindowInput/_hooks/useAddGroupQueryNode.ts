@@ -21,14 +21,12 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
   const selectionRange = useRecoilValue(searchQuerySelectedNodesRangeAtom);
 
   const getNextState = useCallback(
-    (
-      newId: string,
-    ): { query: SearchQueryType; index: number } | null => {
+    (newId: string): { query: SearchQueryType; index: number } | null => {
       if (!selectionRange || activeNode?.type !== 'group') {
         return null;
       }
 
-      const operator = activeNode.operator === 'and' ? 'or' : 'and'
+      const operator = activeNode.operator === 'and' ? 'or' : 'and';
 
       const [startIdx, endIdx] = selectionRange;
 

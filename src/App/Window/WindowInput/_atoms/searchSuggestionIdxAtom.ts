@@ -1,8 +1,8 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
 const searchSuggestionIdxAtom = atom({
   key: 'searchSuggestionIdxAtom',
   default: 0,
-})
+});
 
-export default searchSuggestionIdxAtom
+export default searchSuggestionIdxAtom;

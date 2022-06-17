@@ -74,25 +74,26 @@ function AttributeFilters() {
   const toggleAttribute = useToggleTopLevelAttributeNode();
 
   const originalSortOrder = useMemo(() => {
-    const copy = [...attributes]
+    const copy = [...attributes];
 
-    return copy.sort((a, b) => {
-      const aHasChecked = !!a.values.find((entry) => entry.checked);
-      const bHasChecked = !!b.values.find((entry) => entry.checked);
+    return copy
+      .sort((a, b) => {
+        const aHasChecked = !!a.values.find((entry) => entry.checked);
+        const bHasChecked = !!b.values.find((entry) => entry.checked);
 
-      return Number(bHasChecked) - Number(aHasChecked);
-    }).map(entry => entry.key);
+        return Number(bHasChecked) - Number(aHasChecked);
+      })
+      .map((entry) => entry.key);
   }, []); // eslint-disable-line
-
 
   return (
     <RootContainer autoHide={true}>
       <ContentContainer>
-        {originalSortOrder.map(sortKey => {
-          const attribute = attributes.find(entry => entry.key === sortKey)
+        {originalSortOrder.map((sortKey) => {
+          const attribute = attributes.find((entry) => entry.key === sortKey);
 
           if (!attribute) {
-            return null
+            return null;
           }
 
           return (
@@ -132,7 +133,7 @@ function AttributeFilters() {
                 });
               }}
             />
-          )
+          );
         })}
       </ContentContainer>
     </RootContainer>
