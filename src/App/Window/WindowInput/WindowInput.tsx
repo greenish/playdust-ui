@@ -3,7 +3,7 @@ import { Box, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { useSelect } from 'downshift';
 import parse from 'html-react-parser';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
 import { AutoSizer, ListRowRenderer } from 'react-virtualized';
@@ -16,6 +16,7 @@ import RenderQuery from './RenderQuery/RenderQuery';
 import VirtualizedList from './VirtualizedList';
 import searchQueryDebouncedTermAtom from './_atoms/searchQueryDebouncedTermAtom';
 import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
+import searchSuggestionIdxAtom from './_atoms/searchSuggestionIdxAtom';
 import searchSuggestionsAtom from './_atoms/searchSuggestionsAtom';
 import useOnSuggestionChange from './_hooks/useOnSuggestionChange';
 import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
@@ -68,9 +69,8 @@ function WindowInput() {
     inputRef.current = inputElement;
   }, []);
 
-  const [activeIdx, setActiveIdx] = useState(0);
+  const [activeIdx, setActiveIdx] = useRecoilState(searchSuggestionIdxAtom);
   const { suggestions, loading } = useRecoilValue(searchSuggestionsAtom);
-  const lastSuggestionIdx = suggestions.length - 1;
   const onSuggestionChange = useOnSuggestionChange();
 
   useClickAway(containerRef, () => {
@@ -79,74 +79,56 @@ function WindowInput() {
 
   useEffect(() => {
     setActiveIdx(0);
-  }, [activeNodeMeta]);
+  }, [activeNodeMeta, setActiveIdx]);
 
   useWindowInputKeyEvent();
 
-  const {
-    isOpen,
-    getItemProps,
-    getToggleButtonProps,
-    getMenuProps,
-    highlightedIndex,
-  } = useSelect({
-    items: suggestions,
-    isOpen: suggestions.length > 0,
-    highlightedIndex: activeIdx,
-  });
+  const { isOpen, getItemProps, getToggleButtonProps, getMenuProps } =
+    useSelect({
+      items: suggestions,
+      isOpen: suggestions.length > 0,
+      highlightedIndex: activeIdx,
+    });
 
   const TextInput = React.memo(() => (
-    <QueryNodeChip
-      textInput={
-        <AutosizeInput
-          key="auto-size-input"
-          inputStyle={{
-            fontFamily: 'inherit',
-            border: 'none',
-            outline: 'none',
-            background: 'inherit',
-          }}
-          inputRef={setInputRef}
-          value={term}
-          placeholder={rootNode ? undefined : 'Search...'}
-          onChange={(evt) => {
-            if (activeIdx !== 0) {
-              setActiveIdx(0);
-            }
-            setTerm(evt.target.value);
-            setDebouncedTerm(evt.target.value);
-          }}
-          autoFocus={true}
-          onClick={(e) => e.stopPropagation()}
-          onBlur={() => {
-            if (suggestions.length > 0) {
-              inputRef?.current?.focus();
-            }
-          }}
-          onKeyDown={(evt) => {
-            switch (evt.key) {
-              case 'ArrowUp':
-                return setActiveIdx(
-                  activeIdx === 0 ? lastSuggestionIdx : activeIdx - 1
-                );
-              case 'ArrowDown':
-                return setActiveIdx(
-                  activeIdx === lastSuggestionIdx ? 0 : activeIdx + 1
-                );
-              case 'Enter':
-                return onSuggestionChange(suggestions[highlightedIndex]);
-              default:
-            }
-          }}
-        />
-      }
+    <AutosizeInput
+      key="auto-size-input"
+      inputStyle={{
+        fontFamily: 'inherit',
+        border: 'none',
+        outline: 'none',
+        background: 'inherit',
+      }}
+      inputRef={setInputRef}
+      value={term}
+      placeholder={rootNode ? undefined : 'Search...'}
+      onChange={(evt) => {
+        const { value } = evt.target
+
+        if (value.includes('(') || value.includes(')')) {
+          return
+        }
+
+        if (activeIdx !== 0) {
+          setActiveIdx(0);
+        }
+        setTerm(value);
+        setDebouncedTerm(value);
+      }}
+      autoFocus={true}
+      onClick={(e) => e.stopPropagation()}
+      onBlur={() => {
+        if (suggestions.length > 0) {
+          inputRef?.current?.focus();
+        }
+      }}
     />
   ));
 
   const rowRenderer = useCallback<ListRowRenderer>(
     ({ index, key, style }) => {
       const suggestion = suggestions[index];
-      const isActiveSuggestion = highlightedIndex === index;
+      const isActiveSuggestion = activeIdx === index;
 
       return (
         <div key={key} style={style}>
@@ -173,7 +155,13 @@ function WindowInput() {
         </div>
       );
     },
-    [getItemProps, highlightedIndex, onSuggestionChange, suggestions, theme]
+    [
+      activeIdx,
+      getItemProps,
+      onSuggestionChange,
+      suggestions,
+      theme.palette.grey,
+    ]
   );
 
   const rowHeight = 30;
@@ -204,7 +192,9 @@ function WindowInput() {
       >
         {rootNode ? (
           <RenderQuery
-            textInput={<TextInput />}
+            renderChipInput={(node) => (
+              <QueryNodeChip textInput={<TextInput />} node={node} />
+            )}
           />
         ) : (
           <EmptyContainer>
@@ -224,7 +214,7 @@ function WindowInput() {
                   rowRenderer={rowRenderer}
                   rowHeight={30}
                   overscanRowCount={4}
-                  scrollToIndex={highlightedIndex}
+                  scrollToIndex={activeIdx}
                 />
               )}
             </AutoSizer>

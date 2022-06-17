@@ -17,11 +17,11 @@ const InputOperator = styled.div`
 `;
 
 type RenderInputProps = {
-  textInput: JSX.Element;
+  renderChipInput: () => JSX.Element;
   renderNode: GroupRenderNodeType | GroupRenderOperatorNodeType;
 };
 
-function RenderInput({ textInput, renderNode }: RenderInputProps) {
+function RenderInput({ renderChipInput, renderNode }: RenderInputProps) {
   const toggleGroupOperator = useToggleGroupOperator();
   const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
 
@@ -44,7 +44,7 @@ function RenderInput({ textInput, renderNode }: RenderInputProps) {
       <Tooltip title={`Toggle ${operator} to ${oppositeOperator}`}>
         <InputOperator>{`${operator}:`}</InputOperator>
       </Tooltip>
-      {textInput}
+      {renderChipInput()}
     </QueryPartContainer>
   );
 }

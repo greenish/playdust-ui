@@ -51,7 +51,7 @@ const useUpdateFromSuggestion = () => {
         if (suggestion.action === 'remove') {
           return removeSelection();
         }
-        return addGroupQueryNode(suggestion.operator);
+        return addGroupQueryNode();
       case 'Search':
         return addTextQueryNode();
       default:

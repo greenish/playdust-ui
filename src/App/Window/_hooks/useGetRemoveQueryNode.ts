@@ -1,11 +1,24 @@
 import { useRecoilValue } from 'recoil';
 import searchQueryParentIdMapAtom from '../_atoms/searchQueryParentIdMapAtom';
 import searchStateAtom from '../_atoms/searchStateAtom';
+import GroupNodeType from '../_types/GroupNodeType';
 import SearchQueryType from '../_types/SearchQueryType';
 import SearchStateType from '../_types/SearchStateType';
 import useGetUpdateSearchQuery from './useGetUpdateSearchQuery';
 
 type RemovalReturnType = Pick<SearchStateType, 'query'>;
+
+function flattenNodes(nodes: SearchQueryType['nodes'], id: string): string[] {
+  const node = nodes[id];
+
+  if (node.type !== 'group') {
+    return [node.id];
+  }
+
+  return [
+    ...node.children.flatMap((childId) => flattenNodes(nodes, childId)),
+  ];
+}
 
 const useGetRemoveQueryNode = () => {
   const searchState = useRecoilValue(searchStateAtom);
@@ -34,8 +47,21 @@ const useGetRemoveQueryNode = () => {
 
   return (removalIds: string | string[]): RemovalReturnType => {
     const ids = typeof removalIds === 'string' ? [removalIds] : removalIds;
+    const expandedIds = ids.reduce<string[]>((acc, curr) => {
+      if (GroupNodeType.is(searchState.query.nodes[curr])) {
+        return [
+          ...acc,
+          ...flattenNodes(searchState.query.nodes, curr),
+        ]
+      }
 
-    return ids.reduce<RemovalReturnType>((acc, removalId) => {
+      return [
+        ...acc,
+        curr,
+      ]
+    }, [])
+
+    return expandedIds.reduce<RemovalReturnType>((acc, removalId) => {
       const parentId = parentMap[removalId];
       const parentNode = parentId && acc.query.nodes[parentId];
       const shouldRemoveGroup =

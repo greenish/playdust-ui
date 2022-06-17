@@ -40,7 +40,6 @@ type SearchSuggestionType =
       label: string;
       group: 'Selection';
       action: 'group';
-      operator: GroupNodeType['operator'];
     };
 
 export default SearchSuggestionType;

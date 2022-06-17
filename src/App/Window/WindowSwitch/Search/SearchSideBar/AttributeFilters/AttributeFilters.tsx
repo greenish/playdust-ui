@@ -6,7 +6,7 @@ import {
   FormGroup,
   Typography,
 } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import findTopLevelAttributeAtom from '../../../_atoms/findTopLevelAttributeAtom';
@@ -39,39 +39,32 @@ const attributeFilterDataAtom = selector({
     const findAttribute = get(findTopLevelAttributeAtom);
     const showAll = get(showAllAttributesAtom);
 
-    return aggregations
-      .map((attribute) => {
-        const isExpanded = showAll[attribute.key] || false;
-        const values = attribute.values
-          .map((entry) => ({
-            ...entry,
-            checked: !!findAttribute(attribute.key, entry.value),
-          }))
-          .sort(
-            (a, b) => Number(b.checked) - Number(a.checked) || b.count - a.count
-          )
-          .filter((entry) => {
-            if (isExpanded) {
-              return true;
-            }
+    return aggregations.map((attribute) => {
+      const isExpanded = showAll[attribute.key] || false;
+      const values = attribute.values
+        .map((entry) => ({
+          ...entry,
+          checked: !!findAttribute(attribute.key, entry.value),
+        }))
+        .sort(
+          (a, b) => Number(b.checked) - Number(a.checked) || b.count - a.count
+        )
+        .filter((entry) => {
+          if (isExpanded) {
+            return true;
+          }
 
-            return entry.checked;
-          });
+          return entry.checked;
+        });
 
-        return {
-          key: attribute.key,
-          values,
-          isExpanded,
-          expandIcon:
-            !isExpanded && values.length > 0 ? <ExpandLess /> : <ExpandMore />,
-        };
-      })
-      .sort((a, b) => {
-        const aHasChecked = !!a.values.find((entry) => entry.checked);
-        const bHasChecked = !!b.values.find((entry) => entry.checked);
-
-        return Number(bHasChecked) - Number(aHasChecked);
-      });
+      return {
+        key: attribute.key,
+        values,
+        isExpanded,
+        expandIcon:
+          !isExpanded && values.length > 0 ? <ExpandLess /> : <ExpandMore />,
+      };
+    });
   },
 });
 
@@ -80,47 +73,67 @@ function AttributeFilters() {
   const [showAll, setShowAll] = useRecoilState(showAllAttributesAtom);
   const toggleAttribute = useToggleTopLevelAttributeNode();
 
+  const originalSortOrder = useMemo(() => {
+    const copy = [...attributes]
+
+    return copy.sort((a, b) => {
+      const aHasChecked = !!a.values.find((entry) => entry.checked);
+      const bHasChecked = !!b.values.find((entry) => entry.checked);
+
+      return Number(bHasChecked) - Number(aHasChecked);
+    }).map(entry => entry.key);
+  }, []); // eslint-disable-line
+
+
   return (
     <RootContainer autoHide={true}>
       <ContentContainer>
-        {attributes.map((attribute) => (
-          <ExplorerAccordion
-            key={attribute.key}
-            itemType="table"
-            title={attribute.key}
-            expandIcon={attribute.expandIcon}
-            content={
-              <FormGroup>
-                {attribute.values.map(({ value, checked, count }) => (
-                  <FormControlLabel
-                    key={value}
-                    control={
-                      <Checkbox
-                        sx={{ ml: 2 }}
-                        size="small"
-                        checked={checked}
-                        onChange={() => toggleAttribute(attribute.key, value)}
-                        name={value.toString()}
-                      />
-                    }
-                    label={
-                      <Typography sx={{ fontSize: '80%' }}>
-                        {value} ({count})
-                      </Typography>
-                    }
-                  />
-                ))}
-              </FormGroup>
-            }
-            expanded={attribute.values.length > 0}
-            onChange={() => {
-              setShowAll({
-                ...showAll,
-                [attribute.key]: !attribute.isExpanded,
-              });
-            }}
-          />
-        ))}
+        {originalSortOrder.map(sortKey => {
+          const attribute = attributes.find(entry => entry.key === sortKey)
+
+          if (!attribute) {
+            return null
+          }
+
+          return (
+            <ExplorerAccordion
+              key={attribute.key}
+              itemType="table"
+              title={attribute.key}
+              expandIcon={attribute.expandIcon}
+              content={
+                <FormGroup>
+                  {attribute.values.map(({ value, checked, count }) => (
+                    <FormControlLabel
+                      key={value}
+                      control={
+                        <Checkbox
+                          sx={{ ml: 2 }}
+                          size="small"
+                          checked={checked}
+                          onChange={() => toggleAttribute(attribute.key, value)}
+                          name={value.toString()}
+                        />
+                      }
+                      label={
+                        <Typography sx={{ fontSize: '80%' }}>
+                          {value} ({count})
+                        </Typography>
+                      }
+                    />
+                  ))}
+                </FormGroup>
+              }
+              expanded={attribute.values.length > 0}
+              onChange={() => {
+                setShowAll({
+                  ...showAll,
+                  [attribute.key]: !attribute.isExpanded,
+                });
+              }}
+            />
+          )
+        })}
       </ContentContainer>
     </RootContainer>
   );

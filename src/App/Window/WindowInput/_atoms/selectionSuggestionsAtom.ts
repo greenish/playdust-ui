@@ -40,7 +40,6 @@ const selectionSuggestionsAtom = selector<SearchSuggestionType[] | null>({
         label: `Group Selection in ${inverseOperator.toUpperCase()}`,
         group: 'Selection',
         action: 'group',
-        operator: inverseOperator,
       },
     ];
   },

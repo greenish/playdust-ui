@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import shortId from '../../../_helpers/shortId';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
@@ -13,9 +13,7 @@ import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
 import searchQuerySelectedNodesRangeAtom from '../_atoms/searchQuerySelectedNodesRangeAtom';
 
 const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
-  const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
-    searchQueryActiveNodeMetaAtom
-  );
+  const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
   const activeNode = useRecoilValue(searchQueryActiveNodeAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const { query } = useRecoilValue(searchStateAtom);
@@ -24,14 +22,15 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
 
   const getNextState = useCallback(
     (
-      operator: GroupNodeType['operator']
+      newId: string,
     ): { query: SearchQueryType; index: number } | null => {
       if (!selectionRange || activeNode?.type !== 'group') {
         return null;
       }
 
+      const operator = activeNode.operator === 'and' ? 'or' : 'and'
+
       const [startIdx, endIdx] = selectionRange;
-      const newId = shortId();
 
       const isRootNode = activeNode.id === rootNode?.id;
       const newNodeChildren = activeNode.children.slice(startIdx, endIdx);
@@ -111,20 +110,12 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
         index: 1,
       };
     },
-    // eslint-disable-next-line
-    [
-      activeNode,
-      activeNodeMeta,
-      activeNodeMeta?.type,
-      getUpdateSearchQuery,
-      query,
-      rootNode?.id,
-    ]
+    [activeNode, getUpdateSearchQuery, query, rootNode?.id, selectionRange]
   );
 
-  return (operator: GroupNodeType['operator']) => {
+  return () => {
     const newId = shortId();
-    const nextState = getNextState(operator);
+    const nextState = getNextState(newId);
 
     if (!nextState) {
       return;

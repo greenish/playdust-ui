@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import React, { Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
+import QueryNodeType from '../../_types/QueryNodeType';
 import RenderGroupEnds from './RenderGroupEnds';
 import RenderGroupOperator from './RenderGroupOperator';
 import RenderInput from './RenderInput/RenderInput';
@@ -14,10 +15,10 @@ const QueryGroup = styled.div`
 `;
 
 type RenderQueryProps = {
-  textInput: JSX.Element;
+  renderChipInput: (node?: QueryNodeType) => JSX.Element;
 };
 
-function RenderQuery({ textInput }: RenderQueryProps) {
+function RenderQuery({ renderChipInput }: RenderQueryProps) {
   const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
   const groupedRenderMap = useRecoilValue(searchQueryRenderMapAtom);
 
@@ -42,7 +43,7 @@ function RenderQuery({ textInput }: RenderQueryProps) {
                         renderNode.node.children.length && (
                         <RenderInput
                           renderNode={renderNode}
-                          textInput={textInput}
+                          renderChipInput={renderChipInput}
                         />
                       )}
                     <RenderGroupEnds renderNode={renderNode} />
@@ -55,7 +56,7 @@ function RenderQuery({ textInput }: RenderQueryProps) {
                       activeNodeMeta?.index === renderNode.index && (
                         <RenderInput
                           renderNode={renderNode}
-                          textInput={textInput}
+                          renderChipInput={renderChipInput}
                         />
                       )}
                     <RenderGroupOperator renderNode={renderNode} />
@@ -67,7 +68,7 @@ function RenderQuery({ textInput }: RenderQueryProps) {
                   <RenderQueryNode
                     key={key}
                     renderNode={renderNode}
-                    textInput={textInput}
+                    renderChipInput={renderChipInput}
                   />
                 );
               default:
