@@ -94,8 +94,9 @@ const searchQueryRenderNodeMetaAtom = selectorFamily<
         renderNode.activeDistance === 0 &&
         renderNode.inActiveBranch;
 
-      const higlightBackground =
-        isSelected || (isBelowActive && selectedNodes.length === 0);
+      // const higlightBackground =
+      //   isSelected || (isBelowActive && selectedNodes.length === 0);
+      const higlightBackground = isSelected;
 
       const renderLineBelow =
         renderNode.activeDistance !== null && renderNode.activeDistance >= 0;
