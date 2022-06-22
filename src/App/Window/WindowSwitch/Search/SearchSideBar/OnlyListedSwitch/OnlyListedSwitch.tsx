@@ -1,7 +1,7 @@
 import { FormControlLabel, Switch } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import searchStateAtom from '../../../../_atoms/searchStateAtom';
+import searchStateAtom from '../../../_atoms/searchStateAtom';
 import useSetOnlyListed from './_hooks/useSetOnlyListed';
 
 function OnlyListedSwitch() {

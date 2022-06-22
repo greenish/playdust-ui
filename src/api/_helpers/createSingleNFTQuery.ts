@@ -1,6 +1,6 @@
 import type { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import QueryNodeType from '../../App/Window/_types/QueryNodeType';
-import RangeValueUnionType from '../../App/Window/_types/RangeValueUnionType';
+import QueryNodeType from '../../App/Window/WindowSwitch/_types/QueryNodeType';
+import RangeValueUnionType from '../../App/Window/WindowSwitch/_types/RangeValueUnionType';
 
 const getRangeField = (field: RangeValueUnionType) => {
   switch (field) {

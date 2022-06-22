@@ -1,4 +1,4 @@
-import AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
+import AttributeQueryNodeType from './AttributeQueryNodeType';
 
 type AttributeQueryMapType = {
   [key: string]: {

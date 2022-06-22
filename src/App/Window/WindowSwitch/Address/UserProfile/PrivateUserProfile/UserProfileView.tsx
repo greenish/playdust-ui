@@ -3,12 +3,12 @@ import { AxiosError } from 'axios';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
+import profileApi from '../../../../../_helpers/profileApi';
 import safePromise from '../../../../../_helpers/safePromise';
 import useAuth from '../../../../../_hooks/useAuth';
 import useProfileState from '../../../../_hooks/useProfileState';
 import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
 import publicProfileAtom from '../_atoms/publicProfileAtom';
-import profileApi from '../_helpers/profileApi';
 import UserProfileContent from '../_sharedComponents/UserProfileContent';
 import UserProfileEditorProps from './_types/UserProfileEditorProps';
 

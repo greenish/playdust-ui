@@ -1,17 +1,11 @@
 import styled from '@emotion/styled';
 import { Chip, Skeleton } from '@mui/material';
 import React from 'react';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useRecoilValueLoadable } from 'recoil';
 import humanizeSolana from '../../_helpers/humanizeSolana';
 import searchOverviewAtom from './_atoms/searchOverviewAtom';
 import type SearchOverviewResponseType from './_types/SearchOverviewResponseType';
-
-const RootContainer = styled.div`
-  height: 48px;
-  display: flex;
-  align-items: center;
-  overflow-x: auto;
-`;
 
 const ChipContentContainer = styled.div`
   display: flex;
@@ -48,7 +42,23 @@ function SearchOverview() {
   const searchOverview = useRecoilValueLoadable(searchOverviewAtom);
 
   return (
-    <RootContainer>
+    <Scrollbars
+      autoHide={true}
+      style={{ height: 48 }}
+      renderView={({
+        style,
+        ...divProps
+      }: React.HTMLAttributes<HTMLDivElement>) => (
+        <div
+          style={{
+            ...style,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+          {...divProps}
+        />
+      )}
+    >
       {chips.map((chip) => (
         <Chip
           key={chip.label}
@@ -67,7 +77,7 @@ function SearchOverview() {
           variant="outlined"
         />
       ))}
-    </RootContainer>
+    </Scrollbars>
   );
 }
 

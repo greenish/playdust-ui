@@ -1,6 +1,6 @@
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import getQueryDependencyPath from '../../App/Window/WindowInput/_helpers/getQueryDependencyPath';
-import SearchQueryType from '../../App/Window/_types/SearchQueryType';
+import getQueryDependencyPath from '../../App/Window/WindowSwitch/_sharedComponents/WindowInput/_helpers/getQueryDependencyPath';
+import SearchQueryType from '../../App/Window/WindowSwitch/_types/SearchQueryType';
 import getNFTQueryById from './getNFTQueryById';
 
 const getNFTDependencyQueryById = (

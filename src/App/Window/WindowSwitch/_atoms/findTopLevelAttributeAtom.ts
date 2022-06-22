@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
+import AttributeQueryNodeType from '../_types/AttributeQueryNodeType';
 import secondLevelAttributeMapAtom from './secondLevelAttributeMapAtom';
 import topLevelAttributesMapAtom from './topLevelAttributesMapAtom';
 

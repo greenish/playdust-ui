@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import searchStateAtom from '../../../../_atoms/searchStateAtom';
-import options from '../../../../_helpers/sortOptions';
+import searchStateAtom from '../../../_atoms/searchStateAtom';
+import options from '../../../_helpers/sortOptions';
 import useSetSortValue from './_hooks/useSetSortValue';
 
 const RootContainer = styled.div`

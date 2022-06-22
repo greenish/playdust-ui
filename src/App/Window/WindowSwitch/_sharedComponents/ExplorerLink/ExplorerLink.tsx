@@ -5,7 +5,7 @@ import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
 import safePubkeyString from '../../_helpers/safePubkeyString';
 import ExplorerLinkProps from '../../_types/ExplorerLinkProps';
-import Link from '../_sharedComponents/Link';
+import Link from '../Link';
 import CopyButton from './CopyButton';
 
 function ExplorerLink({

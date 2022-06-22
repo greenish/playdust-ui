@@ -1,6 +1,6 @@
 import { assign, create, number, type } from 'superstruct';
 import SearchResponseType from '../App/Window/WindowSwitch/Search/_types/SearchResponseType';
-import SearchStateType from '../App/Window/_types/SearchStateType';
+import SearchStateType from '../App/Window/WindowSwitch/_types/SearchStateType';
 import getNFTQueryById from './_helpers/getNFTQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchNFTs from './_helpers/searchNFTs';

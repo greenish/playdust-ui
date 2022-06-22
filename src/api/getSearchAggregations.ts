@@ -1,8 +1,8 @@
 import { SearchRequest } from '@opensearch-project/opensearch/api/types';
 import { boolean, create, optional, string, type } from 'superstruct';
-import hasCollectionDependency from '../App/Window/WindowInput/_helpers/hasCollectionDependency';
-import SearchAggResponseType from '../App/Window/_types/SearchAggResponseType';
-import SearchQueryType from '../App/Window/_types/SearchQueryType';
+import hasCollectionDependency from '../App/Window/WindowSwitch/_sharedComponents/WindowInput/_helpers/hasCollectionDependency';
+import SearchAggResponseType from '../App/Window/WindowSwitch/_types/SearchAggResponseType';
+import SearchQueryType from '../App/Window/WindowSwitch/_types/SearchQueryType';
 import getAttributeAggQuery from './_helpers/getAttributeAggQuery';
 import getNFTDependencyQueryById from './_helpers/getNFTDependencyQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';

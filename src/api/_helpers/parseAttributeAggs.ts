@@ -1,5 +1,5 @@
 import { array, number, object, string, type } from 'superstruct';
-import SearchAggResponseType from '../../App/Window/_types/SearchAggResponseType';
+import SearchAggResponseType from '../../App/Window/WindowSwitch/_types/SearchAggResponseType';
 
 const SearchAttributeAggType = type({
   name: object({

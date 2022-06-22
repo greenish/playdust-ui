@@ -1,10 +1,10 @@
 import { useRecoilValue } from 'recoil';
 import shortId from '../../../_helpers/shortId';
-import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
-import searchStateAtom from '../../_atoms/searchStateAtom';
-import useGetAddQueryNode from '../../_hooks/useGetAddQueryNode';
-import QueryNodeType from '../../_types/QueryNodeType';
-import SearchQueryType from '../../_types/SearchQueryType';
+import searchQueryRootNodeAtom from '../_atoms/searchQueryRootNodeAtom';
+import searchStateAtom from '../_atoms/searchStateAtom';
+import QueryNodeType from '../_types/QueryNodeType';
+import SearchQueryType from '../_types/SearchQueryType';
+import useGetAddQueryNode from './useGetAddQueryNode';
 
 const useGetAddTopLevelQueryNode = () => {
   const { query } = useRecoilValue(searchStateAtom);

@@ -1,6 +1,6 @@
 import { nullable, number, object, type } from 'superstruct';
 import type SearchOverviewResponseType from '../App/Window/WindowSwitch/Search/SearchOverview/_types/SearchOverviewResponseType';
-import SearchQueryType from '../App/Window/_types/SearchQueryType';
+import SearchQueryType from '../App/Window/WindowSwitch/_types/SearchQueryType';
 import getNFTQueryById from './_helpers/getNFTQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchNFTs from './_helpers/searchNFTs';

@@ -13,15 +13,16 @@ import {
   TextFieldProps,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
+import profileApi from '../../../../../_helpers/profileApi';
 import safePromise from '../../../../../_helpers/safePromise';
 import useAuth from '../../../../../_hooks/useAuth';
+import PublicProfileType from '../../../../../_types/PublicProfileType';
 import useProfileState from '../../../../_hooks/useProfileState';
 import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
 import profilePictureAtom from '../_atoms/profilePictureAtom';
 import publicProfileAtom from '../_atoms/publicProfileAtom';
-import profileApi from '../_helpers/profileApi';
 import UserProfileEditorProps from './_types/UserProfileEditorProps';
 
 type FormFieldProps = Omit<TextFieldProps, 'name'> & {
@@ -72,7 +73,7 @@ const profileKeys: FormFieldProps['name'][] = [
 function UserProfileEdit({ toggleEdit }: UserProfileEditorProps) {
   const auth = useAuth();
   const connectedWallet = useRecoilValue(connectedWalletAtom);
-  const setPublicProfile = useSetRecoilState(publicProfileAtom);
+  const [publicProfile, setPublicProfile] = useRecoilState(publicProfileAtom);
   const profilePicture = useRecoilValue(profilePictureAtom);
   const resetProfilePicture = useResetRecoilState(profilePictureAtom);
   const [appProfile, setAppProfile] = useProfileState();
@@ -113,12 +114,14 @@ function UserProfileEdit({ toggleEdit }: UserProfileEditorProps) {
           Authorization: `Bearer ${tokens.accessToken}`,
         },
       });
+      const { data: newPublicProfile } =
+        await profileApi.get<PublicProfileType>('/public/read', {
+          params: {
+            walletAddress: connectedWallet,
+          },
+        });
       setAppProfile(newValue);
-      setPublicProfile({
-        username: newValue.username,
-        bio: newValue.bio,
-        profilePictureMintAddress: newValue.profilePictureMintAddress,
-      });
+      setPublicProfile(newPublicProfile);
       toggleEdit();
     }
   };

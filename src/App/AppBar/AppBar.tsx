@@ -6,6 +6,7 @@ import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import appStateAtom from '../_atoms/appStateAtom';
+import currentUserProfileAtom from '../_atoms/currentUserProfileAtom';
 import appBarWidth from '../_helpers/appBarWidth';
 import safePromise from '../_helpers/safePromise';
 import useGoHome from '../_hooks/useGoHome';
@@ -91,6 +92,7 @@ const getWindowTab = (window: AppWindowType): ReactNode | undefined => {
 };
 
 function AppBar() {
+  const currentUserProfile = useRecoilValue(currentUserProfileAtom);
   const { tabs } = useRecoilValue(appStateAtom);
   const activeTab = useRecoilValue(activeTabAtom);
   const removeTab = useRemoveTab();
@@ -107,65 +109,70 @@ function AppBar() {
   const inWindowManager = router.pathname === '/';
   const backgroundColor = theme.palette.background.default;
 
+  const showTabs = currentUserProfile?.isWhitelisted;
+
+  const tabControls = showTabs ? (
+    <>
+      {tabs.map((tab) => {
+        const isActive = inWindowManager && tab.id === activeTab?.id;
+        const currentWindow = tab.windows[tab.selectedWindowIdx];
+
+        return (
+          <TabButtonContainer key={tab.id}>
+            <div>
+              <ImageButton
+                size={largeButtonSize}
+                images={currentWindow.images}
+                onClick={() => goToTab(tab)}
+              >
+                {getWindowTab(currentWindow)}
+              </ImageButton>
+              {isActive && (
+                <ActiveHighlight
+                  style={{
+                    height: largeButtonSize,
+                    backgroundColor,
+                  }}
+                />
+              )}
+            </div>
+            {isActive && (
+              <CloseButtonContainer>
+                <ImageButton size={smallButtonSize} onClick={() => removeTab()}>
+                  <Close fontSize="small" />
+                </ImageButton>
+              </CloseButtonContainer>
+            )}
+          </TabButtonContainer>
+        );
+      })}
+      <TabButtonContainer>
+        <ImageButton onClick={() => goToNewTab()}>
+          <Add />
+        </ImageButton>
+        {inWindowManager && tabs.length > 0 && (
+          <ImageButton
+            size={24}
+            onClick={() => {
+              localStorage.clear();
+              safePromise(router.replace('/'));
+              router.reload();
+            }}
+          >
+            <DeleteSweep fontSize="small" />
+          </ImageButton>
+        )}
+      </TabButtonContainer>
+    </>
+  ) : null;
+
   return (
     <RootContainer>
       <TopContainer>
         <IconButton onClick={() => goHome()}>
           <Playdust width={largeButtonSize} />
         </IconButton>
-        {tabs.map((tab) => {
-          const isActive = inWindowManager && tab.id === activeTab?.id;
-          const currentWindow = tab.windows[tab.selectedWindowIdx];
-
-          return (
-            <TabButtonContainer key={tab.id}>
-              <div>
-                <ImageButton
-                  size={largeButtonSize}
-                  images={currentWindow.images}
-                  onClick={() => goToTab(tab)}
-                >
-                  {getWindowTab(currentWindow)}
-                </ImageButton>
-                {isActive && (
-                  <ActiveHighlight
-                    style={{
-                      height: largeButtonSize,
-                      backgroundColor,
-                    }}
-                  />
-                )}
-              </div>
-              {isActive && (
-                <CloseButtonContainer>
-                  <ImageButton
-                    size={smallButtonSize}
-                    onClick={() => removeTab()}
-                  >
-                    <Close fontSize="small" />
-                  </ImageButton>
-                </CloseButtonContainer>
-              )}
-            </TabButtonContainer>
-          );
-        })}
-        <TabButtonContainer>
-          <ImageButton onClick={() => goToNewTab()}>
-            <Add />
-          </ImageButton>
-          {inWindowManager && tabs.length > 0 && (
-            <ImageButton
-              size={24}
-              onClick={() => {
-                localStorage.clear();
-                safePromise(router.replace('/'));
-                router.reload();
-              }}
-            >
-              <DeleteSweep fontSize="small" />
-            </ImageButton>
-          )}
-        </TabButtonContainer>
+        {tabControls}
       </TopContainer>
       <WalletButton backgroundColor={backgroundColor} size={largeButtonSize} />
     </RootContainer>
