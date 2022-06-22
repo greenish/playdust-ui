@@ -2,6 +2,7 @@ import { selectorFamily } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchStateAtom from '../../../../_atoms/searchStateAtom';
 import GroupNodeType from '../../../../_types/GroupNodeType';
+import searchQueryActiveNodeAtom from '../../_atoms/searchQueryActiveNodeAtom';
 import searchQuerySelectedNodesAtom from '../../_atoms/searchQuerySelectedNodesAtom';
 import RenderMapNodeType from '../_types/RenderMapNodeType';
 import searchQueryPathToRootAtom from './searchQueryPathToRootAtom';
@@ -22,8 +23,11 @@ const searchQueryRenderNodeIsSelectedAtom = selectorFamily<
     (renderNode) =>
     ({ get }) => {
       const selectedNodes = get(searchQuerySelectedNodesAtom);
+      const activeNode = get(searchQueryActiveNodeAtom);
+      const isEmptyGroup =
+        activeNode?.type === 'group' && activeNode.children.length === 0;
 
-      if (selectedNodes.length === 0) {
+      if (selectedNodes.length === 0 && !isEmptyGroup) {
         return false;
       }
 

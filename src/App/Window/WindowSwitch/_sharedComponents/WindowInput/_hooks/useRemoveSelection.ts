@@ -62,7 +62,12 @@ const useRemoveSelection = makeUseChangeSearchQuery(() => {
       };
     });
 
-    return getUseRemoveQuery(selectedNodes);
+    const isGroupSelected = activeNodeMeta?.isGroupSelected === true;
+    const removalIds = isGroupSelected
+      ? [...selectedNodes, activeNodeMeta.nodeId]
+      : selectedNodes;
+
+    return getUseRemoveQuery(removalIds);
   };
 });
 

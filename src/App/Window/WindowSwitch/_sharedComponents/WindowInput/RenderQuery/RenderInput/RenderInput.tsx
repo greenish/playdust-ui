@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Tooltip } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import searchQueryActiveNodeMetaAtom from '../../../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQuerySelectedNodesAtom from '../../_atoms/searchQuerySelectedNodesAtom';
 import QueryPartContainer from '../_sharedComponents/QueryPartContainer';
 import GroupRenderNodeType from '../_types/GroupRenderNodeType';
@@ -24,11 +25,16 @@ type RenderInputProps = {
 function RenderInput({ renderChipInput, renderNode }: RenderInputProps) {
   const toggleGroupOperator = useToggleGroupOperator();
   const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
+  const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
 
   const [operator, oppositeOperator] =
     renderNode.node.operator === 'and' ? ['AND', 'OR'] : ['OR', 'AND'];
 
-  if (selectedNodes.length > 0) {
+  if (
+    selectedNodes.length > 0 ||
+    (activeNodeMeta?.type === 'group' &&
+      activeNodeMeta.isGroupSelected === true)
+  ) {
     return null;
   }
 
@@ -39,7 +45,7 @@ function RenderInput({ renderChipInput, renderNode }: RenderInputProps) {
     >
       <Tooltip title={`Toggle ${operator} to ${oppositeOperator}`}>
         <InputOperator
-          onClick={(e) => {
+          onClick={() => {
             toggleGroupOperator(renderNode.node.id);
           }}
         >{`${operator}:`}</InputOperator>

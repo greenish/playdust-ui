@@ -5,6 +5,7 @@ import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNode
 import searchQueryParentIdMapAtom from '../../../_atoms/searchQueryParentIdMapAtom';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
 import searchStateAtom from '../../../_atoms/searchStateAtom';
+import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode';
 import GroupNodeType from '../../../_types/GroupNodeType';
 import SearchQueryNodeType from '../../../_types/SearchQueryNodeType';
 import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
@@ -210,10 +211,55 @@ const handleZ = (evt: KeyboardEvent) => {
 const useHandleBackspace = () => {
   const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
   const removeSelection = useRemoveSelection();
+  const activeNode = useRecoilValue(searchQueryActiveNodeAtom);
+  const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
+    searchQueryActiveNodeMetaAtom
+  );
+  const term = useRecoilValue(searchQueryTermAtom);
+  const removeQueryNode = useRemoveQueryNode();
+  const { query } = useRecoilValue(searchStateAtom);
 
   return () => {
-    if (selectedNodes.length) {
-      removeSelection();
+    if (
+      selectedNodes.length ||
+      (activeNodeMeta?.type === 'group' &&
+        activeNodeMeta.isGroupSelected === true)
+    ) {
+      return removeSelection();
+    }
+
+    const isEmptyTerm = term === '';
+
+    if (activeNodeMeta?.type === 'query' && isEmptyTerm) {
+      return removeQueryNode(activeNodeMeta.nodeId);
+    }
+
+    if (
+      activeNodeMeta?.type === 'group' &&
+      activeNode?.type === 'group' &&
+      term === ''
+    ) {
+      if (activeNodeMeta.index !== 0) {
+        const nextChildId = activeNode.children[activeNodeMeta.index - 1];
+        const nextChild = query.nodes[nextChildId];
+
+        if (nextChild.type === 'group') {
+          return setActiveNodeMeta({
+            type: 'group',
+            nodeId: nextChild.id,
+            index: 0,
+            endIndex: nextChild.children.length,
+            isGroupSelected: true,
+          });
+        }
+
+        if (nextChild.type === 'query') {
+          return setActiveNodeMeta({
+            type: 'query',
+            nodeId: nextChild.id,
+          })
+        }
+      }
     }
   };
 };

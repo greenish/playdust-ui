@@ -113,7 +113,7 @@ function RenderQueryNodeChip({
       label={
         <>
           <ChipLabel node={node} />
-          {isActive && textInput}
+          {isActive && node?.field !== 'collection' && textInput}
         </>
       }
       variant="outlined"
