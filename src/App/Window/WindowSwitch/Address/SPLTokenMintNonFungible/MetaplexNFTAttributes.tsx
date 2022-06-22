@@ -31,7 +31,7 @@ function MetaplexNFTAttributes() {
         <Box>
           <Grid container={true} spacing={2}>
             {attributes.map((attribute) => (
-              <Grid key={attribute.trait_type} item={true} xs={4}>
+              <Grid key={attribute.trait_type} item={true} xs={6} md={4}>
                 <Item>
                   <Typography
                     sx={{
