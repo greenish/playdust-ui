@@ -1,151 +1,127 @@
 import styled from '@emotion/styled';
-import { ChevronRight, ExpandMore } from '@mui/icons-material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
-  Button,
   Checkbox,
-  FormControl,
   FormControlLabel,
   FormGroup,
+  Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import AttributeQueryNodeType from '../../../../../../_types/AttributeQueryNodeType';
-import safePromise from '../../../../../_helpers/safePromise';
-import searchQueryAttributesAtom from '../../../../_atoms/searchQueryAttributesAtom';
-import useAddAttributeQueryNode from '../../../../_hooks/useAddAttributeQueryNode';
-import useUpdateAttributeQueryNode from '../../../../_hooks/useUpdateAttributeQueryNode';
-import useSearchAggregations from './_hooks/useSearchAggregations';
+import React from 'react';
+import { Scrollbars } from 'react-custom-scrollbars-2';
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import findTopLevelAttributeAtom from '../../../_atoms/findTopLevelAttributeAtom';
+import useToggleTopLevelAttributeNode from '../../../_hooks/useToggleTopLevelAttributeNode';
+import ExplorerAccordion from '../../../_sharedComponents/ExplorerAccordion';
+import searchTopAggregationAtom from './_atoms/searchTopAggregationAtom';
 
-const RootContainer = styled.div`
+const RootContainer = styled(Scrollbars)`
   display: flex;
   flex-direction: column;
-  width: calc(100% + 16px);
   height: 100%;
-  overflow: auto;
-  margin-left: -16px;
-  padding-left: 16px;
 `;
 
-const normalizeOptions = (
-  options: string[],
-  found: AttributeQueryNodeType | undefined,
-  isExpanded: boolean
-) => {
-  const normalized = options
-    .map((option) => ({
-      option,
-      checked: !!(found && found.value.includes(option)),
-    }))
-    .sort((a, b) => {
-      if (a.option === b.option) {
-        return 0;
-      }
-      return a.option < b.option ? -1 : 1;
-    });
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
+`;
 
-  if (isExpanded) {
-    return normalized;
-  }
+const showAllAttributesAtom = atom<{ [key: string]: boolean }>({
+  key: 'showAllAttributesAtom',
+  default: {},
+});
 
-  return normalized.filter((entry) => entry.checked);
-};
+const attributeFilterDataAtom = selector({
+  key: 'attributeFilterDataAtom',
+  get: ({ get }) => {
+    const aggregations = get(searchTopAggregationAtom);
+    const findAttribute = get(findTopLevelAttributeAtom);
+    const showAll = get(showAllAttributesAtom);
+
+    return aggregations
+      .map((attribute) => {
+        const isExpanded = showAll[attribute.key] || false;
+        const values = attribute.values
+          .map((entry) => ({
+            ...entry,
+            checked: !!findAttribute(attribute.key, entry.value),
+          }))
+          .sort(
+            (a, b) => Number(b.checked) - Number(a.checked) || b.count - a.count
+          )
+          .filter((entry) => {
+            if (isExpanded) {
+              return true;
+            }
+
+            return entry.checked;
+          });
+
+        return {
+          key: attribute.key,
+          values,
+          isExpanded,
+          expandIcon:
+            !isExpanded && values.length > 0 ? <ExpandLess /> : <ExpandMore />,
+        };
+      })
+      .sort((a, b) => {
+        const aHasChecked = !!a.values.find((entry) => entry.checked);
+        const bHasChecked = !!b.values.find((entry) => entry.checked);
+
+        return Number(bHasChecked) - Number(aHasChecked);
+      });
+  },
+});
 
 function AttributeFilters() {
-  const queries = useRecoilValue(searchQueryAttributesAtom);
-  const addAttributeQueryNode = useAddAttributeQueryNode();
-  const updateAttributeNode = useUpdateAttributeQueryNode();
-  const [showAll, setShowAll] = useState<{ [key: string]: boolean }>({});
-
-  const [searchAggregations, updateSearchAggregations] =
-    useSearchAggregations();
-
-  useEffect(() => {
-    safePromise(updateSearchAggregations());
-  }, [updateSearchAggregations]);
-
-  const attributes = [...searchAggregations.attributes].sort((a, b) => {
-    if (a.trait === b.trait) {
-      return 0;
-    }
-    return a.trait < b.trait ? -1 : 1;
-  });
+  const attributes = useRecoilValue(attributeFilterDataAtom);
+  const [showAll, setShowAll] = useRecoilState(showAllAttributesAtom);
+  const toggleAttribute = useToggleTopLevelAttributeNode();
 
   return (
-    <RootContainer>
-      {attributes.map((attribute) => {
-        const isExpanded = showAll[attribute.trait] || false;
-        const found = queries.find((entry) => entry.trait === attribute.trait);
-        const options = normalizeOptions(attribute.options, found, isExpanded);
-
-        return (
-          <FormControl
-            sx={{ mb: 2 }}
-            component="fieldset"
-            variant="standard"
-            key={attribute.trait}
-          >
-            <Button
-              sx={{
-                justifyContent: 'space-between',
-                fontWeight: '700',
-                textAlign: 'left',
-              }}
-              endIcon={isExpanded ? <ExpandMore /> : <ChevronRight />}
-              onClick={() =>
-                setShowAll({ ...showAll, [attribute.trait]: !isExpanded })
-              }
-            >
-              {attribute.trait}
-            </Button>
-            <FormGroup>
-              {options.map(({ option, checked }) => (
-                <FormControlLabel
-                  key={option}
-                  control={
-                    <Checkbox
-                      sx={{ ml: 2 }}
-                      size="small"
-                      checked={checked}
-                      onChange={() => {
-                        if (!found) {
-                          return addAttributeQueryNode({
-                            value: [option],
-                            trait: attribute.trait,
-                            operation: 'and',
-                          });
-                        }
-
-                        if (!checked) {
-                          return updateAttributeNode({
-                            id: found.id,
-                            update: {
-                              value: [...found.value, option],
-                            },
-                          });
-                        }
-
-                        const nextValue = found.value.filter(
-                          (entry) => entry !== option
-                        );
-
-                        return updateAttributeNode({
-                          id: found.id,
-                          update: {
-                            value: nextValue,
-                          },
-                          clearOnEmpty: true,
-                        });
-                      }}
-                      name={option.toString()}
-                    />
-                  }
-                  label={option}
-                />
-              ))}
-            </FormGroup>
-          </FormControl>
-        );
-      })}
+    <RootContainer autoHide={true}>
+      <ContentContainer>
+        {attributes.map((attribute) => (
+          <ExplorerAccordion
+            key={attribute.key}
+            itemType="table"
+            title={attribute.key}
+            expandIcon={attribute.expandIcon}
+            content={
+              <FormGroup>
+                {attribute.values.map(({ value, checked, count }) => (
+                  <FormControlLabel
+                    key={value}
+                    control={
+                      <Checkbox
+                        sx={{ ml: 2 }}
+                        size="small"
+                        checked={checked}
+                        onChange={() => toggleAttribute(attribute.key, value)}
+                        name={value.toString()}
+                      />
+                    }
+                    label={
+                      <Typography sx={{ fontSize: '80%' }}>
+                        {value} ({count})
+                      </Typography>
+                    }
+                  />
+                ))}
+              </FormGroup>
+            }
+            expanded={attribute.values.length > 0}
+            onChange={() => {
+              setShowAll({
+                ...showAll,
+                [attribute.key]: !attribute.isExpanded,
+              });
+            }}
+          />
+        ))}
+      </ContentContainer>
     </RootContainer>
   );
 }

@@ -1,20 +1,25 @@
-const getAttributeAggQuery = (aggSize = 20, aggOptionSize = 50) => ({
+import { SearchRequest } from '@opensearch-project/opensearch/api/types';
+
+const getAttributeAggQuery = (
+  aggSize = 20,
+  aggOptionSize = 50
+): SearchRequest['body'] => ({
   size: 0,
   aggs: {
     name: {
       nested: {
-        path: 'offChainData.attributes',
+        path: 'attributes',
       },
       aggs: {
-        trait: {
+        key: {
           terms: {
-            field: 'offChainData.attributes.trait_type.keyword',
+            field: 'attributes.key.keyword',
             size: aggSize,
           },
           aggs: {
             value: {
               terms: {
-                field: 'offChainData.attributes.value.keyword',
+                field: 'attributes.value.keyword',
                 size: aggOptionSize,
               },
             },

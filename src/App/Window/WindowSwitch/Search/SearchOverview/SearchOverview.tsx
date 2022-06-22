@@ -1,31 +1,21 @@
 import styled from '@emotion/styled';
-import { Chip, Skeleton, Typography } from '@mui/material';
-import React, { Suspense } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
-import type SearchOverviewResponseType from '../../../../../_types/SearchOverviewResponseType';
+import { Chip, Skeleton } from '@mui/material';
+import React from 'react';
+import { Scrollbars } from 'react-custom-scrollbars-2';
+import { useRecoilValueLoadable } from 'recoil';
 import humanizeSolana from '../../_helpers/humanizeSolana';
-import CollectionOverview from './CollectionOverview/CollectionOverview';
-import collectionIdAtom from './_atoms/collectionIdAtom';
 import searchOverviewAtom from './_atoms/searchOverviewAtom';
-
-const RootContainer = styled.div`
-  height: 48px;
-  display: flex;
-  align-items: center;
-  overflow-x: scroll;
-`;
+import type SearchOverviewResponseType from './_types/SearchOverviewResponseType';
 
 const ChipContentContainer = styled.div`
   display: flex;
 `;
 
-const max = 10000;
-
 const chips = [
   {
     label: 'Total Items',
-    getValue: ({ count }: SearchOverviewResponseType) =>
-      `${count.toLocaleString()}${count >= max ? '+' : ''}`,
+    getValue: ({ total }: SearchOverviewResponseType) =>
+      total && `~${total.toLocaleString()}`,
   },
   {
     label: 'Listed Items',
@@ -37,6 +27,11 @@ const chips = [
     getValue: ({ floor }: SearchOverviewResponseType) => humanizeSolana(floor),
   },
   {
+    label: 'Avg Price',
+    getValue: ({ average }: SearchOverviewResponseType) =>
+      humanizeSolana(average),
+  },
+  {
     label: 'Ceiling Price',
     getValue: ({ ceiling }: SearchOverviewResponseType) =>
       humanizeSolana(ceiling),
@@ -45,10 +40,25 @@ const chips = [
 
 function SearchOverview() {
   const searchOverview = useRecoilValueLoadable(searchOverviewAtom);
-  const collectionId = useRecoilValue(collectionIdAtom);
 
   return (
-    <RootContainer>
+    <Scrollbars
+      autoHide={true}
+      style={{ height: 48 }}
+      renderView={({
+        style,
+        ...divProps
+      }: React.HTMLAttributes<HTMLDivElement>) => (
+        <div
+          style={{
+            ...style,
+            display: 'flex',
+            alignItems: 'center',
+          }}
+          {...divProps}
+        />
+      )}
+    >
       {chips.map((chip) => (
         <Chip
           key={chip.label}
@@ -67,13 +77,7 @@ function SearchOverview() {
           variant="outlined"
         />
       ))}
-      {collectionId && (
-        <Suspense fallback={null}>
-          <Typography sx={{ mr: 1 }}>&middot;</Typography>
-          <CollectionOverview />
-        </Suspense>
-      )}
-    </RootContainer>
+    </Scrollbars>
   );
 }
 

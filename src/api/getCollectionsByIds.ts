@@ -1,28 +1,17 @@
-import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionSourceType';
+import { array, string } from 'superstruct';
+import OpenSearchCollectionSourceType from '../App/Window/WindowSwitch/_types/OpenSearchCollectionSourceType';
+import getCollectionsByIdsBody from './_helpers/getCollectionsByIdBody';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postCollectionQuery from './_helpers/postCollectionQuery';
+import searchCollections from './_helpers/searchCollections';
 
 const getCollectionsByIds = nextApiHandler<OpenSearchCollectionSourceType[]>(
   async (req) => {
-    const ids = req.body as string[];
+    const ids = array(string()).create(req.body);
+    const searchBody = getCollectionsByIdsBody(ids);
 
-    const esQuery = {
-      size: ids.length,
-      query: {
-        bool: {
-          filter: {
-            ids: {
-              values: ids,
-            },
-          },
-        },
-      },
-    };
+    const [results] = await searchCollections([{ body: searchBody }]);
 
-    const response = await postCollectionQuery(esQuery);
-    const results = response.hits.hits.map((entry) => entry._source);
-
-    return results;
+    return results.sources;
   }
 );
 

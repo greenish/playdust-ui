@@ -1,25 +1,14 @@
 import { Person } from '@mui/icons-material';
-import {
-  Fab,
-  FormControl,
-  InputLabel,
-  Menu,
-  MenuItem,
-  Select,
-} from '@mui/material';
+import { Fab, Menu, MenuItem } from '@mui/material';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import solanaClustersAtom from '../../_atoms/solanaClustersAtom';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import connectedWalletAtom from '../../_atoms/connectedWalletAtom';
 import safePromise from '../../_helpers/safePromise';
-import connectedWalletAtom from './_atoms/connectedWalletAtom';
-import isAdminAtom from './_atoms/isAdminAtom';
-import isLoggedInAtom from './_atoms/isLoggedInAtom';
-import shortenPublicKey from './_helpers/shortenPublicKey';
+import shortenPublicKey from '../../_helpers/shortenPublicKey';
+import useAuth from '../../_hooks/useAuth';
 import useGoToProfile from './_hooks/useGoToProfile';
-import useLogout from './_hooks/useLogout';
-import useSignAuthMessage from './_hooks/useSignAuthMessage';
 
 interface WalletButtonProps {
   backgroundColor: string;
@@ -31,23 +20,26 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
   const walletModal = useWalletModal();
   const wallet = useWallet();
   const open = !!anchorEl;
-  const logout = useLogout();
-  const signAuthMessage = useSignAuthMessage();
-  const [solanaClusters, setSolanaClusters] =
-    useRecoilState(solanaClustersAtom);
-  const goToProfile = useGoToProfile();
+  const auth = useAuth();
   const [connectedWallet, setConnectedWallet] =
     useRecoilState(connectedWalletAtom);
-  const isAdmin = useRecoilValue(isAdminAtom);
-  const isLoggedIn = useRecoilValue(isLoggedInAtom);
+  const resetConnectedWallet = useResetRecoilState(connectedWalletAtom);
+  const goToProfile = useGoToProfile();
 
   useEffect(() => {
     if (wallet.connected && wallet.publicKey) {
       const publicKeyString = wallet.publicKey.toString();
 
       setConnectedWallet(publicKeyString);
+    } else {
+      resetConnectedWallet();
     }
-  }, [setConnectedWallet, wallet.connected, wallet.publicKey]);
+  }, [
+    setConnectedWallet,
+    resetConnectedWallet,
+    wallet.connected,
+    wallet.publicKey,
+  ]);
 
   const buttonProps = connectedWallet
     ? {
@@ -69,6 +61,7 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
         open={open}
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
+        onClick={() => setAnchorEl(null)}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',
@@ -82,48 +75,9 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
         <MenuItem onClick={() => goToProfile()}>
           Wallet: {wallet.publicKey && shortenPublicKey(wallet.publicKey)}
         </MenuItem>
-        {!isLoggedIn && (
-          <MenuItem
-            onClick={() => {
-              safePromise(signAuthMessage());
-            }}
-          >
-            Login
-          </MenuItem>
-        )}
-        <MenuItem
-          onClick={() => {
-            setAnchorEl(null);
-            safePromise(logout());
-          }}
-        >
-          {isLoggedIn ? 'Logout' : 'Disconnect'}
+        <MenuItem onClick={() => safePromise(auth.logout())}>
+          Disconnect
         </MenuItem>
-        {isAdmin && (
-          <MenuItem>
-            <FormControl fullWidth={true}>
-              <InputLabel>Network</InputLabel>
-              <Select
-                value={solanaClusters.selectedIndex}
-                onChange={(evt) => {
-                  const nextIndex = evt.target.value;
-                  if (typeof nextIndex === 'number') {
-                    setSolanaClusters((curr) => ({
-                      ...curr,
-                      selectedIndex: nextIndex,
-                    }));
-                  }
-                }}
-              >
-                {solanaClusters.clusters.map((cluster, idx) => (
-                  <MenuItem value={idx} key={cluster.network}>
-                    {cluster.network}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </MenuItem>
-        )}
       </Menu>
     </>
   );

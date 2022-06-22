@@ -1,6 +1,5 @@
 import { FilterAltOutlined } from '@mui/icons-material';
 import {
-  Button,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -10,12 +9,9 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import type OpenSearchNFTSourceType from '../../../../../_types/OpenSearchNFTSourceType';
-import isCollectionQueryAtom from '../../../_atoms/isCollectionQueryAtom';
-import searchQueryAttributesAtom from '../../../_atoms/searchQueryAttributesAtom';
-import useAddAttributeQueryNode from '../../../_hooks/useAddAttributeQueryNode';
-import usePrependCollectionQueryNode from '../../../_hooks/usePrependCollectionQueryNode';
-import useUpdateAttributeQueryNode from '../../../_hooks/useUpdateAttributeQueryNode';
+import findTopLevelAttributeAtom from '../../_atoms/findTopLevelAttributeAtom';
+import useToggleTopLevelAttributeNode from '../../_hooks/useToggleTopLevelAttributeNode';
+import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
 
 interface TokenCardFilterProps {
   metadata: OpenSearchNFTSourceType;
@@ -23,13 +19,9 @@ interface TokenCardFilterProps {
 
 function TokenCardFilter({ metadata }: TokenCardFilterProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const addAttributeQueryNode = useAddAttributeQueryNode();
-  const updateAtrributeQueryNode = useUpdateAttributeQueryNode();
-  const exactAttributes = useRecoilValue(searchQueryAttributesAtom);
-  const isCollectionQuery = useRecoilValue(isCollectionQueryAtom);
-  const attributes = metadata.offChainData.attributes || [];
-  const prependCollectionQueryNode = usePrependCollectionQueryNode();
-  const { heuristicCollectionId } = metadata;
+  const { attributes } = metadata;
+  const findAttribute = useRecoilValue(findTopLevelAttributeAtom);
+  const toggleAttribute = useToggleTopLevelAttributeNode();
 
   return (
     <>
@@ -46,52 +38,22 @@ function TokenCardFilter({ metadata }: TokenCardFilterProps) {
       >
         <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
           <FormGroup>
-            {!isCollectionQuery && heuristicCollectionId && (
-              <Button
-                onClick={() =>
-                  prependCollectionQueryNode(heuristicCollectionId)
-                }
-              >
-                Search in Collection
-              </Button>
-            )}
             {attributes.map((attribute) => {
-              const found = exactAttributes.find(
-                (entry) =>
-                  entry.trait === attribute.trait_type &&
-                  entry.value?.includes(attribute.value)
-              );
+              const found = findAttribute(attribute.key, attribute.value);
 
               return (
                 <FormControlLabel
-                  key={`${attribute.trait_type}:${attribute.value}`}
+                  key={`${attribute.key}:${attribute.value}`}
                   control={
                     <Checkbox
                       checked={!!found}
                       onChange={() => {
-                        if (!found) {
-                          addAttributeQueryNode({
-                            value: [attribute.value],
-                            trait: attribute.trait_type,
-                            operation: 'and',
-                          });
-                        } else {
-                          updateAtrributeQueryNode({
-                            id: found.id,
-                            update: {
-                              value: found.value.filter(
-                                (entry) => entry !== attribute.value
-                              ),
-                            },
-                            clearOnEmpty: true,
-                          });
-                        }
-
                         setAnchorEl(null);
+                        toggleAttribute(attribute.key, attribute.value);
                       }}
                     />
                   }
-                  label={`${attribute.trait_type}: ${attribute.value}`}
+                  label={`${attribute.key}: ${attribute.value}`}
                 />
               );
             })}

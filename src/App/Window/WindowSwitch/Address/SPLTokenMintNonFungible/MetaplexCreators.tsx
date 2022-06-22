@@ -10,9 +10,9 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import playdustNftDataAtom from '../../_atoms/playdustNftDataAtom';
+import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import playdustNftDataAtom from './_atoms/playdustNftDataAtom';
 
 interface CreatorInfo {
   address: string;
@@ -23,11 +23,11 @@ interface CreatorInfo {
 function MetaplexCreators() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
 
-  if (!playdustNftData || !playdustNftData.metaplexOnChainData) {
+  if (!playdustNftData || !playdustNftData.mintOnChainMetadata) {
     return null;
   }
 
-  const details = playdustNftData.metaplexOnChainData;
+  const details = playdustNftData.mintOnChainMetadata;
 
   return (
     <ExplorerAccordion
@@ -42,7 +42,7 @@ function MetaplexCreators() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(details.creators ?? []).map((creator: CreatorInfo) => (
+            {(details.data?.creators ?? []).map((creator: CreatorInfo) => (
               <TableRow key={creator.address}>
                 <TableCell sx={{ whiteSpace: 'nowrap' }}>
                   <Stack direction="row" alignItems="center" gap={1}>

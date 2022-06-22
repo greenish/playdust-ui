@@ -1,49 +1,54 @@
-import { NextApiRequest } from 'next';
-import ComposedQueryType from '../_types/ComposedQueryType';
-import type SearchAggregationResponseType from '../_types/SearchAggregationResponseType';
-import type { AttributeAggregationType } from './_helpers/getAllAttributes';
-import getAllAttributes from './_helpers/getAllAttributes';
-import getNFTQuery from './_helpers/getNFTQuery';
+import { SearchRequest } from '@opensearch-project/opensearch/api/types';
+import { boolean, create, optional, string, type } from 'superstruct';
+import hasCollectionDependency from '../App/Window/WindowSwitch/_sharedComponents/WindowInput/_helpers/hasCollectionDependency';
+import SearchAggResponseType from '../App/Window/WindowSwitch/_types/SearchAggResponseType';
+import SearchQueryType from '../App/Window/WindowSwitch/_types/SearchQueryType';
+import getAttributeAggQuery from './_helpers/getAttributeAggQuery';
+import getNFTDependencyQueryById from './_helpers/getNFTDependencyQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postMultiNFTQuery from './_helpers/postMultiNFTQuery';
-import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
+import parseAttributeAggs from './_helpers/parseAttributeAggs';
+import searchNFTs from './_helpers/searchNFTs';
 
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: {
-    query?: ComposedQueryType;
-    onlyListed?: boolean;
-  };
-}
+const SearchSuggestionInputType = type({
+  query: SearchQueryType,
+  onlyListed: optional(boolean()),
+  activeNodeId: string(),
+});
 
-const getSearchAggregations = nextApiHandler<SearchAggregationResponseType>(
-  async (
-    req: ExtendedNextApiRequest
-  ): Promise<SearchAggregationResponseType> => {
-    const { query } = req.body;
-    const onlyListed = Boolean(req.body.onlyListed);
-
-    if (!query) {
-      throw new Error('No `query` supplied!');
+const getSearchAggregations = nextApiHandler<SearchAggResponseType>(
+  async (req) => {
+    const { query, activeNodeId, onlyListed } = create(
+      req.body,
+      SearchSuggestionInputType
+    );
+    if (!hasCollectionDependency(query, activeNodeId)) {
+      return [];
     }
 
-    const nftQuery = getNFTQuery(query, 0, undefined, onlyListed);
+    const suggestionNFTQuery = getNFTDependencyQueryById(query, activeNodeId);
+    const activeNode = query.nodes[activeNodeId];
+    const isAttributeNode =
+      activeNode.type === 'query' && activeNode.field === 'attribute';
 
-    const { attributeQueries, cleanAttributes } = getAllAttributes(
-      query,
-      nftQuery
-    );
+    const aggQuery = getAttributeAggQuery();
+    const aggRequest: SearchRequest['body'] = {
+      ...aggQuery,
+      query: suggestionNFTQuery,
+    };
 
-    const attributeMultiQuery = queriesToMultiSearch(
-      attributeQueries,
-      'nft-metadata'
-    );
+    const [results] = await searchNFTs([
+      {
+        body: aggRequest,
+        options: { onlyListed },
+      },
+    ]);
+    const payload = parseAttributeAggs(results.aggregations);
 
-    const attributeResults = await postMultiNFTQuery<AttributeAggregationType>(
-      attributeMultiQuery
-    );
-    const attributes = cleanAttributes(attributeResults);
+    if (isAttributeNode) {
+      return payload.filter((entry) => entry.key === activeNode.key);
+    }
 
-    return { attributes };
+    return payload;
   }
 );
 

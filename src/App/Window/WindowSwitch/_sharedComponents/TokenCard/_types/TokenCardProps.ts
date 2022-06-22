@@ -1,11 +1,19 @@
-import type OpenSearchNFTSourceType from '../../../../../../_types/OpenSearchNFTSourceType';
+import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 
-interface TokenCardProps {
-  imageSize: number;
-  contentHeight: number;
-  skeleton?: boolean;
-  metadata?: OpenSearchNFTSourceType;
-  disableQuickFilter?: boolean;
-}
+type TokenCardProps =
+  | {
+      imageSize: number;
+      skeleton: true;
+      contentHeight: number;
+      metadata?: OpenSearchNFTSourceType;
+      disableQuickFilter?: boolean;
+    }
+  | {
+      imageSize: number;
+      skeleton?: false;
+      contentHeight: number;
+      metadata: OpenSearchNFTSourceType;
+      disableQuickFilter?: boolean;
+    };
 
 export default TokenCardProps;

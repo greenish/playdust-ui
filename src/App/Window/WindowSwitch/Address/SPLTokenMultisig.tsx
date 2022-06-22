@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
+import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
+import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
-import ExplorerAccordion from './_sharedComponents/ExplorerAccordion';
-import ExplorerGrid from './_sharedComponents/ExplorerGrid';
-import ExplorerGridRow from './_sharedComponents/ExplorerGridRow';
 import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 
 // Q6XprfkF8RQQKoQVG33xT88H7wi8Uk1B1CC7YAs69Gi

@@ -4,8 +4,8 @@ import {
   PublicKey,
   TransactionSignature,
 } from '@solana/web3.js';
-import SolanaClusterType from '../../../../../../_types/SolanaClusterType';
-import safePubkey from '../../_helpers/safePubkey';
+import SolanaClusterType from '../../../../../_types/SolanaClusterType';
+import safePubkey from '../../../_helpers/safePubkey';
 import TransactionType from '../_types/TransactionType';
 
 async function fetchTransactionsForAddress(

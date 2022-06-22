@@ -8,6 +8,7 @@ import { createTheme } from '@mui/material/styles';
 import React, { PropsWithChildren } from 'react';
 
 const greyBackground = '#F6F6F6';
+const border = '1px solid #e2e2e2';
 
 const baseTheme = createTheme({
   typography: {
@@ -27,6 +28,9 @@ const baseTheme = createTheme({
       default: '#FEFEFE',
     },
   },
+  shape: {
+    borderRadius: 0,
+  },
 });
 
 const themeOverrides = createTheme({
@@ -37,11 +41,6 @@ const themeOverrides = createTheme({
       },
     },
     MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 0,
-        },
-      },
       defaultProps: {
         size: 'small',
       },
@@ -49,7 +48,6 @@ const themeOverrides = createTheme({
     MuiCard: {
       defaultProps: {
         elevation: 0,
-        square: true,
       },
       styleOverrides: {
         root: {
@@ -67,7 +65,6 @@ const themeOverrides = createTheme({
     MuiPaper: {
       defaultProps: {
         elevation: 0,
-        square: true,
       },
     },
     MuiLink: {
@@ -88,7 +85,6 @@ const themeOverrides = createTheme({
         size: 'small',
         sx: {
           marginTop: '20px',
-          borderRadius: 0,
           '& legend': {
             display: 'none',
           },
@@ -97,7 +93,6 @@ const themeOverrides = createTheme({
       styleOverrides: {
         select: {
           backgroundColor: baseTheme.palette.background.default,
-          borderRadius: 0,
           marginTop: -4,
         },
       },
@@ -147,32 +142,61 @@ const themeOverrides = createTheme({
       },
       styleOverrides: {
         root: ({ ownerState }) => {
-          const base = {
-            '& .MuiInputBase-root': {
-              borderRadius: 0,
-            },
-          };
-
-          if (ownerState.label === undefined) {
-            return base;
+          if (ownerState.label !== undefined) {
+            return {
+              paddingTop: 20,
+              '& input': {
+                marginTop: -4,
+              },
+              '& legend': {
+                display: 'none',
+              },
+            };
           }
-
-          return {
-            ...base,
-            paddingTop: 20,
-            '& input': {
-              marginTop: -4,
-            },
-            '& legend': {
-              display: 'none',
-            },
-          };
         },
       },
     },
     MuiAutocomplete: {
       defaultProps: {
         PaperComponent: (props) => <Paper {...props} elevation={1} />,
+      },
+    },
+    MuiChip: {
+      defaultProps: {
+        size: 'small',
+      },
+    },
+    MuiAccordion: {
+      defaultProps: {
+        disableGutters: true,
+      },
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          border,
+          borderBottom: 0,
+          '.MuiAccordionSummary-root': {
+            background: greyBackground,
+            borderBottom: border,
+            minHeight: 'unset',
+            '.MuiAccordionSummary-content': {
+              margin: '8px 0',
+            },
+          },
+          '.MuiAccordionDetails-root': {
+            padding: ownerState.itemType === 'table' ? 0 : 16,
+            borderBottom: border,
+          },
+          '&:before': {
+            opacity: 0,
+          },
+        }),
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: ({ ownerState }) => ({
+          cursor: ownerState.onClick ? 'pointer' : 'default',
+        }),
       },
     },
   },

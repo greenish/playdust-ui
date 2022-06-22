@@ -1,64 +1,66 @@
-import { NextApiRequest } from 'next';
-import ComposedQueryType from '../_types/ComposedQueryType';
-import type SearchOverviewResponseType from '../_types/SearchOverviewResponseType';
-import getNFTQuery from './_helpers/getNFTQuery';
+import { nullable, number, object, type } from 'superstruct';
+import type SearchOverviewResponseType from '../App/Window/WindowSwitch/Search/SearchOverview/_types/SearchOverviewResponseType';
+import SearchQueryType from '../App/Window/WindowSwitch/_types/SearchQueryType';
+import getNFTQueryById from './_helpers/getNFTQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';
-import postMultiNFTQuery from './_helpers/postMultiNFTQuery';
-import queriesToMultiSearch from './_helpers/queriesToMultiSearch';
+import searchNFTs from './_helpers/searchNFTs';
 
-interface SearchOverviewAggregationType {
-  floor: {
-    value: number;
-  };
-  ceiling: {
-    value: number;
-  };
-}
+const SearchOverviewRequest = type({
+  query: SearchQueryType,
+});
 
-interface ExtendedNextApiRequest extends NextApiRequest {
-  body: {
-    query?: ComposedQueryType;
-    onlyListed?: boolean;
-  };
-}
+const SearchOverviewAggType = type({
+  asks: object({
+    doc_count: number(),
+    ceiling: object({
+      value: nullable(number()),
+    }),
+    floor: object({
+      value: nullable(number()),
+    }),
+    average: object({
+      value: nullable(number()),
+    }),
+  }),
+});
 
 const getSearchOverview = nextApiHandler<SearchOverviewResponseType>(
-  async (req: ExtendedNextApiRequest): Promise<SearchOverviewResponseType> => {
-    const { query } = req.body;
+  async (req) => {
+    const { query } = SearchOverviewRequest.create(req.body);
+    const nftQuery = getNFTQueryById(query, query.rootId);
 
-    if (!query) {
-      throw new Error('No `query` supplied!');
-    }
-
-    const countQuery = getNFTQuery(query, 0);
-    const nftQueryListed = getNFTQuery(query, 0, undefined, true);
-
-    const aggQuery = {
-      ...nftQueryListed,
-      aggs: {
-        ceiling: { max: { field: 'lastListPrice' } },
-        floor: { min: { field: 'lastListPrice' } },
+    const [result] = await searchNFTs([
+      {
+        body: {
+          query: nftQuery,
+          aggregations: {
+            asks: {
+              nested: {
+                path: 'asks',
+              },
+              aggs: {
+                ceiling: { max: { field: 'asks.price' } },
+                floor: { min: { field: 'asks.price' } },
+                average: { avg: { field: 'asks.price' } },
+              },
+            },
+          },
+          size: 0,
+        },
+        options: {
+          onlyListed: true,
+        },
       },
-    };
+    ]);
 
-    const multiQuery = queriesToMultiSearch(
-      [aggQuery, countQuery],
-      'nft-metadata'
-    );
-
-    const [aggResult, countResult] =
-      await postMultiNFTQuery<SearchOverviewAggregationType>(multiQuery);
-
-    const listed = aggResult.hits.total.value;
-    const floor = aggResult.aggregations.floor.value;
-    const ceiling = aggResult.aggregations.ceiling.value;
-    const count = countResult.hits.total.value;
+    const { asks } = SearchOverviewAggType.create(result.aggregations);
+    const { ceiling, floor, average } = asks;
 
     return {
-      listed,
-      floor,
-      ceiling,
-      count,
+      listed: result.total,
+      ceiling: ceiling.value || 0,
+      floor: floor.value || 0,
+      average: average.value || 0,
     };
   }
 );
