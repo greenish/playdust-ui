@@ -1,5 +1,5 @@
 import { array, string } from 'superstruct';
-import OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
+import OpenSearchCollectionSourceType from '../App/Window/WindowSwitch/_types/OpenSearchCollectionSourceType';
 import getCollectionsByIdsBody from './_helpers/getCollectionsByIdBody';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchCollections from './_helpers/searchCollections';

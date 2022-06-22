@@ -18,6 +18,10 @@ const profilePictureAtom = atom<ProfilePictureData | null>({
         return null;
       }
 
+      if (!publicProfile.profilePictureMintAddress) {
+        return null;
+      }
+
       const data = get(nftByMintAtom(publicProfile.profilePictureMintAddress));
 
       if (!data) {

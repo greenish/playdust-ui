@@ -1,7 +1,8 @@
 import { atom, selector } from 'recoil';
+import { create } from 'superstruct';
+import profileApi from '../../../../../_helpers/profileApi';
+import PublicProfileType from '../../../../../_types/PublicProfileType';
 import addressStateAtom from '../../../_atoms/addressStateAtom';
-import profileApi from '../_helpers/profileApi';
-import PublicProfileType from '../_types/PublicProfileType';
 
 const publicProfileAtom = atom<PublicProfileType | null>({
   key: 'publicProfileAtom',
@@ -21,7 +22,7 @@ const publicProfileAtom = atom<PublicProfileType | null>({
             }
           );
 
-          return data;
+          return create(data, PublicProfileType);
         } catch (e) {
           // ignore
         }

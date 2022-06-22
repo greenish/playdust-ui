@@ -1,5 +1,5 @@
-import makeUseChangeSearchQuery from '../../../../../_hooks/makeUseChangeSearchQuery';
-import SearchSortType from '../../../../../_types/SearchSortType';
+import makeUseChangeSearchQuery from '../../../../_hooks/makeUseChangeSearchQuery';
+import SearchSortType from '../../../../_types/SearchSortType';
 
 const useSetSortValue = makeUseChangeSearchQuery(
   () => (nextSort: SearchSortType) => {

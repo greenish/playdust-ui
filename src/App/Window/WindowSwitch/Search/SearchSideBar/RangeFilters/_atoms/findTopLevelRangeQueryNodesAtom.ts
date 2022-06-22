@@ -1,8 +1,8 @@
 import { selector } from 'recoil';
-import searchStateAtom from '../../../../../_atoms/searchStateAtom';
-import RangeQueryNodeType from '../../../../../_types/RangeQueryNodeType';
-import RangeValueUnionType from '../../../../../_types/RangeValueUnionType';
+import searchStateAtom from '../../../../_atoms/searchStateAtom';
 import topLevelAndChildrenAtom from '../../../../_atoms/topLevelAndChildrenAtom';
+import RangeQueryNodeType from '../../../../_types/RangeQueryNodeType';
+import RangeValueUnionType from '../../../../_types/RangeValueUnionType';
 
 const findTopLevelRangeQueryNodesAtom = selector<
   (value: RangeValueUnionType) => RangeQueryNodeType | undefined

@@ -1,15 +1,15 @@
 import { useRecoilValue } from 'recoil';
 import shortId from '../../../_helpers/shortId';
-import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
-import makeUseChangeSearchQuery from '../../_hooks/makeUseChangeSearchQuery';
-import useGetAddQueryNode from '../../_hooks/useGetAddQueryNode';
-import useGetRemoveQueryNode from '../../_hooks/useGetRemoveQueryNode';
-import useGetUpdateSearchQuery from '../../_hooks/useGetUpdateSearchQuery';
-import AttributeQueryNodeType from '../../_types/AttributeQueryNodeType';
-import GroupNodeType from '../../_types/GroupNodeType';
 import findTopLevelAttributeAtom from '../_atoms/findTopLevelAttributeAtom';
 import findTopLevelAttributeKeyAtom from '../_atoms/findTopLevelAttributeKeyAtom';
+import searchQueryRootNodeAtom from '../_atoms/searchQueryRootNodeAtom';
+import AttributeQueryNodeType from '../_types/AttributeQueryNodeType';
+import GroupNodeType from '../_types/GroupNodeType';
+import makeUseChangeSearchQuery from './makeUseChangeSearchQuery';
+import useGetAddQueryNode from './useGetAddQueryNode';
 import useGetAddTopLevelQueryNode from './useGetAddTopLevelQueryNode';
+import useGetRemoveQueryNode from './useGetRemoveQueryNode';
+import useGetUpdateSearchQuery from './useGetUpdateSearchQuery';
 
 const useToggleTopLevelAttributeNode = makeUseChangeSearchQuery(() => {
   const addTopLevelNode = useGetAddTopLevelQueryNode();

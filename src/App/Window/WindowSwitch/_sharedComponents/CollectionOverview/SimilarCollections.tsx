@@ -13,11 +13,11 @@ import {
 } from '@mui/material';
 import React, { ReactNode, useMemo } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
-import humanizeCollection from '../../../_helpers/humanizeCollection';
-import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
-import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
+import humanizeCollection from '../../_helpers/humanizeCollection';
 import humanizeSolana from '../../_helpers/humanizeSolana';
+import useAddCollectionQueryNode from '../../_hooks/useAddCollectionQueryNode';
 import CollectionOverviewResponseType from '../../_types/CollectionOverviewResponseType';
+import OpenSearchCollectionSourceType from '../../_types/OpenSearchCollectionSourceType';
 
 const VerticalTrack = styled.div`
   position: absolute;

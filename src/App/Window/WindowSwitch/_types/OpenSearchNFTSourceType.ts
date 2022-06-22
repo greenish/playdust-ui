@@ -7,9 +7,9 @@ import {
   string,
   type,
 } from 'superstruct';
-import coercedDefaulted from '../../_helpers/coercedDefaulted';
-import coercedOptional from '../../_helpers/coercedOptional';
-import CollectionEnumType from '../../_types/CollectionEnumType';
+import coercedDefaulted from '../_helpers/coercedDefaulted';
+import coercedOptional from '../_helpers/coercedOptional';
+import CollectionEnumType from './CollectionEnumType';
 
 const MarketPlaceType = enums(['MagicEdenV1', 'MagicEdenV2']);
 const AsksBidsType = coercedDefaulted(

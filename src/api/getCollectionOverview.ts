@@ -4,7 +4,7 @@ import {
 } from '@opensearch-project/opensearch/api/types';
 import { string } from 'superstruct';
 import CollectionOverviewResponseType from '../App/Window/WindowSwitch/_types/CollectionOverviewResponseType';
-import type OpenSearchCollectionSourceType from '../App/Window/_types/OpenSearchCollectionSourceType';
+import OpenSearchCollectionSourceType from '../App/Window/WindowSwitch/_types/OpenSearchCollectionSourceType';
 import getRarestNFTsByCollectionBody from './_helpers/getRarestNFTsByCollectionBody';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchCollections from './_helpers/searchCollections';

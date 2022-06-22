@@ -3,7 +3,7 @@ import {
   useRecoilValueLoadable,
   useSetRecoilState,
 } from 'recoil';
-import searchStateSerializedAtom from '../../../../_atoms/searchStateSerializedAtom';
+import searchStateSerializedAtom from '../../../_atoms/searchStateSerializedAtom';
 import fetchSearchResults from '../../_helpers/fetchSearchResults';
 import searchResultsAtom from '../_atoms/searchResultsAtom';
 import searchResultsMore from '../_atoms/searchResultsMoreAtom';

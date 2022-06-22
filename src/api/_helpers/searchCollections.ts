@@ -1,5 +1,5 @@
 import type { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import OpenSearchCollectionSourceType from '../../App/Window/_types/OpenSearchCollectionSourceType';
+import OpenSearchCollectionSourceType from '../../App/Window/WindowSwitch/_types/OpenSearchCollectionSourceType';
 import makeSearchOS from './makeSearchOS';
 
 const existsQuery: QueryDslQueryContainer[] = [

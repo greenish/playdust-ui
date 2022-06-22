@@ -2,9 +2,9 @@ import { CardContent, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
+import PublicProfileType from '../../../../../_types/PublicProfileType';
 import PlaydustProfileType from '../../../../_types/PlaydustProfileType';
 import addressStateAtom from '../../../_atoms/addressStateAtom';
-import PublicProfileType from '../_types/PublicProfileType';
 
 interface UserProfileContentProps {
   userProfile: PublicProfileType | PlaydustProfileType | null;

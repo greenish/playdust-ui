@@ -1,9 +1,9 @@
 import { selector } from 'recoil';
-import searchStateAtom from '../../_atoms/searchStateAtom';
-import api from '../../_helpers/frontendApi';
-import CollectionQueryNodeType from '../../_types/CollectionQueryNodeType';
+import api from '../_helpers/frontendApi';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
+import CollectionQueryNodeType from '../_types/CollectionQueryNodeType';
 import playdustNftDataAtom from './playdustNftDataAtom';
+import searchStateAtom from './searchStateAtom';
 
 const collectionIdAtom = selector<string | null>({
   key: 'collectionIdAtom',

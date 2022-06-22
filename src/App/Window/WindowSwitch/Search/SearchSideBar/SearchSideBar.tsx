@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Divider } from '@mui/material';
 import React from 'react';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import SkeletonRows from '../../../_sharedComponents/SkeletonRows';
+import SkeletonRows from '../../_sharedComponents/SkeletonRows';
 import AttributeFilters from './AttributeFilters/AttributeFilters';
 import OnlyListedSwitch from './OnlyListedSwitch/OnlyListedSwitch';
 import RangeFilters from './RangeFilters/RangeFilters';

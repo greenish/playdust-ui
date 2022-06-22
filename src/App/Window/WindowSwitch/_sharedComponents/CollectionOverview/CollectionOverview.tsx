@@ -11,10 +11,10 @@ import React, { ReactNode, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import ImageButton from '../../../../_sharedComponents/ImageButton';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
-import humanizeCollection from '../../../_helpers/humanizeCollection';
-import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
 import collectionOverviewAtom from '../../_atoms/collectionOverviewAtom';
+import humanizeCollection from '../../_helpers/humanizeCollection';
 import humanizeSolana from '../../_helpers/humanizeSolana';
+import useAddCollectionQueryNode from '../../_hooks/useAddCollectionQueryNode';
 import CollectionOverviewResponseType from '../../_types/CollectionOverviewResponseType';
 import SimilarCollections from './SimilarCollections';
 

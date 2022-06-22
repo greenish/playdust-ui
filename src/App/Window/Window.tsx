@@ -1,15 +1,11 @@
 import styled from '@emotion/styled';
-import { CircularProgress } from '@mui/material';
 import React, { useMemo } from 'react';
-import Scrollbars from 'react-custom-scrollbars-2';
 import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
 import connectedWalletAtom from '../_atoms/connectedWalletAtom';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import Notifications from '../_sharedComponents/Notifications/Notifications';
-import SuspenseBoundary from '../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
-import WindowInput from './WindowInput/WindowInput';
 import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
 import appProfileAtom from './_atoms/appProfileAtom';
@@ -24,27 +20,6 @@ const RootContainer = styled.div`
   height: 100%;
 `;
 
-const SearchInputContainer = styled.div`
-  padding: 16px;
-  position: sticky;
-  width: 100%;
-  z-index: 2;
-`;
-
-const ContentContainer = styled(Scrollbars)`
-  overflow: auto;
-  height: 100%;
-  width: 100%;
-  z-index: 1;
-`;
-
-const SpinnerContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-`;
-
 const WindowContentRenderer = React.memo(() => {
   const windowStateAvailable = useRecoilValue(windowStateAvailableAtom);
   if (!windowStateAvailable) {
@@ -52,24 +27,7 @@ const WindowContentRenderer = React.memo(() => {
   }
   return (
     <RootContainer>
-      <SearchInputContainer>
-        <SuspenseBoundary
-          loading={null}
-          error={null}
-          content={<WindowInput />}
-        />
-      </SearchInputContainer>
-      <ContentContainer autoHide={true}>
-        <SuspenseBoundary
-          loading={
-            <SpinnerContainer>
-              <CircularProgress />
-            </SpinnerContainer>
-          }
-          error={null}
-          content={<WindowSwitch />}
-        />
-      </ContentContainer>
+      <WindowSwitch />
     </RootContainer>
   );
 });

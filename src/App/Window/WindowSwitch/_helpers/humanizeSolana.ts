@@ -1,11 +1,11 @@
-const humanizeSolana = (input?: number): string => {
-  if (input === undefined) {
-    return '◎ N/A';
-  }
+function abbreviatedNumber(value: number, fixed = 1) {
+  return Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    maximumFractionDigits: fixed,
+  }).format(value);
+}
 
-  const rounded = Math.round((input + Number.EPSILON) * 100) / 100;
-
-  return `◎ ${rounded.toLocaleString()}`;
-};
+const humanizeSolana = (input?: number): string =>
+  `◎ ${abbreviatedNumber(input || 0)}`;
 
 export default humanizeSolana;

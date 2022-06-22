@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import searchQueryParentIdMapAtom from '../../_atoms/searchQueryParentIdMapAtom';
+import searchQueryParentIdMapAtom from './searchQueryParentIdMapAtom';
 import secondLevelAttributeMapAtom from './secondLevelAttributeMapAtom';
 import topLevelAttributesMapAtom from './topLevelAttributesMapAtom';
 

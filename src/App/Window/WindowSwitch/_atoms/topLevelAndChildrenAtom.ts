@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
+import searchQueryRootNodeAtom from './searchQueryRootNodeAtom';
 
 const topLevelAndChildrenAtom = selector<string[]>({
   key: 'topLevelAndChildrenAtom',

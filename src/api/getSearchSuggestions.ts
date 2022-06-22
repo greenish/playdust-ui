@@ -1,6 +1,6 @@
 import { SearchRequest } from '@opensearch-project/opensearch/api/types';
 import { string, type } from 'superstruct';
-import SearchSuggestionResponseType from '../App/Window/WindowInput/_types/SearchSuggestionResponseType';
+import SearchSuggestionResponseType from '../App/Window/WindowSwitch/_sharedComponents/WindowInput/_types/SearchSuggestionResponseType';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchCollections from './_helpers/searchCollections';
 

@@ -8,7 +8,7 @@ import useGoHome from '../../../../_hooks/useGoHome';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
 import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
-import TokenGrid from '../../_sharedComponents/TokenGrid/TokenGrid';
+import TokenGrid from './TokenGrid/TokenGrid';
 import searchResultsAtom from './_atoms/searchResultsAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 

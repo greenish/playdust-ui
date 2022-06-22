@@ -1,5 +1,5 @@
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import type SearchQueryType from '../../App/Window/_types/SearchQueryType';
+import SearchQueryType from '../../App/Window/WindowSwitch/_types/SearchQueryType';
 import createSingleNFTQuery from './createSingleNFTQuery';
 
 const getNFTQueryById = (

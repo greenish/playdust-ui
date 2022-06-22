@@ -3,7 +3,7 @@ import type {
   SearchSort,
 } from '@opensearch-project/opensearch/api/types';
 import OpenSearchNFTSourceType from '../../App/Window/WindowSwitch/_types/OpenSearchNFTSourceType';
-import SearchSortType from '../../App/Window/_types/SearchSortType';
+import SearchSortType from '../../App/Window/WindowSwitch/_types/SearchSortType';
 import makeSearchOS from './makeSearchOS';
 
 const existsQuery: QueryDslQueryContainer[] = [
