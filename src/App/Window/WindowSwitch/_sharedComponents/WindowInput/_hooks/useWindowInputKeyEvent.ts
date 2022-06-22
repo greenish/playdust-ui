@@ -257,7 +257,7 @@ const useHandleBackspace = () => {
           return setActiveNodeMeta({
             type: 'query',
             nodeId: nextChild.id,
-          })
+          });
         }
       }
     }
