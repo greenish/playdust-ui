@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import shortId from '../../../_helpers/shortId';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
@@ -10,30 +10,28 @@ import useGetUpdateSearchQuery from '../../_hooks/useGetUpdateSearchQuery';
 import GroupNodeType from '../../_types/GroupNodeType';
 import SearchQueryType from '../../_types/SearchQueryType';
 import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
-import searchQuerySelectedNodesRangeAtom from '../_atoms/searchQuerySelectedNodesRangeAtom';
+import searchQuerySelectedNodesAtom from '../_atoms/searchQuerySelectedNodesAtom';
 
 const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
-  const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
+  const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
+    searchQueryActiveNodeMetaAtom
+  );
   const activeNode = useRecoilValue(searchQueryActiveNodeAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const { query } = useRecoilValue(searchStateAtom);
   const getUpdateSearchQuery = useGetUpdateSearchQuery();
-  const selectionRange = useRecoilValue(searchQuerySelectedNodesRangeAtom);
+  const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
 
   const getNextState = useCallback(
     (newId: string): { query: SearchQueryType; index: number } | null => {
-      if (!selectionRange || activeNode?.type !== 'group') {
+      if (activeNode?.type !== 'group' || activeNodeMeta?.type !== 'group') {
         return null;
       }
 
       const operator = activeNode.operator === 'and' ? 'or' : 'and';
-
-      const [startIdx, endIdx] = selectionRange;
-
       const isRootNode = activeNode.id === rootNode?.id;
-      const newNodeChildren = activeNode.children.slice(startIdx, endIdx);
       const updatedChildren = activeNode.children.filter(
-        (entry) => !newNodeChildren.includes(entry)
+        (entry) => !selectedNodes.includes(entry)
       );
 
       if (updatedChildren.length) {
@@ -41,12 +39,16 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
           id: newId,
           type: 'group',
           operator,
-          children: newNodeChildren,
+          children: selectedNodes,
         };
 
         const updatedActiveNode: GroupNodeType = {
           ...activeNode,
-          children: insertAtIdx(updatedChildren, newNode.id, startIdx),
+          children: insertAtIdx(
+            updatedChildren,
+            newNode.id,
+            activeNodeMeta.index
+          ),
         };
 
         const updatedQuery = {
@@ -108,7 +110,14 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
         index: 1,
       };
     },
-    [activeNode, getUpdateSearchQuery, query, rootNode?.id, selectionRange]
+    [
+      activeNode,
+      activeNodeMeta,
+      getUpdateSearchQuery,
+      query,
+      rootNode?.id,
+      selectedNodes,
+    ]
   );
 
   return () => {

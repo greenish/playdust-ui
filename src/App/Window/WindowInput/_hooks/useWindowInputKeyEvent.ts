@@ -55,6 +55,21 @@ const useHandleLR = () => {
       });
     }
 
+    if (
+      activeNodeMeta.type === 'group' &&
+      activeNodeMeta.endIndex !== undefined
+    ) {
+      const range = [activeNodeMeta.index, activeNodeMeta.endIndex];
+      const nextIndex = isLeft ? Math.min(...range) : Math.max(...range);
+
+      return setActiveNodeMeta({
+        ...activeNodeMeta,
+        index: nextIndex,
+        isGroupSelected: false,
+        endIndex: undefined,
+      });
+    }
+
     if (activeNodeMeta.type === 'group' && isGroup) {
       let newIndex = isLeft
         ? Math.max(activeNodeMeta.index - 1, 0)
@@ -111,6 +126,7 @@ const useHandleShiftLR = () => {
   );
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const activeNode = useRecoilValue(searchQueryActiveNodeAtom);
+  const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
 
   return (isLeft: boolean) => {
     const isGroup = GroupNodeType.is(activeNode);
@@ -143,7 +159,10 @@ const useHandleShiftLR = () => {
         });
       }
 
-      if (activeNodeMeta.nodeId !== rootNode.id) {
+      if (
+        activeNodeMeta.nodeId !== rootNode.id &&
+        activeNode.children.join(',') === selectedNodes.join(',')
+      ) {
         return setActiveNodeMeta({
           ...activeNodeMeta,
           endIndex:
@@ -198,28 +217,13 @@ const useHandleBackspace = () => {
   };
 };
 
-const useHandleGroupChar = () => {
-  const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
-  const addGroupQueryNode = useAddGroupQueryNode();
-
-  return () => {
-    if (activeNodeMeta?.type !== 'group') {
-      return;
-    }
-
-    if (activeNodeMeta.endIndex !== undefined) {
-      return addGroupQueryNode();
-    }
-  };
-};
-
 const useWindowInputKeyEvent = () => {
   const handleLR = useHandleLR();
   const handleShiftLR = useHandleShiftLR();
   const handleUD = useHandleUD();
   const handleEnter = useHandleEnter();
   const handleBackspace = useHandleBackspace();
-  const handleGroupChar = useHandleGroupChar();
+  const addGroupQueryNode = useAddGroupQueryNode();
 
   const onKeyDown = useCallback(
     (evt: KeyboardEvent) => {
@@ -243,16 +247,16 @@ const useWindowInputKeyEvent = () => {
           return handleBackspace();
         case '(':
         case ')':
-          return handleGroupChar();
+          return addGroupQueryNode();
         case 'z':
           return handleZ(evt);
         default:
       }
     },
     [
+      addGroupQueryNode,
       handleBackspace,
       handleEnter,
-      handleGroupChar,
       handleLR,
       handleShiftLR,
       handleUD,
