@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQuerySelectedNodesAtom from '../_atoms/searchQuerySelectedNodesAtom';
 import searchQueryRenderNodeMetaAtom from './_atoms/searchQueryRenderNodeMetaAtom';
@@ -16,9 +16,7 @@ function RenderGroupOperator({
 }: {
   renderNode: GroupRenderOperatorNodeType;
 }) {
-  const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
-    searchQueryActiveNodeMetaAtom
-  );
+  const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
   const { isActive } = useRecoilValue(
     searchQueryRenderNodeMetaAtom(renderNode)
   );
@@ -56,14 +54,6 @@ function RenderGroupOperator({
 
   return (
     <QueryPartContainer
-      onClick={(evt) => {
-        setActiveNodeMeta({
-          type: 'group',
-          nodeId: renderNode.node.id,
-          index: renderNode.index,
-        });
-        evt.stopPropagation();
-      }}
       style={{
         width: '36px',
         ...(isBelowOperator || isAboveOperator ? secondaryHighlight : {}),

@@ -1,11 +1,7 @@
 import styled from '@emotion/styled';
 import { Chip } from '@mui/material';
 import React from 'react';
-import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil';
+import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
 import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode';
 import QueryNodeType from '../../../_types/QueryNodeType';
@@ -109,7 +105,6 @@ function RenderQueryNodeChip({
   textInput,
 }: SearchChipsProps) {
   const removeQueryNode = useRemoveQueryNode();
-  const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
 
   return (
     <Chip
@@ -123,13 +118,6 @@ function RenderQueryNodeChip({
       }
       variant="outlined"
       color={isActive ? 'primary' : 'default'}
-      onClick={(evt) => {
-        evt.stopPropagation();
-
-        if (node) {
-          setActiveNodeMeta({ nodeId: node.id, type: 'query' });
-        }
-      }}
       sx={{
         border: isActive ? '2px solid #276EF1' : '',
       }}

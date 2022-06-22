@@ -18,6 +18,7 @@ import searchQueryDebouncedTermAtom from './_atoms/searchQueryDebouncedTermAtom'
 import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
 import searchSuggestionIdxAtom from './_atoms/searchSuggestionIdxAtom';
 import searchSuggestionsAtom from './_atoms/searchSuggestionsAtom';
+import searchSuggestionsForcedClosedAtom from './_atoms/searchSuggestionsForcedClosedAtom';
 import useOnSuggestionChange from './_hooks/useOnSuggestionChange';
 import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
 
@@ -72,8 +73,12 @@ function WindowInput() {
   const [activeIdx, setActiveIdx] = useRecoilState(searchSuggestionIdxAtom);
   const { suggestions, loading } = useRecoilValue(searchSuggestionsAtom);
   const onSuggestionChange = useOnSuggestionChange();
+  const [forceClosed, setForceClosed] = useRecoilState(
+    searchSuggestionsForcedClosedAtom
+  );
 
   useClickAway(containerRef, () => {
+    setForceClosed(true);
     setActiveNodeMeta(null);
   });
 
@@ -89,6 +94,8 @@ function WindowInput() {
       isOpen: suggestions.length > 0,
       highlightedIndex: activeIdx,
     });
+
+  const showOverlay = isOpen && !forceClosed;
 
   const TextInput = React.memo(() => (
     <AutosizeInput
@@ -112,11 +119,11 @@ function WindowInput() {
         if (activeIdx !== 0) {
           setActiveIdx(0);
         }
+        setForceClosed(false);
         setTerm(value);
         setDebouncedTerm(value);
       }}
       autoFocus={true}
-      onClick={(e) => e.stopPropagation()}
       onBlur={() => {
         if (suggestions.length > 0) {
           inputRef?.current?.focus();
@@ -141,7 +148,14 @@ function WindowInput() {
               height: '100%',
               fontSize: '80%',
               cursor: 'pointer',
-              background: isActiveSuggestion ? theme.palette.grey[200] : 'auto',
+              whiteSpace: 'noWrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              textAlign: 'left',
+              alignSelf: 'flex-start',
+              background: isActiveSuggestion
+                ? theme.palette.grey[200]
+                : theme.palette.background.default,
               '&:hover': {
                 background: isActiveSuggestion
                   ? 'auto'
@@ -155,13 +169,7 @@ function WindowInput() {
         </div>
       );
     },
-    [
-      activeIdx,
-      getItemProps,
-      onSuggestionChange,
-      suggestions,
-      theme.palette.grey,
-    ]
+    [activeIdx, getItemProps, onSuggestionChange, suggestions, theme.palette]
   );
 
   const rowHeight = 30;
@@ -180,6 +188,7 @@ function WindowInput() {
         }}
         {...getToggleButtonProps()}
         onClick={() => {
+          setForceClosed(false);
           if (rootNode) {
             setActiveNodeMeta({
               type: 'group',
@@ -202,8 +211,8 @@ function WindowInput() {
           </EmptyContainer>
         )}
       </InputContainer>
-      <OverlayContainer elevation={isOpen ? 8 : 0} {...getMenuProps()}>
-        {isOpen && (
+      <OverlayContainer elevation={showOverlay ? 8 : 0} {...getMenuProps()}>
+        {showOverlay && (
           <>
             <AutoSizer disableHeight={true}>
               {({ width }) => (

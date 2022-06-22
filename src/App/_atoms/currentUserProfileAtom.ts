@@ -7,6 +7,16 @@ import connectedWalletAtom from './connectedWalletAtom';
 const currentUserProfileAtom = selector<PublicProfileType | null>({
   key: 'currentUserProfileAtom',
   get: async ({ get }) => {
+    if (localStorage.getItem('ignoreCurrentUser') === 'true') {
+      return {
+        username: '',
+        bio: '',
+        profilePictureMintAddress: null,
+        isWhitelisted: true,
+        isAdmin: false,
+      };
+    }
+
     const connectedWallet = get(connectedWalletAtom);
 
     if (!connectedWallet) {

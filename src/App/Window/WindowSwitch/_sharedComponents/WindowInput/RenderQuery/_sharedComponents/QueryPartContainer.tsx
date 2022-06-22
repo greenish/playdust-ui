@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import searchQueryActiveNodeMetaAtom from '../../../../_atoms/searchQueryActiveNodeMetaAtom';
+import searchSuggestionsForcedClosedAtom from '../../_atoms/searchSuggestionsForcedClosedAtom';
 import searchQueryRenderNodeMetaAtom from '../_atoms/searchQueryRenderNodeMetaAtom';
 import RenderMapNodeType from '../_types/RenderMapNodeType';
 
@@ -53,18 +55,63 @@ function QueryPartContainer({
   style,
   onClick,
 }: QueryPartContainerProps) {
-  const meta = useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode));
+  const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
+  const styleMeta = useRecoilValue(searchQueryRenderNodeMetaAtom(renderNode));
+  const setForcedClose = useSetRecoilState(searchSuggestionsForcedClosedAtom);
 
   return (
     <RootContainer
-      highlightBackground={highlightBackground || meta.highlightBackground}
-      highlightColor={highlightColor || meta.isActive}
+      highlightBackground={highlightBackground || styleMeta.highlightBackground}
+      highlightColor={highlightColor || styleMeta.isActive}
       style={style}
-      onClick={onClick}
+      onClick={(evt) => {
+        setForcedClose(false);
+
+        setActiveNodeMeta(() => {
+          if (renderNode.type === 'query') {
+            return {
+              type: 'query',
+              nodeId: renderNode.node.id,
+            };
+          }
+
+          if (
+            renderNode.type === 'groupEnd' ||
+            renderNode.type === 'groupStart'
+          ) {
+            const index =
+              renderNode.type === 'groupStart'
+                ? 0
+                : renderNode.node.children.length;
+
+            return {
+              type: 'group',
+              nodeId: renderNode.node.id,
+              index,
+            };
+          }
+
+          if (renderNode.type === 'groupOperator') {
+            return {
+              type: 'group',
+              nodeId: renderNode.node.id,
+              index: renderNode.index,
+            };
+          }
+
+          return null;
+        });
+
+        if (onClick) {
+          onClick(evt);
+        }
+
+        evt.stopPropagation();
+      }}
     >
       {children}
-      {meta.renderLineBelow && <QueryPartDecorator position="below" />}
-      {!disableLineAbove && meta.renderLineAbove && (
+      {styleMeta.renderLineBelow && <QueryPartDecorator position="below" />}
+      {!disableLineAbove && styleMeta.renderLineAbove && (
         <QueryPartDecorator position="above" />
       )}
     </RootContainer>

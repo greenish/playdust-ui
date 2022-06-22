@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useEvent } from 'react-use';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryParentIdMapAtom from '../../../_atoms/searchQueryParentIdMapAtom';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
@@ -12,6 +12,7 @@ import searchQuerySelectedNodesAtom from '../_atoms/searchQuerySelectedNodesAtom
 import searchQueryTermAtom from '../_atoms/searchQueryTermAtom';
 import searchSuggestionIdxAtom from '../_atoms/searchSuggestionIdxAtom';
 import searchSuggestionsAtom from '../_atoms/searchSuggestionsAtom';
+import searchSuggestionsForcedClosedAtom from '../_atoms/searchSuggestionsForcedClosedAtom';
 import useAddGroupQueryNode from './useAddGroupQueryNode';
 import useOnSuggestionChange from './useOnSuggestionChange';
 import useRemoveSelection from './useRemoveSelection';
@@ -224,6 +225,8 @@ const useWindowInputKeyEvent = () => {
   const handleEnter = useHandleEnter();
   const handleBackspace = useHandleBackspace();
   const addGroupQueryNode = useAddGroupQueryNode();
+  const setForcedClose = useSetRecoilState(searchSuggestionsForcedClosedAtom);
+  const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
 
   const onKeyDown = useCallback(
     (evt: KeyboardEvent) => {
@@ -245,6 +248,9 @@ const useWindowInputKeyEvent = () => {
           return handleEnter();
         case 'Backspace':
           return handleBackspace();
+        case 'Escape':
+          setActiveNodeMeta(null);
+          return setForcedClose(true);
         case '(':
         case ')':
           return addGroupQueryNode();
@@ -260,6 +266,8 @@ const useWindowInputKeyEvent = () => {
       handleLR,
       handleShiftLR,
       handleUD,
+      setActiveNodeMeta,
+      setForcedClose,
     ]
   );
 

@@ -34,15 +34,15 @@ function RenderInput({ renderChipInput, renderNode }: RenderInputProps) {
 
   return (
     <QueryPartContainer
-      onClick={(e) => {
-        toggleGroupOperator(renderNode.node.id);
-        e.stopPropagation();
-      }}
       highlightBackground={selectedNodes.length > 0}
       renderNode={renderNode}
     >
       <Tooltip title={`Toggle ${operator} to ${oppositeOperator}`}>
-        <InputOperator>{`${operator}:`}</InputOperator>
+        <InputOperator
+          onClick={(e) => {
+            toggleGroupOperator(renderNode.node.id);
+          }}
+        >{`${operator}:`}</InputOperator>
       </Tooltip>
       {renderChipInput()}
     </QueryPartContainer>

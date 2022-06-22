@@ -1,6 +1,5 @@
 import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
+import { useRecoilValue } from 'recoil';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
 import GroupRenderNodeType from './_types/GroupRenderNodeType';
@@ -14,7 +13,6 @@ const stylesEnd = {
 };
 
 function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
-  const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
 
   if (!rootNode) {
@@ -28,19 +26,9 @@ function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
   }
 
   const symbol = renderNode.type === 'groupStart' ? '(' : ')';
-  const index =
-    renderNode.type === 'groupStart' ? 0 : renderNode.node.children.length;
 
   return (
     <QueryPartContainer
-      onClick={(evt) => {
-        setActiveNodeMeta({
-          type: 'group',
-          nodeId: renderNode.node.id,
-          index,
-        });
-        evt.stopPropagation();
-      }}
       style={{
         ...(renderNode.type === 'groupStart' ? stylesStart : {}),
         ...(renderNode.type === 'groupEnd' ? stylesEnd : {}),

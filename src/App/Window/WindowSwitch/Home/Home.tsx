@@ -50,7 +50,7 @@ function Home() {
   }, [hasValue, addCollectionQuery, topCollectionsLoadable.contents]);
 
   const content = (
-    <Table sx={{ backgroundColor: 'background.default' }}>
+    <Table sx={{ backgroundColor: 'background.default', zIndex: -1 }}>
       <TableHead>
         <TableRow>
           <TableCell sx={{ color: '#9ba6b1', borderBottom: '0px' }}>
@@ -65,27 +65,28 @@ function Home() {
         </TableRow>
       </TableHead>
       <TableBody>
-        {grouped.map(({ key, groupHref, groupLabel, groupSecondary, nfts }) => {
-          const image = <ImageButton size={40} images={[nfts[0]?.image]} />;
-
-          return (
-            <TableRow key={key}>
-              <TableCell sx={{ fontWeight: 600, borderBottom: '0px' }}>
-                <Grid container={true} alignItems="center" spacing={1}>
-                  <Grid item={true}>
-                    <Link href={groupHref}>{image}</Link>
-                  </Grid>
-                  <Grid item={true}>
-                    <Link href={groupHref}>{groupLabel}</Link>
-                  </Grid>
+        {grouped.map(({ key, groupHref, groupLabel, groupSecondary, nfts }) => (
+          <TableRow key={key}>
+            <TableCell sx={{ fontWeight: 600, borderBottom: '0px' }}>
+              <Grid container={true} alignItems="center" spacing={1}>
+                <Grid item={true}>
+                  <Link href={groupHref}>
+                    <ImageButton
+                      size={40}
+                      images={nfts.map((nft) => nft.image)}
+                    />
+                  </Link>
                 </Grid>
-              </TableCell>
-              <TableCell align="right" sx={{ borderBottom: '0px' }}>
-                {groupSecondary}
-              </TableCell>
-            </TableRow>
-          );
-        })}
+                <Grid item={true}>
+                  <Link href={groupHref}>{groupLabel}</Link>
+                </Grid>
+              </Grid>
+            </TableCell>
+            <TableCell align="right" sx={{ borderBottom: '0px' }}>
+              {groupSecondary}
+            </TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
@@ -107,14 +108,19 @@ function Home() {
         <Typography variant="body1" marginBottom="6%">
           Everything to know about NFTs on Solana
         </Typography>
-        <Box marginBottom="8%">
+        <Box marginBottom="8%" sx={{ zIndex: 2 }}>
           <SuspenseBoundary
             loading={null}
             error={null}
             content={<WindowInput />}
           />
         </Box>
-        <Box minWidth="75%" alignSelf="center" justifySelf="center">
+        <Box
+          minWidth="75%"
+          alignSelf="center"
+          justifySelf="center"
+          sx={{ zIndex: 1 }}
+        >
           <SuspenseBoundary
             loading={<CircularProgress />}
             error={null}
