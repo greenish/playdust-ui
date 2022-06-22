@@ -18,7 +18,7 @@ const useRemoveSelection = makeUseChangeSearchQuery(() => {
   const activeNode = useRecoilValue(searchQueryActiveNodeAtom);
   const parentIdMap = useRecoilValue(searchQueryParentIdMapAtom);
 
-  if (!GroupNodeType.is(activeNode) || activeNodeMeta?.type !== 'group') {
+  if (!activeNode || !activeNodeMeta) {
     return () => {};
   }
 
@@ -27,6 +27,20 @@ const useRemoveSelection = makeUseChangeSearchQuery(() => {
 
   return () => {
     setActiveNodeMeta(() => {
+      if (activeNodeMeta?.type === 'query' && GroupNodeType.is(parentNode)) {
+        return {
+          type: 'group',
+          nodeId: parentNode.id,
+          index: parentNode.children.findIndex(
+            (entry) => entry === activeNodeMeta.nodeId
+          ),
+        };
+      }
+
+      if (activeNode.type !== 'group' || activeNodeMeta?.type !== 'group') {
+        return null;
+      }
+
       const isActiveGroup = GroupNodeType.is(activeNode);
       const removedAll =
         isActiveGroup &&
@@ -62,12 +76,21 @@ const useRemoveSelection = makeUseChangeSearchQuery(() => {
       };
     });
 
-    const isGroupSelected = activeNodeMeta?.isGroupSelected === true;
-    const removalIds = isGroupSelected
-      ? [...selectedNodes, activeNodeMeta.nodeId]
-      : selectedNodes;
+    const getRemovalIds = () => {
+      if (activeNodeMeta.type === 'query') {
+        return activeNodeMeta.nodeId;
+      }
 
-    return getUseRemoveQuery(removalIds);
+      const isGroupSelected = activeNodeMeta?.isGroupSelected === true;
+
+      if (isGroupSelected) {
+        return [...selectedNodes, activeNodeMeta.nodeId];
+      }
+
+      return selectedNodes;
+    };
+
+    return getUseRemoveQuery(getRemovalIds());
   };
 });
 

@@ -5,7 +5,6 @@ import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNode
 import searchQueryParentIdMapAtom from '../../../_atoms/searchQueryParentIdMapAtom';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
 import searchStateAtom from '../../../_atoms/searchStateAtom';
-import useRemoveQueryNode from '../../../_hooks/useRemoveQueryNode';
 import GroupNodeType from '../../../_types/GroupNodeType';
 import SearchQueryNodeType from '../../../_types/SearchQueryNodeType';
 import searchQueryActiveNodeAtom from '../_atoms/searchQueryActiveNodeAtom';
@@ -63,6 +62,17 @@ const useHandleLR = () => {
     ) {
       const range = [activeNodeMeta.index, activeNodeMeta.endIndex];
       const nextIndex = isLeft ? Math.min(...range) : Math.max(...range);
+
+      if (activeNodeMeta.isGroupSelected && parent && isParentGroup) {
+        return setActiveNodeMeta({
+          type: 'group',
+          nodeId: parent.id,
+          index:
+            parent.children.findIndex(
+              (entry) => entry === activeNodeMeta.nodeId
+            ) + offset,
+        });
+      }
 
       return setActiveNodeMeta({
         ...activeNodeMeta,
@@ -216,7 +226,6 @@ const useHandleBackspace = () => {
     searchQueryActiveNodeMetaAtom
   );
   const term = useRecoilValue(searchQueryTermAtom);
-  const removeQueryNode = useRemoveQueryNode();
   const { query } = useRecoilValue(searchStateAtom);
 
   return () => {
@@ -231,7 +240,7 @@ const useHandleBackspace = () => {
     const isEmptyTerm = term === '';
 
     if (activeNodeMeta?.type === 'query' && isEmptyTerm) {
-      return removeQueryNode(activeNodeMeta.nodeId);
+      return removeSelection();
     }
 
     if (
@@ -259,6 +268,13 @@ const useHandleBackspace = () => {
             nodeId: nextChild.id,
           });
         }
+      }
+
+      if (activeNode.children.length === 0) {
+        return setActiveNodeMeta({
+          ...activeNodeMeta,
+          isGroupSelected: true,
+        });
       }
     }
   };
