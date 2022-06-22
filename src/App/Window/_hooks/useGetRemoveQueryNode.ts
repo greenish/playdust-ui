@@ -46,8 +46,10 @@ const useGetRemoveQueryNode = () => {
   return (removalIds: string | string[]): RemovalReturnType => {
     const ids = typeof removalIds === 'string' ? [removalIds] : removalIds;
     const expandedIds = ids.reduce<string[]>((acc, curr) => {
-      if (GroupNodeType.is(searchState.query.nodes[curr])) {
-        return [...acc, ...flattenNodes(searchState.query.nodes, curr)];
+      const currNode = searchState.query.nodes[curr];
+
+      if (GroupNodeType.is(currNode)) {
+        return [...acc, curr, ...flattenNodes(searchState.query.nodes, curr)];
       }
 
       return [...acc, curr];

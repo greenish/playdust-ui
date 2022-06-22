@@ -57,7 +57,7 @@ function QueryPartContainer({
 
   return (
     <RootContainer
-      highlightBackground={highlightBackground || meta.higlightBackground}
+      highlightBackground={highlightBackground || meta.highlightBackground}
       highlightColor={highlightColor || meta.isActive}
       style={style}
       onClick={onClick}

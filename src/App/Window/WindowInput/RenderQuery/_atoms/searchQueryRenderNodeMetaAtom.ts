@@ -8,7 +8,7 @@ import searchQueryPathToRootAtom from './searchQueryPathToRootAtom';
 
 type SearchQueryRenderNodeMetaAtomType = {
   isActive: boolean;
-  higlightBackground: boolean;
+  highlightBackground: boolean;
   renderLineBelow: boolean;
   renderLineAbove: boolean;
 };
@@ -63,8 +63,11 @@ const searchQueryRenderNodeIsSelectedAtom = selectorFamily<
         renderNode.node.id === activeNodeMeta?.nodeId
       ) {
         const assignedChild = renderNode.node.children[renderNode.index];
+        const foundIndex = selectedNodes.findIndex(
+          (entry) => entry === assignedChild
+        );
 
-        if (selectedNodes.includes(assignedChild)) {
+        if (foundIndex >= 1) {
           return true;
         }
       }
@@ -96,7 +99,7 @@ const searchQueryRenderNodeMetaAtom = selectorFamily<
 
       // const higlightBackground =
       //   isSelected || (isBelowActive && selectedNodes.length === 0);
-      const higlightBackground = isSelected;
+      const highlightBackground = isSelected;
 
       const renderLineBelow =
         renderNode.activeDistance !== null &&
@@ -111,7 +114,7 @@ const searchQueryRenderNodeMetaAtom = selectorFamily<
 
       return {
         isActive,
-        higlightBackground,
+        highlightBackground,
         renderLineBelow,
         renderLineAbove,
       };

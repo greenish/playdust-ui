@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
+import searchQuerySelectedNodesAtom from '../_atoms/searchQuerySelectedNodesAtom';
 import searchQueryRenderNodeMetaAtom from './_atoms/searchQueryRenderNodeMetaAtom';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
 import GroupRenderOperatorNodeType from './_types/GroupRenderOperatorNodeType';
@@ -21,6 +22,7 @@ function RenderGroupOperator({
   const { isActive } = useRecoilValue(
     searchQueryRenderNodeMetaAtom(renderNode)
   );
+  const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
 
   const isBelowOperator =
     renderNode.activeDistance !== null &&
@@ -39,6 +41,17 @@ function RenderGroupOperator({
     if (activeNodeIndex !== 0 || !isActive) {
       return null;
     }
+  }
+
+  // hide first operator in group if first child is selected
+  if (
+    isActive &&
+    renderNode.index === 0 &&
+    selectedNodes.length > 0 &&
+    activeNodeMeta?.type === 'group' &&
+    (activeNodeMeta.index === 0 || activeNodeMeta?.endIndex === 0)
+  ) {
+    return null;
   }
 
   return (
