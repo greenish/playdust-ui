@@ -135,6 +135,26 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
+"@datadog/browser-core@4.12.0":
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-core/-/browser-core-4.12.0.tgz#ffdebd48a4ca258fcc048074af5dba9a026d5933"
+  integrity sha512-g9zO8e915Ta0FOqSGCZiyFps6+AAGSC5ahFOBAicgAvioOu91tjZQtw7rREeZwSAZCZNuFOSsJ9Wd1f1k2/CgA==
+
+"@datadog/browser-rum-core@4.12.0":
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum-core/-/browser-rum-core-4.12.0.tgz#58611307748da72d012fdeb48f1e183a4e513498"
+  integrity sha512-sSdF+PwZ6Q5p571Ad6iZ3d0mtlr1JYpFdItA+tOGBiqTpMA0qmSdBc4tAxDzcP6QrJjfKE6ETXRR4aErTQGumQ==
+  dependencies:
+    "@datadog/browser-core" "4.12.0"
+
+"@datadog/browser-rum@^4.12.0":
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-4.12.0.tgz#e2ba56d972a1a102f3ee7841f8b74648303ebfd7"
+  integrity sha512-3V/LTI4zd3RFJkPusGOKDO358jEg1zvseGkuOR7q+LAaSPLmush8pFfdMvXWMu/2fxjxUdycoJjVci5bzNnUVQ==
+  dependencies:
+    "@datadog/browser-core" "4.12.0"
+    "@datadog/browser-rum-core" "4.12.0"
+
 "@emotion/babel-plugin@^11.3.0":
   version "11.7.2"
   resolved "https://registry.npmjs.org/@emotion/babel-plugin/-/babel-plugin-11.7.2.tgz"
