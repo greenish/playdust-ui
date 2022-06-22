@@ -171,31 +171,45 @@ const themeOverrides = createTheme({
         disableGutters: true,
       },
       styleOverrides: {
-        root: ({ ownerState }) => ({
-          border,
-          borderBottom: 0,
-          '.MuiAccordionSummary-root': {
-            background: greyBackground,
-            borderBottom: border,
-            minHeight: 'unset',
-            '.MuiAccordionSummary-content': {
-              margin: '8px 0',
-            },
-          },
-          '.MuiAccordionDetails-root': {
-            padding: ownerState.itemType === 'table' ? 0 : 16,
-            borderBottom: border,
-          },
-          '&:before': {
-            opacity: 0,
-          },
-        }),
+        root: ({ ownerState }) =>
+          ownerState.itemID === 'trading-module'
+            ? {
+                '.MuiAccordionSummary-root': {
+                  cursor: 'default !important',
+                  padding: 0,
+                },
+                '.MuiAccordionDetails-root': {
+                  padding: 0,
+                },
+              }
+            : {
+                border,
+                borderBottom: 0,
+                '.MuiAccordionSummary-root': {
+                  background: greyBackground,
+                  borderBottom: border,
+                  minHeight: 'unset',
+                  '.MuiAccordionSummary-content': {
+                    margin: '8px 0',
+                  },
+                },
+                '.MuiAccordionDetails-root': {
+                  padding: ownerState.className?.includes('disable-padding')
+                    ? 0
+                    : 16,
+                  borderBottom: border,
+                },
+                '&:before': {
+                  opacity: 0,
+                },
+              },
       },
     },
     MuiTableRow: {
       styleOverrides: {
         root: ({ ownerState }) => ({
           cursor: ownerState.onClick ? 'pointer' : 'default',
+          '&:last-child td, &:last-child:not(:only-of-type) th': { border: 0 },
         }),
       },
     },

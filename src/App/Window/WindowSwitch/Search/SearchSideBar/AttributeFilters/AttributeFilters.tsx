@@ -99,7 +99,7 @@ function AttributeFilters() {
           return (
             <ExplorerAccordion
               key={attribute.key}
-              itemType="table"
+              className="disable-padding"
               title={attribute.key}
               expandIcon={attribute.expandIcon}
               content={

@@ -40,7 +40,7 @@ function NFTTradingModule() {
 
   return (
     <ContentContainer>
-      <Accordion expanded={expanded}>
+      <Accordion itemID="trading-module" expanded={expanded}>
         <AccordionSummary
           aria-controls="trading-module-content"
           aria-label="Playdust Trading Module"
