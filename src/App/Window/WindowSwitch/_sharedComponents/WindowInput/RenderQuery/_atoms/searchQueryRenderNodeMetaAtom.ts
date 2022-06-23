@@ -1,7 +1,6 @@
 import { selectorFamily } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchStateAtom from '../../../../_atoms/searchStateAtom';
-import GroupNodeType from '../../../../_types/GroupNodeType';
 import searchQueryActiveNodeAtom from '../../_atoms/searchQueryActiveNodeAtom';
 import searchQuerySelectedNodesAtom from '../../_atoms/searchQuerySelectedNodesAtom';
 import RenderMapNodeType from '../_types/RenderMapNodeType';
@@ -37,22 +36,9 @@ const searchQueryRenderNodeIsSelectedAtom = selectorFamily<
       ).filter((entry) => entry !== query.rootId);
       const activeNodeMeta = get(searchQueryActiveNodeMetaAtom);
 
-      const nearestGroupId = GroupNodeType.is(renderNode.node)
-        ? renderNode.node.id
-        : renderNode.parent && renderNode.parent.id;
-
       const intersections = selectedNodes.filter((selected) =>
         pathToRoot.includes(selected)
       );
-
-      if (
-        activeNodeMeta?.type === 'group' &&
-        activeNodeMeta.isGroupSelected &&
-        nearestGroupId &&
-        nearestGroupId === activeNodeMeta.nodeId
-      ) {
-        return true;
-      }
 
       if (intersections.length) {
         return true;

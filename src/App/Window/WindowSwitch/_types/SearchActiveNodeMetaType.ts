@@ -8,7 +8,6 @@ type SearchActiveNodeMetaType =
       nodeId: string;
       index: number;
       endIndex?: number;
-      isGroupSelected?: boolean;
     };
 
 export default SearchActiveNodeMetaType;

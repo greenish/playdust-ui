@@ -24,10 +24,6 @@ const searchQuerySelectedNodesAtom = selector<string[]>({
       Math.max(index, endIndex),
     ];
 
-    if (activeNodeMeta?.type === 'group' && activeNodeMeta.isGroupSelected) {
-      return activeNode.children;
-    }
-
     return activeNode.children.slice(range[0], range[1]);
   },
 });

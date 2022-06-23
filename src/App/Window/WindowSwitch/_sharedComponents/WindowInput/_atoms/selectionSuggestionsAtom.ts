@@ -1,5 +1,4 @@
 import { selector } from 'recoil';
-import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import searchQueryActiveNodeAtom from './searchQueryActiveNodeAtom';
 import searchQuerySelectedNodesAtom from './searchQuerySelectedNodesAtom';
@@ -9,24 +8,12 @@ const selectionSuggestionsAtom = selector<SearchSuggestionType[] | null>({
   get: ({ get }) => {
     const selectedNodes = get(searchQuerySelectedNodesAtom);
     const activeNode = get(searchQueryActiveNodeAtom);
-    const activeNodeMeta = get(searchQueryActiveNodeMetaAtom);
 
     if (!selectedNodes.length || activeNode?.type !== 'group') {
       return null;
     }
 
     const inverseOperator = activeNode.operator === 'and' ? 'or' : 'and';
-
-    if (activeNodeMeta?.type === 'group' && activeNodeMeta?.isGroupSelected) {
-      return [
-        {
-          key: 'selection-remove-group',
-          label: 'Remove Group and Nodes',
-          group: 'Selection',
-          action: 'remove',
-        },
-      ];
-    }
 
     return [
       {

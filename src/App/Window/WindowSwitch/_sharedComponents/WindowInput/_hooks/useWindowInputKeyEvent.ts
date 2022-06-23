@@ -17,6 +17,9 @@ import useAddGroupQueryNode from './useAddGroupQueryNode';
 import useOnSuggestionChange from './useOnSuggestionChange';
 import useRemoveSelection from './useRemoveSelection';
 
+const getIndexInParent = (parent: GroupNodeType, id: string) =>
+  parent.children.findIndex((nodeId) => nodeId === id);
+
 const useHandleLR = () => {
   const searchTerm = useRecoilValue(searchQueryTermAtom);
   const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
@@ -45,13 +48,9 @@ const useHandleLR = () => {
     const offset = isLeft ? 0 : 1;
 
     if (activeNodeMeta?.type === 'query' && isParentGroup) {
-      const newPosition = parent.children.findIndex(
-        (nodeId) => nodeId === activeNodeMeta.nodeId
-      );
-
       setActiveNodeMeta({
         type: 'group',
-        index: newPosition,
+        index: getIndexInParent(parent, activeNodeMeta.nodeId) + offset,
         nodeId: parent.id,
       });
     }
@@ -63,21 +62,9 @@ const useHandleLR = () => {
       const range = [activeNodeMeta.index, activeNodeMeta.endIndex];
       const nextIndex = isLeft ? Math.min(...range) : Math.max(...range);
 
-      if (activeNodeMeta.isGroupSelected && parent && isParentGroup) {
-        return setActiveNodeMeta({
-          type: 'group',
-          nodeId: parent.id,
-          index:
-            parent.children.findIndex(
-              (entry) => entry === activeNodeMeta.nodeId
-            ) + offset,
-        });
-      }
-
       return setActiveNodeMeta({
         ...activeNodeMeta,
         index: nextIndex,
-        isGroupSelected: false,
         endIndex: undefined,
       });
     }
@@ -116,10 +103,7 @@ const useHandleLR = () => {
         activeNodeMeta.index === endGroupIdx &&
         isParentGroup
       ) {
-        newIndex =
-          parent.children.findIndex(
-            (nodeId) => nodeId === activeNodeMeta.nodeId
-          ) + offset;
+        newIndex = getIndexInParent(parent, activeNodeMeta.nodeId) + offset;
         newNodeId = parent.id;
       }
 
@@ -139,12 +123,14 @@ const useHandleShiftLR = () => {
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const activeNode = useRecoilValue(searchQueryActiveNodeAtom);
   const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
+  const parentIdMap = useRecoilValue(searchQueryParentIdMapAtom);
+  const { query } = useRecoilValue(searchStateAtom);
 
   return (isLeft: boolean) => {
     const isGroup = GroupNodeType.is(activeNode);
 
     if (rootNode && isGroup && activeNodeMeta?.type === 'group') {
-      const { endIndex, index, isGroupSelected } = activeNodeMeta;
+      const { endIndex, index } = activeNodeMeta;
       const currentEndIndex = endIndex === undefined ? index : endIndex;
       const endIdxOffset = isLeft ? -1 : 1;
       const nextEndIdx = currentEndIndex + endIdxOffset;
@@ -152,34 +138,31 @@ const useHandleShiftLR = () => {
         ? nextEndIdx === -1
         : nextEndIdx === activeNode.children.length + 1;
 
-      if (isGroupSelected && atEnd) {
-        return;
-      }
-
-      if (isGroupSelected) {
-        return setActiveNodeMeta({
-          ...activeNodeMeta,
-          isGroupSelected: false,
-        });
-      }
-
       if (!atEnd) {
         return setActiveNodeMeta({
           ...activeNodeMeta,
-          isGroupSelected: false,
           endIndex: nextEndIdx,
         });
       }
 
+      const parentId = parentIdMap[activeNodeMeta.nodeId];
+      const parentNode = parentId && query.nodes[parentId];
+
       if (
         activeNodeMeta.nodeId !== rootNode.id &&
-        activeNode.children.join(',') === selectedNodes.join(',')
+        activeNode.children.join(',') === selectedNodes.join(',') &&
+        GroupNodeType.is(parentNode)
       ) {
+        const indexInParent = getIndexInParent(
+          parentNode,
+          activeNodeMeta.nodeId
+        );
+
         return setActiveNodeMeta({
-          ...activeNodeMeta,
-          endIndex:
-            activeNodeMeta.endIndex === undefined ? 0 : activeNodeMeta.endIndex,
-          isGroupSelected: true,
+          type: 'group',
+          nodeId: parentNode.id,
+          index: isLeft ? indexInParent + 1 : indexInParent,
+          endIndex: isLeft ? indexInParent : indexInParent + 1,
         });
       }
     }
@@ -222,18 +205,12 @@ const useHandleBackspace = () => {
   const selectedNodes = useRecoilValue(searchQuerySelectedNodesAtom);
   const removeSelection = useRemoveSelection();
   const activeNode = useRecoilValue(searchQueryActiveNodeAtom);
-  const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
-    searchQueryActiveNodeMetaAtom
-  );
+  const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
   const term = useRecoilValue(searchQueryTermAtom);
-  const { query } = useRecoilValue(searchStateAtom);
+  const handleShiftLR = useHandleShiftLR();
 
-  return () => {
-    if (
-      selectedNodes.length ||
-      (activeNodeMeta?.type === 'group' &&
-        activeNodeMeta.isGroupSelected === true)
-    ) {
+  return (isLeft: boolean) => {
+    if (selectedNodes.length) {
       return removeSelection();
     }
 
@@ -248,34 +225,7 @@ const useHandleBackspace = () => {
       activeNode?.type === 'group' &&
       term === ''
     ) {
-      if (activeNodeMeta.index !== 0) {
-        const nextChildId = activeNode.children[activeNodeMeta.index - 1];
-        const nextChild = query.nodes[nextChildId];
-
-        if (nextChild.type === 'group') {
-          return setActiveNodeMeta({
-            type: 'group',
-            nodeId: nextChild.id,
-            index: 0,
-            endIndex: nextChild.children.length,
-            isGroupSelected: true,
-          });
-        }
-
-        if (nextChild.type === 'query') {
-          return setActiveNodeMeta({
-            type: 'query',
-            nodeId: nextChild.id,
-          });
-        }
-      }
-
-      if (activeNode.children.length === 0) {
-        return setActiveNodeMeta({
-          ...activeNodeMeta,
-          isGroupSelected: true,
-        });
-      }
+      handleShiftLR(isLeft);
     }
   };
 };
@@ -309,7 +259,8 @@ const useWindowInputKeyEvent = () => {
         case 'Enter':
           return handleEnter();
         case 'Backspace':
-          return handleBackspace();
+        case 'Delete':
+          return handleBackspace(evt.key === 'Backspace');
         case 'Escape':
           setActiveNodeMeta(null);
           return setForcedClose(true);

@@ -30,11 +30,12 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
 
       const operator = activeNode.operator === 'and' ? 'or' : 'and';
       const isRootNode = activeNode.id === rootNode?.id;
-      const updatedChildren = activeNode.children.filter(
+      const unSelectedNodes = activeNode.children.filter(
         (entry) => !selectedNodes.includes(entry)
       );
 
-      if (updatedChildren.length) {
+      // Not all nodes in group are selected, and only one selected node
+      if (unSelectedNodes.length && selectedNodes.length === 1) {
         const newNode: GroupNodeType = {
           id: newId,
           type: 'group',
@@ -45,9 +46,9 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
         const updatedActiveNode: GroupNodeType = {
           ...activeNode,
           children: insertAtIdx(
-            updatedChildren,
+            unSelectedNodes,
             newNode.id,
-            activeNodeMeta.index
+            activeNodeMeta.index - 1
           ),
         };
 
@@ -66,6 +67,47 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
         };
       }
 
+      // Not all nodes in group are selected, and more than one selected node
+      if (unSelectedNodes.length && selectedNodes.length > 1) {
+        const subGroupNode: GroupNodeType = {
+          id: shortId(),
+          type: 'group',
+          operator: activeNode.operator,
+          children: selectedNodes,
+        };
+
+        const newNode: GroupNodeType = {
+          id: newId,
+          type: 'group',
+          operator,
+          children: [subGroupNode.id],
+        };
+
+        const updatedActiveNode: GroupNodeType = {
+          ...activeNode,
+          children: insertAtIdx(
+            unSelectedNodes,
+            newNode.id,
+            activeNodeMeta.index - 1
+          ),
+        };
+
+        const updatedQuery = {
+          ...query,
+          nodes: {
+            ...query.nodes,
+            [updatedActiveNode.id]: updatedActiveNode,
+            [newNode.id]: newNode,
+            [subGroupNode.id]: subGroupNode,
+          },
+        };
+
+        return {
+          query: updatedQuery,
+          index: newNode.children.length,
+        };
+      }
+
       const newNode: GroupNodeType = {
         id: newId,
         type: 'group',
@@ -73,6 +115,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
         children: [activeNode.id],
       };
 
+      // All nodes are selected, and root node is active
       if (isRootNode) {
         const updatedQuery = {
           rootId: newNode.id,
@@ -88,6 +131,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
         };
       }
 
+      // All nodes are selected, but not at root node
       const updated = getUpdateSearchQuery((node) => {
         if (node.type === 'group' && node.id !== newNode.id) {
           return {

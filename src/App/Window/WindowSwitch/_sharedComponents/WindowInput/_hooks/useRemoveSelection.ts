@@ -55,7 +55,6 @@ const useRemoveSelection = makeUseChangeSearchQuery(() => {
           ...activeNodeMeta,
           index: Math.min(...selectedIndexes),
           endIndex: undefined,
-          isGroupSelected: undefined,
         };
       }
 
@@ -79,12 +78,6 @@ const useRemoveSelection = makeUseChangeSearchQuery(() => {
     const getRemovalIds = () => {
       if (activeNodeMeta.type === 'query') {
         return activeNodeMeta.nodeId;
-      }
-
-      const isGroupSelected = activeNodeMeta?.isGroupSelected === true;
-
-      if (isGroupSelected) {
-        return [...selectedNodes, activeNodeMeta.nodeId];
       }
 
       return selectedNodes;
