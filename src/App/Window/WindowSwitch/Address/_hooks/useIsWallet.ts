@@ -9,12 +9,9 @@ function useIsWallet(): boolean {
   if (!addressState) {
     return false;
   }
-  return (
+  return !!(
     addressState.hasPrivateKey &&
-    (!accountInfo ||
-      accountInfo.owner.equals(
-        new PublicKey('11111111111111111111111111111111')
-      ))
+    accountInfo?.owner.equals(new PublicKey('11111111111111111111111111111111'))
   );
 }
 

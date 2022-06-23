@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
@@ -6,6 +6,8 @@ import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
 import ContentContainer from '../../_sharedComponents/ContentContainer';
 import NFTDetailsRenderMedia from './NFTDetailsRenderMedia';
+
+const imageSize = 300;
 
 function NFTDetailsView() {
   const playdustNftData = useRecoilValue(playdustNftDataAtom);
@@ -25,9 +27,43 @@ function NFTDetailsView() {
         backgroundColor: '#F6F6F6',
       }}
     >
-      <Card sx={{ display: 'flex', backgroundColor: 'inherit' }}>
-        <CardMedia component={NFTDetailsRenderMedia} />
-        <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Grid
+        container={true}
+        spacing={2}
+        sx={(theme) => ({
+          [theme.breakpoints.down('md')]: {
+            justifyContent: 'center',
+          },
+        })}
+      >
+        <Grid
+          item={true}
+          xs={12}
+          md={6}
+          sx={(theme) => ({
+            maxWidth: `${imageSize}px !important`,
+            [theme.breakpoints.down('md')]: {
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            },
+          })}
+        >
+          <NFTDetailsRenderMedia imageSize={imageSize} />
+        </Grid>
+        <Grid
+          item={true}
+          xs={12}
+          md={6}
+          sx={(theme) => ({
+            [theme.breakpoints.down('md')]: {
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+            },
+          })}
+        >
           <Typography
             sx={{
               fontWeight: '700',
@@ -57,7 +93,13 @@ function NFTDetailsView() {
           </Typography>
           {playdustNftData.mintRarity && (
             <Box
-              sx={{ backgroundColor: 'grey.300', width: '50%', p: 1, pl: 2 }}
+              sx={{
+                backgroundColor: 'grey.300',
+                width: '250px',
+                p: 1,
+                pl: 2,
+                textAlign: 'left',
+              }}
             >
               <Typography sx={{ opacity: '0.5' }}>Rarity Score</Typography>
 
@@ -77,8 +119,8 @@ function NFTDetailsView() {
               </Box>
             </Box>
           )}
-        </CardContent>
-      </Card>
+        </Grid>
+      </Grid>
     </ContentContainer>
   );
 }

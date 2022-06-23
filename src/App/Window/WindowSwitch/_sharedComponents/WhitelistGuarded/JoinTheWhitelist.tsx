@@ -1,14 +1,14 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import React, { useRef, useState } from 'react';
-import HubspotErrorResponseType from '../../../api/_types/HubspotErrorResponseType';
-import HubspotSuccessResponseType from '../../../api/_types/HubSpotSuccessResponseType';
-import frontendApi from './_helpers/frontendApi';
-import PlaydustLogo from './_sharedComponents/PlaydustLogo';
+import HubspotErrorResponseType from '../../../../../api/_types/HubspotErrorResponseType';
+import HubspotSuccessResponseType from '../../../../../api/_types/HubSpotSuccessResponseType';
+import frontendApi from '../../_helpers/frontendApi';
+import PlaydustLogo from '../PlaydustLogo';
 
 function InlineForm() {
   const [processing, setProcessing] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
+  const [message, setMessage] = useState<{ color: string; text: string }>();
 
   const inputRef = useRef<HTMLInputElement>();
 
@@ -24,29 +24,37 @@ function InlineForm() {
     }
 
     setProcessing(true);
-    setError(undefined);
+    setMessage(undefined);
 
     try {
       await frontendApi.post<HubspotSuccessResponseType>('/join-waitlist', {
         email,
       });
-    } catch (e) {
+    } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error as AxiosError<HubspotErrorResponseType>;
 
         if (serverError.response) {
+          if (serverError.response.status === 200) {
+            setMessage({
+              color: 'success',
+              text: 'You have successfully joined our whitelist.',
+            });
+            return;
+          }
+
           if (
             serverError.response.status === 400 &&
             serverError.response.data.errors &&
             serverError.response.data.errors[0].errorType === 'INVALID_EMAIL'
           ) {
-            setError('Please enter a valid email.');
+            setMessage({ color: 'error', text: 'Please enter a valid email.' });
             return;
           }
         }
       }
 
-      setError('An unknown error occurred.');
+      setMessage({ color: 'error', text: 'An unknown error occurred.' });
     } finally {
       setProcessing(false);
     }
@@ -82,10 +90,10 @@ function InlineForm() {
         </Grid>
       </Grid>
       <Typography
-        color="error"
-        sx={{ visibility: error ? 'visible' : 'hidden', padding: '4px' }}
+        color={message?.color || 'default'}
+        sx={{ visibility: message ? 'visible' : 'hidden', padding: '4px' }}
       >
-        {error || '-'}
+        {message?.text || '-'}
       </Typography>
     </Box>
   );

@@ -86,7 +86,7 @@ function AttributeFilters() {
         {attributes.map((attribute) => (
           <ExplorerAccordion
             key={attribute.key}
-            itemType="table"
+            className="disable-padding"
             title={attribute.key}
             expandIcon={attribute.expandIcon}
             content={
