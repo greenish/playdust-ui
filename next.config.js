@@ -14,6 +14,8 @@ const nextConfig = {
         'process.env.RPC_NODE_CLUSTER': JSON.stringify(process.env.RPC_NODE_CLUSTER),
         'process.env.RPC_NODE_URL': JSON.stringify(process.env.RPC_NODE_URL),
         'process.env.WHITELIST_ACTIVE': JSON.stringify(process.env.WHITELIST_ACTIVE || false),
+        'process.env.HUBSPOT_PORTAL_ID': JSON.stringify(process.env.HUBSPOT_PORTAL_ID),
+        'process.env.HUBSPOT_JOIN_WHITELIST_FORM_ID': JSON.stringify(process.env.HUBSPOT_JOIN_WHITELIST_FORM_ID),
       })
     );
     return config;

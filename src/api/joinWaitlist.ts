@@ -4,11 +4,6 @@ import HubspotErrorResponseType from './_types/HubspotErrorResponseType';
 import HubspotResponseType from './_types/HubSpotResponseType';
 import HubspotSuccessResponseType from './_types/HubSpotSuccessResponseType';
 
-const originalFormId = 'bc45ba74-8293-429d-ae47-70b5f09e3b90';
-const clonedFormId = '474508e1-c364-40a6-81c0-bc89f7451f63';
-const formId = originalFormId; // clonedFormId
-const portalId = '21785114';
-
 interface JoinWaitlistNextApiRequest extends NextApiRequest {
   body: {
     email: string;
@@ -22,9 +17,21 @@ const joinWaitlist = async (
   const { email } = req.body;
 
   const hapikey = process.env.HUBSPOT_ACCESS_TOKEN;
+  const portalId = process.env.HUBSPOT_PORTAL_ID;
+  const formId = process.env.HUBSPOT_JOIN_WHITELIST_FORM_ID;
 
   if (!hapikey) {
     throw new Error('Required env variable HUBSPOT_ACCESS_TOKEN not found.');
+  }
+
+  if (!portalId) {
+    throw new Error('Required env variable HUBSPOT_PORTAL_ID not found.');
+  }
+
+  if (!formId) {
+    throw new Error(
+      'Required env variable HUBSPOT_JOIN_WHITELIST_FORM_ID not found.'
+    );
   }
 
   const url = `https://api.hsforms.com/submissions/v3/integration/submit/${portalId}/${formId}`;
