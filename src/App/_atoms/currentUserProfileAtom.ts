@@ -22,11 +22,16 @@ const currentUserProfileAtom = selector<PublicProfileType | null>({
 
       const publicProfile = create(data, PublicProfileType);
 
-      // Needed until backend work is done, since currently you can complete the whitelist process.
+      // Allow overriding the hubspot isWhitelisted field via localStorage
       const userIsWhitelisted =
         localStorage.getItem('userIsWhitelisted') === 'true';
       if (userIsWhitelisted) {
         publicProfile.isWhitelisted = true;
+      }
+
+      // If the whitelist is not active, we unwhitelist all users.
+      if (!process.env.WHITELIST_ACTIVE) {
+        publicProfile.isWhitelisted = false;
       }
 
       return publicProfile;

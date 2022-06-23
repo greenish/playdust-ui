@@ -13,6 +13,7 @@ const nextConfig = {
         'process.env.PD_ENV': JSON.stringify(process.env.PD_ENV),
         'process.env.RPC_NODE_CLUSTER': JSON.stringify(process.env.RPC_NODE_CLUSTER),
         'process.env.RPC_NODE_URL': JSON.stringify(process.env.RPC_NODE_URL),
+        'process.env.WHITELIST_ACTIVE': JSON.stringify(process.env.WHITELIST_ACTIVE || false),
       })
     );
     return config;

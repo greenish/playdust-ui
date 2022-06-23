@@ -62,11 +62,14 @@ function StandardWindowContainer({ children }: PropsWithChildren<object>) {
 function GuardedHome() {
   const currentUserProfile = useRecoilValue(currentUserProfileAtom);
 
-  if (!currentUserProfile || !currentUserProfile.isWhitelisted) {
-    return <JoinTheWhitelist />;
+  if (
+    currentUserProfile &&
+    (currentUserProfile.isWhitelisted || currentUserProfile.isAdmin)
+  ) {
+    return <Home />;
   }
 
-  return <Home />;
+  return <JoinTheWhitelist />;
 }
 
 function WindowSwitch() {
