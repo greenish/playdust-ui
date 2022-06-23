@@ -51,11 +51,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
 
         const updatedActiveNode: GroupNodeType = {
           ...activeNode,
-          children: insertAtIdx(
-            unSelectedNodes,
-            newNode.id,
-            minSelectionIndex,
-          ),
+          children: insertAtIdx(unSelectedNodes, newNode.id, minSelectionIndex),
         };
 
         const updatedQuery = {
@@ -91,11 +87,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
 
         const updatedActiveNode: GroupNodeType = {
           ...activeNode,
-          children: insertAtIdx(
-            unSelectedNodes,
-            newNode.id,
-            minSelectionIndex,
-          ),
+          children: insertAtIdx(unSelectedNodes, newNode.id, minSelectionIndex),
         };
 
         const updatedQuery = {
