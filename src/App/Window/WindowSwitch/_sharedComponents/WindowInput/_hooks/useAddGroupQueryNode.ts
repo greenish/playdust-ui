@@ -33,9 +33,15 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
       const unSelectedNodes = activeNode.children.filter(
         (entry) => !selectedNodes.includes(entry)
       );
+      const minSelectionIndex = Math.min(
+        activeNodeMeta.index,
+        activeNodeMeta.endIndex === undefined
+          ? activeNodeMeta.index
+          : activeNodeMeta.endIndex
+      );
 
       // Not all nodes in group are selected, and only one selected node
-      if (unSelectedNodes.length && selectedNodes.length === 1) {
+      if (unSelectedNodes.length && selectedNodes.length <= 1) {
         const newNode: GroupNodeType = {
           id: newId,
           type: 'group',
@@ -48,7 +54,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
           children: insertAtIdx(
             unSelectedNodes,
             newNode.id,
-            activeNodeMeta.index - 1
+            minSelectionIndex,
           ),
         };
 
@@ -88,7 +94,7 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
           children: insertAtIdx(
             unSelectedNodes,
             newNode.id,
-            activeNodeMeta.index - 1
+            minSelectionIndex,
           ),
         };
 
