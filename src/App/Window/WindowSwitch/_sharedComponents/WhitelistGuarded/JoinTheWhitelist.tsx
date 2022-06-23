@@ -1,10 +1,10 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import React, { useRef, useState } from 'react';
-import HubspotErrorResponseType from '../../../api/_types/HubspotErrorResponseType';
-import HubspotSuccessResponseType from '../../../api/_types/HubSpotSuccessResponseType';
-import frontendApi from './_helpers/frontendApi';
-import PlaydustLogo from './_sharedComponents/PlaydustLogo';
+import HubspotErrorResponseType from '../../../../../api/_types/HubspotErrorResponseType';
+import HubspotSuccessResponseType from '../../../../../api/_types/HubSpotSuccessResponseType';
+import frontendApi from '../../_helpers/frontendApi';
+import PlaydustLogo from '../PlaydustLogo';
 
 function InlineForm() {
   const [processing, setProcessing] = useState<boolean>(false);
