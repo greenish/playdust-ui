@@ -1,5 +1,6 @@
 import React from 'react';
 import SuspenseBoundary from '../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
+import ContentContainer from '../_sharedComponents/ContentContainer';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import StandardWindowContainer from '../_sharedComponents/StandardWindowContainer';
 import AccountOverviewCard from './AccountOverviewCard/AccountOverviewCard';
@@ -24,7 +25,6 @@ import UserProfile from './UserProfile/UserProfile';
 import VoteAccountCard from './VoteAccountCard/VoteAccountCard';
 import WalletGallery from './WalletGallery';
 import WalletTokenAccounts from './WalletTokenAccounts/WalletTokenAccounts';
-import ContentContainer from './_sharedComponents/ContentContainer';
 
 function Address() {
   return (

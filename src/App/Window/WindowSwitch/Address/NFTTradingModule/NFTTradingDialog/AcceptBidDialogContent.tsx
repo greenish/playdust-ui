@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import humanizeSolana from '../../../_helpers/humanizeSolana';
-import lamportsToSol from '../../_helpers/lamportsToSol';
+import lamportsToSol from '../../../_helpers/lamportsToSol';
 import tradeApi from '../_helpers/tradeApi';
 import EscrowType from '../_types/EscrowType';
 import TradingDialogType from '../_types/TradingDialogType';

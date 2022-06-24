@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js';
-import type { WindowUnionType } from '../../../_types/WindowUnionType';
+import type { WindowUnionType } from '../../../../_types/WindowUnionType';
 
 interface ExplorerLinkProps {
   to: PublicKey | string | number;
