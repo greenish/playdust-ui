@@ -1,6 +1,6 @@
 import { selectorFamily } from 'recoil';
+import frontendApi from '../../../../_helpers/frontendApi';
 import searchStateSerializedAtom from '../../../_atoms/searchStateSerializedAtom';
-import frontendApi from '../../../_helpers/frontendApi';
 import parseSearch from '../../../_helpers/parseSearch';
 import type SearchAggResponseType from '../../../_types/SearchAggResponseType';
 

@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import frontendApi from '../../../_helpers/frontendApi';
+import frontendApi from '../../../../_helpers/frontendApi';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
 import SearchSuggestionType from '../_types/SearchSuggestionType';

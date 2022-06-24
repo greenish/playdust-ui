@@ -1,6 +1,6 @@
 import { noWait, selector } from 'recoil';
+import frontendApi from '../../../../../_helpers/frontendApi';
 import searchStateAtom from '../../../../_atoms/searchStateAtom';
-import frontendApi from '../../../../_helpers/frontendApi';
 import SearchAggResponseType from '../../../../_types/SearchAggResponseType';
 
 let previousValue: SearchAggResponseType;

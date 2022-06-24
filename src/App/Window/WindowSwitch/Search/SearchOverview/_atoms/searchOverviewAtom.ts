@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
+import frontendApi from '../../../../_helpers/frontendApi';
 import searchStateSerializedAtom from '../../../_atoms/searchStateSerializedAtom';
-import frontendApi from '../../../_helpers/frontendApi';
 import parseSearch from '../../../_helpers/parseSearch';
 import searchResultsBaseAtom from '../../_atoms/searchResultsBaseAtom';
 import type SearchOverviewResponseType from '../_types/SearchOverviewResponseType';
