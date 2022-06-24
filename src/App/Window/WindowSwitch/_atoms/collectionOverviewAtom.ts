@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import api from '../_helpers/frontendApi';
+import api from '../../_helpers/frontendApi';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
 import CollectionQueryNodeType from '../_types/CollectionQueryNodeType';
 import playdustNftDataAtom from './playdustNftDataAtom';

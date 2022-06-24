@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
-import JoinTheWhitelist from '../../src/App/Window/WindowSwitch/_sharedComponents/WhitelistGuarded/JoinTheWhitelist';
+import JoinTheWhitelist from '../../src/App/Window/WhitelistGuarded/JoinTheWhitelist/JoinTheWhitelist';
 
 const RootContainer = styled.div`
   position: absolute;
