@@ -146,7 +146,7 @@ function JoinTheWhitelist() {
           <a
             href="https://info.playdust.com/terms-of-service?hsLang=en"
             target="_blank"
-            style={{ color: 'revert' }} 
+            style={{ color: 'revert' }}
             rel="noreferrer"
           >
             terms of use
@@ -155,7 +155,7 @@ function JoinTheWhitelist() {
           <a
             href="https://info.playdust.com/privacy-policy?hsLang=en"
             target="_blank"
-            style={{ color: 'revert' }} 
+            style={{ color: 'revert' }}
             rel="noreferrer"
           >
             privacy policy
