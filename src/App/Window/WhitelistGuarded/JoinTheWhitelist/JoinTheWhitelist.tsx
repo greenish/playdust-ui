@@ -39,8 +39,8 @@ function InlineForm() {
         text: 'You have successfully joined our whitelist.',
       });
 
-      const {redirectUri} = res.data;
-      if (typeof redirectUri === "string") {
+      const { redirectUri } = res.data;
+      if (typeof redirectUri === 'string') {
         window.location.href = redirectUri;
         return;
       }
