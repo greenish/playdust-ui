@@ -1,10 +1,10 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import React, { KeyboardEvent, useRef, useState } from 'react';
-import HubspotErrorResponseType from '../../../../../api/_types/HubspotErrorResponseType';
-import HubspotSuccessResponseType from '../../../../../api/_types/HubSpotSuccessResponseType';
 import frontendApi from '../../_helpers/frontendApi';
-import PlaydustLogo from '../PlaydustLogo';
+import PlaydustLogo from '../../_sharedComponents/PlaydustLogo';
+import HubspotErrorResponseType from './_types/HubspotErrorResponseType';
+import HubspotSuccessResponseType from './_types/HubspotSuccessResponseType';
 
 function InlineForm() {
   const [processing, setProcessing] = useState<boolean>(false);
@@ -161,14 +161,18 @@ function JoinTheWhitelist() {
           By providing your email address, you are agreeing to our{' '}
           <a
             href="https://info.playdust.com/terms-of-service?hsLang=en"
+            target="_blank"
             style={{ color: 'revert' }}
+            rel="noreferrer"
           >
             terms of use
           </a>{' '}
           and{' '}
           <a
             href="https://info.playdust.com/privacy-policy?hsLang=en"
+            target="_blank"
             style={{ color: 'revert' }}
+            rel="noreferrer"
           >
             privacy policy
           </a>
