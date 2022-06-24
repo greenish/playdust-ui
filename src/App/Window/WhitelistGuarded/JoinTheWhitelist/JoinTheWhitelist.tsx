@@ -26,6 +26,7 @@ function InlineForm() {
     setProcessing(true);
     setMessage(undefined);
 
+    // What is this logic?? This is not how promises work!
     try {
       await frontendApi.post<HubspotSuccessResponseType>('/join-waitlist', {
         email,
