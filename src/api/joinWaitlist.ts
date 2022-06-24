@@ -58,7 +58,7 @@ const joinWaitlist = async (
       },
     });
 
-    return resp.data;
+    return res.status(200).json(resp.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const serverError = error as AxiosError<HubspotErrorResponseType>;

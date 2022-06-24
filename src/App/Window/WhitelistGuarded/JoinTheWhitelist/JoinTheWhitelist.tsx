@@ -1,6 +1,6 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import axios, { AxiosError } from 'axios';
-import React, { useRef, useState } from 'react';
+import React, { KeyboardEvent, useRef, useState } from 'react';
 import frontendApi from '../../_helpers/frontendApi';
 import PlaydustLogo from '../../_sharedComponents/PlaydustLogo';
 import HubspotErrorResponseType from './_types/HubspotErrorResponseType';
@@ -12,7 +12,7 @@ function InlineForm() {
 
   const inputRef = useRef<HTMLInputElement>();
 
-  const handleClickButton = async () => {
+  const submitForm = async () => {
     if (!inputRef.current) {
       return;
     }
@@ -24,26 +24,31 @@ function InlineForm() {
     }
 
     setProcessing(true);
-    setMessage(undefined);
+    setMessage({ color: 'default', text: 'Submitting...' });
 
-    // What is this logic?? This is not how promises work!
     try {
-      await frontendApi.post<HubspotSuccessResponseType>('/join-waitlist', {
-        email,
+      const res = await frontendApi.post<HubspotSuccessResponseType>(
+        '/join-waitlist',
+        {
+          email,
+        }
+      );
+
+      setMessage({
+        color: 'success',
+        text: 'You have successfully joined our whitelist.',
       });
+
+      const { redirectUri } = res.data;
+      if (typeof redirectUri === 'string') {
+        window.location.href = redirectUri;
+        return;
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const serverError = error as AxiosError<HubspotErrorResponseType>;
 
         if (serverError.response) {
-          if (serverError.response.status === 200) {
-            setMessage({
-              color: 'success',
-              text: 'You have successfully joined our whitelist.',
-            });
-            return;
-          }
-
           if (
             serverError.response.status === 400 &&
             serverError.response.data.errors &&
@@ -61,6 +66,16 @@ function InlineForm() {
     }
   };
 
+  const handleKeyPress = async (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      await submitForm();
+    }
+  };
+
+  const handleClickButton = async () => {
+    await submitForm();
+  };
+
   return (
     <Box sx={{ padding: '12px' }}>
       <Grid
@@ -76,6 +91,9 @@ function InlineForm() {
             variant="outlined"
             size="small"
             inputProps={{ size: 32 }}
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onKeyPress={handleKeyPress}
+            disabled={processing}
           />
         </Grid>
         <Grid item={true}>
@@ -123,16 +141,14 @@ function JoinTheWhitelist() {
   return (
     <Box
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
+        marginTop: '3rem',
         textAlign: 'center',
+        overflow: 'scroll',
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Box>
-          <PlaydustLogo width="35%" />
+          <PlaydustLogo width="15%" />
         </Box>
         <Typography variant="h6" sx={{ marginBottom: '40px' }}>
           Everything to know about NFTs on Solana

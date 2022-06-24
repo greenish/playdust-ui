@@ -8,8 +8,8 @@ const StringToBoolean = coerce(
 
 type PublicProfileType = Infer<typeof PublicProfileType>;
 const PublicProfileType = object({
-  username: string(),
-  bio: string(),
+  username: nullable(string()),
+  bio: nullable(string()),
   profilePictureMintAddress: nullable(string()),
   isWhitelisted: StringToBoolean,
   isAdmin: StringToBoolean,
