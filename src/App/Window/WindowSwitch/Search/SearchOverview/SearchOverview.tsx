@@ -70,7 +70,7 @@ function SearchOverview() {
               {searchOverview.state === 'hasValue' ? (
                 chip.getValue(searchOverview.contents)
               ) : (
-                <Skeleton variant="text" width={35} />
+                <Skeleton variant="text" width={35} sx={{ ml: 1 }} />
               )}
             </ChipContentContainer>
           }

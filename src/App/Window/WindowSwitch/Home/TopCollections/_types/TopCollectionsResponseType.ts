@@ -1,5 +1,5 @@
-import type OpenSearchCollectionSourceType from '../../_types/OpenSearchCollectionSourceType';
-import type OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
+import OpenSearchCollectionSourceType from '../../../_types/OpenSearchCollectionSourceType';
+import type OpenSearchNFTSourceType from '../../../_types/OpenSearchNFTSourceType';
 
 type TopCollectionsResponseType = {
   results: {

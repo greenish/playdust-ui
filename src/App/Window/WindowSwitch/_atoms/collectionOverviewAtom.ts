@@ -35,11 +35,14 @@ const collectionOverviewAtom = selector<CollectionOverviewResponseType | null>({
     const collectionId = get(collectionIdAtom);
 
     if (collectionId) {
-      const { data } = await api.get<CollectionOverviewResponseType>(
-        `/collection-overview?id=${collectionId}`
-      );
-
-      return data;
+      try {
+        const { data } = await api.get<CollectionOverviewResponseType>(
+          `/collection-overview?id=${collectionId}`
+        );
+        return data;
+      } catch (e) {
+        return null;
+      }
     }
 
     return null;
