@@ -1,19 +1,9 @@
-import { Infer, string, type, union } from 'superstruct';
-
-type HubspotRedirect = Infer<typeof HubspotRedirect>;
-const HubspotRedirect = type({
-  redirectUri: string(),
-});
-
-type HubspotInlineMessage = Infer<typeof HubspotInlineMessage>;
-const HubspotInlineMessage = type({
-  inlineMessage: string(),
-});
+import { Infer, optional, string, type } from 'superstruct';
 
 type HubspotSuccessResponseType = Infer<typeof HubspotSuccessResponseType>;
-const HubspotSuccessResponseType = union([
-  HubspotRedirect,
-  HubspotInlineMessage,
-]);
+const HubspotSuccessResponseType = type({
+  redirectUri: optional(string()),
+  inlineMessage: optional(string()),
+});
 
 export default HubspotSuccessResponseType;
