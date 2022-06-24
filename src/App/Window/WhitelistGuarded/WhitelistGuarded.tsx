@@ -7,8 +7,11 @@ function WhitelistGuarded({ children }: PropsWithChildren<object>) {
   const currentUserProfile = useRecoilValue(currentUserProfileAtom);
 
   if (
-    !currentUserProfile ||
-    (!currentUserProfile.isWhitelisted && !currentUserProfile.isAdmin)
+    process.env.GO_LIVE !== "true"
+    && (
+      !currentUserProfile 
+      || (!currentUserProfile.isWhitelisted && !currentUserProfile.isAdmin)
+    )
   ) {
     return <JoinTheWhitelist />;
   }
