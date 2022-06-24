@@ -16,6 +16,7 @@ const nextConfig = {
         'process.env.WHITELIST_ACTIVE': JSON.stringify(process.env.WHITELIST_ACTIVE || false),
         'process.env.HUBSPOT_PORTAL_ID': JSON.stringify(process.env.HUBSPOT_PORTAL_ID),
         'process.env.HUBSPOT_JOIN_WHITELIST_FORM_ID': JSON.stringify(process.env.HUBSPOT_JOIN_WHITELIST_FORM_ID),
+        'process.env.GO_LIVE': JSON.stringify(process.env.GO_LIVE),
       })
     );
     return config;
