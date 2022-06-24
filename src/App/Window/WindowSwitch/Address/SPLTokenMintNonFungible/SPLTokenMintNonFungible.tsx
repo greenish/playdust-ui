@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
 import playdustNftDataAtom from '../../_atoms/playdustNftDataAtom';
-import ContentContainer from '../_sharedComponents/ContentContainer';
+import ContentContainer from '../../_sharedComponents/ContentContainer';
 import MetaplexCreators from './MetaplexCreators';
 import MetaplexNFTAttributes from './MetaplexNFTAttributes';
 import MetaplexNFTCollectionOverview from './MetaplexNFTCollectionOverview';

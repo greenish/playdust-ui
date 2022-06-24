@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
+import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import SolBalance from '../../_sharedComponents/SolBalance/SolBalance';
 import accountInfoAtom from '../_atoms/accountInfoAtom';
-import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
-import SolBalance from '../_sharedComponents/SolBalance/SolBalance';
 
 function AccountInfoRows() {
   const accountInfo = useRecoilValue(accountInfoAtom);

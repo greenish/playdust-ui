@@ -4,7 +4,7 @@ import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
 import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
-import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import LastVerifiedBuildLabel from './LastVerifiedBuildLabel';
 import SecurityLabel from './SecurityLabel';
 import SecurityTXTBadge from './SecurityTXTBadge';

@@ -7,9 +7,9 @@ import safePubkeyString from '../_helpers/safePubkeyString';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';
+import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import parsedTokenAccountAtom from './_atoms/parsedTokenAccountAtom';
 import ExternalLink from './_sharedComponents/ExternalLink';
-import LabeledAddressLink from './_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 
 function normalizeTokenAmount(raw: string | number, decimals: number): number {
   let rawTokens: number;

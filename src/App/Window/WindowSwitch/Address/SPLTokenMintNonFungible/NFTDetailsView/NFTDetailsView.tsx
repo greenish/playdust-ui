@@ -3,8 +3,8 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
 import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
+import ContentContainer from '../../../_sharedComponents/ContentContainer';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
-import ContentContainer from '../../_sharedComponents/ContentContainer';
 import NFTDetailsRenderMedia from './NFTDetailsRenderMedia';
 
 const imageSize = 300;

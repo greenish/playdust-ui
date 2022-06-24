@@ -2,7 +2,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ExplorerGrid from '../../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../../_sharedComponents/ExplorerGridRow';
-import LabeledAddressLink from '../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
+import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import parsedStakeAccountAtom from './_atoms/parsedStakeAccountAtom';
 
 function AuthoritiesCard() {
