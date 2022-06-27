@@ -31,7 +31,7 @@ const TopCollectionsBody = type({
 
 const getTopCollections = nextApiHandler<TopCollectionsResponseType>(
   async (req) => {
-    const { page } = TopCollectionsBody.create(req);
+    const { page } = TopCollectionsBody.create(req.body);
 
     const topCollectionBody = getTopCollectionQuery(page);
     const [topCollectionResult] = await searchCollections([
