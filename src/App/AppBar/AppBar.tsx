@@ -11,6 +11,7 @@ import appBarWidth from '../_helpers/appBarWidth';
 import safePromise from '../_helpers/safePromise';
 import useGoHome from '../_hooks/useGoHome';
 import ImageButton from '../_sharedComponents/ImageButton';
+import WhitelistGuarded from '../_sharedComponents/WhitelistGuarded';
 import AppWindowType from '../_types/AppWindowType';
 import Playdust from './PlaydustIcon';
 import WalletButton from './WalletButton/WalletButton';
@@ -109,10 +110,8 @@ function AppBar() {
   const inWindowManager = router.pathname === '/';
   const backgroundColor = theme.palette.background.default;
 
-  const showTabs = currentUserProfile?.isWhitelisted;
-
-  const tabControls = showTabs ? (
-    <>
+  const tabControls = (
+    <WhitelistGuarded fallback={null}>
       {tabs.map((tab) => {
         const isActive = inWindowManager && tab.id === activeTab?.id;
         const currentWindow = tab.windows[tab.selectedWindowIdx];
@@ -163,8 +162,8 @@ function AppBar() {
           </ImageButton>
         )}
       </TabButtonContainer>
-    </>
-  ) : null;
+    </WhitelistGuarded>
+  );
 
   return (
     <RootContainer>

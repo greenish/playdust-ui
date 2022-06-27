@@ -1,8 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Infer, union } from 'superstruct';
-import HubspotErrorResponseType from '../App/Window/WhitelistGuarded/JoinTheWhitelist/_types/HubspotErrorResponseType';
-import HubspotSuccessResponseType from '../App/Window/WhitelistGuarded/JoinTheWhitelist/_types/HubspotSuccessResponseType';
+import HubspotErrorResponseType from '../App/Window/JoinTheWhitelist/_types/HubspotErrorResponseType';
+import HubspotSuccessResponseType from '../App/Window/JoinTheWhitelist/_types/HubspotSuccessResponseType';
 
 type HubspotResponseType = Infer<typeof HubspotResponseType>;
 const HubspotResponseType = union([

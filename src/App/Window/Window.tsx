@@ -6,7 +6,8 @@ import activeWindowAtom from '../_atoms/activeWindowAtom';
 import connectedWalletAtom from '../_atoms/connectedWalletAtom';
 import useSetAppWindowState from '../_hooks/useSetAppWindowState';
 import Notifications from '../_sharedComponents/Notifications/Notifications';
-import WhitelistGuarded from './WhitelistGuarded/WhitelistGuarded';
+import WhitelistGuarded from '../_sharedComponents/WhitelistGuarded';
+import JoinTheWhitelist from './JoinTheWhitelist/JoinTheWhitelist';
 import WindowStateProvider from './WindowStateProvider';
 import WindowSwitch from './WindowSwitch/WindowSwitch';
 import appProfileAtom from './_atoms/appProfileAtom';
@@ -28,7 +29,7 @@ const WindowContentRenderer = React.memo(() => {
   }
   return (
     <RootContainer>
-      <WhitelistGuarded>
+      <WhitelistGuarded fallback={<JoinTheWhitelist />}>
         <WindowSwitch />
       </WhitelistGuarded>
     </RootContainer>
