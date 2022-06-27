@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import StandardWindowContainer from '../_sharedComponents/StandardWindowContainer';
 import SearchOverview from './SearchOverview/SearchOverview';
 import SearchResults from './SearchResults/SearchResults';
 import SearchSideBar from './SearchSideBar/SearchSideBar';
@@ -30,15 +31,17 @@ const TokenContainer = styled.div`
 
 function Search() {
   return (
-    <RootContainer>
-      <SearchSideBar />
-      <RightContainer>
-        <SearchOverview />
-        <TokenContainer>
-          <SearchResults />
-        </TokenContainer>
-      </RightContainer>
-    </RootContainer>
+    <StandardWindowContainer>
+      <RootContainer>
+        <SearchSideBar />
+        <RightContainer>
+          <SearchOverview />
+          <TokenContainer>
+            <SearchResults />
+          </TokenContainer>
+        </RightContainer>
+      </RootContainer>
+    </StandardWindowContainer>
   );
 }
 

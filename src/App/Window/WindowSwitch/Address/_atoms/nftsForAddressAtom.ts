@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import frontendApi from '../../_helpers/frontendApi';
+import frontendApi from '../../../_helpers/frontendApi';
 import OpenSearchNFTSourceType from '../../_types/OpenSearchNFTSourceType';
 import tokenAccountsForAddressAtom from './tokenAccountsForAddressAtom';
 

@@ -1,5 +1,5 @@
 import { selector } from 'recoil';
-import api from '../_helpers/frontendApi';
+import api from '../../_helpers/frontendApi';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
 import CollectionQueryNodeType from '../_types/CollectionQueryNodeType';
 import playdustNftDataAtom from './playdustNftDataAtom';
@@ -40,11 +40,14 @@ const collectionOverviewAtom = selector<CollectionOverviewResponseType | null>({
     }
 
     if (collectionId) {
-      const { data } = await api.get<CollectionOverviewResponseType>(
-        `/collection-overview?id=${collectionId}`
-      );
-
-      return data;
+      try {
+        const { data } = await api.get<CollectionOverviewResponseType>(
+          `/collection-overview?id=${collectionId}`
+        );
+        return data;
+      } catch (e) {
+        return null;
+      }
     }
 
     return null;

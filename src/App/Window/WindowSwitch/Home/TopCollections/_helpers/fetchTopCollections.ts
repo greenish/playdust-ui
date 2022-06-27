@@ -1,4 +1,4 @@
-import frontendApi from '../../_helpers/frontendApi';
+import frontendApi from '../../../../_helpers/frontendApi';
 import TopCollectionsResponseType from '../_types/TopCollectionsResponseType';
 
 const fetchTopCollections = async (
