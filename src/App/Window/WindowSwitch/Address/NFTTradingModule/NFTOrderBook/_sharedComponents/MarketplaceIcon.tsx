@@ -1,5 +1,5 @@
 import React, { DetailedHTMLProps, ImgHTMLAttributes } from 'react';
-import Link from '../../../../_sharedComponents/Link';
+import Link from '../../../../../_sharedComponents/Link';
 
 type ImgProps = DetailedHTMLProps<
   ImgHTMLAttributes<HTMLImageElement>,
