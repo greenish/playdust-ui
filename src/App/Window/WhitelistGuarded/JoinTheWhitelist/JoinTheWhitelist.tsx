@@ -139,7 +139,7 @@ function JoinTheWhitelist() {
     <Box
       sx={{
         p: 2,
-        pt: 8,
+        pt: 10,
         textAlign: 'center',
         overflow: 'auto',
       }}
