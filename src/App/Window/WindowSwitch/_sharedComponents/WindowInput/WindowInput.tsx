@@ -143,7 +143,6 @@ function WindowInput() {
             {...getItemProps({ item: suggestion, index })}
             onMouseMove={undefined}
             sx={{
-              textAlign: 'left',
               paddingX: 3,
               paddingY: 0.5,
               height: '100%',
