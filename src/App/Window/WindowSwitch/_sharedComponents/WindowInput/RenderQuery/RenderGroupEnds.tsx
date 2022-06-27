@@ -1,9 +1,7 @@
 import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
+import { useRecoilValue } from 'recoil';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
-import QueryPartDecorator from './_sharedComponents/QueryPartDecorator';
 import GroupRenderNodeType from './_types/GroupRenderNodeType';
 
 const stylesStart = {
@@ -14,18 +12,7 @@ const stylesEnd = {
   paddingLeft: '4px',
 };
 
-const activeBackground = {
-  background: 'rgb(255,0,0, 0.08)',
-};
-
-const stylesActive = {
-  color: 'red',
-  // background: 'rgb(255,0,0, 0.08)',
-  fontWeight: 'bold',
-};
-
 function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
-  const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
 
   if (!rootNode) {
@@ -38,45 +25,17 @@ function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
     return null;
   }
 
-  const isAboveActive =
-    renderNode.activeDistance !== null && renderNode.activeDistance >= 0;
-  const isBelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.activeDistance >= 1 &&
-    renderNode.inActiveBranch;
-  const is2BelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.activeDistance >= 2 &&
-    renderNode.inActiveBranch;
-  const isActive =
-    renderNode.activeDistance !== null &&
-    renderNode.activeDistance === 0 &&
-    renderNode.inActiveBranch;
-
   const symbol = renderNode.type === 'groupStart' ? '(' : ')';
-  const index =
-    renderNode.type === 'groupStart' ? 0 : renderNode.node.children.length;
 
   return (
     <QueryPartContainer
-      onClick={(evt) => {
-        setActiveNodeMeta({
-          type: 'group',
-          nodeId: renderNode.node.id,
-          index,
-        });
-        evt.stopPropagation();
-      }}
       style={{
         ...(renderNode.type === 'groupStart' ? stylesStart : {}),
         ...(renderNode.type === 'groupEnd' ? stylesEnd : {}),
-        ...(isBelowActive ? activeBackground : {}),
-        ...(isActive ? stylesActive : {}),
       }}
+      renderNode={renderNode}
     >
       {!isRoot && symbol}
-      {isAboveActive && <QueryPartDecorator position="below" />}
-      {is2BelowActive && <QueryPartDecorator position="above" />}
     </QueryPartContainer>
   );
 }

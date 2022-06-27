@@ -9,6 +9,7 @@ import SearchSuggestionType from '../_types/SearchSuggestionType';
 import useAddAttributeQueryNode from './useAddAttributeQueryNode';
 import useAddGroupQueryNode from './useAddGroupQueryNode';
 import useAddTextQueryNode from './useAddTextQueryNode';
+import useRemoveSelection from './useRemoveSelection';
 import useUpdateAttributeQueryNode from './useUpdateAttributeQueryNode';
 
 const useUpdateFromSuggestion = () => {
@@ -20,6 +21,7 @@ const useUpdateFromSuggestion = () => {
   const pushWindowHash = usePushWindowHash();
   const addTextQueryNode = useAddTextQueryNode();
   const addGroupQueryNode = useAddGroupQueryNode();
+  const removeSelection = useRemoveSelection();
 
   return (suggestion: SearchSuggestionType) => {
     switch (suggestion.group) {
@@ -45,8 +47,11 @@ const useUpdateFromSuggestion = () => {
           type: suggestion.type,
           state: suggestion.meta,
         });
-      case 'Group':
-        return addGroupQueryNode(suggestion.operator, suggestion.endIdx);
+      case 'Selection':
+        if (suggestion.action === 'remove') {
+          return removeSelection();
+        }
+        return addGroupQueryNode();
       case 'Search':
         return addTextQueryNode();
       default:
@@ -66,7 +71,7 @@ const useOnSuggestionChange = () => {
     updateFromSuggestion(suggestion);
 
     if (
-      suggestion.group !== 'Group' &&
+      suggestion.group !== 'Selection' &&
       activeMeta &&
       activeMeta.type === 'group'
     ) {
