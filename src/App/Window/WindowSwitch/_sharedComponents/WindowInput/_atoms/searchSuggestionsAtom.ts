@@ -2,8 +2,8 @@ import { noWait, selector } from 'recoil';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import clientSuggestionsAtom from './clientSuggestionsAtom';
 import explorerSuggestionsAtom from './explorerSuggestionsAtom';
-import groupSuggestionsAtom from './groupSuggestionsAtom';
 import searchQueryTermAtom from './searchQueryTermAtom';
+import selectionSuggestionsAtom from './selectionSuggestionsAtom';
 import serverSuggestionsAtom from './serverSuggestionsAtom';
 
 type SearchSuggestionAtomType = {
@@ -30,12 +30,12 @@ const searchSuggestionsAtom = selector<SearchSuggestionAtomType>({
     const clientSuggestionsLoadable = get(noWait(clientSuggestionsAtom));
     const serverSuggestionsLoadable = get(noWait(serverSuggestionsAtom));
     const explorerSuggestions = get(explorerSuggestionsAtom);
-    const groupSuggestions = get(groupSuggestionsAtom);
+    const selectionSuggestions = get(selectionSuggestionsAtom);
 
-    if (groupSuggestions) {
+    if (selectionSuggestions) {
       return {
-        suggestions: groupSuggestions,
         loading: false,
+        suggestions: selectionSuggestions,
       };
     }
 

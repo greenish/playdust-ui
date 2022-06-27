@@ -17,6 +17,15 @@ type MetaplexOffChainDataType = {
   };
 };
 
+type OrderStateDataType = {
+  active: boolean;
+  price: number;
+  marketplace: string;
+  blockTime: number;
+  wallet: string;
+  signature: string;
+};
+
 type PlaydustMintAPIResponseType = {
   mintOnChainMetadata: MetadataData;
   mintOffChainMetadata: MetaplexOffChainDataType;
@@ -28,6 +37,8 @@ type PlaydustMintAPIResponseType = {
     id: string;
     type: string;
   };
+  mintAsks?: OrderStateDataType[];
+  mintBids?: OrderStateDataType[];
 };
 
 export default PlaydustMintAPIResponseType;

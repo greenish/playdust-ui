@@ -3,7 +3,7 @@ import { Box, Paper, Stack, Typography, useTheme } from '@mui/material';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { useSelect } from 'downshift';
 import parse from 'html-react-parser';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
 import { AutoSizer, ListRowRenderer } from 'react-virtualized';
@@ -11,12 +11,14 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
 import SkeletonRows from '../SkeletonRows';
+import VirtualizedList from '../VirtualizedList';
 import QueryNodeChip from './QueryNodeChip/QueryNodeChip';
 import RenderQuery from './RenderQuery/RenderQuery';
-import VirtualizedList from './VirtualizedList';
 import searchQueryDebouncedTermAtom from './_atoms/searchQueryDebouncedTermAtom';
 import searchQueryTermAtom from './_atoms/searchQueryTermAtom';
+import searchSuggestionIdxAtom from './_atoms/searchSuggestionIdxAtom';
 import searchSuggestionsAtom from './_atoms/searchSuggestionsAtom';
+import searchSuggestionsForcedClosedAtom from './_atoms/searchSuggestionsForcedClosedAtom';
 import useOnSuggestionChange from './_hooks/useOnSuggestionChange';
 import useWindowInputKeyEvent from './_hooks/useWindowInputKeyEvent';
 
@@ -39,6 +41,7 @@ const InputContainer = styled(Box)`
 const OverlayContainer = styled(Paper)`
   position: absolute;
   width: 100%;
+  padding-top: 8px;
 `;
 
 const EmptyContainer = styled.div`
@@ -67,34 +70,34 @@ function WindowInput() {
     inputRef.current = inputElement;
   }, []);
 
-  const [activeIdx, setActiveIdx] = useState(0);
+  const [activeIdx, setActiveIdx] = useRecoilState(searchSuggestionIdxAtom);
   const { suggestions, loading } = useRecoilValue(searchSuggestionsAtom);
-  const lastSuggestionIdx = suggestions.length - 1;
   const onSuggestionChange = useOnSuggestionChange();
+  const [forceClosed, setForceClosed] = useRecoilState(
+    searchSuggestionsForcedClosedAtom
+  );
 
   useClickAway(containerRef, () => {
+    setForceClosed(true);
     setActiveNodeMeta(null);
   });
 
   useEffect(() => {
     setActiveIdx(0);
-  }, [activeNodeMeta]);
+  }, [activeNodeMeta, setActiveIdx]);
 
   useWindowInputKeyEvent();
 
-  const {
-    isOpen,
-    getItemProps,
-    getToggleButtonProps,
-    getMenuProps,
-    highlightedIndex,
-  } = useSelect({
-    items: suggestions,
-    isOpen: suggestions.length > 0,
-    highlightedIndex: activeIdx,
-  });
+  const { isOpen, getItemProps, getToggleButtonProps, getMenuProps } =
+    useSelect({
+      items: suggestions,
+      isOpen: suggestions.length > 0,
+      highlightedIndex: activeIdx,
+    });
 
-  const textInput = (
+  const showOverlay = isOpen && !forceClosed;
+
+  const TextInput = React.memo(() => (
     <AutosizeInput
       key="auto-size-input"
       inputStyle={{
@@ -107,41 +110,32 @@ function WindowInput() {
       value={term}
       placeholder={rootNode ? undefined : 'Search...'}
       onChange={(evt) => {
+        const { value } = evt.target;
+
+        if (value.includes('(') || value.includes(')')) {
+          return;
+        }
+
         if (activeIdx !== 0) {
           setActiveIdx(0);
         }
-        setTerm(evt.target.value);
-        setDebouncedTerm(evt.target.value);
+        setForceClosed(false);
+        setTerm(value);
+        setDebouncedTerm(value);
       }}
       autoFocus={true}
-      onClick={(e) => e.stopPropagation()}
       onBlur={() => {
         if (suggestions.length > 0) {
           inputRef?.current?.focus();
         }
       }}
-      onKeyDown={(evt) => {
-        switch (evt.key) {
-          case 'ArrowUp':
-            return setActiveIdx(
-              activeIdx === 0 ? lastSuggestionIdx : activeIdx - 1
-            );
-          case 'ArrowDown':
-            return setActiveIdx(
-              activeIdx === lastSuggestionIdx ? 0 : activeIdx + 1
-            );
-          case 'Enter':
-            return onSuggestionChange(suggestions[highlightedIndex]);
-          default:
-        }
-      }}
     />
-  );
+  ));
 
   const rowRenderer = useCallback<ListRowRenderer>(
     ({ index, key, style }) => {
       const suggestion = suggestions[index];
-      const isActiveSuggestion = highlightedIndex === index;
+      const isActiveSuggestion = activeIdx === index;
 
       return (
         <div key={key} style={style}>
@@ -154,7 +148,14 @@ function WindowInput() {
               height: '100%',
               fontSize: '80%',
               cursor: 'pointer',
-              background: isActiveSuggestion ? theme.palette.grey[200] : 'auto',
+              whiteSpace: 'noWrap',
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              textAlign: 'left',
+              alignSelf: 'flex-start',
+              background: isActiveSuggestion
+                ? theme.palette.grey[200]
+                : theme.palette.background.default,
               '&:hover': {
                 background: isActiveSuggestion
                   ? 'auto'
@@ -168,7 +169,7 @@ function WindowInput() {
         </div>
       );
     },
-    [getItemProps, highlightedIndex, onSuggestionChange, suggestions, theme]
+    [activeIdx, getItemProps, onSuggestionChange, suggestions, theme.palette]
   );
 
   const rowHeight = 30;
@@ -187,6 +188,7 @@ function WindowInput() {
         }}
         {...getToggleButtonProps()}
         onClick={() => {
+          setForceClosed(false);
           if (rootNode) {
             setActiveNodeMeta({
               type: 'group',
@@ -199,17 +201,18 @@ function WindowInput() {
       >
         {rootNode ? (
           <RenderQuery
-            renderQueryNode={(queryNode) => (
-              <QueryNodeChip node={queryNode} textInput={textInput} />
+            renderChipInput={(node) => (
+              <QueryNodeChip textInput={<TextInput />} node={node} />
             )}
-            renderTextInput={() => <QueryNodeChip textInput={textInput} />}
           />
         ) : (
-          <EmptyContainer>{textInput}</EmptyContainer>
+          <EmptyContainer>
+            <TextInput />
+          </EmptyContainer>
         )}
       </InputContainer>
-      <OverlayContainer elevation={isOpen ? 8 : 0} {...getMenuProps()}>
-        {isOpen && (
+      <OverlayContainer elevation={showOverlay ? 8 : 0} {...getMenuProps()}>
+        {showOverlay && (
           <>
             <AutoSizer disableHeight={true}>
               {({ width }) => (
@@ -220,7 +223,7 @@ function WindowInput() {
                   rowRenderer={rowRenderer}
                   rowHeight={30}
                   overscanRowCount={4}
-                  scrollToIndex={highlightedIndex}
+                  scrollToIndex={activeIdx}
                 />
               )}
             </AutoSizer>

@@ -1,36 +1,20 @@
 import React from 'react';
+import QueryNodeType from '../../../_types/QueryNodeType';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
-import QueryPartDecorator from './_sharedComponents/QueryPartDecorator';
 import QueryRenderNodeType from './_types/QueryRenderNodeType';
 
-const belowActiveOperatorStyles = {
-  background: 'rgb(255,0,0, 0.08)',
+type RenderQueryNodeProps = {
+  renderNode: QueryRenderNodeType;
+  renderChipInput: (queryNode: QueryNodeType) => JSX.Element;
 };
 
 function RenderQueryNode({
   renderNode,
-  children,
-}: React.PropsWithChildren<{ renderNode: QueryRenderNodeType }>) {
-  const isAboveActive =
-    renderNode.activeDistance !== null && renderNode.activeDistance >= 0;
-  const isBelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.inActiveBranch &&
-    renderNode.activeDistance >= 1;
-  const is2BelowActive =
-    renderNode.activeDistance !== null &&
-    renderNode.inActiveBranch &&
-    renderNode.activeDistance >= 2;
-
+  renderChipInput,
+}: RenderQueryNodeProps) {
   return (
-    <QueryPartContainer
-      style={{
-        ...(isBelowActive ? belowActiveOperatorStyles : {}),
-      }}
-    >
-      {children}
-      {isAboveActive && <QueryPartDecorator position="below" />}
-      {is2BelowActive && <QueryPartDecorator position="above" />}
+    <QueryPartContainer renderNode={renderNode}>
+      {renderChipInput(renderNode.node)}
     </QueryPartContainer>
   );
 }

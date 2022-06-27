@@ -1,6 +1,6 @@
 import type { SearchRequest } from '@opensearch-project/opensearch/api/types';
 import { defaulted, number, type } from 'superstruct';
-import type TopCollectionsResponseType from '../App/Window/WindowSwitch/Home/_types/TopCollectionsResponseType';
+import type TopCollectionsResponseType from '../App/Window/WindowSwitch/Home/TopCollections/_types/TopCollectionsResponseType';
 import getRarestNFTsByCollectionBody from './_helpers/getRarestNFTsByCollectionBody';
 import nextApiHandler from './_helpers/nextApiHandler';
 import searchCollections from './_helpers/searchCollections';
@@ -31,7 +31,7 @@ const TopCollectionsBody = type({
 
 const getTopCollections = nextApiHandler<TopCollectionsResponseType>(
   async (req) => {
-    const { page } = TopCollectionsBody.create(req);
+    const { page } = TopCollectionsBody.create(req.body);
 
     const topCollectionBody = getTopCollectionQuery(page);
     const [topCollectionResult] = await searchCollections([

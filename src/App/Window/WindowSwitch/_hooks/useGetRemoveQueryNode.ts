@@ -1,16 +1,33 @@
 import { useRecoilValue } from 'recoil';
 import searchQueryParentIdMapAtom from '../_atoms/searchQueryParentIdMapAtom';
 import searchStateAtom from '../_atoms/searchStateAtom';
+import GroupNodeType from '../_types/GroupNodeType';
 import SearchQueryType from '../_types/SearchQueryType';
 import SearchStateType from '../_types/SearchStateType';
 import useGetUpdateSearchQuery from './useGetUpdateSearchQuery';
 
+type RemovalReturnType = Pick<SearchStateType, 'query'>;
+
+function flattenNodes(nodes: SearchQueryType['nodes'], id: string): string[] {
+  const node = nodes[id];
+
+  if (node.type === 'group' && node.children.length === 0) {
+    return [node.id];
+  }
+
+  if (node.type !== 'group') {
+    return [node.id];
+  }
+
+  return [...node.children.flatMap((childId) => flattenNodes(nodes, childId))];
+}
+
 const useGetRemoveQueryNode = () => {
-  const { query } = useRecoilValue(searchStateAtom);
+  const searchState = useRecoilValue(searchStateAtom);
   const getUpdateSearchQuery = useGetUpdateSearchQuery();
   const parentMap = useRecoilValue(searchQueryParentIdMapAtom);
 
-  const remove = (removalId: string, uncommittedQuery?: SearchQueryType) =>
+  const remove = (removalId: string, query: SearchQueryType) =>
     getUpdateSearchQuery(
       (node) => {
         if (node.id === removalId) {
@@ -27,24 +44,39 @@ const useGetRemoveQueryNode = () => {
         return node;
       },
       [],
-      uncommittedQuery
+      query
     );
 
-  return (removalId: string): Pick<SearchStateType, 'query'> => {
-    const parentId = parentMap[removalId];
-    const parentNode = parentId && query.nodes[parentId];
-    const shouldRemoveGroup =
-      parentNode &&
-      parentNode.type === 'group' &&
-      parentNode.children.length <= 1;
+  return (removalIds: string | string[]): RemovalReturnType => {
+    const ids = typeof removalIds === 'string' ? [removalIds] : removalIds;
+    const expandedIds = ids.reduce<string[]>((acc, curr) => {
+      const currNode = searchState.query.nodes[curr];
 
-    const removed = remove(removalId);
+      if (GroupNodeType.is(currNode)) {
+        return currNode.children.length
+          ? [...acc, ...flattenNodes(searchState.query.nodes, curr)]
+          : [...acc, curr];
+      }
 
-    if (shouldRemoveGroup) {
-      return remove(parentId, removed.query);
-    }
+      return [...acc, curr];
+    }, []);
 
-    return removed;
+    return expandedIds.reduce<RemovalReturnType>((acc, removalId) => {
+      const parentId = parentMap[removalId];
+      const parentNode = parentId && acc.query.nodes[parentId];
+      const shouldRemoveGroup =
+        parentNode &&
+        parentNode.type === 'group' &&
+        parentNode.children.length <= 1;
+
+      const removed = remove(removalId, acc.query);
+
+      if (shouldRemoveGroup) {
+        return remove(parentId, removed.query);
+      }
+
+      return removed;
+    }, searchState);
   };
 };
 

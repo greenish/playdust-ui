@@ -1,7 +1,7 @@
 import { Box, Card } from '@mui/material';
 import React from 'react';
+import Link from '../../../_sharedComponents/Link';
 import CardImageContainer from '../CardImageContainer';
-import Link from '../Link';
 import TokenCardContentContainer from './_sharedComponents/TokenCardContentContainer';
 
 interface ImageCardProps {

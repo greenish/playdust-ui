@@ -33,13 +33,21 @@ const collectionOverviewAtom = selector<CollectionOverviewResponseType | null>({
   key: 'collectionOverviewAtom',
   get: async ({ get }) => {
     const collectionId = get(collectionIdAtom);
+    const { query } = get(searchStateAtom);
+
+    if (query.rootId === '') {
+      return null;
+    }
 
     if (collectionId) {
-      const { data } = await api.get<CollectionOverviewResponseType>(
-        `/collection-overview?id=${collectionId}`
-      );
-
-      return data;
+      try {
+        const { data } = await api.get<CollectionOverviewResponseType>(
+          `/collection-overview?id=${collectionId}`
+        );
+        return data;
+      } catch (e) {
+        return null;
+      }
     }
 
     return null;

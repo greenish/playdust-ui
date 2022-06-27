@@ -9,6 +9,11 @@ const searchTopAggregationsFetchAtom = selector<SearchAggResponseType>({
   key: 'searchTopAggregationsFetchAtom',
   get: async ({ get }) => {
     const { query } = get(searchStateAtom);
+
+    if (query.rootId === '') {
+      return [];
+    }
+
     const { data } = await frontendApi.post<SearchAggResponseType>(
       '/search-top-aggregations',
       {

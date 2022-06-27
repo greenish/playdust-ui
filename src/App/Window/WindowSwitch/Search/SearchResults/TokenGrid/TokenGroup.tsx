@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { ArrowForwardIos } from '@mui/icons-material';
 import { Skeleton, Typography } from '@mui/material';
 import React, { useCallback } from 'react';
-import Link from '../../../_sharedComponents/Link';
+import Link from '../../../../_sharedComponents/Link';
 import TokenCard from '../../../_sharedComponents/TokenCard/TokenCard';
 import VirtualizedGrid from './_sharedComponents/VirtualizedGrid';
 import type TokenGroupProps from './_types/TokenGroupProps';

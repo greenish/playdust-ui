@@ -1,10 +1,9 @@
 import { WindowUnionType } from '../../../../../_types/WindowUnionType';
-import GroupNodeType from '../../../_types/GroupNodeType';
 
 type SearchSuggestionType =
   | {
       key: string;
-      group: 'Search' | 'Attribute Value' | 'Attribute Trait' | 'No Results';
+      group: 'Search' | 'No Results';
       label: string;
     }
   | {
@@ -32,9 +31,14 @@ type SearchSuggestionType =
   | {
       key: string;
       label: string;
-      group: 'Group';
-      endIdx: number;
-      operator: GroupNodeType['operator'];
+      group: 'Selection';
+      action: 'remove';
+    }
+  | {
+      key: string;
+      label: string;
+      group: 'Selection';
+      action: 'group';
     };
 
 export default SearchSuggestionType;

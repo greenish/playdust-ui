@@ -1,10 +1,14 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import React, { KeyboardEvent, useRef, useState } from 'react';
-import frontendApi from '../../_helpers/frontendApi';
-import PlaydustLogo from '../../_sharedComponents/PlaydustLogo';
+import safePromise from '../../../../scripts/_helpers/safePromise';
+import frontendApi from '../_helpers/frontendApi';
+import Link from '../_sharedComponents/Link';
+import PlaydustLogo from '../_sharedComponents/PlaydustLogo';
 import HubspotErrorResponseType from './_types/HubspotErrorResponseType';
 import HubspotSuccessResponseType from './_types/HubspotSuccessResponseType';
+
+const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 function InlineForm() {
   const [processing, setProcessing] = useState<boolean>(false);
@@ -19,7 +23,8 @@ function InlineForm() {
 
     const email = inputRef.current.value;
 
-    if (!email.length) {
+    if (!emailRegex.test(email)) {
+      setMessage({ color: 'error', text: 'Please enter a valid email.' });
       return;
     }
 
@@ -66,7 +71,7 @@ function InlineForm() {
     }
   };
 
-  const handleKeyPress = async (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = async (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Enter') {
       await submitForm();
     }
@@ -77,10 +82,10 @@ function InlineForm() {
   };
 
   return (
-    <Box sx={{ padding: '12px' }}>
+    <Box sx={{ mt: 6, mb: 2 }}>
       <Grid
         container={true}
-        spacing={1.2}
+        spacing={2}
         alignItems="stretch"
         justifyContent="center"
       >
@@ -91,8 +96,7 @@ function InlineForm() {
             variant="outlined"
             size="small"
             inputProps={{ size: 32 }}
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onKeyPress={handleKeyPress}
+            onKeyPress={(...args) => safePromise(handleKeyPress(...args))}
             disabled={processing}
           />
         </Grid>
@@ -100,39 +104,32 @@ function InlineForm() {
           <Button
             variant="contained"
             sx={{ height: '100%', fontSize: '16px', fontWeight: 500 }}
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onClick={handleClickButton}
+            onClick={() => safePromise(handleClickButton())}
             disabled={processing}
           >
             Join The Waitlist
           </Button>
         </Grid>
       </Grid>
-      <Typography
-        color={message?.color || 'default'}
-        sx={{ visibility: message ? 'visible' : 'hidden', padding: '4px' }}
-      >
-        {message?.text || '-'}
-      </Typography>
+      {message && (
+        <Typography
+          color={message?.color || 'default'}
+          sx={{ visibility: message ? 'visible' : 'hidden', padding: '4px' }}
+        >
+          {message?.text || '-'}
+        </Typography>
+      )}
     </Box>
   );
 }
 
-function Section({
-  header,
-  body,
-}: {
-  header: string;
-  body: JSX.Element | string;
-}) {
+function Section({ header, body }: { header: string; body: string }) {
   return (
-    <Box sx={{ marginBottom: '32px' }}>
+    <Box sx={{ mb: 5, whiteSpace: 'pre-wrap' }}>
       <Typography variant="h6" gutterBottom={true} fontWeight={600}>
         {header}
       </Typography>
-      <Typography variant="body1" gutterBottom={true}>
-        {body}
-      </Typography>
+      <Typography variant="body1">{body}</Typography>
     </Box>
   );
 }
@@ -141,72 +138,51 @@ function JoinTheWhitelist() {
   return (
     <Box
       sx={{
-        marginTop: '3rem',
+        p: 2,
+        pt: 10,
         textAlign: 'center',
-        overflow: 'scroll',
+        overflow: 'auto',
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Box>
-          <PlaydustLogo width="15%" />
+          <PlaydustLogo width="145px" />
         </Box>
-        <Typography variant="h6" sx={{ marginBottom: '40px' }}>
+        <Typography variant="body1" marginBottom="16px">
           Everything to know about NFTs on Solana
         </Typography>
         <InlineForm />
-        <Typography
-          variant="subtitle2"
-          gutterBottom={true}
-          sx={{ padding: '6px', marginBottom: '40px' }}
-        >
+        <Typography variant="subtitle2" gutterBottom={true} sx={{ mb: 6 }}>
           By providing your email address, you are agreeing to our{' '}
-          <a
+          <Link
             href="https://info.playdust.com/terms-of-service?hsLang=en"
             target="_blank"
-            style={{ color: 'revert' }}
             rel="noreferrer"
           >
             terms of use
-          </a>{' '}
+          </Link>{' '}
           and{' '}
-          <a
+          <Link
             href="https://info.playdust.com/privacy-policy?hsLang=en"
             target="_blank"
-            style={{ color: 'revert' }}
             rel="noreferrer"
           >
             privacy policy
-          </a>
+          </Link>
           .
         </Typography>
         <Box>
           <Section
             header="Reimagining NFTs"
-            body={
-              <>
-                We’re building the most intuitive and powerful
-                <br /> platform for digital assets on Solana.
-              </>
-            }
+            body={`We're building the most intuitive and powerful\nplatform for digital assets on Solana.`}
           />
           <Section
             header="Playdust is for you"
-            body={
-              <>
-                Whether you’re a collector, trader, creator, or just jpg-
-                <br />
-                curious, we’ve got you covered.
-              </>
-            }
+            body={`Whether you're a collector, trader, creator, or just jpg-\ncurious, we've got you covered.`}
           />
           <Section
             header="Sign up for access"
-            body={
-              <>
-                Our closed beta will launch soon. We’ll whitelist you
-                <br /> for our Playdust NFT drop as a thank you.
-              </>
-            }
+            body={`Our closed beta will launch soon. We'll whitelist you\nfor our Playdust NFT drop as a thank you.`}
           />
         </Box>
       </Box>

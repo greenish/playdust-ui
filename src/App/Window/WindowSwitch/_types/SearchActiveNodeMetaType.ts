@@ -7,6 +7,7 @@ type SearchActiveNodeMetaType =
       type: 'group';
       nodeId: string;
       index: number;
+      endIndex?: number;
     };
 
 export default SearchActiveNodeMetaType;

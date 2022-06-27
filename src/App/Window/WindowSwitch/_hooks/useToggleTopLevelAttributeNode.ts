@@ -17,7 +17,7 @@ const useToggleTopLevelAttributeNode = makeUseChangeSearchQuery(() => {
   const findAttribute = useRecoilValue(findTopLevelAttributeAtom);
   const findAttributeKey = useRecoilValue(findTopLevelAttributeKeyAtom);
   const getAddQueryNode = useGetAddQueryNode();
-  const updateSearchQuery = useGetUpdateSearchQuery();
+  const getUpdateSearchQuery = useGetUpdateSearchQuery();
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
 
   return (key: string, value: string) => {
@@ -34,6 +34,7 @@ const useToggleTopLevelAttributeNode = makeUseChangeSearchQuery(() => {
       key,
       value,
     };
+
     const foundKey = findAttributeKey(key);
 
     if (foundKey?.groupId) {
@@ -48,7 +49,7 @@ const useToggleTopLevelAttributeNode = makeUseChangeSearchQuery(() => {
         children: [foundKey.nodeId, newNode.id],
       };
 
-      return updateSearchQuery(
+      return getUpdateSearchQuery(
         (node) => {
           if (node.id === rootNode.id) {
             return {
