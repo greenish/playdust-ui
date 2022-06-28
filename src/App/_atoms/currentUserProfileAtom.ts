@@ -22,11 +22,6 @@ const currentUserProfileAtom = selector<PublicProfileType | null>({
 
       const publicProfile = create(data, PublicProfileType);
 
-      // If the whitelist is not active, we unwhitelist all users.
-      if (!process.env.WHITELIST_ACTIVE) {
-        publicProfile.isWhitelisted = false;
-      }
-
       return publicProfile;
     } catch (error) {
       // /public/read properly returns 404 when a user does not have a profile

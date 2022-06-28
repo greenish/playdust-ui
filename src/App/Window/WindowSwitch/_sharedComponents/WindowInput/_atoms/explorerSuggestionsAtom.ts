@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
-import searchQueryDebouncedTermAtom from './searchQueryDebouncedTermAtom';
+import searchQueryTermAtom from './searchQueryTermAtom';
 import searchQueryTermWindowTypeAtom from './searchQueryTermWindowTypeAtom';
 
 const explorerSuggestionsAtom = selector<SearchSuggestionType[] | null>({
@@ -13,7 +13,7 @@ const explorerSuggestionsAtom = selector<SearchSuggestionType[] | null>({
       return null;
     }
 
-    const term = get(searchQueryDebouncedTermAtom);
+    const term = get(searchQueryTermAtom);
     const windowType = get(searchQueryTermWindowTypeAtom);
     const highlightedTerm = `<b>${term}</b>`;
 

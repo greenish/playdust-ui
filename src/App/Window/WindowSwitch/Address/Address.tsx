@@ -18,7 +18,14 @@ import SPLTokenMintFungible from './SPLTokenMintFungible/SPLTokenMintFungible';
 import SPLTokenMintNonFungible from './SPLTokenMintNonFungible/SPLTokenMintNonFungible';
 import SPLTokenMultisig from './SPLTokenMultisig';
 import StakeAccount from './StakeAccount/StakeAccount';
+import SysvarAccountClockCard from './SysvarAccountClockCard';
+import SysvarAccountEpochScheduleCard from './SysvarAccountEpochScheduleCard';
+import SysvarAccountFeesCard from './SysvarAccountFeesCard';
+import SysvarAccountRecentBlockhashesCard from './SysvarAccountRecentBlockhashesCard';
+import SysvarAccountRentCard from './SysvarAccountRentCard';
+import SysvarAccountRewardsCard from './SysvarAccountRewardsCard';
 import SysvarAccountSlotHashesCard from './SysvarAccountSlotHashesCard';
+import SysvarAccountSlotHistoryCard from './SysvarAccountSlotHistoryCard';
 import SysvarAccountStakeHistoryCard from './SysvarAccountStakeHistoryCard';
 import Transactions from './Transactions/Transactions';
 import UserProfile from './UserProfile/UserProfile';
@@ -55,26 +62,22 @@ function Address() {
           error={null}
           loading={null}
         />
-
         <SuspenseBoundary
           content={<WalletGallery />}
           error={null}
           loading={null}
         />
-
         <SuspenseBoundary
           content={<WalletTokenAccounts />}
           error={null}
           loading={null}
         />
-
         {/* All Accounts */}
         <SuspenseBoundary
           content={<AccountOverviewCard />}
           error={null}
           loading={null}
         />
-
         {/* Token Accounts */}
         <SuspenseBoundary
           content={<SPLTokenAccount />}
@@ -91,7 +94,6 @@ function Address() {
           error={null}
           loading={null}
         />
-
         {/* Config & Sys Accounts */}
         <SuspenseBoundary
           content={<ConfigAccountValidatorInfoCard />}
@@ -129,7 +131,42 @@ function Address() {
           loading={null}
         />
         <SuspenseBoundary
+          content={<SysvarAccountClockCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SysvarAccountEpochScheduleCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SysvarAccountFeesCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SysvarAccountRecentBlockhashesCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SysvarAccountRentCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SysvarAccountRewardsCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
           content={<SysvarAccountSlotHashesCard />}
+          error={null}
+          loading={null}
+        />
+        <SuspenseBoundary
+          content={<SysvarAccountSlotHistoryCard />}
           error={null}
           loading={null}
         />
@@ -143,7 +180,6 @@ function Address() {
           error={null}
           loading={null}
         />
-
         {/* All Accounts */}
         <SuspenseBoundary
           content={<RawAccountData />}

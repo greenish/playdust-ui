@@ -1,7 +1,7 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import axios, { AxiosError } from 'axios';
 import React, { KeyboardEvent, useRef, useState } from 'react';
-import safePromise from '../../../../scripts/_helpers/safePromise';
+import safePromise from '../../_helpers/safePromise';
 import frontendApi from '../_helpers/frontendApi';
 import Link from '../_sharedComponents/Link';
 import PlaydustLogo from '../_sharedComponents/PlaydustLogo';
