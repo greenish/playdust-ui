@@ -40,6 +40,33 @@ const useAddGroupQueryNode = makeUseChangeSearchQuery(() => {
           : activeNodeMeta.endIndex
       );
 
+      // Adding empty group within current emtpy group
+      if (unSelectedNodes.length === 0 && selectedNodes.length === 0) {
+        const newNode: GroupNodeType = {
+          id: newId,
+          type: 'group',
+          operator,
+          children: [],
+        };
+
+        const updatedQuery = {
+          ...query,
+          nodes: {
+            ...query.nodes,
+            [activeNode.id]: {
+              ...activeNode,
+              children: [newNode.id],
+            },
+            [newNode.id]: newNode,
+          },
+        };
+
+        return {
+          query: updatedQuery,
+          index: 0,
+        };
+      }
+
       // Not all nodes in group are selected, and only one selected node
       if (unSelectedNodes.length && selectedNodes.length <= 1) {
         const newNode: GroupNodeType = {

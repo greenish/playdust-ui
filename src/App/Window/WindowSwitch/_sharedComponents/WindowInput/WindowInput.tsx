@@ -153,6 +153,8 @@ function WindowInput() {
               overflow: 'hidden',
               textAlign: 'left',
               alignSelf: 'flex-start',
+              border: 'none',
+              outline: 'none',
               background: isActiveSuggestion
                 ? theme.palette.grey[200]
                 : theme.palette.background.default,

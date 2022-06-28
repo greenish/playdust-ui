@@ -44,7 +44,10 @@ const searchSuggestionsAtom = selector<SearchSuggestionAtomType>({
     }
 
     if (explorerSuggestions) {
-      suggestions.push(...explorerSuggestions);
+      return {
+        loading: false,
+        suggestions: explorerSuggestions,
+      };
     }
 
     if (clientSuggestionsLoadable.state === 'hasValue') {
