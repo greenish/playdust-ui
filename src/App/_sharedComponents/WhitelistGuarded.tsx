@@ -16,11 +16,11 @@ function WhitelistGuarded({
 
   if (process.env.GO_LIVE === 'true' || isAdmin || isWhitelisted) {
     // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <>{fallback}</>;
+    return <>{children}</>;
   }
 
   // eslint-disable-next-line react/jsx-no-useless-fragment
-  return <>{children}</>;
+  return <>{fallback}</>;
 }
 
 export default WhitelistGuarded;
