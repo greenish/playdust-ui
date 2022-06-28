@@ -1,18 +1,18 @@
 import { keyframes } from '@emotion/react';
-import { Fab, Theme } from '@mui/material';
+import { Fab, Skeleton, Theme } from '@mui/material';
 import React, {
   PropsWithChildren,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import getCDNUrl from '../_helpers/getCDNUrl';
 import safePromise from '../_helpers/safePromise';
 
 function usePreloadImages(images?: string[]) {
-  const [loadedImages, setLoadedImages] = useState<string[]>(
-    images ? [images[0]] : []
-  );
+  const mountedRef = useRef(true);
+  const [loadedImages, setLoadedImages] = useState<string[]>([]);
 
   const loadImages = useCallback(
     async (imagesToLoad: string[]) => {
@@ -28,7 +28,9 @@ function usePreloadImages(images?: string[]) {
             })
         )
       );
-      setLoadedImages(loaded.filter(Boolean));
+      if (mountedRef.current) {
+        setLoadedImages(loaded.filter(Boolean));
+      }
     },
     [setLoadedImages]
   );
@@ -40,6 +42,13 @@ function usePreloadImages(images?: string[]) {
       setLoadedImages([]);
     }
   }, [images, loadImages]);
+
+  useEffect(
+    () => () => {
+      mountedRef.current = false;
+    },
+    []
+  );
 
   return images && loadedImages;
 }
@@ -103,17 +112,25 @@ function ImageButton({
 
   return (
     <Fab sx={sx} disabled={!onClick} onClick={onClick}>
-      {loadedImages ? (
+      {images && (
         <div
           style={{
-            backgroundImage: loadedImages
+            backgroundImage: images
               .map((image) => `url("${getCDNUrl(image)}")`)
               .join(),
           }}
         />
-      ) : (
-        children
       )}
+      {loadedImages &&
+        !loadedImages.length &&
+        (children || (
+          <Skeleton
+            animation="wave"
+            variant="circular"
+            sx={{ height: size, width: size }}
+          />
+        ))}
+      {!loadedImages && children}
     </Fab>
   );
 }
