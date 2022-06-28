@@ -59,6 +59,17 @@ const useRemoveSelection = makeUseChangeSearchQuery(() => {
       }
 
       if (GroupNodeType.is(parentNode)) {
+        if (
+          selectedNodes.every(
+            (selectedId) => query.nodes[selectedId]?.type === 'group'
+          )
+        ) {
+          return {
+            ...activeNodeMeta,
+            index: 0,
+          };
+        }
+
         return {
           type: 'group',
           nodeId: parentNode.id,

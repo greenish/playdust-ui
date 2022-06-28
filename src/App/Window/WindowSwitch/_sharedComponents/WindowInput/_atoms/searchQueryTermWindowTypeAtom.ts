@@ -1,14 +1,14 @@
 import { selector } from 'recoil';
 import { WindowUnionType } from '../../../../../_types/WindowUnionType';
 import getWindowType from '../_helpers/getWindowType';
-import searchQueryDebouncedTermAtom from './searchQueryDebouncedTermAtom';
+import searchQueryTermAtom from './searchQueryTermAtom';
 
 const searchQueryTermWindowTypeAtom = selector<WindowUnionType>({
   key: 'searchQueryTermWindowTypeAtom',
   get: ({ get }) => {
-    const debouncedTerm = get(searchQueryDebouncedTermAtom);
+    const term = get(searchQueryTermAtom);
 
-    return getWindowType(debouncedTerm);
+    return getWindowType(term);
   },
 });
 

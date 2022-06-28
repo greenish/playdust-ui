@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useEvent } from 'react-use';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import activeWindowAtom from '../../../../../_atoms/activeWindowAtom';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryParentIdMapAtom from '../../../_atoms/searchQueryParentIdMapAtom';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
@@ -191,14 +192,22 @@ const useHandleEnter = () => {
   return () => onSuggestionChange(suggestions[activeIdx]);
 };
 
-const handleZ = (evt: KeyboardEvent) => {
-  if (evt.metaKey && evt.shiftKey) {
-    return window.history.forward();
-  }
+const useHandleZ = () => {
+  const activeWindow = useRecoilValue(activeWindowAtom);
 
-  if (evt.metaKey) {
-    return window.history.back();
-  }
+  return (evt: KeyboardEvent) => {
+    if (activeWindow?.type !== 'search') {
+      return;
+    }
+
+    if (evt.metaKey && evt.shiftKey) {
+      return window.history.forward();
+    }
+
+    if (evt.metaKey) {
+      return window.history.back();
+    }
+  };
 };
 
 const useHandleBackspace = () => {
@@ -236,6 +245,7 @@ const useWindowInputKeyEvent = () => {
   const handleUD = useHandleUD();
   const handleEnter = useHandleEnter();
   const handleBackspace = useHandleBackspace();
+  const handleZ = useHandleZ();
   const addGroupQueryNode = useAddGroupQueryNode();
   const setForcedClose = useSetRecoilState(searchSuggestionsForcedClosedAtom);
   const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
@@ -273,14 +283,15 @@ const useWindowInputKeyEvent = () => {
       }
     },
     [
-      addGroupQueryNode,
-      handleBackspace,
-      handleEnter,
-      handleLR,
-      handleShiftLR,
       handleUD,
+      handleEnter,
+      handleBackspace,
       setActiveNodeMeta,
       setForcedClose,
+      addGroupQueryNode,
+      handleZ,
+      handleLR,
+      handleShiftLR,
     ]
   );
 

@@ -11,15 +11,14 @@ type RemovalReturnType = Pick<SearchStateType, 'query'>;
 function flattenNodes(nodes: SearchQueryType['nodes'], id: string): string[] {
   const node = nodes[id];
 
-  if (node.type === 'group' && node.children.length === 0) {
-    return [node.id];
-  }
-
   if (node.type !== 'group') {
     return [node.id];
   }
 
-  return [...node.children.flatMap((childId) => flattenNodes(nodes, childId))];
+  return [
+    node.id,
+    ...node.children.flatMap((childId) => flattenNodes(nodes, childId)),
+  ];
 }
 
 const useGetRemoveQueryNode = () => {
@@ -53,9 +52,7 @@ const useGetRemoveQueryNode = () => {
       const currNode = searchState.query.nodes[curr];
 
       if (GroupNodeType.is(currNode)) {
-        return currNode.children.length
-          ? [...acc, ...flattenNodes(searchState.query.nodes, curr)]
-          : [...acc, curr];
+        return [...acc, ...flattenNodes(searchState.query.nodes, curr)];
       }
 
       return [...acc, curr];
@@ -67,8 +64,9 @@ const useGetRemoveQueryNode = () => {
       const shouldRemoveGroup =
         parentNode &&
         parentNode.type === 'group' &&
-        parentNode.children.length <= 1;
-
+        parentNode.children.length <= 1 &&
+        removalIds.includes(removalId) &&
+        searchState.query.nodes[removalId]?.type === 'query';
       const removed = remove(removalId, acc.query);
 
       if (shouldRemoveGroup) {
