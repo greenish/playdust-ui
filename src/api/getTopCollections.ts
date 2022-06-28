@@ -39,7 +39,7 @@ const getTopCollections = nextApiHandler<TopCollectionsResponseType>(
     ]);
 
     const topNFTQueries = topCollectionResult.sources.map((entry) => ({
-      body: getRarestNFTsByCollectionBody(entry.id),
+      body: getRarestNFTsByCollectionBody(entry.id, 4),
     }));
 
     const nftResults = await searchNFTs(topNFTQueries);
