@@ -6,6 +6,7 @@ import Block from './Block/Block';
 import Epoch from './Epoch/Epoch';
 import Home from './Home/Home';
 import Search from './Search/Search';
+import Transaction from './Transaction/Transaction';
 
 function WindowSwitch() {
   const windowState = useRecoilValue(windowStateAtom);
@@ -20,7 +21,7 @@ function WindowSwitch() {
     case 'block':
       return <Block />;
     case 'tx':
-      return null;
+      return <Transaction />;
     case 'epoch':
       return <Epoch />;
     default:
