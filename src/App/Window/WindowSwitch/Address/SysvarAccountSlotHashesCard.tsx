@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
+import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import parsedSysvarAccountAtom from './_atoms/parsedSysvarAccountAtom';
 import PaginatedList from './_sharedComponents/PaginatedList';
@@ -22,28 +23,35 @@ function SysvarAccountSlotHashesCard() {
   const { info } = parsedSysvarAccount;
 
   return (
-    <PaginatedList
-      items={info}
-      itemsPerPage={10}
-      renderContainer={(children) => (
-        <Table sx={{ paddingBottom: '24px' }}>
-          <TableHead>
+    <ExplorerAccordion
+      id="sysvarSlotHashes"
+      title="Sysvar: Slot Hashes"
+      expanded={true}
+      content={
+        <PaginatedList
+          items={info}
+          itemsPerPage={10}
+          renderContainer={(children) => (
+            <Table sx={{ paddingBottom: '24px' }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Slot</TableCell>
+                  <TableCell>Hash</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>{children}</TableBody>
+            </Table>
+          )}
+          renderItem={({ slot, hash }) => (
             <TableRow>
-              <TableCell>Slot</TableCell>
-              <TableCell>Hash</TableCell>
+              <TableCell>
+                <ExplorerLink type="block" to={slot} allowCopy={true} />
+              </TableCell>
+              <TableCell>{hash}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>{children}</TableBody>
-        </Table>
-      )}
-      renderItem={({ slot, hash }) => (
-        <TableRow>
-          <TableCell>
-            <ExplorerLink type="block" to={slot} allowCopy={true} />
-          </TableCell>
-          <TableCell>{hash}</TableCell>
-        </TableRow>
-      )}
+          )}
+        />
+      }
     />
   );
 }

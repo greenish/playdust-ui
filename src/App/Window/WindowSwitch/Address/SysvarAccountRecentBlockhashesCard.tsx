@@ -8,15 +8,17 @@ import {
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
-import ExplorerLink from '../_sharedComponents/ExplorerLink/ExplorerLink';
 import parsedSysvarAccountAtom from './_atoms/parsedSysvarAccountAtom';
 import PaginatedList from './_sharedComponents/PaginatedList';
 
-// SysvarStakeHistory1111111111111111111111111
-function SysvarAccountStakeHistoryCard() {
+// SysvarRecentB1ockHashes11111111111111111111
+function SysvarAccountRecentBlockhashesCard() {
   const parsedSysvarAccount = useRecoilValue(parsedSysvarAccountAtom);
 
-  if (!parsedSysvarAccount || parsedSysvarAccount.type !== 'stakeHistory') {
+  if (
+    !parsedSysvarAccount ||
+    parsedSysvarAccount.type !== 'recentBlockhashes'
+  ) {
     return null;
   }
 
@@ -24,8 +26,8 @@ function SysvarAccountStakeHistoryCard() {
 
   return (
     <ExplorerAccordion
-      id="sysvarStakeHistory"
-      title="Sysvar: Stake History"
+      id="sysvarRecentBlockhashes"
+      title="Sysvar: Recent Blockhashes"
       expanded={true}
       content={
         <PaginatedList
@@ -35,26 +37,17 @@ function SysvarAccountStakeHistoryCard() {
             <Table sx={{ paddingBottom: '24px' }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Epoch</TableCell>
-                  <TableCell>Activating</TableCell>
-                  <TableCell>Deactivating</TableCell>
-                  <TableCell>Effective</TableCell>
+                  <TableCell>Blockhash</TableCell>
+                  <TableCell>Lamports Per Signature</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>{children}</TableBody>
             </Table>
           )}
-          renderItem={({
-            epoch,
-            stakeHistory: { activating, deactivating, effective },
-          }) => (
+          renderItem={(item) => (
             <TableRow>
-              <TableCell>
-                <ExplorerLink type="epoch" to={epoch} allowCopy={true} />
-              </TableCell>
-              <TableCell>{activating}</TableCell>
-              <TableCell>{deactivating}</TableCell>
-              <TableCell>{effective}</TableCell>
+              <TableCell>{item.blockhash}</TableCell>
+              <TableCell>{item.feeCalculator.lamportsPerSignature}</TableCell>
             </TableRow>
           )}
         />
@@ -63,4 +56,4 @@ function SysvarAccountStakeHistoryCard() {
   );
 }
 
-export default SysvarAccountStakeHistoryCard;
+export default SysvarAccountRecentBlockhashesCard;
