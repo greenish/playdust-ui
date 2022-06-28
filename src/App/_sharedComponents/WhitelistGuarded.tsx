@@ -5,7 +5,7 @@ import currentUserProfileAtom from '../_atoms/currentUserProfileAtom';
 function WhitelistGuarded({
   fallback,
   children,
-}: PropsWithChildren<{ fallback: NonNullable<ReactNode> | null }>) {
+}: PropsWithChildren<{ fallback: ReactNode }>) {
   const currentUserProfile = useRecoilValue(currentUserProfileAtom);
 
   const isWhitelisted =
@@ -15,10 +15,12 @@ function WhitelistGuarded({
   const isAdmin = Boolean(currentUserProfile?.isAdmin);
 
   if (process.env.GO_LIVE === 'true' || isAdmin || isWhitelisted) {
-    return children;
+    // eslint-disable-next-line react/jsx-no-useless-fragment
+    return <>{fallback}</>;
   }
 
-  return fallback;
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <>{children}</>;
 }
 
 export default WhitelistGuarded;
