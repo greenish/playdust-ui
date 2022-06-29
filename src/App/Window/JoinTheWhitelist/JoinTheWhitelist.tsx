@@ -141,7 +141,7 @@ function JoinTheWhitelist() {
         }}
       >
         <Box>
-          <PlaydustLogo width="145px" />
+          <PlaydustLogo width="215px" />
         </Box>
         <Typography variant="body1" marginBottom="16px">
           A Solana Search Engine
