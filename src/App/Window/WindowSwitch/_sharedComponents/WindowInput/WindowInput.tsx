@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { Box, Paper, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Paper, Stack, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { useSelect } from 'downshift';
 import parse from 'html-react-parser';

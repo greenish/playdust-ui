@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { Add, Close, DeleteSweep, Home, Search } from '@mui/icons-material';
-import { IconButton, Typography, useTheme } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import React, { ReactNode } from 'react';
 import { useRecoilValue } from 'recoil';

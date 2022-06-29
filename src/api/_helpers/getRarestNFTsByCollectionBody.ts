@@ -2,7 +2,7 @@ import type { SearchRequest } from '@opensearch-project/opensearch/api/types';
 
 const getRarestNFTsByCollectionBody = (
   collectionId: string,
-  size = 20
+  size = 10
 ): SearchRequest['body'] => ({
   size,
   _source: ['mint', 'image', 'name'],

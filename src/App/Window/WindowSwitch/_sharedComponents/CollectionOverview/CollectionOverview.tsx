@@ -1,12 +1,5 @@
-import {
-  Box,
-  ButtonBase,
-  Card,
-  Grid,
-  Skeleton,
-  styled,
-  Typography,
-} from '@mui/material';
+import { Box, ButtonBase, Card, Grid, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { ReactNode, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import ImageButton from '../../../../_sharedComponents/ImageButton';
@@ -133,13 +126,7 @@ function CollectionOverview() {
             size={200}
             transitionDuration={1}
             images={images}
-          >
-            <Skeleton
-              animation="wave"
-              variant="circular"
-              sx={{ height: 200, width: 200 }}
-            />
-          </ImageButton>
+          />
           <ButtonBase disabled={!goToCollection} onClick={goToCollection}>
             <Typography
               gutterBottom={true}

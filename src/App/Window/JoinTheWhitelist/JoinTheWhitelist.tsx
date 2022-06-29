@@ -107,7 +107,7 @@ function InlineForm() {
             onClick={() => safePromise(handleClickButton())}
             disabled={processing}
           >
-            Join The Waitlist
+            Get Beta Access
           </Button>
         </Grid>
       </Grid>
@@ -123,17 +123,6 @@ function InlineForm() {
   );
 }
 
-function Section({ header, body }: { header: string; body: string }) {
-  return (
-    <Box sx={{ mb: 5, whiteSpace: 'pre-wrap' }}>
-      <Typography variant="h6" gutterBottom={true} fontWeight={600}>
-        {header}
-      </Typography>
-      <Typography variant="body1">{body}</Typography>
-    </Box>
-  );
-}
-
 function JoinTheWhitelist() {
   return (
     <Box
@@ -144,20 +133,32 @@ function JoinTheWhitelist() {
         overflow: 'auto',
       }}
     >
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
         <Box>
-          <PlaydustLogo width="145px" />
+          <PlaydustLogo width="215px" />
         </Box>
         <Typography variant="body1" marginBottom="16px">
-          Everything to know about NFTs on Solana
+          A Solana Search Engine
         </Typography>
         <InlineForm />
-        <Typography variant="subtitle2" gutterBottom={true} sx={{ mb: 6 }}>
+        <Typography
+          variant="subtitle2"
+          gutterBottom={true}
+          sx={{ mb: 6, color: 'grey.500' }}
+        >
           By providing your email address, you are agreeing to our{' '}
           <Link
             href="https://info.playdust.com/terms-of-service?hsLang=en"
             target="_blank"
             rel="noreferrer"
+            underline="always"
+            color="inherit"
           >
             terms of use
           </Link>{' '}
@@ -166,25 +167,18 @@ function JoinTheWhitelist() {
             href="https://info.playdust.com/privacy-policy?hsLang=en"
             target="_blank"
             rel="noreferrer"
+            underline="always"
+            color="inherit"
           >
             privacy policy
           </Link>
           .
         </Typography>
-        <Box>
-          <Section
-            header="Reimagining NFTs"
-            body={`We're building the most intuitive and powerful\nplatform for digital assets on Solana.`}
-          />
-          <Section
-            header="Playdust is for you"
-            body={`Whether you're a collector, trader, creator, or just jpg-\ncurious, we've got you covered.`}
-          />
-          <Section
-            header="Sign up for access"
-            body={`Our closed beta will launch soon. We'll whitelist you\nfor our Playdust NFT drop as a thank you.`}
-          />
-        </Box>
+        <Typography variant="h6" sx={{ maxWidth: 600 }}>
+          Playdust is a Solana blockchain search engine working to empower
+          collectors and creators to explore, understand and interact with the
+          data on the blockchain.
+        </Typography>
       </Box>
     </Box>
   );

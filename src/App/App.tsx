@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { Paper, styled as muiStyled } from '@mui/material';
+import { Paper } from '@mui/material';
+import { styled as muiStyled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import React from 'react';
 import AppBar from './AppBar/AppBar';

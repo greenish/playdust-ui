@@ -34,10 +34,10 @@ function Home() {
         }}
       >
         <Box>
-          <PlaydustLogo width="145px" />
+          <PlaydustLogo width="215px" />
         </Box>
         <Typography variant="body1" marginBottom="16px">
-          Everything to know about NFTs on Solana
+          A Solana Search Engine
         </Typography>
         <Box sx={{ mb: 2, zIndex: 2 }}>
           <SuspenseBoundary

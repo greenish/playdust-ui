@@ -1,10 +1,9 @@
 import { CheckBoxSharp, SquareOutlined } from '@mui/icons-material';
+import { CssBaseline, Paper } from '@mui/material';
 import {
-  CssBaseline,
-  Paper,
+  createTheme,
   ThemeProvider as MuiThemeProvider,
-} from '@mui/material';
-import { createTheme } from '@mui/material/styles';
+} from '@mui/material/styles';
 import React, { PropsWithChildren } from 'react';
 
 const greyBackground = '#F6F6F6';
@@ -19,7 +18,7 @@ const baseTheme = createTheme({
   },
   palette: {
     primary: {
-      main: '#284866',
+      main: '#404040',
     },
     text: {
       primary: '#141414',
@@ -70,6 +69,7 @@ const themeOverrides = createTheme({
     MuiLink: {
       defaultProps: {
         underline: 'hover',
+        color: '#284866',
       },
     },
     MuiInputLabel: {
