@@ -19,7 +19,7 @@ const baseTheme = createTheme({
   },
   palette: {
     primary: {
-      main: '#284866',
+      main: '#404040',
     },
     text: {
       primary: '#141414',
@@ -70,6 +70,7 @@ const themeOverrides = createTheme({
     MuiLink: {
       defaultProps: {
         underline: 'hover',
+        color: '#284866',
       },
     },
     MuiInputLabel: {
