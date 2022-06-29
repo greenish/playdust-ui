@@ -7,6 +7,16 @@ const { PLAYDUST_API_HOST } = process.env
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    modularizeImports: {
+      "@mui/material": {
+        transform: "@mui/material/{{member}}",
+      },
+      '@mui/icons-material/?(((\\w*)?/?)*)': {
+        transform: '@mui/icons-material/{{ matches.[1] }}/{{member}}',
+      },
+    },
+  },
   webpack: (config, { webpack }) => {
     config.plugins.push(
       new webpack.DefinePlugin({

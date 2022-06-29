@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import {
   Box,
-  lighten,
   Table,
   TableBody,
   TableCell,
@@ -9,8 +8,8 @@ import {
   TableRow,
   Typography,
   TypographyProps,
-  useTheme,
 } from '@mui/material';
+import { lighten, useTheme } from '@mui/material/styles';
 import React, { ReactNode, useMemo } from 'react';
 import Scrollbars from 'react-custom-scrollbars-2';
 import humanizeCollection from '../../_helpers/humanizeCollection';

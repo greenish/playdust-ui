@@ -1,10 +1,9 @@
 import { CheckBoxSharp, SquareOutlined } from '@mui/icons-material';
+import { CssBaseline, Paper } from '@mui/material';
 import {
-  CssBaseline,
-  Paper,
+  createTheme,
   ThemeProvider as MuiThemeProvider,
-} from '@mui/material';
-import { createTheme } from '@mui/material/styles';
+} from '@mui/material/styles';
 import React, { PropsWithChildren } from 'react';
 
 const greyBackground = '#F6F6F6';

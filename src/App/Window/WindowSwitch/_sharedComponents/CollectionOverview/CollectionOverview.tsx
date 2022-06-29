@@ -1,4 +1,5 @@
-import { Box, ButtonBase, Card, Grid, styled, Typography } from '@mui/material';
+import { Box, ButtonBase, Card, Grid, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import React, { ReactNode, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import ImageButton from '../../../../_sharedComponents/ImageButton';
