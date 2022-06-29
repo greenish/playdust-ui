@@ -1,24 +1,27 @@
 import { noWait, selector } from 'recoil';
 import frontendApi from '../../../../../_helpers/frontendApi';
-import searchStateAtom from '../../../../_atoms/searchStateAtom';
-import SearchAggResponseType from '../../../../_types/SearchAggResponseType';
+import searchStateSerializedAtom from '../../../../_atoms/searchStateSerializedAtom';
+import parseSearch from '../../../../_helpers/parseSearch';
+import SearchTopAggResponseType from '../_types/SearchTopAggResponseType';
 
-let previousValue: SearchAggResponseType;
+let previousValue: SearchTopAggResponseType;
 
-const searchTopAggregationsFetchAtom = selector<SearchAggResponseType>({
+const searchTopAggregationsFetchAtom = selector<SearchTopAggResponseType>({
   key: 'searchTopAggregationsFetchAtom',
   get: async ({ get }) => {
-    const { query } = get(searchStateAtom);
+    const serialized = get(searchStateSerializedAtom);
+    const searchState = parseSearch(serialized);
 
-    if (query.rootId === '') {
-      return [];
+    if (searchState.query.rootId === '') {
+      return {
+        attributes: [],
+        collections: [],
+      };
     }
 
-    const { data } = await frontendApi.post<SearchAggResponseType>(
+    const { data } = await frontendApi.post<SearchTopAggResponseType>(
       '/search-top-aggregations',
-      {
-        query,
-      }
+      searchState
     );
 
     previousValue = data;
@@ -27,7 +30,7 @@ const searchTopAggregationsFetchAtom = selector<SearchAggResponseType>({
   },
 });
 
-const searchTopAggregationAtom = selector<SearchAggResponseType>({
+const searchTopAggregationAtom = selector<SearchTopAggResponseType>({
   key: 'searchTopAggregationFetchAtom',
   get: ({ get }) => {
     if (!previousValue) {

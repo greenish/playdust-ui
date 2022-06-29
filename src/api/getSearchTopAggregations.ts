@@ -1,22 +1,97 @@
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import { boolean, optional, type } from 'superstruct';
+import {
+  QueryDslQueryContainer,
+  SearchRequest,
+} from '@opensearch-project/opensearch/api/types';
+import { array, number, string, type } from 'superstruct';
+import SearchTopAggResponseType from '../App/Window/WindowSwitch/Search/SearchSideBar/AttributeFilters/_types/SearchTopAggResponseType';
+import getCollectionDependencies from '../App/Window/WindowSwitch/_sharedComponents/WindowInput/_helpers/getCollectionDependencies';
 import GroupNodeType from '../App/Window/WindowSwitch/_types/GroupNodeType';
-import SearchAggResponseType from '../App/Window/WindowSwitch/_types/SearchAggResponseType';
-import SearchQueryType from '../App/Window/WindowSwitch/_types/SearchQueryType';
+import SearchStateType from '../App/Window/WindowSwitch/_types/SearchStateType';
 import getAttributeAggQuery from './_helpers/getAttributeAggQuery';
 import getNFTDependencyQueryById from './_helpers/getNFTDependencyQueryById';
+import getNFTQueryById from './_helpers/getNFTQueryById';
 import nextApiHandler from './_helpers/nextApiHandler';
 import parseAttributeAggs from './_helpers/parseAttributeAggs';
 import searchNFTs from './_helpers/searchNFTs';
 
-const SearchTopAggsInput = type({
-  query: SearchQueryType,
-  onlyListed: optional(boolean()),
+const PrimaryCollectionAgg = type({
+  primaryCollection: type({
+    buckets: array(
+      type({
+        key: type({
+          id: string(),
+          name: string(),
+        }),
+        doc_count: number(),
+      })
+    ),
+  }),
 });
 
-const getSearchTopAggregations = nextApiHandler<SearchAggResponseType>(
+const getCollectionAggs = async ({
+  query,
+  sort,
+  onlyListed,
+}: SearchStateType): Promise<SearchTopAggResponseType['collections']> => {
+  const collectionDeps = getCollectionDependencies(query, query.rootId);
+
+  if (collectionDeps.length !== 0) {
+    return [];
+  }
+
+  const collectionAggQuery: SearchRequest['body'] = {
+    size: 0,
+    query: getNFTQueryById(query, query.rootId),
+    aggs: {
+      primaryCollection: {
+        composite: {
+          sources: [
+            {
+              id: {
+                terms: {
+                  field: 'primaryCollection.keyword',
+                },
+              },
+            },
+            {
+              name: {
+                terms: {
+                  field: 'collectionName.keyword',
+                },
+              },
+            },
+          ],
+          size: 20,
+        },
+      },
+    },
+  };
+
+  const [results] = await searchNFTs([
+    {
+      body: collectionAggQuery,
+      options: {
+        sort,
+        onlyListed,
+      },
+    },
+  ]);
+
+  const collectionBuckets = PrimaryCollectionAgg.create(results.aggregations)
+    .primaryCollection.buckets;
+  const collections = collectionBuckets.map((entry) => ({
+    id: entry.key.id,
+    name: entry.key.name,
+    count: entry.doc_count,
+  }));
+
+  return collections;
+};
+
+const getSearchTopAggregations = nextApiHandler<SearchTopAggResponseType>(
   async (req) => {
-    const { query, onlyListed } = SearchTopAggsInput.create(req.body);
+    const searchState = SearchStateType.create(req.body);
+    const { query, onlyListed, sort } = searchState;
     const rootNode = GroupNodeType.create(query.nodes[query.rootId]);
     const nodeKeys = [rootNode.id, ...rootNode.children].filter((entry) => {
       const childNode = query.nodes[entry];
@@ -47,11 +122,14 @@ const getSearchTopAggregations = nextApiHandler<SearchAggResponseType>(
     const [results] = await searchNFTs([
       {
         body: searchRequest,
-        options: { onlyListed },
+        options: { onlyListed, sort },
       },
     ]);
 
-    return parseAttributeAggs(results.aggregations);
+    return {
+      collections: await getCollectionAggs(searchState),
+      attributes: parseAttributeAggs(results.aggregations),
+    };
   }
 );
 

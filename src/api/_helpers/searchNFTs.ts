@@ -31,13 +31,8 @@ const existsQuery: QueryDslQueryContainer[] = [
 
 const onlyListedQuery: QueryDslQueryContainer[] = [
   {
-    nested: {
-      path: 'asks',
-      query: {
-        exists: {
-          field: 'asks.price',
-        },
-      },
+    exists: {
+      field: 'listedPrice',
     },
   },
 ];
@@ -55,12 +50,11 @@ const getSort = (sort: SearchSortType | undefined): SearchSort | undefined => {
         },
       ];
     case 'list-price':
-      return undefined;
-    // return [
-    //   {
-    //     lastListPrice: sort.direction,
-    //   },
-    // ];
+      return [
+        {
+          listedPrice: sort.direction,
+        },
+      ];
     case 'sale-price':
       return [
         {
