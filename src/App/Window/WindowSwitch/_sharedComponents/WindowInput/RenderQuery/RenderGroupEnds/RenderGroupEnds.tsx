@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
-import GroupEndIcon from './_sharedComponents/GroupEndIcon';
-import QueryPartContainer from './_sharedComponents/QueryPartContainer';
-import GroupRenderNodeType from './_types/GroupRenderNodeType';
+import searchQueryRootNodeAtom from '../../../../_atoms/searchQueryRootNodeAtom';
+import QueryPartContainer from '../_sharedComponents/QueryPartContainer';
+import GroupRenderNodeType from '../_types/GroupRenderNodeType';
+import GroupEndIcon from './GroupEndIcon';
 
 const stylesStart = {
   marginRight: '-4px',

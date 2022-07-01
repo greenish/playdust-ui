@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
 import QueryNodeType from '../../../_types/QueryNodeType';
-import RenderGroupEnds from './RenderGroupEnds';
+import RenderGroupEnds from './RenderGroupEnds/RenderGroupEnds';
 import RenderGroupOperator from './RenderGroupOperator';
 import RenderInput from './RenderInput/RenderInput';
 import RenderQueryNode from './RenderQueryNode';
