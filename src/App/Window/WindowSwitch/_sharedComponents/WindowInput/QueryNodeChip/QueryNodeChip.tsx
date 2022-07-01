@@ -120,6 +120,24 @@ function RenderQueryNodeChip({
       color={isActive ? 'primary' : 'default'}
       sx={{
         border: isActive ? '2px solid #276EF1' : '',
+        '.MuiChip-deleteIcon': {
+          display: 'none',
+        },
+        '&:hover': !isActive
+          ? {
+              cursor: 'pointer',
+              backgroundColor: '#276EF1',
+              borderColor: '#276EF1',
+              color: 'white',
+              '.MuiChip-deleteIcon': {
+                display: 'unset',
+                color: 'white',
+                '&:hover': {
+                  color: '#DCE8FD',
+                },
+              },
+            }
+          : {},
       }}
       onDelete={
         QueryNodeType.is(node) ? () => removeQueryNode(node.id) : undefined

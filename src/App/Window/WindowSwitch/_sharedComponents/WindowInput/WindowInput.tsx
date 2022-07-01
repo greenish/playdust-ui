@@ -84,8 +84,9 @@ function WindowInput() {
   });
 
   useEffect(() => {
+    setTerm('');
     setActiveIdx(0);
-  }, [activeNodeMeta, setActiveIdx]);
+  }, [activeNodeMeta, setActiveIdx, setTerm]);
 
   useWindowInputKeyEvent();
 
