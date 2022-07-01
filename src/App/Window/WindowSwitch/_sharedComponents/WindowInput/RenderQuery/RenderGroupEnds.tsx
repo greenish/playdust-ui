@@ -1,15 +1,16 @@
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
+import GroupEndIcon from './_sharedComponents/GroupEndIcon';
 import QueryPartContainer from './_sharedComponents/QueryPartContainer';
 import GroupRenderNodeType from './_types/GroupRenderNodeType';
 
 const stylesStart = {
-  paddingRight: '4px',
+  marginRight: '-4px',
 };
 
 const stylesEnd = {
-  paddingLeft: '4px',
+  marginLeft: '-4px',
 };
 
 function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
@@ -25,7 +26,7 @@ function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
     return null;
   }
 
-  const symbol = renderNode.type === 'groupStart' ? '(' : ')';
+  const stroke = renderNode.inActiveBranch ? '#276EF1' : '#B0C8F4';
 
   return (
     <QueryPartContainer
@@ -35,7 +36,7 @@ function RenderGroupEnds({ renderNode }: { renderNode: GroupRenderNodeType }) {
       }}
       renderNode={renderNode}
     >
-      {!isRoot && symbol}
+      {!isRoot && <GroupEndIcon type={renderNode.type} stroke={stroke} />}
     </QueryPartContainer>
   );
 }

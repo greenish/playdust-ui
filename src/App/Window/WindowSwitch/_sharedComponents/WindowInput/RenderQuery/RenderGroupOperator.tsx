@@ -55,7 +55,6 @@ function RenderGroupOperator({
   return (
     <QueryPartContainer
       style={{
-        width: '36px',
         ...(isBelowOperator || isAboveOperator ? secondaryHighlight : {}),
       }}
       renderNode={renderNode}
