@@ -3,10 +3,9 @@ import {
   SearchRequest,
 } from '@opensearch-project/opensearch/api/types';
 import { array, number, string, type } from 'superstruct';
-import SearchTopAggResponseType from '../App/Window/WindowSwitch/Search/SearchSideBar/AttributeFilters/_types/SearchTopAggResponseType';
-import getCollectionDependencies from '../App/Window/WindowSwitch/_sharedComponents/WindowInput/_helpers/getCollectionDependencies';
 import GroupNodeType from '../App/Window/WindowSwitch/_types/GroupNodeType';
 import SearchStateType from '../App/Window/WindowSwitch/_types/SearchStateType';
+import SearchTopAggResponseType from '../App/Window/WindowSwitch/_types/SearchTopAggResponseType';
 import getAttributeAggQuery from './_helpers/getAttributeAggQuery';
 import getNFTDependencyQueryById from './_helpers/getNFTDependencyQueryById';
 import getNFTQueryById from './_helpers/getNFTQueryById';
@@ -33,12 +32,6 @@ const getCollectionAggs = async ({
   sort,
   onlyListed,
 }: SearchStateType): Promise<SearchTopAggResponseType['collections']> => {
-  const collectionDeps = getCollectionDependencies(query, query.rootId);
-
-  if (collectionDeps.length !== 0) {
-    return [];
-  }
-
   const collectionAggQuery: SearchRequest['body'] = {
     size: 0,
     query: getNFTQueryById(query, query.rootId),

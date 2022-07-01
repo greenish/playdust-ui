@@ -10,10 +10,12 @@ import React from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import findTopLevelAttributeAtom from '../../../_atoms/findTopLevelAttributeAtom';
-import useAddCollectionQueryNode from '../../../_hooks/useAddCollectionQueryNode';
+import searchStateAtom from '../../../_atoms/searchStateAtom';
+import searchTopAggregationAtom from '../../../_atoms/searchTopAggregationAtom';
 import useToggleTopLevelAttributeNode from '../../../_hooks/useToggleTopLevelAttributeNode';
 import ExplorerAccordion from '../../../_sharedComponents/ExplorerAccordion';
-import searchTopAggregationAtom from './_atoms/searchTopAggregationAtom';
+import CollectionQueryNodeType from '../../../_types/CollectionQueryNodeType';
+import useToggleCollectionQueryNode from './_hooks/useToggleCollectionQueryNode';
 
 const RootContainer = styled(Scrollbars)`
   display: flex;
@@ -44,10 +46,20 @@ const attributeFilterDataAtom = selector({
     const aggregations = get(searchTopAggregationAtom);
     const findAttribute = get(findTopLevelAttributeAtom);
     const showAll = get(showAllAttributesAtom);
+    const { query } = get(searchStateAtom);
+    const collectionIds = Object.values(query.nodes).reduce<string[]>(
+      (acc, curr) => {
+        if (CollectionQueryNodeType.is(curr)) {
+          return [...acc, curr.value];
+        }
+
+        return acc;
+      },
+      []
+    );
 
     const attributes = aggregations.attributes.map((attribute) => {
-      const isExpanded = showAll[attribute.key] || false;
-      const values = attribute.values
+      const options = attribute.values
         .map((entry) => ({
           id: entry.value,
           label: entry.value,
@@ -56,21 +68,12 @@ const attributeFilterDataAtom = selector({
         }))
         .sort(
           (a, b) => Number(b.checked) - Number(a.checked) || b.count - a.count
-        )
-        .filter((entry) => {
-          if (isExpanded) {
-            return true;
-          }
-
-          return entry.checked;
-        });
+        );
 
       return {
         key: attribute.key,
-        values,
-        isExpanded,
-        expandIcon:
-          !isExpanded && values.length > 0 ? <ExpandLess /> : <ExpandMore />,
+        options,
+        expanded: showAll[attribute.key] || false,
       };
     });
 
@@ -78,7 +81,7 @@ const attributeFilterDataAtom = selector({
       id: collection.id,
       label: collection.name,
       count: collection.count,
-      checked: false,
+      checked: collectionIds.includes(collection.id),
     }));
 
     return { attributes, collections };
@@ -87,8 +90,7 @@ const attributeFilterDataAtom = selector({
 
 interface AttributeAccordianProps {
   title: string;
-  expandIcon?: React.ReactNode;
-  values: {
+  options: {
     id: string;
     label: string;
     count: number;
@@ -101,12 +103,17 @@ interface AttributeAccordianProps {
 
 function AttributeAccordian({
   title,
-  expandIcon,
-  values,
+  options,
   expanded,
   onAccordianChange,
   onToggle,
 }: AttributeAccordianProps) {
+  const visibleOptions = expanded
+    ? options
+    : options.filter((entry) => entry.checked);
+  const expandIcon =
+    !expanded && visibleOptions.length > 0 ? <ExpandLess /> : <ExpandMore />;
+
   return (
     <ExplorerAccordion
       className="disable-padding"
@@ -114,7 +121,7 @@ function AttributeAccordian({
       expandIcon={expandIcon}
       content={
         <FormGroup>
-          {values.map(({ id, label, checked, count }) => (
+          {visibleOptions.map(({ id, label, checked, count }) => (
             <FormControlLabel
               key={id}
               control={
@@ -134,7 +141,7 @@ function AttributeAccordian({
           ))}
         </FormGroup>
       }
-      expanded={expanded}
+      expanded={visibleOptions.length > 0}
       onChange={onAccordianChange}
     />
   );
@@ -146,7 +153,7 @@ function AttributeFilters() {
   const [showCollections, setShowCollections] =
     useRecoilState(showCollectionsAtom);
   const toggleAttribute = useToggleTopLevelAttributeNode();
-  const addCollectionQueryNode = useAddCollectionQueryNode();
+  const toggleCollectionQueryNode = useToggleCollectionQueryNode();
 
   return (
     <RootContainer autoHide={true}>
@@ -155,10 +162,8 @@ function AttributeFilters() {
           <AttributeAccordian
             title="Collections"
             expanded={showCollections}
-            values={collections}
-            onToggle={(collectionId) =>
-              addCollectionQueryNode(collectionId, false, true)
-            }
+            options={collections}
+            onToggle={(collectionId) => toggleCollectionQueryNode(collectionId)}
             onAccordianChange={() => setShowCollections(!showCollections)}
           />
         ) : null}
@@ -166,16 +171,15 @@ function AttributeFilters() {
           <AttributeAccordian
             key={attribute.key}
             title={attribute.key}
-            expandIcon={attribute.expandIcon}
-            expanded={attribute.values.length > 0}
-            values={attribute.values}
+            expanded={attribute.expanded}
+            options={attribute.options}
             onToggle={(attributeValue) =>
               toggleAttribute(attribute.key, attributeValue)
             }
             onAccordianChange={() => {
               setShowAll({
                 ...showAll,
-                [attribute.key]: !attribute.isExpanded,
+                [attribute.key]: !attribute.expanded,
               });
             }}
           />

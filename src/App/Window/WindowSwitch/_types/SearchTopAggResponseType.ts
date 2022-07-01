@@ -1,5 +1,5 @@
 import { array, Infer, number, string, type } from 'superstruct';
-import SearchAggResponseType from '../../../../_types/SearchAggResponseType';
+import SearchAggResponseType from './SearchAggResponseType';
 
 type SearchTopAggResponseType = Infer<typeof SearchTopAggResponseType>;
 const SearchTopAggResponseType = type({
