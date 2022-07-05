@@ -3,9 +3,9 @@ import { enums, Infer, type } from 'superstruct';
 const SortFieldEnum = enums([
   'name',
   'relevance',
-  'list-price',
-  'sale-price',
-  'rarity-score',
+  'listedPrice',
+  'lastSalePrice',
+  'rarityScore',
 ]);
 
 const SortDirectionEnum = enums(['asc', 'desc']);

@@ -35,10 +35,10 @@ const makeSortOption = (
 };
 
 const sortOptions: SearchSortOption[] = [
-  ...makeSortOption('Rarity', 'rarity-score', true),
+  ...makeSortOption('Rarity', 'rarityScore', true),
   ...makeSortOption('Name', 'name'),
-  ...makeSortOption('List Price', 'list-price'),
-  ...makeSortOption('Sale Price', 'sale-price'),
+  ...makeSortOption('List Price', 'listedPrice'),
+  ...makeSortOption('Sale Price', 'lastSalePrice'),
   {
     name: 'Relevance',
     value: {

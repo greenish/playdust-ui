@@ -8,6 +8,7 @@ import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
 import { AutoSizer, ListRowRenderer } from 'react-virtualized';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
 import SkeletonRows from '../SkeletonRows';
@@ -56,6 +57,7 @@ function WindowInput() {
   );
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const [term, setTerm] = useRecoilState(searchQueryTermAtom);
+  const windowState = useRecoilValue(windowStateAtom);
   const setDTerm = useSetRecoilState(searchQueryDebouncedTermAtom);
   const setDebouncedTerm = useDebounceCallback(setDTerm, 500);
   const theme = useTheme();
@@ -88,6 +90,8 @@ function WindowInput() {
 
   useWindowInputKeyEvent();
 
+  const shouldAutoFocus = windowState.type === "home"
+  
   const { isOpen, getItemProps, getToggleButtonProps, getMenuProps } =
     useSelect({
       items: suggestions,
@@ -123,7 +127,7 @@ function WindowInput() {
         setTerm(value);
         setDebouncedTerm(value);
       }}
-      autoFocus={true}
+      autoFocus={shouldAutoFocus}
       onBlur={() => {
         if (suggestions.length > 0) {
           inputRef?.current?.focus();
