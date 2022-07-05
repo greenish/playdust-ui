@@ -50,8 +50,10 @@ const OpenSearchNFTSourceType = type({
       })
     )
   ),
+  primaryCollection: coercedOptional(string()),
   isCollection: coercedDefaulted(boolean(), false),
   lastSalePrice: coercedDefaulted(number(), 0),
+  listedPrice: coercedOptional(number()),
   normalizedRarityScore: coercedOptional(number()),
   normalizedStatisticalRarity: coercedOptional(number()),
   symbol: coercedOptional(string()),

@@ -1,9 +1,9 @@
 import { selector } from 'recoil';
 import api from '../../_helpers/frontendApi';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
-import CollectionQueryNodeType from '../_types/CollectionQueryNodeType';
 import playdustNftDataAtom from './playdustNftDataAtom';
 import searchStateAtom from './searchStateAtom';
+import searchTopAggregationAtom from './searchTopAggregationAtom';
 
 const collectionIdAtom = selector<string | null>({
   key: 'collectionIdAtom',
@@ -14,15 +14,10 @@ const collectionIdAtom = selector<string | null>({
       return nft.playdustCollection.id;
     }
 
-    const { query } = get(searchStateAtom);
+    const topAggs = get(searchTopAggregationAtom);
 
-    const collectionNodes = Object.values(query.nodes).filter((entry) =>
-      CollectionQueryNodeType.is(entry)
-    );
-    const firstNode = collectionNodes[0];
-
-    if (collectionNodes.length === 1 && CollectionQueryNodeType.is(firstNode)) {
-      return firstNode.value;
+    if (topAggs.collections.length === 1) {
+      return topAggs.collections[0].id;
     }
 
     return null;

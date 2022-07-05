@@ -84,8 +84,9 @@ function WindowInput() {
   });
 
   useEffect(() => {
+    setTerm('');
     setActiveIdx(0);
-  }, [activeNodeMeta, setActiveIdx]);
+  }, [activeNodeMeta, setActiveIdx, setTerm]);
 
   useWindowInputKeyEvent();
 
@@ -214,7 +215,14 @@ function WindowInput() {
           </EmptyContainer>
         )}
       </InputContainer>
-      <OverlayContainer elevation={showOverlay ? 8 : 0} {...getMenuProps()}>
+      <OverlayContainer
+        elevation={showOverlay ? 8 : 0}
+        {...getMenuProps()}
+        sx={{
+          border: 'none',
+          outline: 'none',
+        }}
+      >
         {showOverlay && (
           <>
             <AutoSizer disableHeight={true}>

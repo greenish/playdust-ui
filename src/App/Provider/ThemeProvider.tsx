@@ -162,6 +162,11 @@ const themeOverrides = createTheme({
       },
     },
     MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+        },
+      },
       defaultProps: {
         size: 'small',
       },
