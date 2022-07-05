@@ -22,7 +22,6 @@ import useRemoveTab from './_hooks/useRemoveTab';
 
 const largeButtonSize = 40;
 const smallButtonSize = 24;
-const imageAnimationLength = 2;
 
 const RootContainer = styled.div`
   display: flex;
@@ -150,7 +149,7 @@ function AppBar() {
         <ImageButton onClick={() => goToNewTab()}>
           <Add />
         </ImageButton>
-        {inWindowManager && tabs.length > 0 && (
+        {inWindowManager && tabs.length > 0 && currentUserProfile?.isAdmin && (
           <ImageButton
             size={24}
             onClick={() => {

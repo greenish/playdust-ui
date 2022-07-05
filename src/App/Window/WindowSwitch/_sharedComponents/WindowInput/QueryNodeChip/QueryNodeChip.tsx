@@ -19,7 +19,7 @@ function CollectionChip({ value }: QueryNodeType) {
     return (
       <span>
         Collection:{' '}
-        {collectionById.contents.name || collectionById.contents.symbol}
+        {collectionById.contents?.name || collectionById.contents?.symbol}
       </span>
     );
   }

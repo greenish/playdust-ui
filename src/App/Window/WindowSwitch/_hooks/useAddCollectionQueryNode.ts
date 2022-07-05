@@ -12,7 +12,7 @@ const useAddCollectionQueryNode = makeUseChangeSearchQuery(() => {
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const getAddQueryNode = useGetAddQueryNode();
 
-  return (collectionId: string, initialize?: boolean) => {
+  return (collectionId: string, initialize?: boolean, atRootNode?: boolean) => {
     const newNode: CollectionQueryNodeType = {
       id: shortId(),
       type: 'query',
@@ -24,6 +24,10 @@ const useAddCollectionQueryNode = makeUseChangeSearchQuery(() => {
       const nextQuery = initializeSearchQuery(newNode);
 
       return { query: nextQuery };
+    }
+
+    if (atRootNode) {
+      return getAddQueryNode(newNode, rootNode.id);
     }
 
     if (activeNodeMeta?.type === 'group') {

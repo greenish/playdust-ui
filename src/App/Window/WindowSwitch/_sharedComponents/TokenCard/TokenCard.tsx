@@ -79,10 +79,8 @@ function TokenCard({
             </CardTextContainer>
             <CardSecondaryContainer>
               <span>
-                {metadata.asks && metadata.asks.length > 0
-                  ? humanizeSolana(
-                      Math.min(...metadata.asks.map((entry) => entry.price))
-                    )
+                {metadata.listedPrice
+                  ? humanizeSolana(metadata.listedPrice)
                   : '◎ N/A'}
               </span>
               {!disableQuickFilter && (
