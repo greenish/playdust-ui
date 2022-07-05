@@ -1,4 +1,4 @@
-import { TokenInfoMap } from '@solana/spl-token-registry';
+import type { TokenInfoMap } from '@solana/spl-token-registry';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
   SYSVAR_CLOCK_PUBKEY,
