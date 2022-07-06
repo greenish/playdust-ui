@@ -107,7 +107,7 @@ async function multiSearch<SourceType>(
 }
 
 function makeSearchOS<SourceType, OptionsType>(
-  index: 'nft-metadata2' | 'nft-collection2',
+  index: string,
   struct: Struct<SourceType>,
   wrapSearchBody: WrapSearchBodyType<OptionsType>
 ) {

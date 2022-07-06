@@ -83,8 +83,10 @@ type SearchNFTsOptionsType = {
   onlyListed?: boolean;
 };
 
+const metadataIndex = process.env.OPENSEARCH_METADATA_INDEX ?? "nft-metadata2";
+
 const searchNFTs = makeSearchOS<OpenSearchNFTSourceType, SearchNFTsOptionsType>(
-  'nft-metadata2',
+  metadataIndex,
   OpenSearchNFTSourceType,
   (body, { sort, onlyListed } = {}) => {
     const isRelevanceSort = sort?.field === 'relevance';
