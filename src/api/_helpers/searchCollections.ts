@@ -38,10 +38,13 @@ type SearchCollectionsType = {
   includeAttributes?: boolean;
 };
 
+const collectionIndex =
+  process.env.OPENSEARCH_COLLECTION_INDEX ?? 'nft-collection2';
+
 const searchCollections = makeSearchOS<
   OpenSearchCollectionSourceType,
   SearchCollectionsType
->('nft-collection', OpenSearchCollectionSourceType, (body, options) => {
+>(collectionIndex, OpenSearchCollectionSourceType, (body, options) => {
   const wrappedQuery: QueryDslQueryContainer = {
     bool: {
       [options?.useMust ? 'must' : 'filter']: [
