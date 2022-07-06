@@ -64,9 +64,7 @@ function SPLTokenMint() {
               value={<ExternalLink url={website} />}
             />
           )}
-          {info.isInitialized && (
-            <ExplorerGridRow label="Status" value="Uninitialized" />
-          )}
+          <ExplorerGridRow label="Initialized" value={String(info.isInitialized)} />
           {info.mintAuthority && (
             <ExplorerGridRow
               label="Mint Authority"
