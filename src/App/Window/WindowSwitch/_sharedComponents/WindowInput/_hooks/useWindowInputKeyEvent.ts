@@ -249,9 +249,15 @@ const useWindowInputKeyEvent = () => {
   const addGroupQueryNode = useAddGroupQueryNode();
   const setForcedClose = useSetRecoilState(searchSuggestionsForcedClosedAtom);
   const setActiveNodeMeta = useSetRecoilState(searchQueryActiveNodeMetaAtom);
+  const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
+  const searchTerm = useRecoilValue(searchQueryTermAtom);
 
   const onKeyDown = useCallback(
     (evt: KeyboardEvent) => {
+      if (!activeNodeMeta || searchTerm !== '') {
+        return;
+      }
+
       switch (evt.key) {
         case 'ArrowLeft':
         case 'ArrowRight': {
@@ -283,6 +289,8 @@ const useWindowInputKeyEvent = () => {
       }
     },
     [
+      activeNodeMeta,
+      searchTerm,
       handleUD,
       handleEnter,
       handleBackspace,

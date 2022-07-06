@@ -5,7 +5,7 @@ import RangeValueUnionType from '../../App/Window/WindowSwitch/_types/RangeValue
 const getRangeField = (field: RangeValueUnionType) => {
   switch (field) {
     case 'list-price':
-      return 'lastListPrice';
+      return 'listedPrice';
     case 'sale-price':
       return 'lastSalePrice';
     case 'rarity-score':
@@ -78,7 +78,7 @@ const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
     case 'range': {
       const rangeField = getRangeField(child.value);
 
-      const mustBase = [
+      const must = [
         {
           range: {
             [rangeField]: {
@@ -88,18 +88,6 @@ const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
           },
         },
       ];
-
-      const must =
-        rangeField === 'lastListPrice'
-          ? [
-              ...mustBase,
-              {
-                term: {
-                  listed: true,
-                },
-              },
-            ]
-          : mustBase;
 
       return {
         bool: {
