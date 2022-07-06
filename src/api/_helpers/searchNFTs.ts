@@ -58,7 +58,7 @@ const getSort = (sort: SearchSortType | undefined): SearchSort | undefined => {
     case 'sale-price':
       return [
         {
-          lastTradePrice: sort.direction,
+          lastSalePrice: sort.direction,
         },
       ];
     case 'rarity-score':
@@ -84,7 +84,7 @@ type SearchNFTsOptionsType = {
 };
 
 const searchNFTs = makeSearchOS<OpenSearchNFTSourceType, SearchNFTsOptionsType>(
-  'nft-metadata',
+  'nft-metadata2',
   OpenSearchNFTSourceType,
   (body, { sort, onlyListed } = {}) => {
     const isRelevanceSort = sort?.field === 'relevance';
