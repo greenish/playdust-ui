@@ -83,7 +83,7 @@ type SearchNFTsOptionsType = {
   onlyListed?: boolean;
 };
 
-const metadataIndex = process.env.OPENSEARCH_METADATA_INDEX ?? "nft-metadata2";
+const metadataIndex = process.env.OPENSEARCH_METADATA_INDEX ?? 'nft-metadata2';
 
 const searchNFTs = makeSearchOS<OpenSearchNFTSourceType, SearchNFTsOptionsType>(
   metadataIndex,

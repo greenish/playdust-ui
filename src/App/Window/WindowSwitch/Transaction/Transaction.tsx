@@ -27,7 +27,11 @@ function Transaction() {
           error={null}
           loading={null}
         />
-        <SuspenseBoundary content={<ProgramLog />} error={null} loading={null} />
+        <SuspenseBoundary
+          content={<ProgramLog />}
+          error={null}
+          loading={null}
+        />
         <SuspenseBoundary
           content={<RawTransactionData />}
           error={null}

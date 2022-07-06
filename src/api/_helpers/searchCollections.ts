@@ -38,7 +38,8 @@ type SearchCollectionsType = {
   includeAttributes?: boolean;
 };
 
-const collectionIndex = process.env.OPENSEARCH_COLLECTION_INDEX ?? "nft-collection2";
+const collectionIndex =
+  process.env.OPENSEARCH_COLLECTION_INDEX ?? 'nft-collection2';
 
 const searchCollections = makeSearchOS<
   OpenSearchCollectionSourceType,
