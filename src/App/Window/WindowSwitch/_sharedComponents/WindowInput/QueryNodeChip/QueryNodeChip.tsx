@@ -95,6 +95,7 @@ interface SearchChipsProps {
   node?: QueryNodeType;
   className?: string;
   textInput: JSX.Element;
+  explorerText?: string;
 }
 
 function RenderQueryNodeChip({
@@ -103,6 +104,7 @@ function RenderQueryNodeChip({
   isActive,
   node,
   textInput,
+  explorerText,
 }: SearchChipsProps) {
   const removeQueryNode = useRemoveQueryNode();
 
@@ -113,7 +115,11 @@ function RenderQueryNodeChip({
       label={
         <>
           <ChipLabel node={node} />
-          {isActive && node?.field !== 'collection' && textInput}
+          {!node && explorerText ? explorerText : null}
+          {isActive &&
+            node?.field !== 'collection' &&
+            !explorerText &&
+            textInput}
         </>
       }
       variant="outlined"
@@ -123,21 +129,22 @@ function RenderQueryNodeChip({
         '.MuiChip-deleteIcon': {
           display: 'none',
         },
-        '&:hover': !isActive
-          ? {
-              cursor: 'pointer',
-              backgroundColor: '#276EF1',
-              borderColor: '#276EF1',
-              color: 'white',
-              '.MuiChip-deleteIcon': {
-                display: 'unset',
+        '&:hover':
+          isActive || explorerText
+            ? {}
+            : {
+                cursor: 'pointer',
+                backgroundColor: '#276EF1',
+                borderColor: '#276EF1',
                 color: 'white',
-                '&:hover': {
-                  color: '#DCE8FD',
+                '.MuiChip-deleteIcon': {
+                  display: 'unset',
+                  color: 'white',
+                  '&:hover': {
+                    color: '#DCE8FD',
+                  },
                 },
               },
-            }
-          : {},
       }}
       onDelete={
         QueryNodeType.is(node) ? () => removeQueryNode(node.id) : undefined
@@ -149,10 +156,24 @@ function RenderQueryNodeChip({
 type QueryNodeProps = {
   node?: QueryNodeType;
   textInput: JSX.Element;
+  explorerText?: string;
 };
 
-function QueryNodeChip({ node, textInput }: QueryNodeProps) {
+function QueryNodeChip({ node, textInput, explorerText }: QueryNodeProps) {
   const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
+
+  if (explorerText) {
+    return (
+      <QueryNodeChipContainer>
+        <RenderQueryNodeChip
+          isActive={false}
+          disabled={false}
+          textInput={textInput}
+          explorerText={explorerText}
+        />
+      </QueryNodeChipContainer>
+    );
+  }
 
   if (!node) {
     return (

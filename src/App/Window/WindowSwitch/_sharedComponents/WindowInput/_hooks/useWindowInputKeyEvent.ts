@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useEvent } from 'react-use';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import activeWindowAtom from '../../../../../_atoms/activeWindowAtom';
+import clearSearchQueryAtom from '../../../_atoms/clearSearchQueryAtom';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryParentIdMapAtom from '../../../_atoms/searchQueryParentIdMapAtom';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
@@ -194,6 +195,8 @@ const useHandleEnter = () => {
 
 const useHandleZ = () => {
   const activeWindow = useRecoilValue(activeWindowAtom);
+  const [clearSearchQuery, setClearSearchQuery] =
+    useRecoilState(clearSearchQueryAtom);
 
   return (evt: KeyboardEvent) => {
     if (activeWindow?.type !== 'search') {
@@ -202,6 +205,10 @@ const useHandleZ = () => {
 
     if (evt.metaKey && evt.shiftKey) {
       return window.history.forward();
+    }
+
+    if (clearSearchQuery) {
+      return setClearSearchQuery(false);
     }
 
     if (evt.metaKey) {
@@ -254,7 +261,7 @@ const useWindowInputKeyEvent = () => {
 
   const onKeyDown = useCallback(
     (evt: KeyboardEvent) => {
-      if (!activeNodeMeta || searchTerm !== '') {
+      if (!activeNodeMeta && searchTerm === '') {
         return;
       }
 

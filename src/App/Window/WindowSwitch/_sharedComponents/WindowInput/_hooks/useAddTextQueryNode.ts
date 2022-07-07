@@ -1,5 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import shortId from '../../../../../_helpers/shortId';
+import clearSearchQueryAtom from '../../../_atoms/clearSearchQueryAtom';
 import searchQueryActiveNodeMetaAtom from '../../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
 import initializeSearchQuery from '../../../_helpers/initializeSearchQuery';
@@ -14,6 +15,7 @@ const useAddTextQueryNode = makeUseChangeSearchQuery(() => {
   const searchTerm = useRecoilValue(searchQueryTermAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const getAddQueryNode = useGetAddQueryNode();
+  const clearSearchQuery = useRecoilValue(clearSearchQueryAtom);
 
   return () => {
     const newNode: TextQueryNodeType = {
@@ -27,7 +29,7 @@ const useAddTextQueryNode = makeUseChangeSearchQuery(() => {
       direction: 'desc',
     };
 
-    if (!rootNode) {
+    if (!rootNode || clearSearchQuery) {
       return {
         query: initializeSearchQuery(newNode),
         sort,

@@ -1,5 +1,6 @@
 import { matchSorter } from 'match-sorter';
 import { selector } from 'recoil';
+import clearSearchQueryAtom from '../../../_atoms/clearSearchQueryAtom';
 import type SearchAggResponseType from '../../../_types/SearchAggResponseType';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import hasCollectionDependencyAtom from './hasCollectionDependencyAtom';
@@ -58,8 +59,9 @@ const clientSuggestionsAtom = selector<SearchSuggestionType[] | null>({
   key: 'clientSuggestionsAtom',
   get: ({ get }) => {
     const hasCollectionDependency = get(hasCollectionDependencyAtom);
+    const clearSearchQuery = get(clearSearchQueryAtom);
 
-    if (!hasCollectionDependency) {
+    if (!hasCollectionDependency || clearSearchQuery) {
       return null;
     }
 
