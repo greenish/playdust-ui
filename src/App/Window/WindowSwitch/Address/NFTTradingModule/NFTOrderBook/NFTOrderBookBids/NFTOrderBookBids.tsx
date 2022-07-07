@@ -21,9 +21,9 @@ import ExplorerLink from '../../../../_sharedComponents/ExplorerLink/ExplorerLin
 import currentOwnerForMintAtom from '../../../_atoms/currentOwnerForMintAtom';
 import ordersForMintAtom from '../../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../../_atoms/tradingDialogAtom';
+import walletEscrowAtom from '../../_atoms/walletEscrowAtom';
 import MarketplaceIcon from '../_sharedComponents/MarketplaceIcon';
 import Tooltip from './Tooltip';
-import walletEscrowAtom from '../../_atoms/walletEscrowAtom';
 
 function NFTOrderBookBids() {
   const setTradingDialog = useSetRecoilState(tradingDialogAtom);
