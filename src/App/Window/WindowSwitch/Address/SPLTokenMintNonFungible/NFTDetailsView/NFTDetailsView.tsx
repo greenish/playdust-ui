@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil';
 import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
 import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
 import ContentContainer from '../../../_sharedComponents/ContentContainer';
+import ExplorerLink from '../../../_sharedComponents/ExplorerLink/ExplorerLink';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
 import NFTDetailsRenderMedia from './NFTDetailsRenderMedia';
 
@@ -83,7 +84,15 @@ function NFTDetailsView() {
               <Box sx={{ opacity: 0.4 }} component="span">
                 {'Owned by '}
               </Box>
-              {shortenPublicKey(ownerWalletAddress)}
+              <ExplorerLink
+                type="address"
+                to={ownerWalletAddress}
+                allowCopy={true}
+                ellipsis={{
+                  cutoff: 4,
+                  remain: 4,
+                }}
+              />
             </Typography>
           )}
           <Typography
