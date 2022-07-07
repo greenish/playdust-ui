@@ -11,6 +11,7 @@ interface ImageCardProps {
   content: JSX.Element | null;
   contentHeight: number;
   censored?: boolean;
+  overlay: JSX.Element | null;
 }
 
 function ImageCard({
@@ -20,6 +21,7 @@ function ImageCard({
   content,
   contentHeight,
   censored,
+  overlay,
 }: ImageCardProps) {
   return (
     <Card sx={{ minWidth: imageSize, maxWidth: imageSize }}>
@@ -28,6 +30,7 @@ function ImageCard({
           src={src}
           imageSize={imageSize}
           censored={censored}
+          overlay={overlay}
         />
       </Link>
       {content && (

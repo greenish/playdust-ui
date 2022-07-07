@@ -40,6 +40,7 @@ function ImageSelect({ onChange }: ImageSelectProps) {
           <CardImageContainer
             src={getCDNUrl(nft.image)}
             imageSize={imageSize}
+            overlay={null}
           />
         </ButtonBase>
       ))}
