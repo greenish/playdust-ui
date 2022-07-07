@@ -1,13 +1,13 @@
 type OrderType<Side> = {
+  id: string;
   auctionHouse: string;
   wallet: string;
+  mint: string;
   txHash: string;
   qty: number;
   price: number;
   side: Side;
-  market: {
-    tokenSymbol: string;
-  };
+  treasuryMint: string;
 };
 
 export default OrderType;

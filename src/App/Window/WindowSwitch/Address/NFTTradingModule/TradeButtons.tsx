@@ -4,6 +4,7 @@ import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import connectedWalletAtom from '../../../../_atoms/connectedWalletAtom';
 import addressStateAtom from '../../_atoms/addressStateAtom';
+import humanizeSolana from '../../_helpers/humanizeSolana';
 import safePubkeyString from '../../_helpers/safePubkeyString';
 import currentOwnerForMintAtom from '../_atoms/currentOwnerForMintAtom';
 import ordersForMintAtom from './_atoms/ordersForMintAtom';
@@ -50,7 +51,7 @@ function TradeButtons() {
             });
           }}
         >
-          {`Cancel Bid: ◎${myBid.price}`}
+          {`Cancel Bid: ${humanizeSolana(myBid.price)}`}
         </Button>
       )}
       {myListing && connectedWallet && (
@@ -67,7 +68,7 @@ function TradeButtons() {
             });
           }}
         >
-          {`Cancel Listing: ◎${myListing.price}`}
+          {`Cancel Listing: ${humanizeSolana(myListing.price)}`}
         </Button>
       )}
       {/* Create: New offer / listing second  */}
@@ -131,7 +132,7 @@ function TradeButtons() {
             });
           }}
         >
-          {`Accept Highest Offer: ◎${highestBid.price}`}
+          {`Accept Highest Offer: ${humanizeSolana(highestBid.price)}`}
         </Button>
       )}
       {!isOwner && lowestAsk && (
@@ -152,7 +153,7 @@ function TradeButtons() {
             });
           }}
         >
-          {`Buy for: ◎${lowestAsk.price}`}
+          {`Buy for: ${humanizeSolana(lowestAsk.price)}`}
         </Button>
       )}
     </>
