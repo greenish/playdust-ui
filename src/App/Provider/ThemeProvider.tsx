@@ -61,6 +61,13 @@ const themeOverrides = createTheme({
         },
       },
     },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          whiteSpace: 'nowrap',
+        },
+      },
+    },
     MuiPaper: {
       defaultProps: {
         elevation: 0,

@@ -9,7 +9,7 @@ interface CopyButtonProps {
 
 function CopyButton({ value }: CopyButtonProps) {
   return (
-    <IconButton onClick={() => copy(String(value))}>
+    <IconButton edge="start" onClick={() => copy(String(value))} size="small">
       <ContentCopyIcon />
     </IconButton>
   );

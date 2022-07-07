@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ellipsisify from '../../../../_helpers/ellipsisify';
@@ -34,13 +35,13 @@ function ExplorerLink({
     tabId: windowState.tabId,
   });
   return (
-    <>
+    <Box sx={{ whiteSpace: 'nowrap' }}>
       {allowCopy && <CopyButton value={toString} />}
       <Link href={href} title={toString}>
         <pre style={{ display: 'inline' }}>{display}</pre>
       </Link>
       {isShortened && <sub>{` ${fullLabel.length}`}</sub>}
-    </>
+    </Box>
   );
 }
 
