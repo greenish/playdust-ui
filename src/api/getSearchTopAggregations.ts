@@ -42,7 +42,7 @@ const getCollectionAggs = async ({
             {
               id: {
                 terms: {
-                  field: 'primaryCollection.keyword',
+                  field: 'primaryCollection',
                 },
               },
             },
