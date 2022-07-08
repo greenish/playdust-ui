@@ -57,7 +57,15 @@ function RangeTextField({ value, label, setter }: RangeTextFieldProps) {
       size="small"
       type="number"
       value={value === undefined ? '' : value}
-      onChange={(evt) => setter(parseFloat(evt.target.value))}
+      onChange={(evt) => {
+        const nextValue = evt.target.value;
+
+        if (nextValue === '') {
+          return setter(undefined);
+        }
+
+        setter(parseFloat(evt.target.value));
+      }}
     />
   );
 }
@@ -67,6 +75,8 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
   const found = useMemo(() => findRange(value), [findRange, value]);
   const [localMin, setLocalMin] = useState<number | undefined>();
   const [localMax, setLocalMax] = useState<number | undefined>();
+  const [hasTouchedMin, setHasTouchedMin] = useState(false);
+  const [hasTouchedMax, setHasTouchedMax] = useState(false);
   const [localVisible, setLocalVisible] = useState(false);
   const upsertRange = useUpsertTopLevelRangeQueryNode();
   const removeQueryNode = useRemoveQueryNode();
@@ -97,8 +107,8 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
   const textValue = useMemo(() => {
     if (found) {
       return {
-        min: found.min,
-        max: found.max,
+        min: hasTouchedMin ? localMin : found.min,
+        max: hasTouchedMax ? localMax : found.max,
       };
     }
 
@@ -106,7 +116,7 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
       min: localMin,
       max: localMax,
     };
-  }, [found, localMax, localMin]);
+  }, [found, hasTouchedMax, hasTouchedMin, localMax, localMin]);
 
   const disabled = useMemo(() => {
     if (found && found.min === localMin && found.max === localMax) {
@@ -118,7 +128,7 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
     }
 
     if (localMax && localMin) {
-      return localMax > localMin;
+      return localMin >= localMax;
     }
 
     const hasOneValue =
@@ -171,24 +181,30 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
               <RangeTextField
                 label="min"
                 value={textValue.min}
-                setter={setLocalMin}
+                setter={(arg) => {
+                  setLocalMin(arg);
+                  setHasTouchedMin(true);
+                }}
               />
               <Typography sx={{ mx: 1 }}>to</Typography>
               <RangeTextField
                 label="max"
                 value={textValue.max}
-                setter={setLocalMax}
+                setter={(arg) => {
+                  setLocalMax(arg);
+                  setHasTouchedMax(true);
+                }}
               />
             </TextFieldContainer>
           )}
-
           <IconButton
             color="primary"
             sx={{ ml: 1 }}
             disabled={disabled}
             onClick={() => {
               if (!disabled) {
-                upsertRange(value, localMin, localMax);
+                const { min, max } = isSlider ? sliderValue : textValue;
+                upsertRange(value, min, max);
               }
             }}
           >
@@ -203,6 +219,7 @@ function RangeSlider({ label, value, isSlider }: RangeFilterProps) {
 function RangeFilters() {
   return (
     <RootContainer>
+      <RangeSlider label="Filter by List Price" value="list-price" />
       <RangeSlider label="Filter by Sales Price" value="sale-price" />
       <RangeSlider
         label="Filter by Rarity"

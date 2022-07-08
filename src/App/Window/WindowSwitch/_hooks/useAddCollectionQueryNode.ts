@@ -1,5 +1,6 @@
 import { useRecoilValue } from 'recoil';
 import shortId from '../../../_helpers/shortId';
+import clearSearchQueryAtom from '../_atoms/clearSearchQueryAtom';
 import searchQueryActiveNodeMetaAtom from '../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../_atoms/searchQueryRootNodeAtom';
 import initializeSearchQuery from '../_helpers/initializeSearchQuery';
@@ -11,6 +12,7 @@ const useAddCollectionQueryNode = makeUseChangeSearchQuery(() => {
   const activeNodeMeta = useRecoilValue(searchQueryActiveNodeMetaAtom);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const getAddQueryNode = useGetAddQueryNode();
+  const clearSearchQuery = useRecoilValue(clearSearchQueryAtom);
 
   return (collectionId: string, initialize?: boolean, atRootNode?: boolean) => {
     const newNode: CollectionQueryNodeType = {
@@ -20,9 +22,8 @@ const useAddCollectionQueryNode = makeUseChangeSearchQuery(() => {
       value: collectionId,
     };
 
-    if (!rootNode || initialize) {
+    if (!rootNode || initialize || clearSearchQuery) {
       const nextQuery = initializeSearchQuery(newNode);
-
       return { query: nextQuery };
     }
 

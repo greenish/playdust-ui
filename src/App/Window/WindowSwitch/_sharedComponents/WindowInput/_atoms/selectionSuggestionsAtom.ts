@@ -1,4 +1,5 @@
 import { selector } from 'recoil';
+import clearSearchQueryAtom from '../../../_atoms/clearSearchQueryAtom';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import searchQueryActiveNodeAtom from './searchQueryActiveNodeAtom';
 import searchQuerySelectedNodesAtom from './searchQuerySelectedNodesAtom';
@@ -8,8 +9,13 @@ const selectionSuggestionsAtom = selector<SearchSuggestionType[] | null>({
   get: ({ get }) => {
     const selectedNodes = get(searchQuerySelectedNodesAtom);
     const activeNode = get(searchQueryActiveNodeAtom);
+    const clearSearchQuery = get(clearSearchQueryAtom);
 
-    if (!selectedNodes.length || activeNode?.type !== 'group') {
+    if (
+      !selectedNodes.length ||
+      activeNode?.type !== 'group' ||
+      clearSearchQuery
+    ) {
       return null;
     }
 

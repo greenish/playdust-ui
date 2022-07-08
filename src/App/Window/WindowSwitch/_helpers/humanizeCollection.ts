@@ -2,13 +2,6 @@ import type OpenSearchCollectionSourceType from '../_types/OpenSearchCollectionS
 
 const humanizeCollection = ({
   name,
-  symbol,
-}: Partial<OpenSearchCollectionSourceType>): string => {
-  if (name && symbol) {
-    return `${name} (${symbol})`;
-  }
-
-  return name || symbol || '';
-};
+}: Partial<OpenSearchCollectionSourceType>): string => name || '';
 
 export default humanizeCollection;

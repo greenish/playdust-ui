@@ -1,6 +1,7 @@
 import {
   Chip,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -46,6 +47,7 @@ function AccountInputs() {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>#</TableCell>
                 <TableCell>Address</TableCell>
                 <TableCell>Pre Balance (SOL)</TableCell>
                 <TableCell>Post Balance (SOL)</TableCell>
@@ -67,6 +69,7 @@ function AccountInputs() {
                       key={idx}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
+                      <TableCell>{idx + 1}</TableCell>
                       <TableCell>
                         <LabeledAddressLink to={pubkey} allowCopy={true} />
                       </TableCell>
@@ -80,18 +83,22 @@ function AccountInputs() {
                         <SolBalance lamports={preBalance - postBalance} />
                       </TableCell>
                       <TableCell>
-                        {idx === 0 && (
-                          <Chip color="info" label="Fee Payer" size="small" />
-                        )}
-                        {account.writable && (
-                          <Chip color="info" label="Writable" size="small" />
-                        )}
-                        {account.signer && (
-                          <Chip color="info" label="Signer" size="small" />
-                        )}
-                        {message.instructions.find((ix) =>
-                          ix.programId.equals(pubkey)
-                        ) && <Chip color="info" label="Program" size="small" />}
+                        <Stack direction="row" spacing={1}>
+                          {idx === 0 && (
+                            <Chip color="info" label="Fee Payer" size="small" />
+                          )}
+                          {account.writable && (
+                            <Chip color="info" label="Writable" size="small" />
+                          )}
+                          {account.signer && (
+                            <Chip color="info" label="Signer" size="small" />
+                          )}
+                          {message.instructions.find((ix) =>
+                            ix.programId.equals(pubkey)
+                          ) && (
+                            <Chip color="info" label="Program" size="small" />
+                          )}
+                        </Stack>
                       </TableCell>
                     </TableRow>
                   );

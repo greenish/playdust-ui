@@ -1,4 +1,5 @@
 import { selector } from 'recoil';
+import clearSearchQueryAtom from '../../../_atoms/clearSearchQueryAtom';
 import searchQueryRootNodeAtom from '../../../_atoms/searchQueryRootNodeAtom';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import searchQueryTermAtom from './searchQueryTermAtom';
@@ -8,8 +9,9 @@ const explorerSuggestionsAtom = selector<SearchSuggestionType[] | null>({
   key: 'explorerSuggestionsAtom',
   get: ({ get }) => {
     const rootNode = get(searchQueryRootNodeAtom);
+    const clearSearchQuery = get(clearSearchQueryAtom);
 
-    if (rootNode) {
+    if (rootNode && !clearSearchQuery) {
       return null;
     }
 

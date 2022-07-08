@@ -1,5 +1,6 @@
 import { selector } from 'recoil';
 import frontendApi from '../../../../_helpers/frontendApi';
+import clearSearchQueryAtom from '../../../_atoms/clearSearchQueryAtom';
 import humanizeCollection from '../../../_helpers/humanizeCollection';
 import type SearchSuggestionResponseType from '../_types/SearchSuggestionResponseType';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
@@ -47,11 +48,12 @@ const serverSuggestionsAtom = selector<SearchSuggestionType[] | null>({
     const debouncedTerm = get(searchQueryDebouncedTermAtom);
     const hasCollectionDependency = get(hasCollectionDependencyAtom);
     const windowType = get(searchQueryTermWindowTypeAtom);
+    const clearSearchQuery = get(clearSearchQueryAtom);
 
     if (
       term !== debouncedTerm ||
       debouncedTerm.length < 3 ||
-      hasCollectionDependency ||
+      (hasCollectionDependency && !clearSearchQuery) ||
       windowType === 'address' ||
       windowType === 'tx'
     ) {

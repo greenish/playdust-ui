@@ -43,7 +43,11 @@ function NFTDetailsRenderMedia({ imageSize }: { imageSize: number }) {
         )}
       </VisibilityContainer>
       {visible ? (
-        <CardImageContainer src={offChainData.image} imageSize={imageSize} />
+        <CardImageContainer
+          src={offChainData.image}
+          imageSize={imageSize}
+          overlay={null}
+        />
       ) : (
         <BlurImage
           alt={offChainData.name || ''}
@@ -53,7 +57,11 @@ function NFTDetailsRenderMedia({ imageSize }: { imageSize: number }) {
       )}
     </BlurImageContainer>
   ) : (
-    <CardImageContainer src={offChainData.image} imageSize={imageSize} />
+    <CardImageContainer
+      src={offChainData.image}
+      imageSize={imageSize}
+      overlay={null}
+    />
   );
 }
 

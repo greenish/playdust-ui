@@ -78,8 +78,11 @@ function TransactionRow({ transaction }: { transaction: TransactionType }) {
 }
 
 function Transactions() {
-  const [transactions, fetchMoreTransactions] = useTransactionsForAddress();
+  const [addressTransactions, fetchMoreTransactions] =
+    useTransactionsForAddress();
   const [loadingMore, setLoadingMore] = useState(false);
+
+  const { transactions, done } = addressTransactions;
 
   const loadMoreHandler = useCallback(async () => {
     setLoadingMore(true);
@@ -115,9 +118,11 @@ function Transactions() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Button onClick={() => safePromise(loadMoreHandler())}>
-        {loadingMore ? <CircularProgress /> : 'Load More'}
-      </Button>
+      {!done && (
+        <Button onClick={() => safePromise(loadMoreHandler())}>
+          {loadingMore ? <CircularProgress /> : 'Load More'}
+        </Button>
+      )}
     </>
   );
 }

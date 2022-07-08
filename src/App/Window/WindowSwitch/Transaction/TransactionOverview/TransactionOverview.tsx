@@ -69,12 +69,16 @@ function TransactionOverview() {
 
           <ExplorerGridRow
             label="Confirmation Status"
-            value={signatureStatus?.confirmationStatus ?? 'unknown'}
+            value={(
+              signatureStatus?.confirmationStatus ?? 'unknown'
+            ).toUpperCase()}
           />
 
           <ExplorerGridRow
             label="Confirmations"
-            value={signatureStatus?.confirmations ?? 'max'}
+            value={String(
+              signatureStatus?.confirmations ?? 'max'
+            ).toUpperCase()}
           />
 
           <ExplorerGridRow

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { Box, Paper, Stack, Typography } from '@mui/material';
+import { Clear, Undo } from '@mui/icons-material';
+import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { useSelect } from 'downshift';
@@ -9,6 +10,8 @@ import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
 import { AutoSizer, ListRowRenderer } from 'react-virtualized';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import windowStateAtom from '../../../_atoms/windowStateAtom';
+import clearSearchQueryAtom from '../../_atoms/clearSearchQueryAtom';
 import searchQueryActiveNodeMetaAtom from '../../_atoms/searchQueryActiveNodeMetaAtom';
 import searchQueryRootNodeAtom from '../../_atoms/searchQueryRootNodeAtom';
 import SkeletonRows from '../SkeletonRows';
@@ -37,6 +40,7 @@ const InputContainer = styled(Box)`
   font-size: 80%;
   background: none;
   cursor: text;
+  width: 100%;
 `;
 
 const OverlayContainer = styled(Paper)`
@@ -77,6 +81,9 @@ function WindowInput() {
   const [forceClosed, setForceClosed] = useRecoilState(
     searchSuggestionsForcedClosedAtom
   );
+  const windowState = useRecoilValue(windowStateAtom);
+  const [clearSearchQuery, setClearSearchQuery] =
+    useRecoilState(clearSearchQueryAtom);
 
   useClickAway(containerRef, () => {
     setForceClosed(true);
@@ -85,12 +92,13 @@ function WindowInput() {
 
   useEffect(() => {
     setTerm('');
+    setDTerm('');
     setActiveIdx(0);
-  }, [activeNodeMeta, setActiveIdx, setTerm]);
+  }, [activeNodeMeta]); // eslint-disable-line
 
   useWindowInputKeyEvent();
 
-  const { isOpen, getItemProps, getToggleButtonProps, getMenuProps } =
+  const { isOpen, getItemProps, getMenuProps, getToggleButtonProps } =
     useSelect({
       items: suggestions,
       isOpen: suggestions.length > 0,
@@ -110,7 +118,7 @@ function WindowInput() {
       }}
       inputRef={setInputRef}
       value={term}
-      placeholder={rootNode ? undefined : 'Search...'}
+      placeholder={!rootNode || clearSearchQuery ? 'Search...' : undefined}
       onChange={(evt) => {
         const { value } = evt.target;
 
@@ -181,8 +189,11 @@ function WindowInput() {
 
   return (
     <RootContainer ref={containerRef}>
-      <InputContainer
+      <Box
         sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           border: 'solid',
           borderColor,
           borderWidth,
@@ -190,31 +201,55 @@ function WindowInput() {
             borderColor: theme.palette.primary.main,
           },
         }}
-        {...getToggleButtonProps()}
-        onClick={() => {
-          setForceClosed(false);
-          if (rootNode) {
-            setActiveNodeMeta({
-              type: 'group',
-              nodeId: rootNode.id,
-              index: rootNode.children.length,
-            });
-          }
-          inputRef?.current?.focus();
-        }}
       >
-        {rootNode ? (
-          <RenderQuery
-            renderChipInput={(node) => (
-              <QueryNodeChip textInput={<TextInput />} node={node} />
-            )}
-          />
-        ) : (
-          <EmptyContainer>
-            <TextInput />
-          </EmptyContainer>
+        {windowState.type === 'search' && (
+          <IconButton
+            sx={{ ml: 1 }}
+            onClick={(evt) => {
+              evt.stopPropagation();
+              setClearSearchQuery(!clearSearchQuery);
+            }}
+          >
+            {clearSearchQuery ? <Undo /> : <Clear />}
+          </IconButton>
         )}
-      </InputContainer>
+        <InputContainer
+          {...getToggleButtonProps()}
+          onClick={() => {
+            setForceClosed(false);
+            if (rootNode) {
+              setActiveNodeMeta({
+                type: 'group',
+                nodeId: rootNode.id,
+                index: rootNode.children.length,
+              });
+            }
+            inputRef?.current?.focus();
+          }}
+        >
+          {windowState.type === 'search' && !clearSearchQuery && (
+            <RenderQuery
+              renderChipInput={(node) => (
+                <QueryNodeChip textInput={<TextInput />} node={node} />
+              )}
+            />
+          )}
+          {(windowState.type !== 'search' || clearSearchQuery) && (
+            <EmptyContainer>
+              {!['home', 'search'].includes(windowState.type) && (
+                <>
+                  <QueryNodeChip
+                    textInput={<TextInput />}
+                    explorerText={windowState.state}
+                  />
+                  &nbsp;
+                </>
+              )}
+              <TextInput />
+            </EmptyContainer>
+          )}
+        </InputContainer>
+      </Box>
       <OverlayContainer
         elevation={showOverlay ? 8 : 0}
         {...getMenuProps()}

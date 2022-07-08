@@ -3,13 +3,19 @@ import { ArrowBack, HomeSharp } from '@mui/icons-material';
 import { Box, Button, Stack } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import {
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useResetRecoilState,
+} from 'recoil';
 import useGoHome from '../../../../_hooks/useGoHome';
 import SuspenseBoundary from '../../../../_sharedComponents/SuspenseBoundary/SuspenseBoundary';
 import setWindowImagesAtom from '../../../_atoms/setWindowImagesAtom';
+import searchStateSerializedAtom from '../../_atoms/searchStateSerializedAtom';
 import CollectionOverview from '../../_sharedComponents/CollectionOverview/CollectionOverview';
 import TokenGrid from './TokenGrid/TokenGrid';
 import searchResultsAtom from './_atoms/searchResultsAtom';
+import searchResultsMoreAtom from './_atoms/searchResultsMoreAtom';
 import useFetchMoreSearchResults from './_hooks/useFetchMoreSearchResults';
 
 const NoResultsContainer = styled.div`
@@ -21,6 +27,8 @@ const NoResultsContainer = styled.div`
 
 function SearchResults() {
   const searchResults = useRecoilValueLoadable(searchResultsAtom);
+  const searchStateSerialized = useRecoilValue(searchStateSerializedAtom);
+  const resetSearchResultsMore = useResetRecoilState(searchResultsMoreAtom);
   const fetchMoreSearchResults = useFetchMoreSearchResults();
   const hasValue = searchResults.state === 'hasValue';
   const goHome = useGoHome();
@@ -37,6 +45,10 @@ function SearchResults() {
       setWindowImages(filtered);
     }
   }, [searchResults, setWindowImages]);
+
+  useEffect(() => {
+    resetSearchResultsMore();
+  }, [searchStateSerialized, resetSearchResultsMore]);
 
   if (hasValue && searchResults.contents.total === 0) {
     return (

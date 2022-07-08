@@ -1,4 +1,6 @@
 import styled from '@emotion/styled';
+import { Box, Chip, Theme, Typography } from '@mui/material';
+import { lighten } from '@mui/material/styles';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
@@ -64,6 +66,31 @@ function TokenCard({
     );
   }
 
+  let listedOrLastPrice;
+  if (metadata.asks && metadata.asks.length > 0) {
+    listedOrLastPrice = (
+      <Typography>
+        {humanizeSolana(Math.min(...metadata.asks.map((entry) => entry.price)))}
+      </Typography>
+    );
+  } else if (metadata.lastSalePrice > 0) {
+    listedOrLastPrice = (
+      <Typography
+        sx={(theme: Theme) => ({
+          color: lighten(theme.palette.text.primary, 0.7),
+        })}
+      >
+        {humanizeSolana(metadata.lastSalePrice)} last
+      </Typography>
+    );
+  } else {
+    listedOrLastPrice = <Box />;
+  }
+
+  const overlay = metadata.normalizedRarityScore ? (
+    <Chip label={metadata.normalizedRarityScore.toFixed(2)} />
+  ) : null;
+
   return (
     <ImageCard
       imageSize={imageSize}
@@ -78,11 +105,7 @@ function TokenCard({
               </CardText>
             </CardTextContainer>
             <CardSecondaryContainer>
-              <span>
-                {metadata.listedPrice
-                  ? humanizeSolana(metadata.listedPrice)
-                  : '◎ N/A'}
-              </span>
+              {listedOrLastPrice}
               {!disableQuickFilter && (
                 <TokenCardFilterContainer>
                   {metadata && metadata.attributes && (
@@ -95,6 +118,7 @@ function TokenCard({
         ) : null
       }
       contentHeight={contentHeight}
+      overlay={overlay}
     />
   );
 }

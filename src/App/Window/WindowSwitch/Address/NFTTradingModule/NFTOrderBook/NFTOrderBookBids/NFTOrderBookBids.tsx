@@ -14,7 +14,6 @@ import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import connectedWalletAtom from '../../../../../../_atoms/connectedWalletAtom';
 import addressStateAtom from '../../../../_atoms/addressStateAtom';
-import playdustNftDataAtom from '../../../../_atoms/playdustNftDataAtom';
 import humanizeSolana from '../../../../_helpers/humanizeSolana';
 import lamportsToSol from '../../../../_helpers/lamportsToSol';
 import safePubkeyString from '../../../../_helpers/safePubkeyString';
@@ -22,9 +21,9 @@ import ExplorerLink from '../../../../_sharedComponents/ExplorerLink/ExplorerLin
 import currentOwnerForMintAtom from '../../../_atoms/currentOwnerForMintAtom';
 import ordersForMintAtom from '../../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../../_atoms/tradingDialogAtom';
+import walletEscrowAtom from '../../_atoms/walletEscrowAtom';
 import MarketplaceIcon from '../_sharedComponents/MarketplaceIcon';
 import Tooltip from './Tooltip';
-import walletEscrowAtom from './_atoms/walletEscrowAtom';
 
 function NFTOrderBookBids() {
   const setTradingDialog = useSetRecoilState(tradingDialogAtom);
@@ -33,7 +32,6 @@ function NFTOrderBookBids() {
   const walletModal = useWalletModal();
   const addressState = useRecoilValue(addressStateAtom);
   const connectedWallet = useRecoilValue(connectedWalletAtom);
-  const playdustData = useRecoilValue(playdustNftDataAtom);
   const walletEscrow = useRecoilValue(walletEscrowAtom);
   const isOwner =
     connectedWallet !== null && ownerWalletAddress === connectedWallet;
@@ -47,9 +45,7 @@ function NFTOrderBookBids() {
     orders?.bids.find((order) => order.wallet === connectedWallet) ?? null;
   const escrowAmount = lamportsToSol(walletEscrow?.amount || 0);
 
-  const marketBids = playdustData?.mintBids ?? [];
-
-  const hasBids = !!(orders?.bids.length || marketBids.length);
+  const hasBids = !!orders?.bids.length;
 
   return (
     <TableContainer>
@@ -78,126 +74,105 @@ function NFTOrderBookBids() {
               </TableCell>
             </TableRow>
           )}
-          {(orders?.bids ?? []).map((order) => (
-            <TableRow key={order.txHash}>
-              <TableCell>
-                {myBid?.txHash === order.txHash &&
-                escrowAmount < order.price ? (
-                  <Tooltip
-                    title={`Bid is invalid. Escrow account has insufficient funds. (${humanizeSolana(
-                      escrowAmount
-                    )})`}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <ErrorOutline color="warning" />
-                      <Box sx={{ ml: 1, color: 'grey.500' }}>
-                        {humanizeSolana(order.price)}
+          {(orders?.bids ?? []).map((order) => {
+            const marketplace = order.id.split('-').reverse()[0];
+            return (
+              <TableRow key={order.txHash}>
+                <TableCell>
+                  {myBid?.txHash === order.txHash &&
+                  escrowAmount < order.price ? (
+                    <Tooltip
+                      title={`Bid is invalid. Escrow account has insufficient funds. (${humanizeSolana(
+                        escrowAmount
+                      )})`}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <ErrorOutline color="warning" />
+                        <Box sx={{ ml: 1, color: 'grey.500' }}>
+                          {humanizeSolana(order.price)}
+                        </Box>
                       </Box>
-                    </Box>
-                  </Tooltip>
-                ) : (
-                  humanizeSolana(order.price)
-                )}
-              </TableCell>
-              <TableCell>
-                <ExplorerLink
-                  type="address"
-                  to={order.wallet}
-                  allowCopy={true}
-                  ellipsis={{
-                    cutoff: 4,
-                    remain: 4,
-                  }}
-                />
-              </TableCell>
-              <TableCell>
-                <ExplorerLink
-                  type="tx"
-                  to={order.txHash}
-                  allowCopy={true}
-                  ellipsis={{
-                    cutoff: 4,
-                    remain: 4,
-                  }}
-                />
-              </TableCell>
-              <TableCell>
-                {myBid?.txHash === order.txHash && (
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => {
-                      if (!connectedWallet) {
-                        walletModal.setVisible(true);
-                        return;
-                      }
-                      setTradingDialog({
-                        type: 'cancelBid',
-                        wallet: connectedWallet,
-                        bid: order,
-                        mintAddress,
-                      });
+                    </Tooltip>
+                  ) : (
+                    humanizeSolana(order.price)
+                  )}
+                </TableCell>
+                <TableCell>
+                  <ExplorerLink
+                    type="address"
+                    to={order.wallet}
+                    allowCopy={true}
+                    ellipsis={{
+                      cutoff: 4,
+                      remain: 4,
                     }}
-                  >
-                    <Cancel />
-                  </IconButton>
-                )}
-                {isOwner && myBid?.wallet !== connectedWallet && (
-                  <IconButton
-                    size="small"
-                    color="success"
-                    onClick={() => {
-                      if (!connectedWallet) {
-                        walletModal.setVisible(true);
-                        return;
-                      }
-                      setTradingDialog({
-                        type: 'acceptBid',
-                        wallet: connectedWallet,
-                        bid: order,
-                        mintAddress,
-                      });
+                  />
+                </TableCell>
+                <TableCell>
+                  <ExplorerLink
+                    type="tx"
+                    to={order.txHash}
+                    allowCopy={true}
+                    ellipsis={{
+                      cutoff: 4,
+                      remain: 4,
                     }}
-                  >
-                    <CheckCircle />
-                  </IconButton>
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
-          {marketBids.map((order) => (
-            <TableRow key={order.signature}>
-              <TableCell>{humanizeSolana(order.price)}</TableCell>
-              <TableCell>
-                <ExplorerLink
-                  type="address"
-                  to={order.wallet}
-                  allowCopy={true}
-                  ellipsis={{
-                    cutoff: 4,
-                    remain: 4,
-                  }}
-                />
-              </TableCell>
-              <TableCell>
-                <ExplorerLink
-                  type="tx"
-                  to={order.signature}
-                  allowCopy={true}
-                  ellipsis={{
-                    cutoff: 4,
-                    remain: 4,
-                  }}
-                />
-              </TableCell>
-              <TableCell>
-                <MarketplaceIcon
-                  marketplace={order.marketplace}
-                  address={addressState.pubkey.toString()}
-                />
-              </TableCell>
-            </TableRow>
-          ))}
+                  />
+                </TableCell>
+                <TableCell>
+                  {marketplace === 'Playdust' &&
+                    myBid?.txHash === order.txHash && (
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => {
+                          if (!connectedWallet) {
+                            walletModal.setVisible(true);
+                            return;
+                          }
+                          setTradingDialog({
+                            type: 'cancelBid',
+                            wallet: connectedWallet,
+                            bid: order,
+                            mintAddress,
+                          });
+                        }}
+                      >
+                        <Cancel />
+                      </IconButton>
+                    )}
+                  {marketplace === 'Playdust' &&
+                    isOwner &&
+                    myBid?.wallet !== connectedWallet && (
+                      <IconButton
+                        size="small"
+                        color="success"
+                        onClick={() => {
+                          if (!connectedWallet) {
+                            walletModal.setVisible(true);
+                            return;
+                          }
+                          setTradingDialog({
+                            type: 'acceptBid',
+                            wallet: connectedWallet,
+                            bid: order,
+                            mintAddress,
+                          });
+                        }}
+                      >
+                        <CheckCircle />
+                      </IconButton>
+                    )}
+                  {marketplace !== 'Playdust' && (
+                    <MarketplaceIcon
+                      marketplace={marketplace}
+                      address={order.mint}
+                    />
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>

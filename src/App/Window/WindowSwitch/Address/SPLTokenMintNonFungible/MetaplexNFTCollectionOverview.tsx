@@ -15,6 +15,7 @@ function MetaplexNFTCollectionOverview() {
     <ExplorerAccordion
       id="collection-overview"
       title="Collection Overview"
+      expanded={true}
       content={<CollectionOverview />}
     />
   );
