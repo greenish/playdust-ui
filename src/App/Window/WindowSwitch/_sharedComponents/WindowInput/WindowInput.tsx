@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { useSelect } from 'downshift';
 import parse from 'html-react-parser';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
 import { AutoSizer, ListRowRenderer } from 'react-virtualized';
@@ -107,40 +107,54 @@ function WindowInput() {
 
   const showOverlay = isOpen && !forceClosed;
 
-  const TextInput = React.memo(() => (
-    <AutosizeInput
-      key="auto-size-input"
-      inputStyle={{
-        fontFamily: 'inherit',
-        border: 'none',
-        outline: 'none',
-        background: 'inherit',
-      }}
-      inputRef={setInputRef}
-      value={term}
-      placeholder={!rootNode || clearSearchQuery ? 'Search...' : undefined}
-      onChange={(evt) => {
-        const { value } = evt.target;
+  const textInput = useMemo(
+    () => (
+      <AutosizeInput
+        key="auto-size-input"
+        inputStyle={{
+          fontFamily: 'inherit',
+          border: 'none',
+          outline: 'none',
+          background: 'inherit',
+        }}
+        inputRef={setInputRef}
+        value={term}
+        placeholder={!rootNode || clearSearchQuery ? 'Search...' : undefined}
+        onChange={(evt) => {
+          const { value } = evt.target;
 
-        if (value.includes('(') || value.includes(')')) {
-          return;
-        }
+          if (value.includes('(') || value.includes(')')) {
+            return;
+          }
 
-        if (activeIdx !== 0) {
-          setActiveIdx(0);
-        }
-        setForceClosed(false);
-        setTerm(value);
-        setDebouncedTerm(value);
-      }}
-      autoFocus={true}
-      onBlur={() => {
-        if (suggestions.length > 0) {
-          inputRef?.current?.focus();
-        }
-      }}
-    />
-  ));
+          if (activeIdx !== 0) {
+            setActiveIdx(0);
+          }
+          setForceClosed(false);
+          setTerm(value);
+          setDebouncedTerm(value);
+        }}
+        autoFocus={true}
+        onBlur={() => {
+          if (suggestions.length > 0) {
+            inputRef?.current?.focus();
+          }
+        }}
+      />
+    ),
+    [
+      activeIdx,
+      clearSearchQuery,
+      rootNode,
+      setActiveIdx,
+      setDebouncedTerm,
+      setForceClosed,
+      setInputRef,
+      setTerm,
+      suggestions.length,
+      term,
+    ]
+  );
 
   const rowRenderer = useCallback<ListRowRenderer>(
     ({ index, key, style }) => {
@@ -230,7 +244,7 @@ function WindowInput() {
           {windowState.type === 'search' && !clearSearchQuery && (
             <RenderQuery
               renderChipInput={(node) => (
-                <QueryNodeChip textInput={<TextInput />} node={node} />
+                <QueryNodeChip textInput={textInput} node={node} />
               )}
             />
           )}
@@ -239,13 +253,13 @@ function WindowInput() {
               {!['home', 'search'].includes(windowState.type) && (
                 <>
                   <QueryNodeChip
-                    textInput={<TextInput />}
+                    textInput={textInput}
                     explorerText={windowState.state}
                   />
                   &nbsp;
                 </>
               )}
-              <TextInput />
+              {textInput}
             </EmptyContainer>
           )}
         </InputContainer>
