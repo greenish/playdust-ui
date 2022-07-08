@@ -25,8 +25,8 @@ function SPLTokenMintNonFungible() {
     <>
       <NFTDetailsView />
       <ContentContainer>
-        <MetaplexNFTCollectionOverview />
         <MetaplexNFTAttributes />
+        <MetaplexNFTCollectionOverview />
         <MetaplexCreators />
         <MetaplexRawOffChainMetadata />
         <MetaplexRawOnChainMetadata />

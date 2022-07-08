@@ -1,7 +1,6 @@
 import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import shortenPublicKey from '../../../../../_helpers/shortenPublicKey';
 import playdustNftDataAtom from '../../../_atoms/playdustNftDataAtom';
 import ContentContainer from '../../../_sharedComponents/ContentContainer';
 import ExplorerLink from '../../../_sharedComponents/ExplorerLink/ExplorerLink';
