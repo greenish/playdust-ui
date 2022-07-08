@@ -2,7 +2,6 @@ import { selector } from 'recoil';
 import api from '../../_helpers/frontendApi';
 import type CollectionOverviewResponseType from '../_types/CollectionOverviewResponseType';
 import playdustNftDataAtom from './playdustNftDataAtom';
-import searchStateAtom from './searchStateAtom';
 import searchTopAggregationAtom from './searchTopAggregationAtom';
 
 const collectionIdAtom = selector<string | null>({
@@ -28,11 +27,6 @@ const collectionOverviewAtom = selector<CollectionOverviewResponseType | null>({
   key: 'collectionOverviewAtom',
   get: async ({ get }) => {
     const collectionId = get(collectionIdAtom);
-    const { query } = get(searchStateAtom);
-
-    if (query.rootId === '') {
-      return null;
-    }
 
     if (collectionId) {
       try {
