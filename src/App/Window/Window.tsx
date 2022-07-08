@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import React, { useMemo } from 'react';
-import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
+import React, { useEffect, useMemo } from 'react';
+import { RecoilRoot, useRecoilSnapshot, useRecoilState, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import activeWindowAtom from '../_atoms/activeWindowAtom';
 import connectedWalletAtom from '../_atoms/connectedWalletAtom';
@@ -35,6 +35,20 @@ const WindowContentRenderer = React.memo(() => {
     </RootContainer>
   );
 });
+
+WindowContentRenderer.whyDidYouRender = true;
+
+function DebugObserver(): React.Node {
+  const snapshot = useRecoilSnapshot();
+  useEffect(() => {
+    console.debug('The following atoms were modified:');
+    for (const node of snapshot.getNodes_UNSTABLE({isModified: true})) {
+      console.debug(node.key, snapshot.getLoadable(node));
+    }
+  }, [snapshot]);
+
+  return null;
+}
 
 function Window() {
   const activeWindow = useRecoilValue(activeWindowAtom);
@@ -72,6 +86,7 @@ function Window() {
   }
   return (
     <RecoilRoot key={`${activeWindow.tabId}`}>
+      <DebugObserver />
       <WindowStateProvider
         profileState={profileState}
         setWindowImages={setWindowImages}
@@ -83,5 +98,7 @@ function Window() {
     </RecoilRoot>
   );
 }
+
+Window.whyDidYouRender = true;
 
 export default Window;

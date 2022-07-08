@@ -45,4 +45,6 @@ function Search() {
   );
 }
 
+Search.whyDidYouRender = true;
+
 export default Search;

@@ -51,4 +51,6 @@ function WindowStateProvider({
   return null;
 }
 
+WindowStateProvider.whyDidYouRender = true;
+
 export default WindowStateProvider;

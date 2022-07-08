@@ -29,4 +29,6 @@ function WindowSwitch() {
   }
 }
 
+WindowSwitch.whyDidYouRender = true;
+
 export default WindowSwitch;

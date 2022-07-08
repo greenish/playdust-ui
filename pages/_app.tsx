@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 import getPDEnv from '../src/App/_helpers/getPDEnv';
+import '../src/App/_helpers/wdyr';
 import '../styles/globals.css';
 
 const env = getPDEnv();

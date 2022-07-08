@@ -196,4 +196,6 @@ function Address() {
   );
 }
 
+Address.whyDidYouRender = true;
+
 export default Address;
