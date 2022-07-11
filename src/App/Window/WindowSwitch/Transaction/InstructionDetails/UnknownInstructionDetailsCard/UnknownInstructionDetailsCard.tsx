@@ -10,7 +10,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import solanaClusterAtom from '../../../../../_atoms/solanaClusterAtom';
 import programLabel from '../../../_helpers/programLabel';
-import safePubkeyString from '../../../_helpers/safePubkeyString';
+import safePubkeyString from '../../../../../_helpers/safePubkeyString';
 import BasicInstructionCard from './BasicInstructionCard/BasicInstructionCard';
 import InstructionCardPropsType from './_types/InstructionCardPropsType';
 

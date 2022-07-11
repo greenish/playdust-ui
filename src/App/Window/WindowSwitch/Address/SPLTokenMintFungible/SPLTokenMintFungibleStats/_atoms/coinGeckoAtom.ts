@@ -3,7 +3,7 @@ import { selector } from 'recoil';
 import { assert } from 'superstruct';
 import addressStateAtom from '../../../../_atoms/addressStateAtom';
 import tokenRegistryAtom from '../../../../_atoms/tokenRegistryAtom';
-import safePubkeyString from '../../../../_helpers/safePubkeyString';
+import safePubkeyString from '../../../../../../_helpers/safePubkeyString';
 import CoinFullInfoType from '../_types/CoinFullInfoType';
 
 const coinGeckoApiBaseUrl = 'https://api.coingecko.com/api/v3';

@@ -3,7 +3,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import addressStateAtom from '../_atoms/addressStateAtom';
 import tokenRegistryAtom from '../_atoms/tokenRegistryAtom';
-import safePubkeyString from '../_helpers/safePubkeyString';
+import safePubkeyString from '../../../_helpers/safePubkeyString';
 import ExplorerAccordion from '../_sharedComponents/ExplorerAccordion';
 import ExplorerGrid from '../_sharedComponents/ExplorerGrid';
 import ExplorerGridRow from '../_sharedComponents/ExplorerGridRow';

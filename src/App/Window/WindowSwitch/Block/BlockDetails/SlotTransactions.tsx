@@ -14,7 +14,7 @@ import {
 } from '@solana/web3.js';
 import React, { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import safePubkeyString from '../../_helpers/safePubkeyString';
+import safePubkeyString from '../../../../_helpers/safePubkeyString';
 import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 import ExplorerLink from '../../_sharedComponents/ExplorerLink/ExplorerLink';
 import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
