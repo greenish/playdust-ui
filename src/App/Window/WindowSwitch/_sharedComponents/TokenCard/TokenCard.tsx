@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Chip, Theme, Typography } from '@mui/material';
-import { lighten } from '@mui/material/styles';
+import { alpha, lighten } from '@mui/material/styles';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
@@ -88,7 +88,10 @@ function TokenCard({
   }
 
   const overlay = metadata.normalizedRarityScore ? (
-    <Chip label={metadata.normalizedRarityScore.toFixed(2)} />
+    <Chip
+      sx={{ backgroundColor: alpha('#fff', 0.8) }}
+      label={metadata.normalizedRarityScore.toFixed(2)}
+    />
   ) : null;
 
   return (
