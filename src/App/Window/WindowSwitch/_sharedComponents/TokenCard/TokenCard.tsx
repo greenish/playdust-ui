@@ -8,6 +8,7 @@ import getCDNUrl from '../../../../_helpers/getCDNUrl';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
 import Link from '../../../_sharedComponents/Link';
 import humanizeSolana from '../../_helpers/humanizeSolana';
+import round from '../../_helpers/round';
 import ImageCard from './ImageCard';
 import SkeletonImageCard from './SkeletonImageCard';
 import TokenCardFilter from './TokenCardFilter';
@@ -90,7 +91,7 @@ function TokenCard({
   const overlay = metadata.normalizedRarityScore ? (
     <Chip
       sx={{ backgroundColor: alpha('#fff', 0.8) }}
-      label={metadata.normalizedRarityScore.toFixed(2)}
+      label={round(metadata.normalizedRarityScore, 2)}
     />
   ) : null;
 
