@@ -1,4 +1,5 @@
 import { noWait, selector } from 'recoil';
+import windowStateAtom from '../../../../_atoms/windowStateAtom';
 import SearchSuggestionType from '../_types/SearchSuggestionType';
 import clientSuggestionsAtom from './clientSuggestionsAtom';
 import explorerSuggestionsAtom from './explorerSuggestionsAtom';
@@ -31,6 +32,14 @@ const searchSuggestionsAtom = selector<SearchSuggestionAtomType>({
     const serverSuggestionsLoadable = get(noWait(serverSuggestionsAtom));
     const explorerSuggestions = get(explorerSuggestionsAtom);
     const selectionSuggestions = get(selectionSuggestionsAtom);
+    const windowState = get(windowStateAtom);
+
+    if (windowState.state === term) {
+      return {
+        loading: false,
+        suggestions: [],
+      };
+    }
 
     if (selectionSuggestions) {
       return {

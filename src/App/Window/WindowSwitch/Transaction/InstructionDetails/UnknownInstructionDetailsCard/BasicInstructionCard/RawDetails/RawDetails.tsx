@@ -1,7 +1,7 @@
 import { Chip, TableCell, TableRow } from '@mui/material';
 import { TransactionInstruction } from '@solana/web3.js';
 import React from 'react';
-import safePubkeyString from '../../../../../_helpers/safePubkeyString';
+import safePubkeyString from '../../../../../../../_helpers/safePubkeyString';
 import LabeledAddressLink from '../../../../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import HexData from './HexData';
 

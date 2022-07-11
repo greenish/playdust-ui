@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Chip, Theme, Typography } from '@mui/material';
-import { lighten } from '@mui/material/styles';
+import { alpha, lighten } from '@mui/material/styles';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
@@ -8,6 +8,7 @@ import getCDNUrl from '../../../../_helpers/getCDNUrl';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
 import Link from '../../../_sharedComponents/Link';
 import humanizeSolana from '../../_helpers/humanizeSolana';
+import round from '../../_helpers/round';
 import ImageCard from './ImageCard';
 import SkeletonImageCard from './SkeletonImageCard';
 import TokenCardFilter from './TokenCardFilter';
@@ -70,7 +71,10 @@ function TokenCard({
   if (metadata.asks && metadata.asks.length > 0) {
     listedOrLastPrice = (
       <Typography>
-        {humanizeSolana(Math.min(...metadata.asks.map((entry) => entry.price)))}
+        {humanizeSolana(
+          Math.min(...metadata.asks.map((entry) => entry.price)),
+          2
+        )}
       </Typography>
     );
   } else if (metadata.lastSalePrice > 0) {
@@ -80,7 +84,7 @@ function TokenCard({
           color: lighten(theme.palette.text.primary, 0.7),
         })}
       >
-        {humanizeSolana(metadata.lastSalePrice)} last
+        {humanizeSolana(metadata.lastSalePrice, 2)} last
       </Typography>
     );
   } else {
@@ -88,7 +92,10 @@ function TokenCard({
   }
 
   const overlay = metadata.normalizedRarityScore ? (
-    <Chip label={metadata.normalizedRarityScore.toFixed(2)} />
+    <Chip
+      sx={{ backgroundColor: alpha('#fff', 0.8) }}
+      label={round(metadata.normalizedRarityScore, 2)}
+    />
   ) : null;
 
   return (

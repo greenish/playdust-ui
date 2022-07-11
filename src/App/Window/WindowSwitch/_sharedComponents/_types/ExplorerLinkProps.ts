@@ -11,5 +11,6 @@ interface ExplorerLinkProps {
     remain: number;
     ellipsis?: string;
   };
+  component?: React.ElementType;
 }
 export default ExplorerLinkProps;

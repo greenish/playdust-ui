@@ -3,9 +3,9 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import ellipsisify from '../../../../_helpers/ellipsisify';
 import encodeWindowHash from '../../../../_helpers/encodeWindowHash';
+import safePubkeyString from '../../../../_helpers/safePubkeyString';
 import windowStateAtom from '../../../_atoms/windowStateAtom';
 import Link from '../../../_sharedComponents/Link';
-import safePubkeyString from '../../_helpers/safePubkeyString';
 import ExplorerLinkProps from '../_types/ExplorerLinkProps';
 import CopyButton from './CopyButton';
 
@@ -15,6 +15,7 @@ function ExplorerLink({
   allowCopy,
   ellipsis,
   type,
+  component = 'span',
 }: ExplorerLinkProps) {
   const windowState = useRecoilValue(windowStateAtom);
   const toString = safePubkeyString(to);
@@ -35,7 +36,7 @@ function ExplorerLink({
     tabId: windowState.tabId,
   });
   return (
-    <Box sx={{ whiteSpace: 'nowrap' }}>
+    <Box sx={{ whiteSpace: 'nowrap' }} component={component}>
       {allowCopy && <CopyButton value={toString} />}
       <Link href={href} title={toString}>
         <pre style={{ display: 'inline' }}>{display}</pre>
