@@ -37,7 +37,7 @@ function Home() {
           <PlaydustLogo width="215px" />
         </Box>
         <Typography variant="body1" marginBottom="16px">
-          A Solana Search Engine
+          A Solana Search Engine (beta)
         </Typography>
         <Box sx={{ mb: 2, zIndex: 2 }}>
           <SuspenseBoundary
