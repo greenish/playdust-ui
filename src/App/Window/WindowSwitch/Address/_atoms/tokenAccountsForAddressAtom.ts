@@ -19,13 +19,18 @@ const tokenAccountsForAddressAtom = selector<TokenAccountsType[]>({
       addressState.pubkey
     );
 
+    // filter 0 by token balances
+    const filteredTokenAccounts = tokenAccounts.filter(
+      (account) => account.data.info.tokenAmount.uiAmountString !== '0'
+    );
+
     // sort by token balance desc.
-    tokenAccounts.sort(
+    filteredTokenAccounts.sort(
       (a, b) =>
         b.data.info.tokenAmount.uiAmount - a.data.info.tokenAmount.uiAmount
     );
 
-    return tokenAccounts;
+    return filteredTokenAccounts;
   },
 });
 

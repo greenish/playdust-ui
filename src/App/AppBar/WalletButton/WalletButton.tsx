@@ -5,8 +5,9 @@ import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import connectedWalletAtom from '../../_atoms/connectedWalletAtom';
+import ellipsisify from '../../_helpers/ellipsisify';
 import safePromise from '../../_helpers/safePromise';
-import shortenPublicKey from '../../_helpers/shortenPublicKey';
+import safePubkeyString from '../../_helpers/safePubkeyString';
 import useAuth from '../../_hooks/useAuth';
 import useGoToProfile from './_hooks/useGoToProfile';
 
@@ -43,7 +44,7 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
 
   const buttonProps = connectedWallet
     ? {
-        children: shortenPublicKey(connectedWallet),
+        children: ellipsisify(connectedWallet, 4, 4),
         onClick: (event: React.MouseEvent<HTMLButtonElement>) =>
           setAnchorEl(event.currentTarget),
       }
@@ -73,7 +74,9 @@ function WalletButton({ backgroundColor, size }: WalletButtonProps) {
         sx={{ ml: 2 }}
       >
         <MenuItem onClick={() => goToProfile()}>
-          Wallet: {wallet.publicKey && shortenPublicKey(wallet.publicKey)}
+          Wallet:{' '}
+          {wallet.publicKey &&
+            ellipsisify(safePubkeyString(wallet.publicKey), 4, 4)}
         </MenuItem>
         <MenuItem onClick={() => safePromise(auth.logout())}>
           Disconnect

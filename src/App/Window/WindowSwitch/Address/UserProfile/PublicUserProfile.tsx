@@ -12,10 +12,6 @@ function PublicUserProfile() {
   const profilePicture = useRecoilValue(profilePictureAtom);
   const image = profilePicture?.profilePictureImage;
 
-  if (!publicProfile) {
-    return null;
-  }
-
   return (
     <UserProfileCard
       avatar={<Avatar src={image && getCDNUrl(image)} />}

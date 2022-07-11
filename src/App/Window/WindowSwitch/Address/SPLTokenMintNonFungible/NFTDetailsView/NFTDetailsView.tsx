@@ -84,6 +84,7 @@ function NFTDetailsView() {
                 {'Owned by '}
               </Box>
               <ExplorerLink
+                component="span"
                 type="address"
                 to={ownerWalletAddress}
                 allowCopy={true}

@@ -6,6 +6,7 @@ import accountInfoAtom from '../_atoms/accountInfoAtom';
 function useIsWallet(): boolean {
   const addressState = useRecoilValue(addressStateAtom);
   const accountInfo = useRecoilValue(accountInfoAtom);
+
   if (!addressState) {
     return false;
   }

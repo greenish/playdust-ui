@@ -1,6 +1,6 @@
 import { selector } from 'recoil';
+import safePubkeyString from '../../../../../_helpers/safePubkeyString';
 import addressStateAtom from '../../../_atoms/addressStateAtom';
-import safePubkeyString from '../../../_helpers/safePubkeyString';
 import parsedTokenAccountAtom from '../../_atoms/parsedTokenAccountAtom';
 import getOrdersForMint from '../_helpers/getOrdersForMint';
 import AllOrdersType from '../_types/AllOrdersType';

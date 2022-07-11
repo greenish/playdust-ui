@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import safePubkeyString from '../../_helpers/safePubkeyString';
+import safePubkeyString from '../../../../_helpers/safePubkeyString';
 import ExplorerAccordion from '../../_sharedComponents/ExplorerAccordion';
 import LabeledAddressLink from '../../_sharedComponents/LabeledAddressLink/LabeledAddressLink';
 import blockStateAtom from '../_atoms/blockStateAtom';
