@@ -71,7 +71,10 @@ function TokenCard({
   if (metadata.asks && metadata.asks.length > 0) {
     listedOrLastPrice = (
       <Typography>
-        {humanizeSolana(Math.min(...metadata.asks.map((entry) => entry.price)))}
+        {humanizeSolana(
+          Math.min(...metadata.asks.map((entry) => entry.price)),
+          2
+        )}
       </Typography>
     );
   } else if (metadata.lastSalePrice > 0) {
@@ -81,7 +84,7 @@ function TokenCard({
           color: lighten(theme.palette.text.primary, 0.7),
         })}
       >
-        {humanizeSolana(metadata.lastSalePrice)} last
+        {humanizeSolana(metadata.lastSalePrice, 2)} last
       </Typography>
     );
   } else {

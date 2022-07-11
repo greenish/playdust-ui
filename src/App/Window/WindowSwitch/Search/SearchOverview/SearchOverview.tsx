@@ -24,17 +24,18 @@ const chips = [
   },
   {
     label: 'Floor Price',
-    getValue: ({ floor }: SearchOverviewResponseType) => humanizeSolana(floor),
+    getValue: ({ floor }: SearchOverviewResponseType) =>
+      humanizeSolana(floor, 2),
   },
   {
     label: 'Avg Price',
     getValue: ({ average }: SearchOverviewResponseType) =>
-      humanizeSolana(average),
+      humanizeSolana(average, 2),
   },
   {
     label: 'Ceiling Price',
     getValue: ({ ceiling }: SearchOverviewResponseType) =>
-      humanizeSolana(ceiling),
+      humanizeSolana(ceiling, 2),
   },
 ];
 

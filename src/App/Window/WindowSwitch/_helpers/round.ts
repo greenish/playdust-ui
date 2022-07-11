@@ -1,4 +1,4 @@
-function round(value = 0, maximumFractionDigits = 0) {
+function round(value: number, maximumFractionDigits = 20) {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits }).format(
     value
   );

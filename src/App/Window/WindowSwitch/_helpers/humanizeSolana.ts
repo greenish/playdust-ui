@@ -1,5 +1,6 @@
 import round from './round';
 
-const humanizeSolana = (input?: number): string => `◎${round(input, 2) ?? 0}`;
+const humanizeSolana = (input = 0, maximumFractionDigits?: number): string =>
+  `◎${round(input, maximumFractionDigits)}`;
 
 export default humanizeSolana;
