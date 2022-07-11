@@ -38,12 +38,10 @@ function NFTTradingDialog() {
 
   const resetOrders = useRecoilRefresher_UNSTABLE(ordersForMintAtom);
   const resetOwner = useRecoilRefresher_UNSTABLE(currentOwnerForMintAtom);
-  const resetEscrow = useRecoilRefresher_UNSTABLE(walletEscrowAtom);
   const reset = useCallback(() => {
     resetOrders();
     resetOwner();
-    resetEscrow();
-  }, [resetOrders, resetOwner, resetEscrow]);
+  }, [resetOrders, resetOwner]);
 
   const [executing, setExecuting] = useState(false);
   const [resolution, setResolution] = useState<

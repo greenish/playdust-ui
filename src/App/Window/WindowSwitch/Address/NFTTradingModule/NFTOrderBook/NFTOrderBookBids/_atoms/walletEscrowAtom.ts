@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
-import connectedWalletAtom from '../../../../../_atoms/connectedWalletAtom';
-import tradeApi from '../_helpers/tradeApi';
-import EscrowType from '../_types/EscrowType';
+import connectedWalletAtom from '../../../../../../../_atoms/connectedWalletAtom';
+import tradeApi from '../../../_helpers/tradeApi';
+import EscrowType from '../../../_types/EscrowType';
 
 const walletEscrowAtom = selector<EscrowType | null>({
   key: 'walletEscrowAtom',

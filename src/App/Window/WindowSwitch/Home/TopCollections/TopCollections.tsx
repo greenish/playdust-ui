@@ -38,6 +38,7 @@ function TopCollections() {
   const grouped = useMemo(() => {
     if (hasValue) {
       const { results } = topCollectionsLoadable.contents;
+
       return results.map(({ collection, nfts }) => ({
         key: collection.id,
         groupLabel: humanizeCollection(collection),

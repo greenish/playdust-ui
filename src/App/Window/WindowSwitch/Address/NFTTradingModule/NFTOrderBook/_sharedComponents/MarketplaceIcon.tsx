@@ -30,7 +30,7 @@ function MarketplaceIcon({
   address,
   ...props
 }: MarketplaceIconProps) {
-  const { alt, src, href } = marketplaceProps[marketplace] ?? {};
+  const { alt, src, href } = marketplaceProps[marketplace];
   const image = <img height={20} alt={alt} src={src} {...props} />;
 
   return address ? (
