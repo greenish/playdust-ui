@@ -96,7 +96,9 @@ function WindowInput() {
 
   useEffect(() => {
     setInInput(false);
-  }, [windowState.state]);
+    setTerm('');
+    setDTerm('');
+  }, [windowState.state]); // eslint-disable-line
 
   useClickAway(containerRef, () => {
     setForceClosed(true);
