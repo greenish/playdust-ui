@@ -39,11 +39,11 @@ const columns: Column[] = [
   },
   {
     label: 'Total Volume',
-    getValue: ({ volume }) => humanizeSolana(volume.global.total),
+    getValue: ({ volume }) => humanizeSolana(volume.global.total, 2),
   },
   {
     label: 'Floor Price',
-    getValue: ({ floorPrice }) => humanizeSolana(floorPrice.global),
+    getValue: ({ floorPrice }) => humanizeSolana(floorPrice.global, 2),
   },
   {
     label: 'Items',
