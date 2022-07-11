@@ -5,7 +5,13 @@ import { useTheme } from '@mui/material/styles';
 import { useDebounceCallback } from '@react-hook/debounce';
 import { useSelect } from 'downshift';
 import parse from 'html-react-parser';
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
 import { AutoSizer, ListRowRenderer } from 'react-virtualized';
@@ -59,6 +65,7 @@ function WindowInput() {
   const [activeNodeMeta, setActiveNodeMeta] = useRecoilState(
     searchQueryActiveNodeMetaAtom
   );
+  const [inInput, setInInput] = useState(false);
   const rootNode = useRecoilValue(searchQueryRootNodeAtom);
   const [term, setTerm] = useRecoilState(searchQueryTermAtom);
   const setDTerm = useSetRecoilState(searchQueryDebouncedTermAtom);
@@ -85,9 +92,23 @@ function WindowInput() {
   const [clearSearchQuery, setClearSearchQuery] =
     useRecoilState(clearSearchQueryAtom);
 
+  const inExplorer = !['home', 'search'].includes(windowState.type);
+
+  useEffect(() => {
+    setInInput(false);
+    setTerm('');
+    setDTerm('');
+  }, [windowState.state]); // eslint-disable-line
+
   useClickAway(containerRef, () => {
     setForceClosed(true);
     setActiveNodeMeta(null);
+    setInInput(false);
+
+    if (inExplorer && windowState.state === term) {
+      setTerm('');
+      setDTerm('');
+    }
   });
 
   useEffect(() => {
@@ -119,7 +140,11 @@ function WindowInput() {
         }}
         inputRef={setInputRef}
         value={term}
-        placeholder={!rootNode || clearSearchQuery ? 'Search...' : undefined}
+        placeholder={
+          !inExplorer && (!rootNode || clearSearchQuery)
+            ? 'Search...'
+            : undefined
+        }
         onChange={(evt) => {
           const { value } = evt.target;
 
@@ -153,6 +178,7 @@ function WindowInput() {
       setTerm,
       suggestions.length,
       term,
+      inExplorer,
     ]
   );
 
@@ -231,6 +257,17 @@ function WindowInput() {
           {...getToggleButtonProps()}
           onClick={() => {
             setForceClosed(false);
+
+            if (inExplorer) {
+              setInInput(true);
+              setTerm(windowState.state);
+              setDTerm(windowState.state);
+
+              setTimeout(() => {
+                inputRef?.current?.select();
+              }, 150);
+            }
+
             if (rootNode) {
               setActiveNodeMeta({
                 type: 'group',
@@ -250,7 +287,7 @@ function WindowInput() {
           )}
           {(windowState.type !== 'search' || clearSearchQuery) && (
             <EmptyContainer>
-              {!['home', 'search'].includes(windowState.type) && (
+              {!inInput && inExplorer && (
                 <>
                   <QueryNodeChip
                     textInput={textInput}
