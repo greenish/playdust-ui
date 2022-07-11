@@ -140,7 +140,7 @@ function WindowInput() {
         }}
         inputRef={setInputRef}
         value={term}
-        placeholder={!rootNode || clearSearchQuery ? 'Search...' : undefined}
+        placeholder={!inExplorer && (!rootNode || clearSearchQuery) ? 'Search...' : undefined}
         onChange={(evt) => {
           const { value } = evt.target;
 
