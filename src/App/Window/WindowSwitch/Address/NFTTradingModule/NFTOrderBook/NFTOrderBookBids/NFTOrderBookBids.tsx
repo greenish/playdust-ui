@@ -22,10 +22,9 @@ import ExplorerLink from '../../../../_sharedComponents/ExplorerLink/ExplorerLin
 import currentOwnerForMintAtom from '../../../_atoms/currentOwnerForMintAtom';
 import ordersForMintAtom from '../../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../../_atoms/tradingDialogAtom';
-
 import MarketplaceIcon from '../_sharedComponents/MarketplaceIcon';
 import Tooltip from './Tooltip';
-import walletEscrowAtom from './_atoms/walletEscrowAtom';
+import walletEscrowAtom from '../../_atoms/walletEscrowAtom';
 
 function NFTOrderBookBids() {
   const setTradingDialog = useSetRecoilState(tradingDialogAtom);
@@ -48,9 +47,9 @@ function NFTOrderBookBids() {
     orders?.bids.find((order) => order.wallet === connectedWallet) ?? null;
   const escrowAmount = lamportsToSol(walletEscrow?.amount || 0);
 
-  const marketBids = (playdustData?.mintBids ?? []).filter((bid)=>(
-    bid.marketplace === "MagicEdenV2"
-  ));
+  const marketBids = (playdustData?.mintBids ?? []).filter(
+    (bid) => bid.marketplace === 'MagicEdenV2'
+  );
 
   const hasBids = !!(orders?.bids.length || marketBids.length);
 

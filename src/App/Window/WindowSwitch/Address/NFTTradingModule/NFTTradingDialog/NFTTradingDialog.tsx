@@ -13,7 +13,7 @@ import { TransitionProps } from '@mui/material/transitions';
 import React, { useCallback, useState } from 'react';
 import { useRecoilRefresher_UNSTABLE, useRecoilState } from 'recoil';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
-import walletEscrowAtom from '../NFTOrderBook/NFTOrderBookBids/_atoms/walletEscrowAtom';
+import walletEscrowAtom from '../_atoms/walletEscrowAtom';
 import ordersForMintAtom from '../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../_atoms/tradingDialogAtom';
 import AcceptAskDialogContent from './AcceptAskDialogContent';
