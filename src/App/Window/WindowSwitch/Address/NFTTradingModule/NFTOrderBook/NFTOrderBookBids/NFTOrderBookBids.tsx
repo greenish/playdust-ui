@@ -48,7 +48,9 @@ function NFTOrderBookBids() {
     orders?.bids.find((order) => order.wallet === connectedWallet) ?? null;
   const escrowAmount = lamportsToSol(walletEscrow?.amount || 0);
 
-  const marketBids = playdustData?.mintBids ?? [];
+  const marketBids = (playdustData?.mintBids ?? []).filter((bid)=>(
+    bid.marketplace === "MagicEdenV2"
+  ));
 
   const hasBids = !!(orders?.bids.length || marketBids.length);
 

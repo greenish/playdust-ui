@@ -45,7 +45,9 @@ function NFTOrderBookAsks() {
     (order) => order.wallet === ownerWalletAddress
   );
 
-  const marketAsks = playdustData?.mintAsks ?? [];
+  const marketAsks = (playdustData?.mintAsks ?? []).filter((bid)=>(
+    bid.marketplace === "MagicEdenV2"
+  ));
 
   const hasAsks = !!(filteredAsks.length || marketAsks.length);
 

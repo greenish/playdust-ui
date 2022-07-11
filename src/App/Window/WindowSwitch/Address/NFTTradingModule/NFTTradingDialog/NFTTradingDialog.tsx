@@ -13,9 +13,9 @@ import { TransitionProps } from '@mui/material/transitions';
 import React, { useCallback, useState } from 'react';
 import { useRecoilRefresher_UNSTABLE, useRecoilState } from 'recoil';
 import currentOwnerForMintAtom from '../../_atoms/currentOwnerForMintAtom';
+import walletEscrowAtom from '../NFTOrderBook/NFTOrderBookBids/_atoms/walletEscrowAtom';
 import ordersForMintAtom from '../_atoms/ordersForMintAtom';
 import tradingDialogAtom from '../_atoms/tradingDialogAtom';
-import walletEscrowAtom from '../_atoms/walletEscrowAtom';
 import AcceptAskDialogContent from './AcceptAskDialogContent';
 import AcceptBidDialogContent from './AcceptBidDialogContent';
 import CancelAskDialogContent from './CancelAskDialogContent/CancelAskDialogContent';
@@ -38,10 +38,12 @@ function NFTTradingDialog() {
 
   const resetOrders = useRecoilRefresher_UNSTABLE(ordersForMintAtom);
   const resetOwner = useRecoilRefresher_UNSTABLE(currentOwnerForMintAtom);
+  const resetEscrow = useRecoilRefresher_UNSTABLE(walletEscrowAtom);
   const reset = useCallback(() => {
     resetOrders();
     resetOwner();
-  }, [resetOrders, resetOwner]);
+    resetEscrow();
+  }, [resetOrders, resetOwner, resetEscrow]);
 
   const [executing, setExecuting] = useState(false);
   const [resolution, setResolution] = useState<
