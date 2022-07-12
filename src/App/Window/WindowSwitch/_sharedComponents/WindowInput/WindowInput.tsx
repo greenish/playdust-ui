@@ -47,6 +47,7 @@ const InputContainer = styled(Box)`
   background: none;
   cursor: text;
   width: 100%;
+  min-height: 58px;
 `;
 
 const OverlayContainer = styled(Paper)`
