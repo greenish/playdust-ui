@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Chip, Theme, Typography } from '@mui/material';
+import { Chip, Theme, Typography } from '@mui/material';
 import { alpha, lighten } from '@mui/material/styles';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
@@ -47,6 +47,10 @@ const TokenCardFilterContainer = styled.div`
   margin-left: 8px;
 `;
 
+const PriceTypography = styled(Typography)`
+  font-size: 100%;
+`;
+
 function TokenCard({
   imageSize,
   contentHeight,
@@ -67,28 +71,23 @@ function TokenCard({
     );
   }
 
-  let listedOrLastPrice;
-  if (metadata.asks && metadata.asks.length > 0) {
+  let listedOrLastPrice = <div />;
+  if (metadata.listedPrice) {
     listedOrLastPrice = (
-      <Typography>
-        {humanizeSolana(
-          Math.min(...metadata.asks.map((entry) => entry.price)),
-          2
-        )}
-      </Typography>
+      <PriceTypography sx={{ fontWeight: 700 }}>
+        {humanizeSolana(metadata.listedPrice, 2)}
+      </PriceTypography>
     );
   } else if (metadata.lastSalePrice > 0) {
     listedOrLastPrice = (
-      <Typography
+      <PriceTypography
         sx={(theme: Theme) => ({
           color: lighten(theme.palette.text.primary, 0.7),
         })}
       >
         {humanizeSolana(metadata.lastSalePrice, 2)} last
-      </Typography>
+      </PriceTypography>
     );
-  } else {
-    listedOrLastPrice = <Box />;
   }
 
   const overlay = metadata.normalizedRarityScore ? (
