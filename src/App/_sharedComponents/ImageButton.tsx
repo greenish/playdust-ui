@@ -76,7 +76,7 @@ function ImageButton({
         minWidth: size,
         maxHeight: size,
         minHeight: size,
-        boxShadow: '0px 0px 2px 0px #fefefe',
+        // boxShadow: '0px 0px 2px 0px #fefefe',
         zIndex: 2,
         backgroundColor: theme.palette.background.default,
 

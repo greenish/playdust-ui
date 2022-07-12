@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Clear, Undo } from '@mui/icons-material';
+import { Clear, Redo } from '@mui/icons-material';
 import { Box, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useDebounceCallback } from '@react-hook/debounce';
@@ -250,7 +250,7 @@ function WindowInput() {
               setClearSearchQuery(!clearSearchQuery);
             }}
           >
-            {clearSearchQuery ? <Undo /> : <Clear />}
+            {clearSearchQuery ? <Redo /> : <Clear />}
           </IconButton>
         )}
         <InputContainer
