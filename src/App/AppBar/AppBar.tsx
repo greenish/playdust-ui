@@ -49,7 +49,6 @@ const GroupContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
   width: 100%;
 `;
 
@@ -57,17 +56,18 @@ const TabButtonContainer = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  gap: 6px;
   align-items: center;
+  justify-content: center;
   width: 100%;
   z-index: 2;
+  height: ${appBarWidth}px;
 `;
 
 const ActiveHighlightContainer = styled(Box)`
   position: absolute;
   height: ${appBarWidth}px;
   width: ${appBarWidth}px;
-  top: -${(appBarWidth - largeButtonSize) / 2}px;
+  top: 0;
   left: 0;
   padding: 2px;
 `;
@@ -194,7 +194,7 @@ function AppBar() {
       <Scrollbars>
         <GroupContainer sx={{ flex: 1 }}>{tabControls}</GroupContainer>
       </Scrollbars>
-      <GroupContainer>
+      <GroupContainer sx={{ gap: 1 }}>
         <IconButton href="https://twitter.com/PlaydustNFT" target="_blank">
           <Twitter sx={{ color: backgroundColor }} />
         </IconButton>
