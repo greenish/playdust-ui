@@ -1,5 +1,12 @@
 import styled from '@emotion/styled';
-import { Add, Close, DeleteSweep, Home, Search } from '@mui/icons-material';
+import {
+  Add,
+  Close,
+  DeleteSweep,
+  Home,
+  Search,
+  Twitter,
+} from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
 import { styled as muiStyled, useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
@@ -14,6 +21,7 @@ import useGoHome from '../_hooks/useGoHome';
 import ImageButton from '../_sharedComponents/ImageButton';
 import WhitelistGuarded from '../_sharedComponents/WhitelistGuarded';
 import AppWindowType from '../_types/AppWindowType';
+import DiscordLogo from './DiscordLogo';
 import Playdust from './PlaydustIcon';
 import WalletButton from './WalletButton/WalletButton';
 import useGoToNewTab from './_hooks/useGoToNewTab';
@@ -34,7 +42,7 @@ const RootContainer = styled.div`
   width: ${appBarWidth}px;
 `;
 
-const TopContainer = styled.div`
+const GroupContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -175,13 +183,24 @@ function AppBar() {
 
   return (
     <RootContainer>
-      <TopContainer>
+      <GroupContainer>
         <IconButton onClick={() => goHome()}>
           <Playdust width={largeButtonSize} />
         </IconButton>
         {tabControls}
-      </TopContainer>
-      <WalletButton backgroundColor={backgroundColor} size={largeButtonSize} />
+      </GroupContainer>
+      <GroupContainer>
+        <IconButton href="https://twitter.com/PlaydustNFT" target="_blank">
+          <Twitter sx={{ color: backgroundColor }} />
+        </IconButton>
+        <IconButton href="https://discord.gg/3H3b4XMQt6" target="_blank">
+          <DiscordLogo color={backgroundColor} />
+        </IconButton>
+        <WalletButton
+          backgroundColor={backgroundColor}
+          size={largeButtonSize}
+        />
+      </GroupContainer>
     </RootContainer>
   );
 }
