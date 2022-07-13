@@ -11,6 +11,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { styled as muiStyled, useTheme } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import React, { ReactNode } from 'react';
+import Scrollbars from 'react-custom-scrollbars-2';
 import { useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
 import appStateAtom from '../_atoms/appStateAtom';
@@ -40,9 +41,11 @@ const RootContainer = styled.div`
   width: 100%;
   padding: 4px 0px 16px 0px;
   width: ${appBarWidth}px;
+  overflow: hidden;
+  gap: 16px;
 `;
 
-const GroupContainer = styled.div`
+const GroupContainer = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -187,8 +190,10 @@ function AppBar() {
         <IconButton onClick={() => goHome()}>
           <Playdust width={largeButtonSize} />
         </IconButton>
-        {tabControls}
       </GroupContainer>
+      <Scrollbars>
+        <GroupContainer sx={{ flex: 1 }}>{tabControls}</GroupContainer>
+      </Scrollbars>
       <GroupContainer>
         <IconButton href="https://twitter.com/PlaydustNFT" target="_blank">
           <Twitter sx={{ color: backgroundColor }} />
