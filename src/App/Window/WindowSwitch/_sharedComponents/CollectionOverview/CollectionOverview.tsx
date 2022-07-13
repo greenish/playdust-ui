@@ -122,6 +122,7 @@ function CollectionOverview() {
       <Grid item={true} xs={12} md={gridItemSize}>
         <CardContainer>
           <ImageButton
+            key={images.join('')}
             onClick={goToCollection}
             size={200}
             transitionDuration={1}
