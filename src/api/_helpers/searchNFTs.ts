@@ -6,29 +6,6 @@ import OpenSearchNFTSourceType from '../../App/Window/WindowSwitch/_types/OpenSe
 import SearchSortType from '../../App/Window/WindowSwitch/_types/SearchSortType';
 import makeSearchOS from './makeSearchOS';
 
-const existsQuery: QueryDslQueryContainer[] = [
-  {
-    exists: {
-      field: 'mint',
-    },
-  },
-  {
-    exists: {
-      field: 'uri',
-    },
-  },
-  {
-    exists: {
-      field: 'name',
-    },
-  },
-  {
-    exists: {
-      field: 'image',
-    },
-  },
-];
-
 const onlyListedQuery: QueryDslQueryContainer[] = [
   {
     exists: {
@@ -93,7 +70,6 @@ const searchNFTs = makeSearchOS<OpenSearchNFTSourceType, SearchNFTsOptionsType>(
     const wrappedQuery: QueryDslQueryContainer = {
       bool: {
         [isRelevanceSort ? 'must' : 'filter']: [
-          ...existsQuery,
           ...(onlyListed ? onlyListedQuery : []),
           body?.query,
         ],
