@@ -63,15 +63,29 @@ const createSingleNFTQuery = (child: QueryNodeType): QueryDslQueryContainer => {
       const { value } = child;
 
       return {
-        nested: {
-          path: 'attributes',
-          query: {
-            multi_match: {
-              query: value,
-              fields: ['name', 'attributes.value'],
-              fuzziness: 'AUTO',
+        bool: {
+          should: [
+            {
+              multi_match: {
+                query: value,
+                fuzziness: 'AUTO',
+                fields: ['name'],
+              },
             },
-          },
+            {
+              nested: {
+                path: 'attributes',
+                query: {
+                  multi_match: {
+                    query: value,
+                    fields: ['attributes.value'],
+                    fuzziness: 'AUTO',
+                  },
+                },
+              },
+            },
+          ],
+          minimum_should_match: 1,
         },
       };
     }
