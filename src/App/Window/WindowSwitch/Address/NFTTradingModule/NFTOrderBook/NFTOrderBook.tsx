@@ -1,31 +1,18 @@
-import styled from '@emotion/styled';
+import { Grid } from '@mui/material';
 import React from 'react';
 import NFTOrderBookAsks from './NFTOrderBookAsks';
 import NFTOrderBookBids from './NFTOrderBookBids/NFTOrderBookBids';
 
-const OrderBookContainer = styled.div`
-  display: flex;
-  flex-grow: 1;
-  justify-content: end;
-  gap: 16px;
-`;
-
-const OrderBookColumn = styled.div`
-  display: flex;
-  flex-grow: 1;
-  justify-content: end;
-`;
-
 function NFTOrderBook() {
   return (
-    <OrderBookContainer>
-      <OrderBookColumn>
+    <Grid container={true} spacing={1}>
+      <Grid item={true} xs={12} lg={6}>
         <NFTOrderBookAsks />
-      </OrderBookColumn>
-      <OrderBookColumn>
+      </Grid>
+      <Grid item={true} xs={12} lg={6}>
         <NFTOrderBookBids />
-      </OrderBookColumn>
-    </OrderBookContainer>
+      </Grid>
+    </Grid>
   );
 }
 

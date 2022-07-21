@@ -5,6 +5,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
 } from '@mui/material';
@@ -34,33 +35,35 @@ function MetaplexCreators() {
       title="NFT Creators"
       expanded={true}
       content={
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Creator Address</TableCell>
-              <TableCell>Royalty</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(details.data?.creators ?? []).map((creator: CreatorInfo) => (
-              <TableRow key={creator.address}>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  <Stack direction="row" alignItems="center" gap={1}>
-                    {creator.verified ? (
-                      <CheckIcon />
-                    ) : (
-                      <ReportGmailerrorredIcon />
-                    )}{' '}
-                    <LabeledAddressLink to={creator.address} />
-                  </Stack>
-                </TableCell>
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  {creator.share}%
-                </TableCell>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Creator Address</TableCell>
+                <TableCell>Royalty</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {(details.data?.creators ?? []).map((creator: CreatorInfo) => (
+                <TableRow key={creator.address}>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    <Stack direction="row" alignItems="center" gap={1}>
+                      {creator.verified ? (
+                        <CheckIcon />
+                      ) : (
+                          <ReportGmailerrorredIcon />
+                        )}{' '}
+                      <LabeledAddressLink to={creator.address} />
+                    </Stack>
+                  </TableCell>
+                  <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                    {creator.share}%
+                </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       }
     />
   );
