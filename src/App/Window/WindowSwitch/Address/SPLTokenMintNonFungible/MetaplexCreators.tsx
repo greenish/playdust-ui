@@ -51,14 +51,14 @@ function MetaplexCreators() {
                       {creator.verified ? (
                         <CheckIcon />
                       ) : (
-                          <ReportGmailerrorredIcon />
-                        )}{' '}
+                        <ReportGmailerrorredIcon />
+                      )}{' '}
                       <LabeledAddressLink to={creator.address} />
                     </Stack>
                   </TableCell>
                   <TableCell sx={{ whiteSpace: 'nowrap' }}>
                     {creator.share}%
-                </TableCell>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
