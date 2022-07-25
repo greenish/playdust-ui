@@ -40,7 +40,10 @@ function App({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/fav-icon-circle.svg" />
         <link rel="apple-touch-icon" href="/fav-icon-square.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"

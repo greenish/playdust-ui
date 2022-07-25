@@ -12,6 +12,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { isMobile } from 'react-device-detect';
 import AutosizeInput from 'react-input-autosize';
 import { useClickAway } from 'react-use';
 import { AutoSizer, ListRowRenderer } from 'react-virtualized';
@@ -37,17 +38,22 @@ const RootContainer = styled.div`
   width: 100%;
 `;
 
-const InputContainer = styled(Box)`
+interface InputContainerProps {
+  isMobile: boolean;
+}
+
+const InputContainer = styled(Box)<InputContainerProps>`
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  flex-wrap: wrap;
+  flex-wrap: ${(props) => (props.isMobile ? 'nowrap' : 'wrap')};
   padding: 0 8px;
   font-size: 80%;
   background: none;
   cursor: text;
   width: 100%;
   min-height: 58px;
+  overflow-x: auto;
 `;
 
 const OverlayContainer = styled(Paper)`
@@ -92,7 +98,6 @@ function WindowInput() {
   const windowState = useRecoilValue(windowStateAtom);
   const [clearSearchQuery, setClearSearchQuery] =
     useRecoilState(clearSearchQueryAtom);
-
   const inExplorer = !['home', 'search'].includes(windowState.type);
 
   useEffect(() => {
@@ -278,6 +283,7 @@ function WindowInput() {
             }
             inputRef?.current?.focus();
           }}
+          isMobile={isMobile}
         >
           {windowState.type === 'search' && !clearSearchQuery && (
             <RenderQuery

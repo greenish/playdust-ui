@@ -9,9 +9,8 @@ import RangeFilters from './RangeFilters/RangeFilters';
 import SortFields from './SortFields/SortFields';
 
 const RootContainer = styled.div`
-  width: 300px;
-  margin-right: 8px;
-  margin-left: 16px;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
