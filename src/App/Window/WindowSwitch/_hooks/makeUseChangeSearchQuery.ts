@@ -33,6 +33,10 @@ function makeUseChangeSearchQuery<GetNextStateArgs extends unknown[]>(
         return '';
       }
 
+      if (nextState.query && Object.keys(nextState.query.nodes).length === 0) {
+        return setClearSearchQuery(true);
+      }
+
       const next: SearchStateType = {
         query: nextState.query || query,
         sort: nextState.sort || sort,
