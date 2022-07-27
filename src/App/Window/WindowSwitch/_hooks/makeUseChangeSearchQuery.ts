@@ -34,7 +34,8 @@ function makeUseChangeSearchQuery<GetNextStateArgs extends unknown[]>(
       }
 
       if (nextState.query && Object.keys(nextState.query.nodes).length === 0) {
-        return setClearSearchQuery(true);
+        setClearSearchQuery(true);
+        return '';
       }
 
       const next: SearchStateType = {
