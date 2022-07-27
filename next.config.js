@@ -34,7 +34,7 @@ const nextConfig = {
   rewrites: async () => [
     {
       source: '/cdn/:path*',
-      destination: 'https://cdn.playdust.dev/api/image:path*',
+      destination: 'https://by7lmcn0zd.execute-api.us-east-1.amazonaws.com/testing/3:path*'
     },
     {
       source: '/playdust-api/:path*',
