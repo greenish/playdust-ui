@@ -45,7 +45,10 @@ const nextConfig = {
   typescript: {
     tsconfigPath: "tsconfig.json",
     ignoreBuildErrors: true,
-  }
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
