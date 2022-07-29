@@ -49,6 +49,11 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  env: {
+    OPENSEARCH_URL: process.env.OPENSEARCH_URL,
+    OPENSEARCH_USER: process.env.OPENSEARCH_USER,
+    OPENSEARCH_PASSWORD: process.env.OPENSEARCH_PASSWORD,
+  }
 }
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
