@@ -34,7 +34,7 @@ const nextConfig = {
   rewrites: async () => [
     {
       source: '/cdn/:path*',
-      destination: 'https://cdn.playdust.dev/api/image:path*',
+      destination: 'https://bix5os3dh6.execute-api.us-east-1.amazonaws.com/prod/3:path*',
     },
     {
       source: '/playdust-api/:path*',
@@ -45,7 +45,10 @@ const nextConfig = {
   typescript: {
     tsconfigPath: "tsconfig.json",
     ignoreBuildErrors: true,
-  }
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 }
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
