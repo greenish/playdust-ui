@@ -26,7 +26,6 @@ const GroupContainer = styled(Box)`
   justify-content: space-around;
   align-items: center;
   height: ${rowHeight}px;
-  padding: 8px;
 `;
 
 function TopCollections() {
@@ -65,7 +64,7 @@ function TopCollections() {
                 animation="wave"
               />
               <Skeleton
-                sx={{ margin: '0 16px' }}
+                sx={{ margin: '0 0 0 8px' }}
                 height={25}
                 width={200}
                 variant="rectangular"
@@ -97,7 +96,10 @@ function TopCollections() {
             <Link href={groupHref}>
               <ImageButton size={40} images={nfts.map((nft) => nft.image)} />
             </Link>
-            <Link sx={{ margin: '0 16px' }} href={groupHref}>
+            <Link
+              sx={{ margin: '0 0 0 8px', textAlign: 'left' }}
+              href={groupHref}
+            >
               {groupLabel}
             </Link>
             <Box sx={{ flexGrow: 1 }} />
