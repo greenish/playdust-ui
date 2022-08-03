@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { RecoilRoot } from 'recoil';
-import { AnalyticsProvider } from './AnalyticsProvider';
+import AnalyticsProvider from './AnalyticsProvider';
 import ThemeProvider from './ThemeProvider';
 import WalletProvider from './WalletProvider';
 
@@ -9,9 +9,7 @@ function Provider({ children }: PropsWithChildren<object>) {
     <RecoilRoot>
       <ThemeProvider>
         <WalletProvider>
-          <AnalyticsProvider>
-            {children}
-          </AnalyticsProvider>
+          <AnalyticsProvider>{children}</AnalyticsProvider>
         </WalletProvider>
       </ThemeProvider>
     </RecoilRoot>
