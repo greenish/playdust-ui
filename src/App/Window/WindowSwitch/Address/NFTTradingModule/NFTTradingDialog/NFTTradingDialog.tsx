@@ -174,7 +174,9 @@ function NFTTradingDialog() {
           </DialogActions>
         </>
       )}
-      <Alert severity="error">Product demo only. Trade at your own risk.</Alert>
+      <Alert severity="error">
+        Product demo mode. Trading enabled. Trade at your own risk.
+      </Alert>
       {!executing && !resolution && renderContent()}
     </Dialog>
   );
