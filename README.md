@@ -88,6 +88,10 @@ export interface App {
 }
 ```
 
+# Analytics
+
+Analytics are recorded via Google Analytics version 4. For Google Analytics setup, reach out to a user with Google Analytics admin access (stan@playdust.com, eugene@playdust.com, philipp@playdust.com, operations@playdust.com). Configuration of the Google Analytics version 4 measurement id is done through the .env file under the key GOOGLE_ANALYTICS_4_MEASUREMENT_ID and it's current value should be set to G-96LZMYF7WY.
+
 # Coding Guidelines
 
 > The guiding principle for the file/code structure is to be as self documenting as possible to avoid manual maintenance.
