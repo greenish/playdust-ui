@@ -31,7 +31,9 @@ const WindowContentRenderer = React.memo(() => {
   return (
     <RootContainer>
       <WhitelistGuarded fallback={<JoinTheWhitelist />}>
-        <Alert severity="warning">Product demo only. Price data is out of date</Alert>
+        <Alert severity="warning">
+          Product demo only. Price data is out of date
+        </Alert>
         <WindowSwitch />
       </WhitelistGuarded>
     </RootContainer>
