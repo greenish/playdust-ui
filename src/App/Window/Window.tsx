@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { Alert } from '@mui/material';
 import React, { useMemo } from 'react';
 import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
 import activeTabAtom from '../_atoms/activeTabAtom';
@@ -30,6 +31,7 @@ const WindowContentRenderer = React.memo(() => {
   return (
     <RootContainer>
       <WhitelistGuarded fallback={<JoinTheWhitelist />}>
+        <Alert severity="warning">Product demo only. Price data is out of date</Alert>
         <WindowSwitch />
       </WhitelistGuarded>
     </RootContainer>

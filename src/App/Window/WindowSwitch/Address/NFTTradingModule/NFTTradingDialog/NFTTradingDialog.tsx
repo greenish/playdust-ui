@@ -1,5 +1,6 @@
 import { Cancel, CheckCircle } from '@mui/icons-material';
 import {
+  Alert,
   Button,
   CircularProgress,
   Dialog,
@@ -173,6 +174,7 @@ function NFTTradingDialog() {
           </DialogActions>
         </>
       )}
+      <Alert severity="error">Product demo only. Trade at your own risk.</Alert>
       {!executing && !resolution && renderContent()}
     </Dialog>
   );
