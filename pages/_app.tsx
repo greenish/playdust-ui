@@ -1,4 +1,3 @@
-import { datadogRum } from '@datadog/browser-rum';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -7,24 +6,6 @@ import getPDEnv from '../src/App/_helpers/getPDEnv';
 import '../styles/globals.css';
 
 const env = getPDEnv();
-
-if (env !== 'local') {
-  datadogRum.init({
-    applicationId: 'ec89a6b0-1b64-4a87-bf7a-2d19cdcb339d',
-    clientToken: 'pubb1b51268c7e297f09c00ffbe8e387553',
-    site: 'datadoghq.com',
-    service: 'playdust',
-    env: getPDEnv(),
-    // Specify a version number to identify the deployed version of your application in Datadog
-    // version: '1.0.0',
-    sampleRate: 100,
-    premiumSampleRate: 100,
-    trackInteractions: true,
-    defaultPrivacyLevel: 'mask-user-input',
-  });
-
-  datadogRum.startSessionReplayRecording();
-}
 
 function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
