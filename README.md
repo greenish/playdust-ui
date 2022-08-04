@@ -47,7 +47,7 @@ All those steps are for connection in local to our API.
 
 - the top level entity
 - playdust-ui utilizes a single next.js page, that utilizes hash routing to move between **tabs**
-- the playdust **app** contains 1 to many **tabs**
+- the playdust **app** contains one (1) to many **tabs**
 
 ### Tab
 
