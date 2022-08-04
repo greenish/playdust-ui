@@ -27,6 +27,7 @@ const nextConfig = {
         'process.env.HUBSPOT_PORTAL_ID': JSON.stringify(process.env.HUBSPOT_PORTAL_ID),
         'process.env.HUBSPOT_JOIN_WHITELIST_FORM_ID': JSON.stringify(process.env.HUBSPOT_JOIN_WHITELIST_FORM_ID),
         'process.env.GO_LIVE': JSON.stringify(process.env.GO_LIVE),
+        'process.env.GOOGLE_ANALYTICS_4_MEASUREMENT_ID': JSON.stringify(process.env.GOOGLE_ANALYTICS_4_MEASUREMENT_ID),
       })
     );
     return config;
