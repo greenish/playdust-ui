@@ -241,7 +241,7 @@ MyComponent/
      - the preferred method is to use the `emotion/styled` API to add styles to components
    - [VSCode Syntax Highlighting for styled components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components)
 
-## Build Process, Scripting, & Automation
+## Build Process, Scripting, & Automation 
 
 In order for a build to succeed the following type/lint checks must pass:
 
